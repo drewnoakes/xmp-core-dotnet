@@ -22,14 +22,14 @@ namespace Com.Adobe.Xmp
     /// to convert to the ISO format, a <c>Calendar</c> or get the Timezone. The fields of
     /// <c>XMPDateTime</c> are:
     /// <list type="bullet">
-    /// <item> month - The month in the range 1..12.
-    /// <item> day - The day of the month in the range 1..31.
-    /// <item> minute - The minute in the range 0..59.
-    /// <item> hour - The time zone hour in the range 0..23.
-    /// <item> minute - The time zone minute in the range 0..59.
-    /// <item> nanoSecond - The nano seconds within a second. <em>Note:</em> if the XMPDateTime is
-    /// converted into a calendar, the resolution is reduced to milli seconds.
-    /// <item> timeZone - a <c>TimeZone</c>-object.
+    /// <item>month - The month in the range 1..12.</item>
+    /// <item>day - The day of the month in the range 1..31.</item>
+    /// <item>minute - The minute in the range 0..59.</item>
+    /// <item>hour - The time zone hour in the range 0..23.</item>
+    /// <item>minute - The time zone minute in the range 0..59.</item>
+    /// <item>nanoSecond - The nano seconds within a second. <em>Note:</em> if the XMPDateTime is
+    /// converted into a calendar, the resolution is reduced to milli seconds.</item>
+    /// <item>timeZone - a <c>TimeZone</c>-object.</item>
     /// </list>
     /// DateTime values are occasionally used in cases with only a date or only a time component. A date
     /// without a time has zeros for all the time fields. A time without a date has zeros for all date
