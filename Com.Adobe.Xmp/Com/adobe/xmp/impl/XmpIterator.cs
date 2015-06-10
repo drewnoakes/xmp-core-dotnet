@@ -95,7 +95,7 @@ namespace Com.Adobe.Xmp.Impl
             // create iterator
             if (startNode != null)
             {
-                if (!_options.IsJustChildren)
+                if (!Options.IsJustChildren)
                 {
                     _nodeIterator = new NodeIterator(this, startNode, initialPath, 1);
                 }
