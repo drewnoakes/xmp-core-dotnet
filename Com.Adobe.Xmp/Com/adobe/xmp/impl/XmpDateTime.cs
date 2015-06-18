@@ -8,6 +8,7 @@
 // =================================================================================================
 
 using System;
+using System.Diagnostics.Contracts;
 using System.Globalization;
 using Sharpen;
 using Calendar = Sharpen.Calendar;
@@ -66,7 +67,7 @@ namespace Com.Adobe.Xmp.Impl
             // put that date into a calendar the pretty much represents ISO8601
             // I use US because it is close to the "locale" for the ISO8601 spec
             var intCalendar = (GregorianCalendar)Calendar.GetInstance(CultureInfo.InvariantCulture);
-            intCalendar.SetGregorianChange(Extensions.CreateDate(long.MinValue));
+            intCalendar.SetGregorianChange(UnixTimeToDateTime(long.MinValue));
             intCalendar.SetTimeZone(zone);
             intCalendar.SetTime(date);
             _year = intCalendar.Get(CalendarEnum.Year);
@@ -240,7 +241,7 @@ namespace Com.Adobe.Xmp.Impl
         public Calendar GetCalendar()
         {
             var calendar = (GregorianCalendar)Calendar.GetInstance(CultureInfo.InvariantCulture);
-            calendar.SetGregorianChange(Extensions.CreateDate(long.MinValue));
+            calendar.SetGregorianChange(UnixTimeToDateTime(long.MinValue));
             if (_hasTimeZone)
             {
                 calendar.SetTimeZone(_timeZone);
@@ -265,5 +266,27 @@ namespace Com.Adobe.Xmp.Impl
         {
             return GetIso8601String();
         }
+
+        #region Conversions
+
+        private static readonly DateTime _unixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+        /// <param name="unixTime">Number of milliseconds since the Unix epoch (1970-01-01 00:00:00).</param>
+        [Pure]
+        internal static DateTime UnixTimeToDateTime(long unixTime)
+        {
+            return new DateTime(_unixEpoch.Ticks + unixTime*10000);
+        }
+
+        /// <param name="unixTime">Number of milliseconds since the Unix epoch (1970-01-01 00:00:00).</param>
+        [Pure]
+        public static DateTimeOffset UnixTimeToDateTimeOffset(long unixTime)
+        {
+            return new DateTimeOffset(
+                _unixEpoch.Ticks + (unixTime*10000),
+                TimeSpan.Zero);
+        }
+
+        #endregion
     }
 }
