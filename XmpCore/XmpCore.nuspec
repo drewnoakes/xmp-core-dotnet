@@ -6,7 +6,7 @@
     <title>Extensible Metadata Platform (XMP) library for .NET</title>
     <authors>Adobe Systems Incorporated, Drew Noakes, Yakov Danila, Nathanael Jones</authors>
     <owners>Drew Noakes</owners>
-    <licenseUrl>http://www.adobe.com/devnet/xmp/sdk/eula.html</licenseUrl>
+    <licenseUrl>http://www.adobe.com/devnet/xmp/library/eula-xmp-library-java.html</licenseUrl>
     <projectUrl>https://github.com/drewnoakes/xmp-core-dotnet/</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/drewnoakes/xmp-core-dotnet/master/docs/logo-512px.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>

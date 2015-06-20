@@ -26,5 +26,5 @@ by Drew Noakes and contributors on GitHub.
 
 ## License
 
-The [same BSD license](http://www.adobe.com/devnet/xmp/sdk/eula.html) applies to this project
+The [same BSD license](http://www.adobe.com/devnet/xmp/library/eula-xmp-library-java.html) applies to this project
 as to the Adobe's open source XMP SDK from which it is derived.
