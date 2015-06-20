@@ -1,5 +1,7 @@
 ﻿<img src="https://cdn.rawgit.com/drewnoakes/xmp-core-dotnet/master/docs/logo.svg" width="260" height="260" />
 
+[![XmpCore NuGet version](https://img.shields.io/nuget/v/XmpCore.svg)](https://www.nuget.org/packages/XmpCore/) [![XmpCore download stats](https://img.shields.io/nuget/dt/XmpCore.svg)](https://www.nuget.org/packages/XmpCore/)
+
 This library is a port of Adobe's XMP SDK to .NET.
 
 The API should be familiar to users of Adobe's XMPCore 5.1.2, though it has been modified
