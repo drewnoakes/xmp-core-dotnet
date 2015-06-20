@@ -248,7 +248,7 @@ namespace XmpCore.Impl
             }
         }
 
-        public IReadOnlyList<IXmpAliasInfo> FindAliases(string aliasNs)
+        public IEnumerable<IXmpAliasInfo> FindAliases(string aliasNs)
         {
             lock (this)
             {

@@ -570,7 +570,7 @@ namespace XmpCore.Impl
         }
 
         /// <returns>Returns a read-only copy of child nodes list.</returns>
-        public IReadOnlyList<object> GetUnmodifiableChildren()
+        public IEnumerable<object> GetUnmodifiableChildren()
         {
             return GetChildren().Cast<object>().ToList();
         }

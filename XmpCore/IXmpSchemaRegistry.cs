@@ -149,7 +149,7 @@ namespace XmpCore
         /// </remarks>
         /// <param name="aliasNs">a schema namespace URI</param>
         /// <returns>Returns all alias infos from aliases that are contained in the provided namespace.</returns>
-        IReadOnlyList<IXmpAliasInfo> FindAliases(string aliasNs);
+        IEnumerable<IXmpAliasInfo> FindAliases(string aliasNs);
 
         /// <summary>Searches for registered aliases.</summary>
         /// <param name="qname">an XML conform qname</param>
