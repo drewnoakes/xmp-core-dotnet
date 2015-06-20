@@ -69,6 +69,9 @@
     <Compile Include="IXmpAliasInfo.cs" />
     <Compile Include="IXmpProperty.cs" />
     <Compile Include="IXmpPropertyInfo.cs" />
+    <Compile Include="Sharpen\EnumeratorWrapper.cs" />
+    <Compile Include="Sharpen\IIterator.cs" />
+    <Compile Include="Sharpen\PushbackReader.cs" />
     <Compile Include="XmpConstConstants.cs" />
     <Compile Include="IXmpDateTime.cs" />
     <Compile Include="XmpDateTimeFactory.cs" />
@@ -85,12 +88,6 @@
     <Compile Include="Sharpen\Calendar.cs" />
     <Compile Include="Sharpen\Extensions.cs" />
     <Compile Include="Sharpen\GregorianCalendar.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Sharpen\Sharpen.csproj">
-      <Project>{72944a6c-45ff-4ef8-b349-8c9cabf519d4}</Project>
-      <Name>Sharpen</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
