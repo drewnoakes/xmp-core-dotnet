@@ -9,9 +9,9 @@ in places to better suit .NET development.
 
 ## Installation
 
-Reference the project via NuGet.
+The easiest way to reference this project is to install [its NuGet package](https://www.nuget.org/packages/XmpCore/):
 
-https://www.nuget.org/packages/XmpCore/
+    PM> Install-Package XmpCore
 
 ## Requirements
 
