@@ -230,7 +230,7 @@ namespace XmpCore.Impl
             if (tzSign < 0)
                 offset = -offset;
 
-            binValue.SetTimeZone(TimeZoneInfo.CreateCustomTimeZone(string.Empty, offset, string.Empty, string.Empty));
+            binValue.SetTimeZone(TimeZoneInfo.CreateCustomTimeZone("OFFSET" + offset, offset, string.Empty, string.Empty));
 
             if (input.HasNext)
                 throw new XmpException("Invalid date string, extra chars at end", XmpErrorCode.BadValue);
