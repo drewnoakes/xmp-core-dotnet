@@ -7,6 +7,8 @@
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
 
+// ReSharper disable UnusedParameter.Global
+
 namespace XmpCore.Impl
 {
     /// <since>11.08.2006</since>
