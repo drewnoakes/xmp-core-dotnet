@@ -67,34 +67,33 @@ namespace XmpCore.Impl
             {
                 ParameterAsserts.AssertSchemaNs(namespaceUri);
                 ParameterAsserts.AssertPrefix(suggestedPrefix);
+
                 if (suggestedPrefix[suggestedPrefix.Length - 1] != ':')
-                {
                     suggestedPrefix += ':';
-                }
+
                 if (!Utils.IsXmlNameNs(suggestedPrefix.Substring(0, suggestedPrefix.Length - 1 - 0)))
-                {
                     throw new XmpException("The prefix is a bad XML name", XmpErrorCode.BadXml);
-                }
-                var registeredPrefix = _namespaceToPrefixMap[namespaceUri];
-                var registeredNs = _prefixToNamespaceMap[suggestedPrefix];
-                if (registeredPrefix != null)
+
+                string registeredPrefix;
+                if (_namespaceToPrefixMap.TryGetValue(namespaceUri, out registeredPrefix))
                 {
                     // Return the actual prefix
                     return registeredPrefix;
                 }
-                if (registeredNs != null)
+
+                if (_prefixToNamespaceMap.ContainsKey(suggestedPrefix))
                 {
                     // the namespace is new, but the prefix is already engaged,
                     // we generate a new prefix out of the suggested
                     var generatedPrefix = suggestedPrefix;
                     for (var i = 1; _prefixToNamespaceMap.ContainsKey(generatedPrefix); i++)
-                    {
                         generatedPrefix = suggestedPrefix.Substring(0, suggestedPrefix.Length - 1 - 0) + "_" + i + "_:";
-                    }
                     suggestedPrefix = generatedPrefix;
                 }
+
                 _prefixToNamespaceMap[suggestedPrefix] = namespaceUri;
                 _namespaceToPrefixMap[namespaceUri] = suggestedPrefix;
+
                 // Return the suggested prefix
                 return suggestedPrefix;
             }
@@ -117,7 +116,8 @@ namespace XmpCore.Impl
         {
             lock (this)
             {
-                return _namespaceToPrefixMap[namespaceUri];
+                string value;
+                return _namespaceToPrefixMap.TryGetValue(namespaceUri, out value) ? value : null;
             }
         }
 
@@ -126,10 +126,9 @@ namespace XmpCore.Impl
             lock (this)
             {
                 if (namespacePrefix != null && !namespacePrefix.EndsWith(":"))
-                {
                     namespacePrefix += ":";
-                }
-                return _prefixToNamespaceMap[namespacePrefix];
+                string value;
+                return _prefixToNamespaceMap.TryGetValue(namespacePrefix, out value) ? value : null;
             }
         }
 
@@ -236,7 +235,8 @@ namespace XmpCore.Impl
                 {
                     return null;
                 }
-                return _aliasMap[aliasPrefix + aliasProp];
+                IXmpAliasInfo info;
+                return _aliasMap.TryGetValue(aliasPrefix + aliasProp, out info) ? info : null;
             }
         }
 
@@ -244,7 +244,8 @@ namespace XmpCore.Impl
         {
             lock (this)
             {
-                return _aliasMap[qname];
+                IXmpAliasInfo info;
+                return _aliasMap.TryGetValue(qname, out info) ? info : null;
             }
         }
 
