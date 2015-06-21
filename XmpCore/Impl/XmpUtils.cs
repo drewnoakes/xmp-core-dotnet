@@ -101,13 +101,11 @@ namespace XmpCore.Impl
         }
 
         /// <summary>
-        /// see
-        /// <see cref="XmpCore.XmpUtils.SeparateArrayItems(IXmpMeta, string, string, string, Com.PropertyOptionsol)"/>
+        /// See <see cref="XmpCore.XmpUtils.SeparateArrayItems(IXmpMeta, string, string, string, PropertyOptions, bool)"/>.
         /// </summary>
         /// <param name="xmp">The XMP object containing the array to be updated.</param>
         /// <param name="schemaNs">
-        /// The schema namespace URI for the array. Must not be null or
-        /// the empty string.
+        /// The schema namespace URI for the array. Must not be null or the empty string.
         /// </param>
         /// <param name="arrayName">
         /// The name of the array. May be a general path expression, must

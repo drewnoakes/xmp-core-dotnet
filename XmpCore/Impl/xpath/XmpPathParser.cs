@@ -18,31 +18,45 @@ namespace XmpCore.Impl.XPath
         /// root namespace prefix to the first property component.
         /// </summary>
         /// <remarks>
-        /// Split an XMPPath expression apart at the conceptual steps, adding the
-        /// root namespace prefix to the first property component. The schema URI is
-        /// put in the first (0th) slot in the expanded XMPPath. Check if the top
-        /// level component is an alias, but don't resolve it.
+        /// The schema URI is put in the first (0th) slot in the expanded XMPPath.
+        /// Check if the top level component is an alias, but don't resolve it.
         /// <para />
         /// In the most verbose case steps are separated by '/', and each step can be
         /// of these forms:
-        /// <dl>
-        /// <dt>prefix:name
-        /// <dd> A top level property or struct field.
-        /// <dt>[index]
-        /// <dd> An element of an array.
-        /// <dt>[last()]
-        /// <dd> The last element of an array.
-        /// <dt>[fieldName=&quot;value&quot;]
-        /// <dd> An element in an array of structs, chosen by a field value.
-        /// <dt>[@xml:lang=&quot;value&quot;]
-        /// <dd> An element in an alt-text array, chosen by the xml:lang qualifier.
-        /// <dt>[?qualName=&quot;value&quot;]
-        /// <dd> An element in an array, chosen by a qualifier value.
-        /// <dt>@xml:lang
-        /// <dd> An xml:lang qualifier.
-        /// <dt>?qualName
-        /// <dd> A general qualifier.
-        /// </dl>
+        /// <list>
+        ///   <item>
+        ///     <term>prefix:name</term>
+        ///     <description>A top level property or struct field.</description>
+        ///   </item>
+        ///   <item>
+        ///     <term>[index]</term>
+        ///     <description>An element of an array.</description>
+        ///   </item>
+        ///   <item>
+        ///     <term>[last()]</term>
+        ///     <description>The last element of an array.</description>
+        ///   </item>
+        ///   <item>
+        ///     <term>[fieldName=&quot;value&quot;]</term>
+        ///     <description>An element in an array of structs, chosen by a field value.</description>
+        ///   </item>
+        ///   <item>
+        ///     <term>[@xml:lang=&quot;value&quot;]</term>
+        ///     <description>An element in an alt-text array, chosen by the xml:lang qualifier.</description>
+        ///   </item>
+        ///   <item>
+        ///     <term>[?qualName=&quot;value&quot;]</term>
+        ///     <description>An element in an array, chosen by a qualifier value.</description>
+        ///   </item>
+        ///   <item>
+        ///     <term>@xml:lang</term>
+        ///     <description>An xml:lang qualifier.</description>
+        ///   </item>
+        ///   <item>
+        ///     <term>?qualName</term>
+        ///     <description>A general qualifier.</description>
+        ///   </item>
+        /// </list>
         /// <para />
         /// The logic is complicated though by shorthand for arrays, the separating
         /// '/' and leading '*' are optional. These are all equivalent: array/*[2]

@@ -819,7 +819,7 @@ namespace XmpCore.Impl
             WriteNewline();
         }
 
-        /// <summary>Write the </rdf:Description> end tag.</summary>
+        /// <summary>Write the <c>&lt;/rdf:Description&gt;</c> end tag.</summary>
         /// <exception cref="System.IO.IOException"/>
         private void EndOuterRdfDescription(int level)
         {
