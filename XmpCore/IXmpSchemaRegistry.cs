@@ -9,6 +9,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using XmpCore;
 
 namespace XmpCore
@@ -84,6 +85,7 @@ namespace XmpCore
         /// string.
         /// </param>
         /// <returns>Returns the prefix registered for this namespace URI or null.</returns>
+        [CanBeNull]
         string GetNamespacePrefix(string namespaceUri);
 
         /// <summary>Obtain the URI for a registered namespace prefix.</summary>
@@ -97,18 +99,21 @@ namespace XmpCore
         /// string.
         /// </param>
         /// <returns>Returns the URI registered for this prefix or null.</returns>
+        [CanBeNull]
         string GetNamespaceUri(string namespacePrefix);
 
         /// <returns>
         /// Returns the registered prefix/namespace-pairs as map, where the keys are the
         /// namespaces and the values are the prefixes.
         /// </returns>
+        [NotNull]
         IDictionary GetNamespaces();
 
         /// <returns>
         /// Returns the registered namespace/prefix-pairs as map, where the keys are the
         /// prefixes and the values are the namespaces.
         /// </returns>
+        [NotNull]
         IDictionary GetPrefixes();
 
         /// <summary>Deletes a namespace from the registry.</summary>
@@ -140,7 +145,8 @@ namespace XmpCore
         /// Returns the <c>XMPAliasInfo</c> for the given alias namespace and property or
         /// <c>null</c> if there is no such alias.
         /// </returns>
-        IXmpAliasInfo ResolveAlias(string aliasNs, string aliasProp);
+        [CanBeNull]
+        IXmpAliasInfo ResolveAlias([NotNull] string aliasNs, [NotNull] string aliasProp);
 
         /// <summary>Collects all aliases that are contained in the provided namespace.</summary>
         /// <remarks>
@@ -149,7 +155,8 @@ namespace XmpCore
         /// </remarks>
         /// <param name="aliasNs">a schema namespace URI</param>
         /// <returns>Returns all alias infos from aliases that are contained in the provided namespace.</returns>
-        IEnumerable<IXmpAliasInfo> FindAliases(string aliasNs);
+        [NotNull]
+        IEnumerable<IXmpAliasInfo> FindAliases([NotNull] string aliasNs);
 
         /// <summary>Searches for registered aliases.</summary>
         /// <param name="qname">an XML conform qname</param>
@@ -157,12 +164,14 @@ namespace XmpCore
         /// Returns if an alias definition for the given qname to another
         /// schema and property is registered.
         /// </returns>
-        IXmpAliasInfo FindAlias(string qname);
+        [CanBeNull]
+        IXmpAliasInfo FindAlias([NotNull] string qname);
 
         /// <returns>
         /// Returns the registered aliases as map, where the key is the "qname" (prefix and name)
         /// and the value an <c>XMPAliasInfo</c>-object.
         /// </returns>
+        [NotNull]
         IDictionary GetAliases();
 
         #endregion
