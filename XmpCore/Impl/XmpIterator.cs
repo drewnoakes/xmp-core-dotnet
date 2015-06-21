@@ -12,7 +12,6 @@ using System.Linq;
 using Sharpen;
 using XmpCore.Impl.XPath;
 using XmpCore.Options;
-using XmpCore;
 
 namespace XmpCore.Impl
 {

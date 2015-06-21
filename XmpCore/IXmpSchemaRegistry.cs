@@ -10,7 +10,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
-using XmpCore;
 
 namespace XmpCore
 {
@@ -175,6 +174,5 @@ namespace XmpCore
         IDictionary GetAliases();
 
         #endregion
-
     }
 }

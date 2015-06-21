@@ -13,7 +13,6 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Sharpen;
 using XmpCore.Options;
-using XmpCore;
 
 namespace XmpCore.Impl
 {

@@ -11,7 +11,6 @@ using System;
 using System.Collections.Generic;
 using Sharpen;
 using XmpCore.Options;
-using XmpCore;
 
 namespace XmpCore
 {
