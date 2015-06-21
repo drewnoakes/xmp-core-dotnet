@@ -101,24 +101,22 @@ namespace XmpCore
         [CanBeNull]
         string GetNamespaceUri(string namespacePrefix);
 
-        /// <returns>
+        /// <summary>
         /// Returns the registered prefix/namespace-pairs as map, where the keys are the
         /// namespaces and the values are the prefixes.
-        /// </returns>
+        /// </summary>
         [NotNull]
-        IDictionary GetNamespaces();
+        IDictionary<string, string> Namespaces { get; }
 
-        /// <returns>
+        /// <summary>
         /// Returns the registered namespace/prefix-pairs as map, where the keys are the
         /// prefixes and the values are the namespaces.
-        /// </returns>
+        /// </summary>
         [NotNull]
-        IDictionary GetPrefixes();
+        IDictionary<string, string> Prefixes { get; }
 
         /// <summary>Deletes a namespace from the registry.</summary>
         /// <remarks>
-        /// Deletes a namespace from the registry.
-        /// <para />
         /// Does nothing if the URI is not registered, or if the namespaceURI
         /// parameter is null or the empty string.
         /// <para />
@@ -166,12 +164,12 @@ namespace XmpCore
         [CanBeNull]
         IXmpAliasInfo FindAlias([NotNull] string qname);
 
-        /// <returns>
+        /// <summary>
         /// Returns the registered aliases as map, where the key is the "qname" (prefix and name)
         /// and the value an <c>XMPAliasInfo</c>-object.
-        /// </returns>
+        /// </summary>
         [NotNull]
-        IDictionary GetAliases();
+        IDictionary<string, IXmpAliasInfo> Aliases { get; }
 
         #endregion
     }

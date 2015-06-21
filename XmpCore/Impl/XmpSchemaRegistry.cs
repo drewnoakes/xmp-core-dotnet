@@ -131,19 +131,25 @@ namespace XmpCore.Impl
             }
         }
 
-        public IDictionary GetNamespaces()
+        public IDictionary<string, string> Namespaces
         {
-            lock (this)
+            get
             {
-                return new Dictionary<string, string>(_namespaceToPrefixMap);
+                lock (this)
+                {
+                    return new Dictionary<string, string>(_namespaceToPrefixMap);
+                }
             }
         }
 
-        public IDictionary GetPrefixes()
+        public IDictionary<string, string> Prefixes
         {
-            lock (this)
+            get
             {
-                return new Dictionary<string, string>(_prefixToNamespaceMap);
+                lock (this)
+                {
+                    return new Dictionary<string, string>(_prefixToNamespaceMap);
+                }
             }
         }
 
@@ -392,11 +398,14 @@ namespace XmpCore.Impl
             private readonly AliasOptions _aliasOpts;
         }
 
-        public IDictionary GetAliases()
+        public IDictionary<string, IXmpAliasInfo> Aliases
         {
-            lock (this)
+            get
             {
-                return new Dictionary<string, IXmpAliasInfo>(_aliasMap);
+                lock (this)
+                {
+                    return new Dictionary<string, IXmpAliasInfo>(_aliasMap);
+                }
             }
         }
 
