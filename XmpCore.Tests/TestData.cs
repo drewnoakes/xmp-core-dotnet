@@ -17,7 +17,7 @@ namespace XmpCore.Tests
      *
      * @since   21.02.2007
      */
-    public static class XmpCoreCoverageConst
+    public static class TestData
     {
         /** */
         public const String NS1 = "ns:test1/";
