@@ -647,7 +647,7 @@ namespace XmpCore.Tests
             }
             catch (XmpException e)
             {
-                log.WriteLine("Parse and do not reconcile inconsistent aliases - threw XmpException #" + e.GetErrorCode() + " :   " + e.Message);
+                log.WriteLine("Parse and do not reconcile inconsistent aliases - threw XmpException #{0} :   {1}", e.GetErrorCode(), e.Message);
             }
         }
 
@@ -736,8 +736,7 @@ namespace XmpCore.Tests
             }
             catch (XmpException e)
             {
-                log.WriteLine("\nExact packet size smaller than minimal packet length - " +
-                    "threw XmpException #" + e.GetErrorCode() + " :   " + e.Message);
+                log.WriteLine("\nExact packet size smaller than minimal packet length - threw XmpException #{0} :   {1}", e.GetErrorCode(), e.Message);
             }
         }
 
@@ -899,10 +898,10 @@ namespace XmpCore.Tests
 
             var currentDateTime = XmpDateTimeFactory.GetCurrentDateTime();
 
-            log.WriteLine("Print date 2000 Jan 31 12:34:56 PST =   " + date1.ToString());
-            log.WriteLine("Print zero date =   " + date2.ToString());
-            log.WriteLine("Print date created by a calendar =   " + date3.ToString());
-            log.WriteLine("Print current date =   " + currentDateTime);
+            log.WriteLine("Print date 2000 Jan 31 12:34:56 PST =   {0}", date1);
+            log.WriteLine("Print zero date =   {0}", date2);
+            log.WriteLine("Print date created by a calendar =   {0}", date3);
+            log.WriteLine("Print current date =   {0}", currentDateTime);
             log.WriteLine();
         }
 
@@ -923,11 +922,11 @@ namespace XmpCore.Tests
             String name = meta.GetObjectName();
             if (!string.IsNullOrEmpty(name))
             {
-                log.WriteLine(title + " (Name: '" + name + "'):");
+                log.WriteLine("{0} (Name: '{1}'):", title, name);
             }
             else
             {
-                log.WriteLine(title + ":");
+                log.WriteLine("{0}:", title);
             }
             log.WriteLine(meta.DumpObject());
             log.WriteLine();
@@ -951,10 +950,7 @@ namespace XmpCore.Tests
         {
             var aliases = registry.Aliases;
             foreach (var qname in aliases.Keys)
-            {
-                var aliasInfo = (IXmpAliasInfo) aliases[qname];
-                log.WriteLine("" + qname + "   --->   " + aliasInfo);
-            }
+                log.WriteLine("{0}   --->   {1}", qname, aliases[qname]);
             log.WriteLine();
         }
 
@@ -967,7 +963,7 @@ namespace XmpCore.Tests
         {
             log.WriteLine();
             log.WriteLine("// =============================================================================");
-            log.WriteLine("// " + title);
+            log.WriteLine("// {0}", title);
             log.WriteLine("// =============================================================================");
             log.WriteLine();
         }
@@ -981,7 +977,7 @@ namespace XmpCore.Tests
         {
             log.WriteLine();
             log.WriteLine ("// -----------------------------------------------------------------------------".Substring(0, title.Length + 3));
-            log.WriteLine ("// " + title);
+            log.WriteLine ("// {0}", title);
             log.WriteLine();
         }
     }
