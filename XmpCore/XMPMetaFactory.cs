@@ -50,14 +50,13 @@ namespace XmpCore
         /// is recognized automatically.
         /// </remarks>
         /// <param name="in">an <c>Stream</c></param>
-        /// <param name="options">
-        /// Options controlling the parsing.<br />
+        /// <param name="options">Options controlling the parsing.
         /// The available options are:
         /// <list type="bullet">
         ///   <item>XMP_REQUIRE_XMPMETA - The &lt;x:xmpmeta&gt; XML element is required around <tt>&lt;rdf:RDF&gt;</tt>.</item>
         ///   <item>XMP_STRICT_ALIASING - Do not reconcile alias differences, throw an exception.</item>
         /// </list>
-        /// <em>Note:</em>The XMP_STRICT_ALIASING option is not yet implemented.
+        /// Note: The XMP_STRICT_ALIASING option is not yet implemented.
         /// </param>
         /// <returns>Returns the <c>XMPMeta</c>-object created from the input.</returns>
         /// <exception cref="XmpException">If the file is not well-formed XML or if the parsing fails.</exception>
@@ -93,13 +92,9 @@ namespace XmpCore
 
         /// <summary>Serializes an <c>XMPMeta</c>-object as RDF into an <c>OutputStream</c>.</summary>
         /// <param name="xmp">a metadata object</param>
-        /// <param name="options">
-        /// Options to control the serialization (see
-        /// <see cref="SerializeOptions"/>
-        /// ).
-        /// </param>
+        /// <param name="options">Options to control the serialization (see <see cref="SerializeOptions"/>).</param>
         /// <param name="stream">an <c>OutputStream</c> to write the serialized RDF to.</param>
-        /// <exception cref="XmpException">on serializsation errors.</exception>
+        /// <exception cref="XmpException">on serialization errors.</exception>
         /// <exception cref="XmpException"/>
         public static void Serialize(IXmpMeta xmp, Stream stream, SerializeOptions options = null)
         {
@@ -109,13 +104,9 @@ namespace XmpCore
 
         /// <summary>Serializes an <c>XMPMeta</c>-object as RDF into a byte buffer.</summary>
         /// <param name="xmp">a metadata object</param>
-        /// <param name="options">
-        /// Options to control the serialization (see
-        /// <see cref="SerializeOptions"/>
-        /// ).
-        /// </param>
+        /// <param name="options">Options to control the serialization (see <see cref="SerializeOptions"/>).</param>
         /// <returns>Returns a byte buffer containing the serialized RDF.</returns>
-        /// <exception cref="XmpException">on serializsation errors.</exception>
+        /// <exception cref="XmpException">on serialization errors.</exception>
         /// <exception cref="XmpException"/>
         public static byte[] SerializeToBuffer(IXmpMeta xmp, SerializeOptions options)
         {
@@ -129,13 +120,9 @@ namespace XmpCore
         /// is ignored when serializing to a string.
         /// </remarks>
         /// <param name="xmp">a metadata object</param>
-        /// <param name="options">
-        /// Options to control the serialization (see
-        /// <see cref="SerializeOptions"/>
-        /// ).
-        /// </param>
+        /// <param name="options">Options to control the serialization (see <see cref="SerializeOptions"/>).</param>
         /// <returns>Returns a string containing the serialized RDF.</returns>
-        /// <exception cref="XmpException">on serializsation errors.</exception>
+        /// <exception cref="XmpException">on serialization errors.</exception>
         /// <exception cref="XmpException"/>
         public static string SerializeToString(IXmpMeta xmp, SerializeOptions options)
         {
@@ -156,7 +143,7 @@ namespace XmpCore
         /// <remarks>
         /// Resets the schema registry to its original state (creates a new one).
         /// Be careful this might break all existing XMPMeta-objects and should be used
-        /// only for testing purpurses.
+        /// only for testing purposes.
         /// </remarks>
         public static void Reset()
         {

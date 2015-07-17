@@ -53,7 +53,7 @@ namespace XmpCore.Impl
         /// ).
         /// </param>
         /// <returns>Returns a string containing the serialized RDF.</returns>
-        /// <exception cref="XmpException">on serializsation errors.</exception>
+        /// <exception cref="XmpException">on serialization errors.</exception>
         public static string SerializeToString(XmpMeta xmp, SerializeOptions options)
         {
             // forces the encoding to be UTF-16 to get the correct string length
@@ -81,7 +81,7 @@ namespace XmpCore.Impl
         /// ).
         /// </param>
         /// <returns>Returns a byte buffer containing the serialized RDF.</returns>
-        /// <exception cref="XmpException">on serializsation errors.</exception>
+        /// <exception cref="XmpException">on serialization errors.</exception>
         public static byte[] SerializeToBuffer(XmpMeta xmp, SerializeOptions options)
         {
             var @out = new MemoryStream(2048);
