@@ -24,7 +24,7 @@ namespace XmpCore.Tests
      *
      * @since   11.02.2007
      */
-    public class XmpCoreCoverage : XmpCoreCoverageConst
+    public class XmpCoreCoverage
     {
         /** the log stream for all outputs */
         private static TextWriter log;
@@ -130,15 +130,15 @@ namespace XmpCore.Tests
             // Registry namespace functions
             writeMinorLabel ("Test namespace registry functions");
 
-            String prefix = registry.RegisterNamespace(NS1, "ns1");
+            String prefix = registry.RegisterNamespace(XmpCoreCoverageConst.NS1, "ns1");
             log.WriteLine ("registerNamespace ns1:   " + prefix + "   --->   " +
                 registry.GetNamespaceUri(prefix));
 
-            prefix = registry.RegisterNamespace(NS2, "ns2");
+            prefix = registry.RegisterNamespace(XmpCoreCoverageConst.NS2, "ns2");
             log.WriteLine ("registerNamespace ns2:   " + prefix + "   --->   " +
                 registry.GetNamespaceUri(prefix));
 
-            prefix = registry.GetNamespacePrefix(NS1);
+            prefix = registry.GetNamespacePrefix(XmpCoreCoverageConst.NS1);
             log.WriteLine ("getNamespacePrefix ns1:   " + prefix);
 
             log.WriteLine("getNamespaceURI ns1:   " + registry.GetNamespaceUri("ns1"));
@@ -168,38 +168,38 @@ namespace XmpCore.Tests
             // Resolve aliases
             writeMinorLabel ("Resolve ns2: to ns1: aliases");
 
-            var aliasInfo = registry.ResolveAlias (NS1, "SimpleActual");
+            var aliasInfo = registry.ResolveAlias(XmpCoreCoverageConst.NS1, "SimpleActual");
             log.WriteLine ("ResolveAlias ns1:SimpleActual:   " + aliasInfo + "   (wrong way!)");
 
-            aliasInfo = registry.ResolveAlias (NS2, "SimpleAlias");
+            aliasInfo = registry.ResolveAlias(XmpCoreCoverageConst.NS2, "SimpleAlias");
             log.WriteLine ("ResolveAlias ns2:SimpleAlias:   " + aliasInfo);
             log.WriteLine();
 
 
-            aliasInfo = registry.ResolveAlias (NS2, "BagAlias");
+            aliasInfo = registry.ResolveAlias (XmpCoreCoverageConst.NS2, "BagAlias");
             log.WriteLine ("ResolveAlias ns2:BagAlias:   " + aliasInfo);
 
-            aliasInfo = registry.ResolveAlias (NS2, "SeqAlias");
+            aliasInfo = registry.ResolveAlias (XmpCoreCoverageConst.NS2, "SeqAlias");
             log.WriteLine ("ResolveAlias ns2:SeqAlias:   " + aliasInfo);
 
-            aliasInfo = registry.ResolveAlias (NS2, "AltAlias");
+            aliasInfo = registry.ResolveAlias (XmpCoreCoverageConst.NS2, "AltAlias");
             log.WriteLine ("ResolveAlias ns2:AltAlias:   " + aliasInfo);
 
-            aliasInfo = registry.ResolveAlias (NS2, "AltTextAlias");
+            aliasInfo = registry.ResolveAlias (XmpCoreCoverageConst.NS2, "AltTextAlias");
             log.WriteLine ("ResolveAlias ns2:AltTextAlias:   " + aliasInfo);
             log.WriteLine();
 
 
-            aliasInfo = registry.ResolveAlias (NS2, "BagItemAlias");
+            aliasInfo = registry.ResolveAlias (XmpCoreCoverageConst.NS2, "BagItemAlias");
             log.WriteLine ("ResolveAlias ns2:BagItemAlias:   " + aliasInfo);
 
-            aliasInfo = registry.ResolveAlias (NS2, "SeqItemAlias");
+            aliasInfo = registry.ResolveAlias (XmpCoreCoverageConst.NS2, "SeqItemAlias");
             log.WriteLine ("ResolveAlias ns2:SeqItemAlias:   " + aliasInfo);
 
-            aliasInfo = registry.ResolveAlias (NS2, "AltItemAlias");
+            aliasInfo = registry.ResolveAlias (XmpCoreCoverageConst.NS2, "AltItemAlias");
             log.WriteLine ("ResolveAlias ns2:AltItemAlias:   " + aliasInfo);
 
-            aliasInfo = registry.ResolveAlias (NS2, "AltTextItemAlias");
+            aliasInfo = registry.ResolveAlias (XmpCoreCoverageConst.NS2, "AltTextItemAlias");
             log.WriteLine ("ResolveAlias ns2:AltTextItemAlias:   " + aliasInfo);
             log.WriteLine();
 
@@ -208,11 +208,11 @@ namespace XmpCore.Tests
             writeMinorLabel ("Test SetProperty through ns2: simple aliases");
 
             var meta = XmpMetaFactory.Create();
-            meta.SetProperty (NS2, "SimpleAlias", "Simple value");
-            meta.SetProperty (NS2, "ns2:BagItemAlias", "BagItem value");
-            meta.SetProperty (NS2, "SeqItemAlias", "SeqItem value");
-            meta.SetProperty (NS2, "AltItemAlias", "AltItem value");
-            meta.SetProperty (NS2, "AltTextItemAlias", "AltTextItem value");
+            meta.SetProperty (XmpCoreCoverageConst.NS2, "SimpleAlias", "Simple value");
+            meta.SetProperty (XmpCoreCoverageConst.NS2, "ns2:BagItemAlias", "BagItem value");
+            meta.SetProperty (XmpCoreCoverageConst.NS2, "SeqItemAlias", "SeqItem value");
+            meta.SetProperty (XmpCoreCoverageConst.NS2, "AltItemAlias", "AltItem value");
+            meta.SetProperty (XmpCoreCoverageConst.NS2, "AltTextItemAlias", "AltTextItem value");
             printXmpMeta(meta, "Check for aliases and bases");
 
 
@@ -238,7 +238,7 @@ namespace XmpCore.Tests
             meta2.SetObjectName("New object name");
             printXmpMeta(meta2, "XMP object with name");
 
-            var meta3 = XmpMetaFactory.ParseFromString(RDF_COVERAGE);
+            var meta3 = XmpMetaFactory.ParseFromString(XmpCoreCoverageConst.RDF_COVERAGE);
             printXmpMeta(meta3, "Construct and parse from buffer");
 
             meta3.SetProperty(XmpConstConstants.NsXmpMm, "InstanceID", "meta2:Original");
@@ -261,22 +261,22 @@ namespace XmpCore.Tests
             writeMajorLabel ("Test SetProperty and related methods");
 
             var meta = XmpMetaFactory.Create();
-            meta.SetProperty (NS1, "Prop", "Prop value");
-            meta.SetProperty (NS1, "ns1:XMLProp", "<PropValue/>");
-            meta.SetProperty (NS1, "ns1:URIProp", "URI:value/", new PropertyOptions { IsUri = true });
+            meta.SetProperty (XmpCoreCoverageConst.NS1, "Prop", "Prop value");
+            meta.SetProperty (XmpCoreCoverageConst.NS1, "ns1:XMLProp", "<PropValue/>");
+            meta.SetProperty (XmpCoreCoverageConst.NS1, "ns1:URIProp", "URI:value/", new PropertyOptions { IsUri = true });
 
-            meta.AppendArrayItem(NS1, "Bag", new PropertyOptions { IsArray = true }, "BagItem value", null);
-            meta.AppendArrayItem(NS1, "ns1:Seq", new PropertyOptions { IsArrayOrdered = true }, "SeqItem value", null);
-            meta.AppendArrayItem(NS1, "ns1:Alt", new PropertyOptions { IsArrayAlternate = true }, "AltItem value", null);
+            meta.AppendArrayItem(XmpCoreCoverageConst.NS1, "Bag", new PropertyOptions { IsArray = true }, "BagItem value", null);
+            meta.AppendArrayItem(XmpCoreCoverageConst.NS1, "ns1:Seq", new PropertyOptions { IsArrayOrdered = true }, "SeqItem value", null);
+            meta.AppendArrayItem(XmpCoreCoverageConst.NS1, "ns1:Alt", new PropertyOptions { IsArrayAlternate = true }, "AltItem value", null);
 
-            meta.SetArrayItem (NS1, "Bag", 1, "BagItem 3");
-            meta.InsertArrayItem (NS1, "ns1:Bag", 1, "BagItem 1");
-            meta.InsertArrayItem (NS1, "ns1:Bag", 2, "BagItem 2");
-            meta.AppendArrayItem (NS1, "Bag", "BagItem 4");
+            meta.SetArrayItem (XmpCoreCoverageConst.NS1, "Bag", 1, "BagItem 3");
+            meta.InsertArrayItem (XmpCoreCoverageConst.NS1, "ns1:Bag", 1, "BagItem 1");
+            meta.InsertArrayItem (XmpCoreCoverageConst.NS1, "ns1:Bag", 2, "BagItem 2");
+            meta.AppendArrayItem (XmpCoreCoverageConst.NS1, "Bag", "BagItem 4");
 
-            meta.SetStructField (NS1, "Struct", NS2, "Field1", "Field1 value");
-            meta.SetStructField (NS1, "ns1:Struct", NS2, "Field2", "Field2 value");
-            meta.SetStructField (NS1, "ns1:Struct", NS2, "Field3", "Field3 value");
+            meta.SetStructField (XmpCoreCoverageConst.NS1, "Struct", XmpCoreCoverageConst.NS2, "Field1", "Field1 value");
+            meta.SetStructField (XmpCoreCoverageConst.NS1, "ns1:Struct", XmpCoreCoverageConst.NS2, "Field2", "Field2 value");
+            meta.SetStructField (XmpCoreCoverageConst.NS1, "ns1:Struct", XmpCoreCoverageConst.NS2, "Field3", "Field3 value");
 
             printXmpMeta(meta, "A few basic set property calls");
 
@@ -284,30 +284,30 @@ namespace XmpCore.Tests
 
             // Add some properties with qualifier
             writeMinorLabel ("Add some properties with qualifier");
-            log.WriteLine ("CountArrayItems Bag = " + meta.CountArrayItems(NS1, "Bag"));
+            log.WriteLine ("CountArrayItems Bag = " + meta.CountArrayItems(XmpCoreCoverageConst.NS1, "Bag"));
 
-            meta.SetProperty (NS1, "QualProp1", "Prop value");
-            meta.SetQualifier (NS1, "QualProp1", NS2, "Qual1", "Qual1 value");
-            meta.SetProperty (NS1, "QualProp1/?ns2:Qual3", "Qual3 value");
-            meta.SetProperty (NS1, "QualProp1/?xml:lang", "x-qual");
+            meta.SetProperty (XmpCoreCoverageConst.NS1, "QualProp1", "Prop value");
+            meta.SetQualifier (XmpCoreCoverageConst.NS1, "QualProp1", XmpCoreCoverageConst.NS2, "Qual1", "Qual1 value");
+            meta.SetProperty (XmpCoreCoverageConst.NS1, "QualProp1/?ns2:Qual3", "Qual3 value");
+            meta.SetProperty (XmpCoreCoverageConst.NS1, "QualProp1/?xml:lang", "x-qual");
 
-            meta.SetProperty (NS1, "QualProp2", "Prop value");
-            meta.SetQualifier (NS1, "QualProp2", XmpConstConstants.NsXml, "lang", "en-us");
-            meta.SetProperty (NS1, "QualProp2/@xml:lang", "x-attr");
+            meta.SetProperty (XmpCoreCoverageConst.NS1, "QualProp2", "Prop value");
+            meta.SetQualifier (XmpCoreCoverageConst.NS1, "QualProp2", XmpConstConstants.NsXml, "lang", "en-us");
+            meta.SetProperty (XmpCoreCoverageConst.NS1, "QualProp2/@xml:lang", "x-attr");
 
-            meta.SetProperty (NS1, "QualProp3", "Prop value");
-            meta.SetQualifier (NS1, "ns1:QualProp3", XmpConstConstants.NsXml, "xml:lang", "en-us");
-            meta.SetQualifier (NS1, "ns1:QualProp3", NS2, "ns2:Qual", "Qual value");
+            meta.SetProperty (XmpCoreCoverageConst.NS1, "QualProp3", "Prop value");
+            meta.SetQualifier (XmpCoreCoverageConst.NS1, "ns1:QualProp3", XmpConstConstants.NsXml, "xml:lang", "en-us");
+            meta.SetQualifier (XmpCoreCoverageConst.NS1, "ns1:QualProp3", XmpCoreCoverageConst.NS2, "ns2:Qual", "Qual value");
 
-            meta.SetProperty (NS1, "QualProp4", "Prop value");
-            meta.SetQualifier (NS1, "QualProp4", NS2, "Qual", "Qual value");
-            meta.SetQualifier (NS1, "QualProp4", XmpConstConstants.NsXml, "lang", "en-us");
+            meta.SetProperty (XmpCoreCoverageConst.NS1, "QualProp4", "Prop value");
+            meta.SetQualifier (XmpCoreCoverageConst.NS1, "QualProp4", XmpCoreCoverageConst.NS2, "Qual", "Qual value");
+            meta.SetQualifier (XmpCoreCoverageConst.NS1, "QualProp4", XmpConstConstants.NsXml, "lang", "en-us");
             printXmpMeta(meta, "Add some qualifiers");
 
-            meta.SetProperty (NS1, "QualProp1", "new value");
-            meta.SetProperty (NS1, "QualProp2", "new value");
-            meta.SetProperty (NS1, "QualProp3", "new value");
-            meta.SetProperty (NS1, "QualProp4", "new value");
+            meta.SetProperty (XmpCoreCoverageConst.NS1, "QualProp1", "new value");
+            meta.SetProperty (XmpCoreCoverageConst.NS1, "QualProp2", "new value");
+            meta.SetProperty (XmpCoreCoverageConst.NS1, "QualProp3", "new value");
+            meta.SetProperty (XmpCoreCoverageConst.NS1, "QualProp4", "new value");
             printXmpMeta (meta, "Change values and keep qualifiers");
 
             return meta;
@@ -323,43 +323,43 @@ namespace XmpCore.Tests
         {
             writeMajorLabel ("Test getProperty, deleteProperty and related methods");
 
-            meta.DeleteProperty (NS1, "QualProp1");    // ! Start with fresh qualifiers.
-            meta.DeleteProperty (NS1, "ns1:QualProp2");
-            meta.DeleteProperty (NS1, "ns1:QualProp3");
-            meta.DeleteProperty (NS1, "QualProp4");
+            meta.DeleteProperty (XmpCoreCoverageConst.NS1, "QualProp1");    // ! Start with fresh qualifiers.
+            meta.DeleteProperty (XmpCoreCoverageConst.NS1, "ns1:QualProp2");
+            meta.DeleteProperty (XmpCoreCoverageConst.NS1, "ns1:QualProp3");
+            meta.DeleteProperty (XmpCoreCoverageConst.NS1, "QualProp4");
 
 
             writeMinorLabel("Set properties with qualifier");
 
-            meta.SetProperty (NS1, "QualProp1", "Prop value");
-            meta.SetQualifier (NS1, "QualProp1", NS2, "Qual1", "Qual1 value");
+            meta.SetProperty (XmpCoreCoverageConst.NS1, "QualProp1", "Prop value");
+            meta.SetQualifier (XmpCoreCoverageConst.NS1, "QualProp1", XmpCoreCoverageConst.NS2, "Qual1", "Qual1 value");
 
-            meta.SetProperty (NS1, "QualProp2", "Prop value");
-            meta.SetQualifier (NS1, "QualProp2", XmpConstConstants.NsXml, "lang", "en-us");
+            meta.SetProperty (XmpCoreCoverageConst.NS1, "QualProp2", "Prop value");
+            meta.SetQualifier (XmpCoreCoverageConst.NS1, "QualProp2", XmpConstConstants.NsXml, "lang", "en-us");
 
-            meta.SetProperty (NS1, "QualProp3", "Prop value");
-            meta.SetQualifier (NS1, "QualProp3", XmpConstConstants.NsXml, "lang", "en-us");
-            meta.SetQualifier (NS1, "QualProp3", NS2, "Qual", "Qual value");
+            meta.SetProperty (XmpCoreCoverageConst.NS1, "QualProp3", "Prop value");
+            meta.SetQualifier (XmpCoreCoverageConst.NS1, "QualProp3", XmpConstConstants.NsXml, "lang", "en-us");
+            meta.SetQualifier (XmpCoreCoverageConst.NS1, "QualProp3", XmpCoreCoverageConst.NS2, "Qual", "Qual value");
 
-            meta.SetProperty (NS1, "QualProp4", "Prop value");
-            meta.SetQualifier (NS1, "QualProp4", NS2, "Qual", "Qual value");
-            meta.SetQualifier (NS1, "QualProp4", XmpConstConstants.NsXml, "lang", "en-us");
+            meta.SetProperty (XmpCoreCoverageConst.NS1, "QualProp4", "Prop value");
+            meta.SetQualifier (XmpCoreCoverageConst.NS1, "QualProp4", XmpCoreCoverageConst.NS2, "Qual", "Qual value");
+            meta.SetQualifier (XmpCoreCoverageConst.NS1, "QualProp4", XmpConstConstants.NsXml, "lang", "en-us");
 
             printXmpMeta (meta, "XMP object");
 
 
             writeMinorLabel("Get simple properties");
 
-            var property = meta.GetProperty(NS1, "Prop");
+            var property = meta.GetProperty(XmpCoreCoverageConst.NS1, "Prop");
             log.WriteLine("getProperty ns1:Prop =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
 
-            property = meta.GetProperty(NS1, "ns1:XMLProp");
+            property = meta.GetProperty(XmpCoreCoverageConst.NS1, "ns1:XMLProp");
             log.WriteLine("getProperty ns1:XMLProp =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
 
-            property = meta.GetProperty(NS1, "ns1:URIProp");
+            property = meta.GetProperty(XmpCoreCoverageConst.NS1, "ns1:URIProp");
             log.WriteLine("getProperty ns1:URIProp =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
 
-            property = meta.GetArrayItem(NS1, "Bag", 2);
+            property = meta.GetArrayItem(XmpCoreCoverageConst.NS1, "Bag", 2);
             log.WriteLine("getArrayItem ns1:Bag[2] =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
 
             try
@@ -374,67 +374,67 @@ namespace XmpCore.Tests
 
             writeMinorLabel("Get array items and struct fields");
 
-            property = meta.GetArrayItem(NS1, "ns1:Seq", 1);
+            property = meta.GetArrayItem(XmpCoreCoverageConst.NS1, "ns1:Seq", 1);
             log.WriteLine("getArrayItem ns1:Seq[1] =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
 
-            property = meta.GetArrayItem(NS1, "ns1:Alt", 1);
+            property = meta.GetArrayItem(XmpCoreCoverageConst.NS1, "ns1:Alt", 1);
             log.WriteLine("getArrayItem ns1:Alt[1] =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
             log.WriteLine();
 
-            property = meta.GetStructField(NS1, "Struct", NS2, "Field1");
+            property = meta.GetStructField(XmpCoreCoverageConst.NS1, "Struct", XmpCoreCoverageConst.NS2, "Field1");
             log.WriteLine("getStructField ns1:Struct/ns2:Field1 =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
 
-            property = meta.GetStructField(NS1, "ns1:Struct", NS2, "Field2");
+            property = meta.GetStructField(XmpCoreCoverageConst.NS1, "ns1:Struct", XmpCoreCoverageConst.NS2, "Field2");
             log.WriteLine("getStructField ns1:Struct/ns2:Field2 =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
 
-            property = meta.GetStructField(NS1, "ns1:Struct", NS2, "ns2:Field3");
+            property = meta.GetStructField(XmpCoreCoverageConst.NS1, "ns1:Struct", XmpCoreCoverageConst.NS2, "ns2:Field3");
             log.WriteLine("getStructField ns1:Struct/ns2:Field3 =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
 
-            property = meta.GetStructField(NS1, "ns1:Struct", NS2, "ns2:Field3");
+            property = meta.GetStructField(XmpCoreCoverageConst.NS1, "ns1:Struct", XmpCoreCoverageConst.NS2, "ns2:Field3");
             log.WriteLine("getStructField ns1:Struct/ns2:Field3 =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
 
-            property = meta.GetStructField(NS1, "ns1:Struct", NS2, "ns2:Field3");
+            property = meta.GetStructField(XmpCoreCoverageConst.NS1, "ns1:Struct", XmpCoreCoverageConst.NS2, "ns2:Field3");
             log.WriteLine("getStructField ns1:Struct/ns2:Field3 =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
             log.WriteLine();
 
 
             writeMinorLabel("Get qualifier");
 
-            property = meta.GetQualifier(NS1, "QualProp1", NS2, "Qual1");
+            property = meta.GetQualifier(XmpCoreCoverageConst.NS1, "QualProp1", XmpCoreCoverageConst.NS2, "Qual1");
             log.WriteLine("getQualifier  ns1:QualProp1/?ns2:Qual1 =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
 
             try
             {
-                meta.GetQualifier(null, "ns1:QualProp1", NS2, "Qual1");
+                meta.GetQualifier(null, "ns1:QualProp1", XmpCoreCoverageConst.NS2, "Qual1");
             }
             catch (XmpException e)
             {
                 log.WriteLine("getQualifier with no schema URI - threw XmpException #" + e.GetErrorCode() + " :   " + e.Message);
             }
 
-            property = meta.GetQualifier(NS1, "QualProp3", XmpConstConstants.NsXml, "xml:lang");
+            property = meta.GetQualifier(XmpCoreCoverageConst.NS1, "QualProp3", XmpConstConstants.NsXml, "xml:lang");
             log.WriteLine("getQualifier ns1:QualProp3/@xml-lang =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
 
-            property = meta.GetQualifier(NS1, "QualProp3", NS2, "ns2:Qual");
+            property = meta.GetQualifier(XmpCoreCoverageConst.NS1, "QualProp3", XmpCoreCoverageConst.NS2, "ns2:Qual");
             log.WriteLine("getQualifier ns1:QualProp3/?ns2:Qual =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
             log.WriteLine();
 
 
             writeMinorLabel("Get non-simple properties");
 
-            property = meta.GetProperty(NS1, "Bag");
+            property = meta.GetProperty(XmpCoreCoverageConst.NS1, "Bag");
             log.WriteLine("getProperty ns1:Bag =   " + property.Value + " ("
                     + property.Options.GetOptionsString() + ")");
 
-            property = meta.GetProperty(NS1, "Seq");
+            property = meta.GetProperty(XmpCoreCoverageConst.NS1, "Seq");
             log.WriteLine("getProperty ns1:Seq =   " + property.Value + " ("
                     + property.Options.GetOptionsString() + ")");
 
-            property = meta.GetProperty(NS1, "Alt");
+            property = meta.GetProperty(XmpCoreCoverageConst.NS1, "Alt");
             log.WriteLine("getProperty ns1:Alt =   " + property.Value + " ("
                     + property.Options.GetOptionsString() + ")");
 
-            property = meta.GetProperty(NS1, "Struct");
+            property = meta.GetProperty(XmpCoreCoverageConst.NS1, "Struct");
             log.WriteLine("getProperty ns1:Struct =   " + property.Value + " ("
                     + property.Options.GetOptionsString() + ")");
             log.WriteLine();
@@ -451,16 +451,16 @@ namespace XmpCore.Tests
                 log.WriteLine("getProperty with bogus schema URI - threw XmpException #" + e.GetErrorCode() + " :   " + e.Message);
             }
 
-            property = meta.GetProperty (NS1, "Bogus");
+            property = meta.GetProperty (XmpCoreCoverageConst.NS1, "Bogus");
             log.WriteLine ("getProperty ns1:Bogus (not existing) =   " + property);
 
-            property = meta.GetArrayItem(NS1, "Bag", 99);
+            property = meta.GetArrayItem(XmpCoreCoverageConst.NS1, "Bag", 99);
             log.WriteLine ("ArrayItem ns1:Bag[99] (not existing) =   " + property);
 
-            property = meta.GetStructField(NS1, "Struct", NS2, "Bogus");
+            property = meta.GetStructField(XmpCoreCoverageConst.NS1, "Struct", XmpCoreCoverageConst.NS2, "Bogus");
             log.WriteLine ("getStructField ns1:Struct/ns2:Bogus (not existing) =   " + property);
 
-            property = meta.GetQualifier (NS1, "Prop", NS2, "Bogus");
+            property = meta.GetQualifier (XmpCoreCoverageConst.NS1, "Prop", XmpCoreCoverageConst.NS2, "Bogus");
             log.WriteLine ("getQualifier ns1:Prop/?ns2:Bogus (not existing) =   " + property);
         }
 
@@ -475,17 +475,17 @@ namespace XmpCore.Tests
 
             printXmpMeta (meta, "XMP object");
 
-            log.WriteLine("doesPropertyExist ns1:Prop =    " + meta.DoesPropertyExist(NS1, "Prop"));
-            log.WriteLine("doesPropertyExist ns1:Struct =    " + meta.DoesPropertyExist(NS1, "ns1:Struct"));
-            log.WriteLine("doesArrayItemExist ns1:Bag[2] =    " + meta.DoesArrayItemExist(NS1, "Bag", 2));
+            log.WriteLine("doesPropertyExist ns1:Prop =    " + meta.DoesPropertyExist(XmpCoreCoverageConst.NS1, "Prop"));
+            log.WriteLine("doesPropertyExist ns1:Struct =    " + meta.DoesPropertyExist(XmpCoreCoverageConst.NS1, "ns1:Struct"));
+            log.WriteLine("doesArrayItemExist ns1:Bag[2] =    " + meta.DoesArrayItemExist(XmpCoreCoverageConst.NS1, "Bag", 2));
             log.WriteLine("doesArrayItemExist ns1:Seq[last()] =    "
-                    + meta.DoesArrayItemExist(NS1, "ns1:Seq", XmpConstConstants.ArrayLastItem));
+                    + meta.DoesArrayItemExist(XmpCoreCoverageConst.NS1, "ns1:Seq", XmpConstConstants.ArrayLastItem));
             log.WriteLine("doesStructFieldExist ns1:Struct/ns2:Field1 =    "
-                    + meta.DoesStructFieldExist(NS1, "Struct", NS2, "Field1"));
+                    + meta.DoesStructFieldExist(XmpCoreCoverageConst.NS1, "Struct", XmpCoreCoverageConst.NS2, "Field1"));
             log.WriteLine("doesQualifierExist ns1:QualProp1/?ns2:Qual1 =    "
-                    + meta.DoesQualifierExist(NS1, "QualProp1", NS2, "Qual1"));
+                    + meta.DoesQualifierExist(XmpCoreCoverageConst.NS1, "QualProp1", XmpCoreCoverageConst.NS2, "Qual1"));
             log.WriteLine("doesQualifierExist ns1:QualProp2/?xml:lang =    "
-                    + meta.DoesQualifierExist(NS1, "QualProp2", XmpConstConstants.NsXml, "lang"));
+                    + meta.DoesQualifierExist(XmpCoreCoverageConst.NS1, "QualProp2", XmpConstConstants.NsXml, "lang"));
             log.WriteLine();
             log.WriteLine("doesPropertyExist (namespace is null) =    "
                     + meta.DoesPropertyExist(null, "ns1:Bag"));
@@ -493,12 +493,12 @@ namespace XmpCore.Tests
                     + meta.DoesArrayItemExist(null, "ns1:Bag", XmpConstConstants.ArrayLastItem));
             log.WriteLine("doesQualifierExist ns:Bogus (namespace not existing) =    "
                     + meta.DoesPropertyExist("ns:bogus/", "Bogus"));
-            log.WriteLine("doesPropertyExist ns1:Bogus =    " + meta.DoesPropertyExist(NS1, "Bogus"));
-            log.WriteLine("doesArrayItemExist ns1:Bag[99] =    " + meta.DoesArrayItemExist(NS1, "Bag", 99));
+            log.WriteLine("doesPropertyExist ns1:Bogus =    " + meta.DoesPropertyExist(XmpCoreCoverageConst.NS1, "Bogus"));
+            log.WriteLine("doesArrayItemExist ns1:Bag[99] =    " + meta.DoesArrayItemExist(XmpCoreCoverageConst.NS1, "Bag", 99));
             log.WriteLine("doesStructFieldExist ns1:Struct/ns2:Bogus =    "
-                    + meta.DoesStructFieldExist(NS1, "Struct", NS2, "Bogus"));
+                    + meta.DoesStructFieldExist(XmpCoreCoverageConst.NS1, "Struct", XmpCoreCoverageConst.NS2, "Bogus"));
             log.WriteLine("doesQualifierExist ns1:Prop/?ns2:Bogus =    "
-                    + meta.DoesQualifierExist(NS1, "Prop", NS2, "Bogus"));
+                    + meta.DoesQualifierExist(XmpCoreCoverageConst.NS1, "Prop", XmpCoreCoverageConst.NS2, "Bogus"));
         }
 
 
@@ -510,23 +510,23 @@ namespace XmpCore.Tests
         {
             writeMajorLabel("Test deleteProperty");
 
-            meta.DeleteProperty (NS1, "Prop");
-            meta.DeleteArrayItem (NS1, "Bag", 2);
-            meta.DeleteStructField (NS1, "Struct", NS2, "Field1");
+            meta.DeleteProperty (XmpCoreCoverageConst.NS1, "Prop");
+            meta.DeleteArrayItem (XmpCoreCoverageConst.NS1, "Bag", 2);
+            meta.DeleteStructField (XmpCoreCoverageConst.NS1, "Struct", XmpCoreCoverageConst.NS2, "Field1");
 
             printXmpMeta (meta, "Delete Prop, Bag[2], and Struct1/Field1");
 
-            meta.DeleteQualifier (NS1, "QualProp1", NS2, "Qual1");
-            meta.DeleteQualifier (NS1, "QualProp2", XmpConstConstants.NsXml, "lang");
-            meta.DeleteQualifier (NS1, "QualProp3", NS2, "Qual");
-            meta.DeleteQualifier (NS1, "QualProp4", XmpConstConstants.NsXml, "lang");
+            meta.DeleteQualifier (XmpCoreCoverageConst.NS1, "QualProp1", XmpCoreCoverageConst.NS2, "Qual1");
+            meta.DeleteQualifier (XmpCoreCoverageConst.NS1, "QualProp2", XmpConstConstants.NsXml, "lang");
+            meta.DeleteQualifier (XmpCoreCoverageConst.NS1, "QualProp3", XmpCoreCoverageConst.NS2, "Qual");
+            meta.DeleteQualifier (XmpCoreCoverageConst.NS1, "QualProp4", XmpConstConstants.NsXml, "lang");
 
             printXmpMeta(meta,
                 "Delete QualProp1/?ns2:Qual1, QualProp2/?xml:lang, " +
                 "QualProp3:/ns2:Qual, and QualProp4/?xml:lang");
 
-            meta.DeleteProperty (NS1, "Bag");
-            meta.DeleteProperty (NS1, "Struct");
+            meta.DeleteProperty (XmpCoreCoverageConst.NS1, "Bag");
+            meta.DeleteProperty (XmpCoreCoverageConst.NS1, "Struct");
 
             printXmpMeta (meta, "Delete all of Bag and Struct");
         }
@@ -541,20 +541,20 @@ namespace XmpCore.Tests
             writeMajorLabel ("Test setLocalizedText and getLocalizedText");
 
             var meta = XmpMetaFactory.Create();
-            meta.SetLocalizedText (NS1, "AltText", "", "x-default", "default value");
+            meta.SetLocalizedText (XmpCoreCoverageConst.NS1, "AltText", "", "x-default", "default value");
             printXmpMeta (meta, "Set x-default value");
 
-            meta.SetLocalizedText (NS1, "AltText", "en", "en-us", "en-us value");
+            meta.SetLocalizedText (XmpCoreCoverageConst.NS1, "AltText", "en", "en-us", "en-us value");
             printXmpMeta (meta, "Set en/en-us value");
 
-            meta.SetLocalizedText (NS1, "AltText", "en", "en-uk", "en-uk value");
+            meta.SetLocalizedText (XmpCoreCoverageConst.NS1, "AltText", "en", "en-uk", "en-uk value");
             printXmpMeta (meta, "Set en/en-uk value");
             log.WriteLine();
 
-            var property = meta.GetLocalizedText(NS1, "AltText", "en", "en-ca");
+            var property = meta.GetLocalizedText(XmpCoreCoverageConst.NS1, "AltText", "en", "en-ca");
             log.WriteLine("getLocalizedText en/en-ca =   " + property.Value + " (lang: " + property.Language + ", opt: " + property.Options.GetOptionsString() + ")");
 
-            property = meta.GetProperty(NS1, "AltText");
+            property = meta.GetProperty(XmpCoreCoverageConst.NS1, "AltText");
             log.WriteLine("getProperty ns1:AltText =   "  + property.Value + " (lang: " + property.Language + ", opt: " + property.Options.GetOptionsString() + ")");
         }
 
@@ -568,15 +568,15 @@ namespace XmpCore.Tests
             writeMajorLabel("Test SetProperty... and getProperty... methods " +
                 "(set/get with literal values)");
 
-            var meta = XmpMetaFactory.ParseFromString(DATETIME_RDF);
+            var meta = XmpMetaFactory.ParseFromString(XmpCoreCoverageConst.DATETIME_RDF);
             var dateValue = XmpDateTimeFactory.Create(2000, 1, 2, 3, 4, 5, 0);
 
-            meta.SetPropertyBoolean (NS1, "Bool0", false);
-            meta.SetPropertyBoolean (NS1, "Bool1", true);
-            meta.SetPropertyInteger (NS1, "Int", 42);
-            meta.SetPropertyDouble (NS1, "Double", 4.2);
+            meta.SetPropertyBoolean (XmpCoreCoverageConst.NS1, "Bool0", false);
+            meta.SetPropertyBoolean (XmpCoreCoverageConst.NS1, "Bool1", true);
+            meta.SetPropertyInteger (XmpCoreCoverageConst.NS1, "Int", 42);
+            meta.SetPropertyDouble (XmpCoreCoverageConst.NS1, "Double", 4.2);
 
-            meta.SetPropertyDate (NS1, "Date10", dateValue);
+            meta.SetPropertyDate (XmpCoreCoverageConst.NS1, "Date10", dateValue);
 /*
             TODO reinstate this code
 
@@ -593,25 +593,25 @@ namespace XmpCore.Tests
             printXmpMeta (meta, "A few basic binary Set... calls");
             log.WriteLine();
 
-            bool b = meta.GetPropertyBoolean(NS1, "Bool0");
+            bool b = meta.GetPropertyBoolean(XmpCoreCoverageConst.NS1, "Bool0");
             log.WriteLine ("getPropertyBoolean ns1:Bool0 =   " + b);
 
-            b = meta.GetPropertyBoolean(NS1, "Bool1");
+            b = meta.GetPropertyBoolean(XmpCoreCoverageConst.NS1, "Bool1");
             log.WriteLine ("getPropertyBoolean ns1:Bool1 =   " + b);
 
-            int integer = meta.GetPropertyInteger(NS1, "Int");
+            int integer = meta.GetPropertyInteger(XmpCoreCoverageConst.NS1, "Int");
             log.WriteLine ("getPropertyBoolean ns1:Int =   " + integer);
 
-            Double d = meta.GetPropertyDouble(NS1, "Double");
+            Double d = meta.GetPropertyDouble(XmpCoreCoverageConst.NS1, "Double");
             log.WriteLine ("getPropertyBoolean ns1:Int =   " + d);
             log.WriteLine();
 
             for (int i = 1; i <= 13; i++)
             {
                 var dateName = "Date" + i;
-                var dt = meta.GetPropertyDate (NS1, dateName);
+                var dt = meta.GetPropertyDate (XmpCoreCoverageConst.NS1, dateName);
                 log.WriteLine ("getPropertyDate (" + i + ") =   " + dt);
-                meta.SetPropertyDate (NS2, dateName, dateValue);
+                meta.SetPropertyDate (XmpCoreCoverageConst.NS2, dateName, dateValue);
             }
 
             printXmpMeta (meta, "Get and re-set the dates in NS2");
@@ -626,24 +626,24 @@ namespace XmpCore.Tests
         {
             writeMajorLabel ("Test parsing with multiple buffers and various options");
 
-            var meta = XmpMetaFactory.ParseFromString(SIMPLE_RDF);
+            var meta = XmpMetaFactory.ParseFromString(XmpCoreCoverageConst.SIMPLE_RDF);
             printXmpMeta (meta, "Parse from String");
 
-            meta = XmpMetaFactory.ParseFromString(SIMPLE_RDF, new ParseOptions { RequireXmpMeta = true });
+            meta = XmpMetaFactory.ParseFromString(XmpCoreCoverageConst.SIMPLE_RDF, new ParseOptions { RequireXmpMeta = true });
             printXmpMeta(meta, "Parse and require xmpmeta element, which is missing");
 
-            meta = XmpMetaFactory.ParseFromString(NAMESPACE_RDF);
+            meta = XmpMetaFactory.ParseFromString(XmpCoreCoverageConst.NAMESPACE_RDF);
             printXmpMeta(meta, "Parse RDF with multiple nested namespaces");
 
-            meta = XmpMetaFactory.ParseFromString(XMPMETA_RDF, new ParseOptions { RequireXmpMeta = true });
+            meta = XmpMetaFactory.ParseFromString(XmpCoreCoverageConst.XMPMETA_RDF, new ParseOptions { RequireXmpMeta = true });
             printXmpMeta(meta, "Parse and require xmpmeta element, which is present");
 
-            meta = XmpMetaFactory.ParseFromString(INCONSISTENT_RDF);
+            meta = XmpMetaFactory.ParseFromString(XmpCoreCoverageConst.INCONSISTENT_RDF);
             printXmpMeta(meta, "Parse and reconcile inconsistent aliases");
 
             try
             {
-                XmpMetaFactory.ParseFromString(INCONSISTENT_RDF, new ParseOptions { StrictAliasing = true });
+                XmpMetaFactory.ParseFromString(XmpCoreCoverageConst.INCONSISTENT_RDF, new ParseOptions { StrictAliasing = true });
             }
             catch (XmpException e)
             {
@@ -664,21 +664,21 @@ namespace XmpCore.Tests
             String valueWithLF        = "ASCII \n LF";
             String valueWithCRLF    = "ASCII \r\n CRLF";
 
-            var meta = XmpMetaFactory.ParseFromString(NEWLINE_RDF);
+            var meta = XmpMetaFactory.ParseFromString(XmpCoreCoverageConst.NEWLINE_RDF);
 
-            meta.SetProperty (NS2, "HasCR", valueWithCR);
-            meta.SetProperty (NS2, "HasLF", valueWithLF);
-            meta.SetProperty (NS2, "HasCRLF", valueWithCRLF);
+            meta.SetProperty (XmpCoreCoverageConst.NS2, "HasCR", valueWithCR);
+            meta.SetProperty (XmpCoreCoverageConst.NS2, "HasLF", valueWithLF);
+            meta.SetProperty (XmpCoreCoverageConst.NS2, "HasCRLF", valueWithCRLF);
 
             String result = XmpMetaFactory.SerializeToString(meta, new SerializeOptions { OmitPacketWrapper = true });
             log.WriteLine(result);
 
-            var hasCR = meta.GetPropertyString (NS1, "HasCR");
-            var hasCR2 = meta.GetPropertyString (NS2, "HasCR");
-            var hasLF = meta.GetPropertyString (NS1, "HasLF");
-            var hasLF2 = meta.GetPropertyString (NS2, "HasLF");
-            var hasCRLF = meta.GetPropertyString (NS1, "HasCRLF");
-            var hasCRLF2 = meta.GetPropertyString (NS2, "HasCRLF");
+            var hasCR = meta.GetPropertyString (XmpCoreCoverageConst.NS1, "HasCR");
+            var hasCR2 = meta.GetPropertyString (XmpCoreCoverageConst.NS2, "HasCR");
+            var hasLF = meta.GetPropertyString (XmpCoreCoverageConst.NS1, "HasLF");
+            var hasLF2 = meta.GetPropertyString (XmpCoreCoverageConst.NS2, "HasLF");
+            var hasCRLF = meta.GetPropertyString (XmpCoreCoverageConst.NS1, "HasCRLF");
+            var hasCRLF2 = meta.GetPropertyString (XmpCoreCoverageConst.NS2, "HasCRLF");
 
             if (hasCR == valueWithCR && hasCR2 == valueWithCR &&
                 hasLF == valueWithLF && hasLF2 == valueWithLF &&
@@ -698,9 +698,9 @@ namespace XmpCore.Tests
         {
             writeMajorLabel ("Test serialization with various options");
 
-            var meta = XmpMetaFactory.ParseFromString(SIMPLE_RDF);
-            meta.SetProperty (NS2, "Another", "Something in another schema");
-            meta.SetProperty (NS2, "Yet/pdf:More", "Yet more in another schema");
+            var meta = XmpMetaFactory.ParseFromString(XmpCoreCoverageConst.SIMPLE_RDF);
+            meta.SetProperty (XmpCoreCoverageConst.NS2, "Another", "Something in another schema");
+            meta.SetProperty (XmpCoreCoverageConst.NS2, "Yet/pdf:More", "Yet more in another schema");
 
             printXmpMeta (meta, "Parse simple RDF, serialize with various options");
 
@@ -749,11 +749,11 @@ namespace XmpCore.Tests
         {
             writeMajorLabel ("Test iteration methods");
 
-            var meta = XmpMetaFactory.ParseFromString(RDF_COVERAGE);
-            meta.SetProperty (NS2, "Prop", "Prop value");
-            meta.AppendArrayItem(NS2, "Bag", new PropertyOptions { IsArray = true }, "BagItem 2", null);
-            meta.AppendArrayItem(NS2, "Bag", "BagItem 1");
-            meta.AppendArrayItem(NS2, "Bag", "BagItem 3");
+            var meta = XmpMetaFactory.ParseFromString(XmpCoreCoverageConst.RDF_COVERAGE);
+            meta.SetProperty (XmpCoreCoverageConst.NS2, "Prop", "Prop value");
+            meta.AppendArrayItem(XmpCoreCoverageConst.NS2, "Bag", new PropertyOptions { IsArray = true }, "BagItem 2", null);
+            meta.AppendArrayItem(XmpCoreCoverageConst.NS2, "Bag", "BagItem 1");
+            meta.AppendArrayItem(XmpCoreCoverageConst.NS2, "Bag", "BagItem 3");
 
             printXmpMeta (meta, "Parse \"coverage\" RDF, add Bag items out of order");
 /*
@@ -855,27 +855,27 @@ namespace XmpCore.Tests
 
             var meta = XmpMetaFactory.Create();
 
-            meta.AppendArrayItem(NS1, "ArrayProp", new PropertyOptions { IsArray = true }, "Item 1", null);
+            meta.AppendArrayItem(XmpCoreCoverageConst.NS1, "ArrayProp", new PropertyOptions { IsArray = true }, "Item 1", null);
 
             String path = XmpPathFactory.ComposeArrayItemPath("ArrayProp", 2);
             log.WriteLine ("composeArrayItemPath ArrayProp[2] =   " + path);
-            meta.SetProperty (NS1, path, "new ns1:ArrayProp[2] value");
+            meta.SetProperty (XmpCoreCoverageConst.NS1, path, "new ns1:ArrayProp[2] value");
 
             path = "StructProperty";
-            path += XmpPathFactory.ComposeStructFieldPath(NS2, "Field3");
+            path += XmpPathFactory.ComposeStructFieldPath(XmpCoreCoverageConst.NS2, "Field3");
             log.WriteLine ("composeStructFieldPath StructProperty/ns2:Field3 =   " + path);
-            meta.SetProperty (NS1, path, "new ns1:StructProp/ns2:Field3 value");
+            meta.SetProperty (XmpCoreCoverageConst.NS1, path, "new ns1:StructProp/ns2:Field3 value");
 
             path = "QualProp";
-            path += XmpPathFactory.ComposeQualifierPath(NS2, "Qual");
+            path += XmpPathFactory.ComposeQualifierPath(XmpCoreCoverageConst.NS2, "Qual");
             log.WriteLine ("composeStructFieldPath QualProp/?ns2:Qual =   " + path);
-            meta.SetProperty (NS1, path, "new ns1:QualProp/?ns2:Qual value");
+            meta.SetProperty (XmpCoreCoverageConst.NS1, path, "new ns1:QualProp/?ns2:Qual value");
 
-            meta.SetLocalizedText(NS1, "AltTextProp", null, "en-US", "initival value");
+            meta.SetLocalizedText(XmpCoreCoverageConst.NS1, "AltTextProp", null, "en-US", "initival value");
             path = "AltTextProp";
             path += XmpPathFactory.ComposeQualifierPath(XmpConstConstants.NsXml, "lang");
             log.WriteLine ("composeQualifierPath ns1:AltTextProp/?xml:lang =   " + path);
-            meta.SetProperty (NS1, path, "new ns1:AltTextProp/?xml:lang value");
+            meta.SetProperty (XmpCoreCoverageConst.NS1, path, "new ns1:AltTextProp/?xml:lang value");
 
             printXmpMeta (meta, "Modified simple RDF");
         }
