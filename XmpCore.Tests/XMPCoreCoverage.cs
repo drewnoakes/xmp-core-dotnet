@@ -24,7 +24,7 @@ namespace XmpCore.Tests
      *
      * @since   11.02.2007
      */
-    public class XmpCoreCoverage
+    public static class XmpCoreCoverage
     {
         /** the log stream for all outputs */
         private static TextWriter log;
