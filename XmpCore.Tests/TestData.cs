@@ -8,8 +8,6 @@
 // =================================================================================================
 
 
-using System;
-
 namespace XmpCore.Tests
 {
     /**
@@ -20,11 +18,11 @@ namespace XmpCore.Tests
     public static class TestData
     {
         /** */
-        public const String NS1 = "ns:test1/";
+        public const string NS1 = "ns:test1/";
         /** */
-        public const String NS2 = "ns:test2/";
+        public const string NS2 = "ns:test2/";
         /** RDF metadata that covers most variants of XMP data structures */
-        public const String RDF_COVERAGE =
+        public const string RDF_COVERAGE =
             "<rdf:RDF xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>" +
             "  <rdf:Description rdf:about='Test:XMPCoreCoverage/kRDFCoverage' xmlns:ns1='ns:test1/' " +
             "        xmlns:ns2='ns:test2/'>" +
@@ -124,7 +122,7 @@ namespace XmpCore.Tests
             "</rdf:RDF>";
 
         /** */
-        public const String SIMPLE_RDF =
+        public const string SIMPLE_RDF =
             "<rdf:RDF xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>" +
             "  <rdf:Description rdf:about='Test:XMPCoreCoverage/kSimpleRDF' xmlns:ns1='ns:test1/' " +
             "        xmlns:ns2='ns:test2/'>" +
@@ -172,7 +170,7 @@ namespace XmpCore.Tests
             "</rdf:RDF>";
 
         /** RDF metadata introducing new namespaces */
-        public const String NAMESPACE_RDF =
+        public const string NAMESPACE_RDF =
             "<rdf:RDF xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>" +
             "  <rdf:Description rdf:about='Test:XMPCoreCoverage/kNamespaceRDF' " +
             "        xmlns:ns1='ns:test1/'>" +
@@ -193,7 +191,7 @@ namespace XmpCore.Tests
             "</rdf:RDF>";
 
         /** RDF metadata embedded in XML tag. */
-        public const String XMPMETA_RDF =
+        public const string XMPMETA_RDF =
             "<x:Outermost xmlns:x='adobe:ns:meta/'>" +
             "" +
             "<rdf:RDF xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>" +
@@ -221,7 +219,7 @@ namespace XmpCore.Tests
             "</x:Outermost>";
 
         /** RDF metadata with properties that contain whitespaces */
-        public const String NEWLINE_RDF =
+        public const string NEWLINE_RDF =
             "<rdf:RDF xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>" +
             "  <rdf:Description rdf:about='Test:XMPCoreCoverage/kNewlineRDF' xmlns:ns1='ns:test1/'>" +
             "" +
@@ -233,7 +231,7 @@ namespace XmpCore.Tests
             "</rdf:RDF>";
 
         /** Inconsistant RDF metadata */
-        public const String INCONSISTENT_RDF =
+        public const string INCONSISTENT_RDF =
             "<rdf:RDF xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>" +
             "  <rdf:Description rdf:about='Test:XMPCoreCoverage/kInconsistentRDF'" +
             "                   xmlns:pdf='http://ns.adobe.com/pdf/1.3/'" +
@@ -259,7 +257,7 @@ namespace XmpCore.Tests
             "</rdf:RDF>";
 
         /** Example for the usage of date and time properties */
-        public const String DATETIME_RDF =
+        public const string DATETIME_RDF =
             "<rdf:RDF xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>" +
             "  <rdf:Description rdf:about='Test:XMPCoreCoverage/kDateTimeRDF' xmlns:ns1='ns:test1/'>" +
             "" +

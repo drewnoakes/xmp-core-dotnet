@@ -130,7 +130,7 @@ namespace XmpCore.Tests
             // Registry namespace functions
             writeMinorLabel ("Test namespace registry functions");
 
-            String prefix = registry.RegisterNamespace(TestData.NS1, "ns1");
+            string prefix = registry.RegisterNamespace(TestData.NS1, "ns1");
             log.WriteLine ("registerNamespace ns1:   " + prefix + "   --->   " +
                 registry.GetNamespaceUri(prefix));
 
@@ -602,7 +602,7 @@ namespace XmpCore.Tests
             int integer = meta.GetPropertyInteger(TestData.NS1, "Int");
             log.WriteLine ("getPropertyBoolean ns1:Int =   " + integer);
 
-            Double d = meta.GetPropertyDouble(TestData.NS1, "Double");
+            double d = meta.GetPropertyDouble(TestData.NS1, "Double");
             log.WriteLine ("getPropertyBoolean ns1:Int =   " + d);
             log.WriteLine();
 
@@ -660,9 +660,9 @@ namespace XmpCore.Tests
         {
             writeMajorLabel ("Test CR and LF in values");
 
-            String valueWithCR        = "ASCII \r CR";
-            String valueWithLF        = "ASCII \n LF";
-            String valueWithCRLF    = "ASCII \r\n CRLF";
+            string valueWithCR        = "ASCII \r CR";
+            string valueWithLF        = "ASCII \n LF";
+            string valueWithCRLF    = "ASCII \r\n CRLF";
 
             var meta = XmpMetaFactory.ParseFromString(TestData.NEWLINE_RDF);
 
@@ -670,7 +670,7 @@ namespace XmpCore.Tests
             meta.SetProperty (TestData.NS2, "HasLF", valueWithLF);
             meta.SetProperty (TestData.NS2, "HasCRLF", valueWithCRLF);
 
-            String result = XmpMetaFactory.SerializeToString(meta, new SerializeOptions { OmitPacketWrapper = true });
+            string result = XmpMetaFactory.SerializeToString(meta, new SerializeOptions { OmitPacketWrapper = true });
             log.WriteLine(result);
 
             var hasCR = meta.GetPropertyString (TestData.NS1, "HasCR");
@@ -857,7 +857,7 @@ namespace XmpCore.Tests
 
             meta.AppendArrayItem(TestData.NS1, "ArrayProp", new PropertyOptions { IsArray = true }, "Item 1", null);
 
-            String path = XmpPathFactory.ComposeArrayItemPath("ArrayProp", 2);
+            string path = XmpPathFactory.ComposeArrayItemPath("ArrayProp", 2);
             log.WriteLine ("composeArrayItemPath ArrayProp[2] =   " + path);
             meta.SetProperty (TestData.NS1, path, "new ns1:ArrayProp[2] value");
 
@@ -917,9 +917,9 @@ namespace XmpCore.Tests
          * @param meta an <code>XmpMeta</code> object
          * @param title the headline
          */
-        private static void printXmpMeta(IXmpMeta meta, String title)
+        private static void printXmpMeta(IXmpMeta meta, string title)
         {
-            String name = meta.GetObjectName();
+            string name = meta.GetObjectName();
             if (!string.IsNullOrEmpty(name))
             {
                 log.WriteLine("{0} (Name: '{1}'):", title, name);
@@ -959,7 +959,7 @@ namespace XmpCore.Tests
          * Writes a major headline to the output.
          * @param title the headline
          */
-        private static void writeMajorLabel (String title)
+        private static void writeMajorLabel (string title)
         {
             log.WriteLine();
             log.WriteLine("// =============================================================================");
@@ -973,7 +973,7 @@ namespace XmpCore.Tests
          * Writes a minor headline to the output.
          * @param title the headline
          */
-        private static void writeMinorLabel (String title)
+        private static void writeMinorLabel (string title)
         {
             log.WriteLine();
             log.WriteLine ("// -----------------------------------------------------------------------------".Substring(0, title.Length + 3));
