@@ -1046,13 +1046,13 @@ namespace XmpCore.Impl
         /// <param name="value">the value of the qualifier</param>
         /// <returns>Returns the newly created child node.</returns>
         /// <exception cref="XmpException">thrown on parsing errors</exception>
-        private static XmpNode AddQualifierNode(XmpNode xmpParent, string name, string value)
+        private static void AddQualifierNode(XmpNode xmpParent, string name, string value)
         {
-            var isLang = XmpConstConstants.XmlLang.Equals(name);
             // normalize value of language qualifiers
-            var newQual = new XmpNode(name, isLang ? Utils.NormalizeLangValue(value) : value, null);
-            xmpParent.AddQualifier(newQual);
-            return newQual;
+            if (name == XmpConstConstants.XmlLang)
+                value = Utils.NormalizeLangValue(value);
+
+            xmpParent.AddQualifier(new XmpNode(name, value, null));
         }
 
         /// <summary>The parent is an RDF pseudo-struct containing an rdf:value field.</summary>
