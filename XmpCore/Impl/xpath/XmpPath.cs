@@ -77,7 +77,7 @@ namespace XmpCore.Impl.XPath
                 result.Append(GetSegment(index));
                 if (index < Size() - 1)
                 {
-                    var kind = GetSegment(index + 1).GetKind();
+                    var kind = GetSegment(index + 1).Kind;
                     if (kind == StructFieldStep || kind == QualifierStep)
                     {
                         // all but last and array indices

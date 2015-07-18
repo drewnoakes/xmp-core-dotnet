@@ -164,7 +164,7 @@ namespace XmpCore.Impl
             XmpNode rootImplicitNode = null;
             XmpNode currNode = null;
             // resolve schema step
-            currNode = FindSchemaNode(xmpTree, xpath.GetSegment(XmpPath.StepSchema).GetName(), createNodes);
+            currNode = FindSchemaNode(xmpTree, xpath.GetSegment(XmpPath.StepSchema).Name, createNodes);
             if (currNode == null)
             {
                 return null;
@@ -197,14 +197,14 @@ namespace XmpCore.Impl
                         currNode.IsImplicit = false;
                         // if node is an ALIAS (can be only in root step, auto-create array
                         // when the path has been resolved from a not simple alias type
-                        if (i == 1 && xpath.GetSegment(i).IsAlias() && xpath.GetSegment(i).GetAliasForm() != 0)
+                        if (i == 1 && xpath.GetSegment(i).IsAlias && xpath.GetSegment(i).AliasForm != 0)
                         {
-                            currNode.Options.SetOption(xpath.GetSegment(i).GetAliasForm(), true);
+                            currNode.Options.SetOption(xpath.GetSegment(i).AliasForm, true);
                         }
                         else
                         {
                             // "CheckImplicitStruct" in C++
-                            if (i < xpath.Size() - 1 && xpath.GetSegment(i).GetKind() == XmpPath.StructFieldStep && !currNode.Options.IsCompositeProperty)
+                            if (i < xpath.Size() - 1 && xpath.GetSegment(i).Kind == XmpPath.StructFieldStep && !currNode.Options.IsCompositeProperty)
                             {
                                 currNode.Options.IsStruct = true;
                             }
@@ -392,16 +392,16 @@ namespace XmpCore.Impl
         private static XmpNode FollowXPathStep(XmpNode parentNode, XmpPathSegment nextStep, bool createNodes)
         {
             XmpNode nextNode = null;
-            var stepKind = nextStep.GetKind();
+            var stepKind = nextStep.Kind;
             if (stepKind == XmpPath.StructFieldStep)
             {
-                nextNode = FindChildNode(parentNode, nextStep.GetName(), createNodes);
+                nextNode = FindChildNode(parentNode, nextStep.Name, createNodes);
             }
             else
             {
                 if (stepKind == XmpPath.QualifierStep)
                 {
-                    nextNode = FindQualifierNode(parentNode, nextStep.GetName().Substring (1), createNodes);
+                    nextNode = FindQualifierNode(parentNode, nextStep.Name.Substring (1), createNodes);
                 }
                 else
                 {
@@ -413,7 +413,7 @@ namespace XmpCore.Impl
                     var index = 0;
                     if (stepKind == XmpPath.ArrayIndexStep)
                     {
-                        index = FindIndexedItem(parentNode, nextStep.GetName(), createNodes);
+                        index = FindIndexedItem(parentNode, nextStep.Name, createNodes);
                     }
                     else
                     {
@@ -425,7 +425,7 @@ namespace XmpCore.Impl
                         {
                             if (stepKind == XmpPath.FieldSelectorStep)
                             {
-                                var result = Utils.SplitNameAndValue(nextStep.GetName());
+                                var result = Utils.SplitNameAndValue(nextStep.Name);
                                 var fieldName = result[0];
                                 var fieldValue = result[1];
                                 index = LookupFieldSelector(parentNode, fieldName, fieldValue);
@@ -434,10 +434,10 @@ namespace XmpCore.Impl
                             {
                                 if (stepKind == XmpPath.QualSelectorStep)
                                 {
-                                    var result = Utils.SplitNameAndValue(nextStep.GetName());
+                                    var result = Utils.SplitNameAndValue(nextStep.Name);
                                     var qualName = result[0];
                                     var qualValue = result[1];
-                                    index = LookupQualSelector(parentNode, qualName, qualValue, nextStep.GetAliasForm());
+                                    index = LookupQualSelector(parentNode, qualName, qualValue, nextStep.AliasForm);
                                 }
                                 else
                                 {

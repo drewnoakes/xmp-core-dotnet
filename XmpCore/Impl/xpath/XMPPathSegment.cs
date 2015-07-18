@@ -13,23 +13,11 @@ namespace XmpCore.Impl.XPath
     /// <since>23.06.2006</since>
     public sealed class XmpPathSegment
     {
-        /// <summary>name of the path segment</summary>
-        private string _name;
-
-        /// <summary>kind of the path segment</summary>
-        private int _kind;
-
-        /// <summary>flag if segment is an alias</summary>
-        private bool _alias;
-
-        /// <summary>alias form if applicable</summary>
-        private int _aliasForm;
-
         /// <summary>Constructor with initial values.</summary>
         /// <param name="name">the name of the segment</param>
         public XmpPathSegment(string name)
         {
-            _name = name;
+            Name = name;
         }
 
         /// <summary>Constructor with initial values.</summary>
@@ -37,81 +25,37 @@ namespace XmpCore.Impl.XPath
         /// <param name="kind">the kind of the segment</param>
         public XmpPathSegment(string name, int kind)
         {
-            _name = name;
-            _kind = kind;
+            Name = name;
+            Kind = kind;
         }
 
-        /// <returns>Returns the kind.</returns>
-        public int GetKind()
-        {
-            return _kind;
-        }
+        /// <value>Get and set the kind of the path segment.</value>
+        public int Kind { get; set; }
 
-        /// <param name="kind">The kind to set.</param>
-        public void SetKind(int kind)
-        {
-            _kind = kind;
-        }
+        /// <value>Get and set the name of the path segment.</value>
+        public string Name { get; set; }
 
-        /// <returns>Returns the name.</returns>
-        public string GetName()
-        {
-            return _name;
-        }
+        /// <value>Get and set whether the segment is an alias.</value>
+        public bool IsAlias { get; set; }
 
-        /// <param name="name">The name to set.</param>
-        public void SetName(string name)
-        {
-            _name = name;
-        }
-
-        /// <param name="alias">the flag to set</param>
-        public void SetAlias(bool alias)
-        {
-            _alias = alias;
-        }
-
-        /// <returns>Returns the alias.</returns>
-        public bool IsAlias()
-        {
-            return _alias;
-        }
-
-        /// <returns>Returns the aliasForm if this segment has been created by an alias.</returns>
-        public int GetAliasForm()
-        {
-            return _aliasForm;
-        }
-
-        /// <param name="aliasForm">the aliasForm to set</param>
-        public void SetAliasForm(int aliasForm)
-        {
-            _aliasForm = aliasForm;
-        }
+        /// <value>Get and set the alias form, if this segment has been created by an alias.</value>
+        public int AliasForm { get; set; }
 
         public override string ToString()
         {
-            switch (_kind)
+            switch (Kind)
             {
                 case XmpPath.StructFieldStep:
                 case XmpPath.ArrayIndexStep:
                 case XmpPath.QualifierStep:
                 case XmpPath.ArrayLastStep:
-                {
-                    return _name;
-                }
-
+                    return Name;
                 case XmpPath.QualSelectorStep:
                 case XmpPath.FieldSelectorStep:
-                {
-                    return _name;
-                }
-
+                    return Name;
                 default:
-                {
                     // no defined step
-                    return _name;
-                }
+                    return Name;
             }
         }
     }

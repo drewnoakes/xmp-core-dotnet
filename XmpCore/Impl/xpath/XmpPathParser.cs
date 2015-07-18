@@ -100,37 +100,37 @@ namespace XmpCore.Impl.XPath
                     ? ParseStructSegment(pos)
                     : ParseIndexSegment(pos);
 
-                if (segment.GetKind() == XmpPath.StructFieldStep)
+                if (segment.Kind == XmpPath.StructFieldStep)
                 {
-                    if (segment.GetName()[0] == '@')
+                    if (segment.Name[0] == '@')
                     {
-                        segment.SetName("?" + segment.GetName().Substring (1));
-                        if (!"?xml:lang".Equals(segment.GetName()))
+                        segment.Name = "?" + segment.Name.Substring (1);
+                        if (!"?xml:lang".Equals(segment.Name))
                             throw new XmpException("Only xml:lang allowed with '@'", XmpErrorCode.BadXPath);
                     }
 
-                    if (segment.GetName()[0] == '?')
+                    if (segment.Name[0] == '?')
                     {
                         pos.NameStart++;
-                        segment.SetKind(XmpPath.QualifierStep);
+                        segment.Kind = XmpPath.QualifierStep;
                     }
 
                     VerifyQualName(pos.Path.Substring (pos.NameStart, pos.NameEnd - pos.NameStart));
                 }
-                else if (segment.GetKind() == XmpPath.FieldSelectorStep)
+                else if (segment.Kind == XmpPath.FieldSelectorStep)
                 {
-                    if (segment.GetName()[1] == '@')
+                    if (segment.Name[1] == '@')
                     {
-                        segment.SetName("[?" + segment.GetName().Substring (2));
+                        segment.Name = "[?" + segment.Name.Substring (2);
 
-                        if (!segment.GetName().StartsWith("[?xml:lang="))
+                        if (!segment.Name.StartsWith("[?xml:lang="))
                             throw new XmpException("Only xml:lang allowed with '@'", XmpErrorCode.BadXPath);
                     }
 
-                    if (segment.GetName()[1] == '?')
+                    if (segment.Name[1] == '?')
                     {
                         pos.NameStart++;
-                        segment.SetKind(XmpPath.QualSelectorStep);
+                        segment.Kind = XmpPath.QualSelectorStep;
                         VerifyQualName(pos.Path.Substring (pos.NameStart, pos.NameEnd - pos.NameStart));
                     }
                 }
@@ -259,7 +259,7 @@ namespace XmpCore.Impl.XPath
                 throw new XmpException("Missing ']' for array index", XmpErrorCode.BadXPath);
 
             pos.StepEnd++;
-            segment.SetName(pos.Path.Substring (pos.StepBegin, pos.StepEnd - pos.StepBegin));
+            segment.Name = pos.Path.Substring (pos.StepBegin, pos.StepEnd - pos.StepBegin);
 
             return segment;
         }
@@ -295,22 +295,22 @@ namespace XmpCore.Impl.XPath
                 // add schema xpath step and base step of alias
                 expandedXPath.Add(new XmpPathSegment(aliasInfo.Namespace, XmpPath.SchemaNode));
                 var rootStep = new XmpPathSegment(VerifyXPathRoot(aliasInfo.Namespace, aliasInfo.PropName), XmpPath.StructFieldStep);
-                rootStep.SetAlias(true);
-                rootStep.SetAliasForm(aliasInfo.AliasForm.GetOptions());
+                rootStep.IsAlias = true;
+                rootStep.AliasForm = aliasInfo.AliasForm.GetOptions();
                 expandedXPath.Add(rootStep);
 
                 if (aliasInfo.AliasForm.IsArrayAltText)
                 {
                     var qualSelectorStep = new XmpPathSegment("[?xml:lang='x-default']", XmpPath.QualSelectorStep);
-                    qualSelectorStep.SetAlias(true);
-                    qualSelectorStep.SetAliasForm(aliasInfo.AliasForm.GetOptions());
+                    qualSelectorStep.IsAlias = true;
+                    qualSelectorStep.AliasForm = aliasInfo.AliasForm.GetOptions();
                     expandedXPath.Add(qualSelectorStep);
                 }
                 else if (aliasInfo.AliasForm.IsArray)
                 {
                     var indexStep = new XmpPathSegment("[1]", XmpPath.ArrayIndexStep);
-                    indexStep.SetAlias(true);
-                    indexStep.SetAliasForm(aliasInfo.AliasForm.GetOptions());
+                    indexStep.IsAlias = true;
+                    indexStep.AliasForm = aliasInfo.AliasForm.GetOptions();
                     expandedXPath.Add(indexStep);
                 }
             }

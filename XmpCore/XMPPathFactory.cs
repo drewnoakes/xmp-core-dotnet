@@ -101,7 +101,7 @@ namespace XmpCore
             if (fieldPath.Size() != 2)
                 throw new XmpException("The field name must be simple", XmpErrorCode.BadXPath);
 
-            return '/' + fieldPath.GetSegment(XmpPath.StepRootProp).GetName();
+            return '/' + fieldPath.GetSegment(XmpPath.StepRootProp).Name;
         }
 
         /// <summary>Compose the path expression for a qualifier.</summary>
@@ -129,7 +129,7 @@ namespace XmpCore
             if (qualPath.Size() != 2)
                 throw new XmpException("The qualifier name must be simple", XmpErrorCode.BadXPath);
 
-            return "/?" + qualPath.GetSegment(XmpPath.StepRootProp).GetName();
+            return "/?" + qualPath.GetSegment(XmpPath.StepRootProp).Name;
         }
 
         /// <summary>Compose the path expression to select an alternate item by language.</summary>
@@ -206,7 +206,7 @@ namespace XmpCore
             if (fieldPath.Size() != 2)
                 throw new XmpException("The fieldName name must be simple", XmpErrorCode.BadXPath);
 
-            return string.Format("{0}{1}{2}=\"{3}\"]", arrayName, "[", fieldPath.GetSegment(XmpPath.StepRootProp).GetName(), fieldValue);
+            return string.Format("{0}{1}{2}=\"{3}\"]", arrayName, "[", fieldPath.GetSegment(XmpPath.StepRootProp).Name, fieldValue);
         }
 
         /// <summary>ParameterAsserts that a qualifier namespace is set.</summary>

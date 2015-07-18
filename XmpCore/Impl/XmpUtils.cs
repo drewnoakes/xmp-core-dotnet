@@ -331,7 +331,7 @@ namespace XmpCore.Impl
                 var propNode = XmpNodeUtils.FindNode(xmpImpl.GetRoot(), expPath, false, null);
                 if (propNode != null)
                 {
-                    if (doAllProperties || !Utils.IsInternalProperty(expPath.GetSegment(XmpPath.StepSchema).GetName(), expPath.GetSegment(XmpPath.StepRootProp).GetName()))
+                    if (doAllProperties || !Utils.IsInternalProperty(expPath.GetSegment(XmpPath.StepSchema).Name, expPath.GetSegment(XmpPath.StepRootProp).Name))
                     {
                         var parent = propNode.Parent;
                         parent.RemoveChild(propNode);
