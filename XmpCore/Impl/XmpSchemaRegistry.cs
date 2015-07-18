@@ -23,18 +23,14 @@ namespace XmpCore.Impl
     /// <since>27.01.2006</since>
     public sealed class XmpSchemaRegistry : IXmpSchemaRegistry
     {
-        /// <summary>a map from a namespace URI to its registered prefix</summary>
+        /// <summary>a map from a namespace URI to its registered prefix.</summary>
         private readonly Dictionary<string, string> _namespaceToPrefixMap = new Dictionary<string, string>();
 
-        /// <summary>a map from a prefix to the associated namespace URI</summary>
-        private readonly IDictionary<string, string> _prefixToNamespaceMap = new Dictionary<string, string>();
+        /// <summary>a map from a prefix to the associated namespace URI.</summary>
+        private readonly Dictionary<string, string> _prefixToNamespaceMap = new Dictionary<string, string>();
 
-        /// <summary>a map of all registered aliases.</summary>
-        /// <remarks>
-        /// a map of all registered aliases.
-        /// The map is a relationship from a qname to an <c>XMPAliasInfo</c>-object.
-        /// </remarks>
-        private readonly IDictionary<string, IXmpAliasInfo> _aliasMap = new Dictionary<string, IXmpAliasInfo>();
+        /// <summary>A map of all registered aliases, from qname to IXmpAliasInfo.</summary>
+        private readonly Dictionary<string, IXmpAliasInfo> _aliasMap = new Dictionary<string, IXmpAliasInfo>();
 
         /// <summary>The pattern that must not be contained in simple properties</summary>
         private readonly Regex _p = new Regex ("[/*?\\[\\]]", RegexOptions.Compiled);
@@ -60,7 +56,6 @@ namespace XmpCore.Impl
 
         #region Namespaces
 
-        /// <exception cref="XmpException"/>
         public string RegisterNamespace(string namespaceUri, string suggestedPrefix)
         {
             lock (_lock)

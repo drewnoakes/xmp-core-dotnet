@@ -68,7 +68,6 @@ namespace XmpCore
         /// otherwise the existing prefix.
         /// </returns>
         /// <exception cref="XmpException">If the parameters are not accordingly set</exception>
-        /// <exception cref="XmpException"/>
         string RegisterNamespace(string namespaceUri, string suggestedPrefix);
 
         /// <summary>Obtain the prefix for a registered namespace URI.</summary>
