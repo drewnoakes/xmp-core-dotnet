@@ -1049,9 +1049,8 @@ namespace XmpCore.Impl
         private static XmpNode AddQualifierNode(XmpNode xmpParent, string name, string value)
         {
             var isLang = XmpConstConstants.XmlLang.Equals(name);
-            XmpNode newQual = null;
             // normalize value of language qualifiers
-            newQual = new XmpNode(name, isLang ? Utils.NormalizeLangValue(value) : value, null);
+            var newQual = new XmpNode(name, isLang ? Utils.NormalizeLangValue(value) : value, null);
             xmpParent.AddQualifier(newQual);
             return newQual;
         }
