@@ -26,10 +26,10 @@ namespace XmpCore.Impl
         /// serialialize the same XMPMeta objects in two threads.
         /// </remarks>
         /// <param name="xmp">a metadata implementation object</param>
-        /// <param name="out">the output stream to serialize to</param>
+        /// <param name="stream">the output stream to serialize to</param>
         /// <param name="options">serialization options, can be <c>null</c> for default.</param>
         /// <exception cref="XmpException"/>
-        public static void Serialize(XmpMeta xmp, Stream @out, SerializeOptions options)
+        public static void Serialize(XmpMeta xmp, Stream stream, SerializeOptions options)
         {
             options = options ?? new SerializeOptions();
             // sort the internal data model on demand
@@ -37,7 +37,7 @@ namespace XmpCore.Impl
             {
                 xmp.Sort();
             }
-            new XmpSerializerRdf().Serialize(xmp, @out, options);
+            new XmpSerializerRdf().Serialize(xmp, stream, options);
         }
 
         /// <summary>Serializes an <c>XMPMeta</c>-object as RDF into a string.</summary>
@@ -59,17 +59,17 @@ namespace XmpCore.Impl
             // forces the encoding to be UTF-16 to get the correct string length
             options = options ?? new SerializeOptions();
             options.EncodeUtf16Be = true;
-            var @out = new MemoryStream(2048);
-            Serialize(xmp, @out, options);
+            var output = new MemoryStream(2048);
+            Serialize(xmp, output, options);
             try
             {
-                return options.GetEncoding().GetString(@out.GetBuffer(), 0, (int)@out.Length);
+                return options.GetEncoding().GetString(output.GetBuffer(), 0, (int)output.Length);
             }
             catch
             {
                 // cannot happen as UTF-8/16LE/BE is required to be implemented in
                 // Java
-                return @out.ToString();
+                return output.ToString();
             }
         }
 
@@ -84,9 +84,9 @@ namespace XmpCore.Impl
         /// <exception cref="XmpException">on serialization errors.</exception>
         public static byte[] SerializeToBuffer(XmpMeta xmp, SerializeOptions options)
         {
-            var @out = new MemoryStream(2048);
-            Serialize(xmp, @out, options);
-            return @out.ToArray();
+            var output = new MemoryStream(2048);
+            Serialize(xmp, output, options);
+            return output.ToArray();
         }
     }
 }

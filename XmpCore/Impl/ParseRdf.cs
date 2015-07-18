@@ -962,20 +962,20 @@ namespace XmpCore.Impl
         private static XmpNode AddChildNode(XmpMeta xmp, XmpNode xmpParent, XmlNode xmlNode, string value, bool isTopLevel)
         {
             var registry = XmpMetaFactory.GetSchemaRegistry();
-            var @namespace = xmlNode.NamespaceURI;
+            var ns = xmlNode.NamespaceURI;
             string childName;
-            if (@namespace != null)
+            if (ns != null)
             {
-                if (XmpConstConstants.NsDcDeprecated.Equals(@namespace))
+                if (XmpConstConstants.NsDcDeprecated.Equals(ns))
                 {
                     // Fix a legacy DC namespace
-                    @namespace = XmpConstConstants.NsDc;
+                    ns = XmpConstConstants.NsDc;
                 }
-                var prefix = registry.GetNamespacePrefix(@namespace);
+                var prefix = registry.GetNamespacePrefix(ns);
                 if (prefix == null)
                 {
                     prefix = xmlNode.Prefix ?? DefaultPrefix;
-                    prefix = registry.RegisterNamespace(@namespace, prefix);
+                    prefix = registry.RegisterNamespace(ns, prefix);
                 }
                 childName = prefix + xmlNode.LocalName;
             }
@@ -990,7 +990,7 @@ namespace XmpCore.Impl
             {
                 // Lookup the schema node, adjust the XMP parent pointer.
                 // Incoming parent must be the tree root.
-                var schemaNode = XmpNodeUtils.FindSchemaNode(xmp.GetRoot(), @namespace, DefaultPrefix, true);
+                var schemaNode = XmpNodeUtils.FindSchemaNode(xmp.GetRoot(), ns, DefaultPrefix, true);
                 schemaNode.IsImplicit = false;
                 // Clear the implicit node bit.
                 // need runtime check for proper 32 bit code.
@@ -1173,12 +1173,12 @@ namespace XmpCore.Impl
         private static int GetRdfTermKind(XmlNode node)
         {
             var localName = node.LocalName;
-            var @namespace = node.NamespaceURI;
-            if (@namespace == null && ("about".Equals(localName) || "ID".Equals(localName)) && (node is XmlAttribute) && XmpConstConstants.NsRdf.Equals(((XmlAttribute)node).OwnerElement.NamespaceURI))
+            var ns = node.NamespaceURI;
+            if (ns == null && ("about".Equals(localName) || "ID".Equals(localName)) && (node is XmlAttribute) && XmpConstConstants.NsRdf.Equals(((XmlAttribute)node).OwnerElement.NamespaceURI))
             {
-                @namespace = XmpConstConstants.NsRdf;
+                ns = XmpConstConstants.NsRdf;
             }
-            if (XmpConstConstants.NsRdf.Equals(@namespace))
+            if (XmpConstConstants.NsRdf.Equals(ns))
             {
                 if ("li".Equals(localName))
                 {

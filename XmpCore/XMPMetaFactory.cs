@@ -49,7 +49,7 @@ namespace XmpCore
         /// <c>parseFromBuffer()</c> parses RDF from an <c>Stream</c>. The encoding
         /// is recognized automatically.
         /// </remarks>
-        /// <param name="in">an <c>Stream</c></param>
+        /// <param name="stream">an <c>Stream</c></param>
         /// <param name="options">Options controlling the parsing.
         /// The available options are:
         /// <list type="bullet">
@@ -60,9 +60,9 @@ namespace XmpCore
         /// </param>
         /// <returns>Returns the <c>XMPMeta</c>-object created from the input.</returns>
         /// <exception cref="XmpException">If the file is not well-formed XML or if the parsing fails.</exception>
-        public static IXmpMeta Parse(Stream @in, ParseOptions options = null)
+        public static IXmpMeta Parse(Stream stream, ParseOptions options = null)
         {
-            return XmpMetaParser.Parse(@in, options);
+            return XmpMetaParser.Parse(stream, options);
         }
 
         /// <summary>Creates an <c>XMPMeta</c>-object from a string.</summary>

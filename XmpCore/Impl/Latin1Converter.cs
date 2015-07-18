@@ -58,7 +58,7 @@ namespace XmpCore.Impl
                 // expected UTF8 bytes to come
                 var expectedBytes = 0;
                 // output buffer with estimated length
-                var @out = new ByteBuffer(buffer.Length() * 4 / 3);
+                var output = new ByteBuffer(buffer.Length() * 4 / 3);
                 var state = StateStart;
                 for (var i = 0; i < buffer.Length(); i++)
                 {
@@ -70,7 +70,7 @@ namespace XmpCore.Impl
                         {
                             if (b < 0x7F)
                             {
-                                @out.Append(unchecked((byte)b));
+                                output.Append(unchecked((byte)b));
                             }
                             else
                             {
@@ -91,7 +91,7 @@ namespace XmpCore.Impl
                                     //  implicitly:  b >= 0x80  &&  b < 0xC0
                                     // invalid UTF8 start char, assume to be Latin-1
                                     var utf8 = ConvertToUtf8(unchecked((byte)b));
-                                    @out.Append(utf8);
+                                    output.Append(utf8);
                                 }
                             }
                             break;
@@ -106,7 +106,7 @@ namespace XmpCore.Impl
                                 expectedBytes--;
                                 if (expectedBytes == 0)
                                 {
-                                    @out.Append(readAheadBuffer, 0, readAhead);
+                                    output.Append(readAheadBuffer, 0, readAhead);
                                     readAhead = 0;
                                     state = StateStart;
                                 }
@@ -116,7 +116,7 @@ namespace XmpCore.Impl
                                 // invalid UTF8 char:
                                 // 1. convert first of seq to UTF8
                                 var utf8 = ConvertToUtf8(readAheadBuffer[0]);
-                                @out.Append(utf8);
+                                output.Append(utf8);
                                 // 2. continue processing at second byte of sequence
                                 i = i - readAhead;
                                 readAhead = 0;
@@ -133,10 +133,10 @@ namespace XmpCore.Impl
                     {
                         var b = readAheadBuffer[j];
                         var utf8 = ConvertToUtf8(b);
-                        @out.Append(utf8);
+                        output.Append(utf8);
                     }
                 }
-                return @out;
+                return output;
             }
             // Latin-1 fixing applies only to UTF-8
             return buffer;

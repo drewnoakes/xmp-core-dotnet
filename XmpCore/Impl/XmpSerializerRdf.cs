@@ -764,13 +764,13 @@ namespace XmpCore.Impl
 
         /// <summary>Writes one namespace declaration to the output.</summary>
         /// <param name="prefix">a namespace prefix (without colon) or a complete qname (when namespace == null)</param>
-        /// <param name="namespace">the a namespace</param>
+        /// <param name="ns">the a namespace</param>
         /// <param name="usedPrefixes">a set containing currently used prefixes</param>
         /// <param name="indent">the current indent level</param>
         /// <exception cref="System.IO.IOException">Forwards all writer exceptions.</exception>
-        private void DeclareNamespace(string prefix, string @namespace, ICollection<object> usedPrefixes, int indent)
+        private void DeclareNamespace(string prefix, string ns, ICollection<object> usedPrefixes, int indent)
         {
-            if (@namespace == null)
+            if (ns == null)
             {
                 // prefix contains qname, extract prefix and lookup namespace with prefix
                 var qname = new QName(prefix);
@@ -778,9 +778,9 @@ namespace XmpCore.Impl
                 {
                     prefix = qname.GetPrefix();
                     // add colon for lookup
-                    @namespace = XmpMetaFactory.GetSchemaRegistry().GetNamespaceUri(prefix + ":");
+                    ns = XmpMetaFactory.GetSchemaRegistry().GetNamespaceUri(prefix + ":");
                     // prefix w/o colon
-                    DeclareNamespace(prefix, @namespace, usedPrefixes, indent);
+                    DeclareNamespace(prefix, ns, usedPrefixes, indent);
                 }
                 else
                 {
@@ -794,7 +794,7 @@ namespace XmpCore.Impl
                 Write("xmlns:");
                 Write(prefix);
                 Write("=\"");
-                Write(@namespace);
+                Write(ns);
                 Write('"');
                 usedPrefixes.Add(prefix);
             }

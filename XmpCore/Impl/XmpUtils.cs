@@ -595,9 +595,9 @@ namespace XmpCore.Impl
                                     // Merge other arrays by item values. Don't worry about order or duplicates. Source
                                     // items with empty values do not cause deletion, that conflicts horribly with
                                     // merging.
-                                    for (var @is = sourceNode.IterateChildren(); @is.HasNext(); )
+                                    for (var children = sourceNode.IterateChildren(); children.HasNext(); )
                                     {
-                                        var sourceItem = (XmpNode)@is.Next();
+                                        var sourceItem = (XmpNode)children.Next();
                                         var match = false;
                                         for (var id = destNode.IterateChildren(); id.HasNext(); )
                                         {
