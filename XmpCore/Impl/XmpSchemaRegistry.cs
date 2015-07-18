@@ -8,7 +8,6 @@
 // =================================================================================================
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Sharpen;
@@ -40,6 +39,8 @@ namespace XmpCore.Impl
         /// <summary>The pattern that must not be contained in simple properties</summary>
         private readonly Regex _p = new Regex ("[/*?\\[\\]]", RegexOptions.Compiled);
 
+        private readonly object _lock = new object();
+
         /// <summary>
         /// Performs the initialisation of the registry with the default namespaces, aliases and global
         /// options.
@@ -62,7 +63,7 @@ namespace XmpCore.Impl
         /// <exception cref="XmpException"/>
         public string RegisterNamespace(string namespaceUri, string suggestedPrefix)
         {
-            lock (this)
+            lock (_lock)
             {
                 ParameterAsserts.AssertSchemaNs(namespaceUri);
                 ParameterAsserts.AssertPrefix(suggestedPrefix);
@@ -100,7 +101,7 @@ namespace XmpCore.Impl
 
         public void DeleteNamespace(string namespaceUri)
         {
-            lock (this)
+            lock (_lock)
             {
                 var prefixToDelete = GetNamespacePrefix(namespaceUri);
                 if (prefixToDelete != null)
@@ -113,7 +114,7 @@ namespace XmpCore.Impl
 
         public string GetNamespacePrefix(string namespaceUri)
         {
-            lock (this)
+            lock (_lock)
             {
                 string value;
                 return _namespaceToPrefixMap.TryGetValue(namespaceUri, out value) ? value : null;
@@ -122,7 +123,7 @@ namespace XmpCore.Impl
 
         public string GetNamespaceUri(string namespacePrefix)
         {
-            lock (this)
+            lock (_lock)
             {
                 if (namespacePrefix != null && !namespacePrefix.EndsWith(":"))
                     namespacePrefix += ":";
@@ -135,7 +136,7 @@ namespace XmpCore.Impl
         {
             get
             {
-                lock (this)
+                lock (_lock)
                 {
                     return new Dictionary<string, string>(_namespaceToPrefixMap);
                 }
@@ -146,7 +147,7 @@ namespace XmpCore.Impl
         {
             get
             {
-                lock (this)
+                lock (_lock)
                 {
                     return new Dictionary<string, string>(_prefixToNamespaceMap);
                 }
@@ -233,7 +234,7 @@ namespace XmpCore.Impl
 
         public IXmpAliasInfo ResolveAlias(string aliasNs, string aliasProp)
         {
-            lock (this)
+            lock (_lock)
             {
                 var aliasPrefix = GetNamespacePrefix(aliasNs);
                 if (aliasPrefix == null)
@@ -247,7 +248,7 @@ namespace XmpCore.Impl
 
         public IXmpAliasInfo FindAlias(string qname)
         {
-            lock (this)
+            lock (_lock)
             {
                 IXmpAliasInfo info;
                 return _aliasMap.TryGetValue(qname, out info) ? info : null;
@@ -256,7 +257,7 @@ namespace XmpCore.Impl
 
         public IEnumerable<IXmpAliasInfo> FindAliases(string aliasNs)
         {
-            lock (this)
+            lock (_lock)
             {
                 var prefix = GetNamespacePrefix(aliasNs);
                 var result = new List<IXmpAliasInfo>();
@@ -317,9 +318,9 @@ namespace XmpCore.Impl
         /// ).
         /// </param>
         /// <exception cref="XmpException">for inconsistant aliases.</exception>
-        internal void RegisterAlias(string aliasNs, string aliasProp, string actualNs, string actualProp, AliasOptions aliasForm)
+        private void RegisterAlias(string aliasNs, string aliasProp, string actualNs, string actualProp, AliasOptions aliasForm)
         {
-            lock (this)
+            lock (_lock)
             {
                 ParameterAsserts.AssertSchemaNs(aliasNs);
                 ParameterAsserts.AssertPropName(aliasProp);
@@ -402,7 +403,7 @@ namespace XmpCore.Impl
         {
             get
             {
-                lock (this)
+                lock (_lock)
                 {
                     return new Dictionary<string, IXmpAliasInfo>(_aliasMap);
                 }

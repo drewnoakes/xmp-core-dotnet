@@ -144,6 +144,8 @@ namespace XmpCore
             _schema = new XmpSchemaRegistry();
         }
 
+        private static readonly object _lock = new object();
+
         /// <summary>Obtain version information.</summary>
         /// <remarks>
         /// Obtain version information. The XMPVersionInfo singleton is created the first time
@@ -152,7 +154,7 @@ namespace XmpCore
         /// <returns>Returns the version information.</returns>
         public static IXmpVersionInfo GetVersionInfo()
         {
-            lock (typeof(XmpMetaFactory))
+            lock (_lock)
             {
                 if (_versionInfo == null)
                 {
