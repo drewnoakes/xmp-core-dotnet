@@ -230,7 +230,7 @@ namespace XmpCore.Impl
             {
                 WriteIndent(level);
                 Write(RdfXmpmetaStart);
-                Write(XmpMetaFactory.GetVersionInfo().Message);
+                Write(XmpMetaFactory.VersionInfo.Message);
                 Write("\">");
                 WriteNewline();
                 level++;
@@ -778,7 +778,7 @@ namespace XmpCore.Impl
                 {
                     prefix = qname.GetPrefix();
                     // add colon for lookup
-                    ns = XmpMetaFactory.GetSchemaRegistry().GetNamespaceUri(prefix + ":");
+                    ns = XmpMetaFactory.SchemaRegistry.GetNamespaceUri(prefix + ":");
                     // prefix w/o colon
                     DeclareNamespace(prefix, ns, usedPrefixes, indent);
                 }

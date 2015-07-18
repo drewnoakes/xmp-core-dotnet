@@ -14,20 +14,16 @@ using XmpCore.Options;
 
 namespace XmpCore
 {
-    /// <summary>Creates <c>XMPMeta</c>-instances from an <c>Stream</c></summary>
+    /// <summary>Parses and serialises <see cref="IXmpMeta"/> instances.</summary>
     /// <since>30.01.2006</since>
     public static class XmpMetaFactory
     {
-        /// <summary>The singleton instance of the <c>XMPSchemaRegistry</c>.</summary>
-        private static IXmpSchemaRegistry _schema = new XmpSchemaRegistry();
+        /// <value>Returns the singleton instance of the <see cref="XmpSchemaRegistry"/>.</value>
+        public static IXmpSchemaRegistry SchemaRegistry { get; private set; }
 
-        /// <summary>cache for version info</summary>
-        private static IXmpVersionInfo _versionInfo;
-
-        /// <returns>Returns the singleton instance of the <c>XMPSchemaRegistry</c>.</returns>
-        public static IXmpSchemaRegistry GetSchemaRegistry()
+        static XmpMetaFactory()
         {
-            return _schema;
+            SchemaRegistry = new XmpSchemaRegistry();
         }
 
         /// <returns>Returns an empty <c>XMPMeta</c>-object.</returns>
@@ -128,9 +124,7 @@ namespace XmpCore
         private static void AssertImplementation(IXmpMeta xmp)
         {
             if (!(xmp is XmpMeta))
-            {
-                throw new NotSupportedException("The serializing service works only" + "with the XMPMeta implementation of this library");
-            }
+                throw new NotSupportedException("The serializing service works only with the XMPMeta implementation of this library");
         }
 
         /// <summary>Resets the schema registry to its original state (creates a new one).</summary>
@@ -141,42 +135,13 @@ namespace XmpCore
         /// </remarks>
         public static void Reset()
         {
-            _schema = new XmpSchemaRegistry();
+            SchemaRegistry = new XmpSchemaRegistry();
         }
 
-        private static readonly object _lock = new object();
-
         /// <summary>Obtain version information.</summary>
-        /// <remarks>
-        /// Obtain version information. The XMPVersionInfo singleton is created the first time
-        /// its requested.
-        /// </remarks>
-        /// <returns>Returns the version information.</returns>
-        public static IXmpVersionInfo GetVersionInfo()
+        public static IXmpVersionInfo VersionInfo
         {
-            lock (_lock)
-            {
-                if (_versionInfo == null)
-                {
-                    try
-                    {
-                        var major = 5;
-                        var minor = 1;
-                        var micro = 0;
-                        var engBuild = 3;
-                        var debug = false;
-                        // Adobe XMP Core 5.0-jc001 DEBUG-<branch>.<changelist>, 2009 Jan 28 15:22:38-CET
-                        var message = "Adobe XMP Core 5.1.0-jc003";
-                        _versionInfo = new XmpVersionInfo(major, minor, micro, debug, engBuild, message);
-                    }
-                    catch (Exception e)
-                    {
-                        // EMTPY, severe error would be detected during the tests
-                        Console.Out.WriteLine(e);
-                    }
-                }
-                return _versionInfo;
-            }
+            get { return new XmpVersionInfo(5, 1, 0, false, 3, "Adobe XMP Core 5.1.0-jc003"); }
         }
 
         private sealed class XmpVersionInfo : IXmpVersionInfo

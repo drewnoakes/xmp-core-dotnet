@@ -964,7 +964,7 @@ namespace XmpCore.Impl
         /// <exception cref="XmpException">thrown on parsing errors</exception>
         private static XmpNode AddChildNode(XmpMeta xmp, XmpNode xmpParent, XmlNode xmlNode, string value, bool isTopLevel)
         {
-            var registry = XmpMetaFactory.GetSchemaRegistry();
+            var registry = XmpMetaFactory.SchemaRegistry;
             var ns = xmlNode.NamespaceURI;
             string childName;
             if (ns != string.Empty)

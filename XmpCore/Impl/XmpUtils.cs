@@ -7,6 +7,8 @@
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
 
+
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using XmpCore.Impl.XPath;
@@ -54,50 +56,48 @@ namespace XmpCore.Impl
             ParameterAsserts.AssertSchemaNs(schemaNs);
             ParameterAsserts.AssertArrayName(arrayName);
             ParameterAsserts.AssertImplementation(xmp);
+
             if (string.IsNullOrEmpty(separator))
-            {
                 separator = "; ";
-            }
             if (string.IsNullOrEmpty(quotes))
-            {
                 quotes = "\"";
-            }
+
             var xmpImpl = (XmpMeta)xmp;
+
             // Return an empty result if the array does not exist,
             // hurl if it isn't the right form.
             var arrayPath = XmpPathParser.ExpandXPath(schemaNs, arrayName);
             var arrayNode = XmpNodeUtils.FindNode(xmpImpl.GetRoot(), arrayPath, false, null);
+
             if (arrayNode == null)
-            {
                 return string.Empty;
-            }
             if (!arrayNode.Options.IsArray || arrayNode.Options.IsArrayAlternate)
-            {
                 throw new XmpException("Named property must be non-alternate array", XmpErrorCode.BadParam);
-            }
+
             // Make sure the separator is OK.
             CheckSeparator(separator);
+
             // Make sure the open and close quotes are a legitimate pair.
             var openQuote = quotes[0];
             var closeQuote = CheckQuotes(quotes, openQuote);
+
             // Build the result, quoting the array items, adding separators.
             // Hurl if any item isn't simple.
-            var catinatedString = new StringBuilder();
+            var catenatedString = new StringBuilder();
             for (var it = arrayNode.IterateChildren(); it.HasNext(); )
             {
                 var currItem = (XmpNode)it.Next();
+
                 if (currItem.Options.IsCompositeProperty)
-                {
                     throw new XmpException("Array items must be simple", XmpErrorCode.BadParam);
-                }
+
                 var str = ApplyQuotes(currItem.Value, openQuote, closeQuote, allowCommas);
-                catinatedString.Append(str);
+                catenatedString.Append(str);
+
                 if (it.HasNext())
-                {
-                    catinatedString.Append(separator);
-                }
+                    catenatedString.Append(separator);
             }
-            return catinatedString.ToString();
+            return catenatedString.ToString();
         }
 
         /// <summary>
@@ -120,14 +120,16 @@ namespace XmpCore.Impl
         {
             ParameterAsserts.AssertSchemaNs(schemaNs);
             ParameterAsserts.AssertArrayName(arrayName);
+
             if (catedStr == null)
-            {
                 throw new XmpException("Parameter must not be null", XmpErrorCode.BadParam);
-            }
+
             ParameterAsserts.AssertImplementation(xmp);
             var xmpImpl = (XmpMeta)xmp;
+
             // Keep a zero value, has special meaning below.
             var arrayNode = SeparateFindCreateArray(schemaNs, arrayName, arrayOptions, xmpImpl);
+
             // Extract the item values one at a time, until the whole input string is done.
             var charKind = UnicodeKind.Normal;
             var ch = (char)0;
@@ -143,16 +145,13 @@ namespace XmpCore.Impl
                     ch = catedStr[itemStart];
                     charKind = ClassifyCharacter(ch);
                     if (charKind == UnicodeKind.Normal || charKind == UnicodeKind.Quote)
-                    {
                         break;
-                    }
                 }
+
                 if (itemStart >= endPos)
-                {
                     break;
-                }
+
                 string itemValue;
-                var nextKind = UnicodeKind.Normal;
                 if (charKind != UnicodeKind.Quote)
                 {
                     // This is not a quoted value. Scan for the end, create an array
@@ -161,22 +160,19 @@ namespace XmpCore.Impl
                     {
                         ch = catedStr[itemEnd];
                         charKind = ClassifyCharacter(ch);
+
                         if (charKind == UnicodeKind.Normal || charKind == UnicodeKind.Quote || (charKind == UnicodeKind.Comma && preserveCommas))
-                        {
                             continue;
-                        }
+
                         if (charKind != UnicodeKind.Space)
-                        {
                             break;
-                        }
+
                         if ((itemEnd + 1) < endPos)
                         {
                             ch = catedStr[itemEnd + 1];
-                            nextKind = ClassifyCharacter(ch);
+                            var nextKind = ClassifyCharacter(ch);
                             if (nextKind == UnicodeKind.Normal || nextKind == UnicodeKind.Quote || (nextKind == UnicodeKind.Comma && preserveCommas))
-                            {
                                 continue;
-                            }
                         }
                         // Anything left?
                         break;
@@ -213,17 +209,12 @@ namespace XmpCore.Impl
                             // Tolerate various edge cases like undoubled opening
                             // (non-closing) quotes,
                             // or end of input.
-                            var nextChar = (char)0;
+                            char nextChar;
                             if ((itemEnd + 1) < endPos)
-                            {
                                 nextChar = catedStr[itemEnd + 1];
-                                nextKind = ClassifyCharacter(nextChar);
-                            }
                             else
-                            {
-                                nextKind = UnicodeKind.Semicolon;
                                 nextChar = (char)0x3B;
-                            }
+
                             if (ch == nextChar)
                             {
                                 // This is doubled, copy it and skip the double.
@@ -233,7 +224,7 @@ namespace XmpCore.Impl
                             }
                             else
                             {
-                                if (!IsClosingingQuote(ch, openQuote, closeQuote))
+                                if (!IsClosingQuote(ch, openQuote, closeQuote))
                                 {
                                     // This is an undoubled, non-closing quote, copy it.
                                     itemValue += ch;
@@ -276,10 +267,10 @@ namespace XmpCore.Impl
         private static XmpNode SeparateFindCreateArray(string schemaNs, string arrayName, PropertyOptions arrayOptions, XmpMeta xmp)
         {
             arrayOptions = XmpNodeUtils.VerifySetOptions(arrayOptions, null);
+
             if (!arrayOptions.IsOnlyArrayOptions)
-            {
                 throw new XmpException("Options can only provide array form", XmpErrorCode.BadOptions);
-            }
+
             // Find the array node, make sure it is OK. Move the current children
             // aside, to be readded later if kept.
             var arrayPath = XmpPathParser.ExpandXPath(schemaNs, arrayName);
@@ -289,14 +280,11 @@ namespace XmpCore.Impl
                 // The array exists, make sure the form is compatible. Zero
                 // arrayForm means take what exists.
                 var arrayForm = arrayNode.Options;
+
                 if (!arrayForm.IsArray || arrayForm.IsArrayAlternate)
-                {
                     throw new XmpException("Named property must be non-alternate array", XmpErrorCode.BadXPath);
-                }
                 if (arrayOptions.EqualArrayTypes(arrayForm))
-                {
                     throw new XmpException("Mismatch of specified and existing array form", XmpErrorCode.BadXPath);
-                }
             }
             else
             {
@@ -306,9 +294,7 @@ namespace XmpCore.Impl
                 arrayOptions.IsArray = true;
                 arrayNode = XmpNodeUtils.FindNode(xmp.GetRoot(), arrayPath, true, arrayOptions);
                 if (arrayNode == null)
-                {
                     throw new XmpException("Failed to create named array", XmpErrorCode.BadXPath);
-                }
             }
             return arrayNode;
         }
@@ -331,6 +317,7 @@ namespace XmpCore.Impl
         public static void RemoveProperties(IXmpMeta xmp, string schemaNs, string propName, bool doAllProperties, bool includeAliases)
         {
             ParameterAsserts.AssertImplementation(xmp);
+
             var xmpImpl = (XmpMeta)xmp;
             if (!string.IsNullOrEmpty(propName))
             {
@@ -338,9 +325,8 @@ namespace XmpCore.Impl
                 // the named schema might not actually exist. So don't lookup the
                 // schema node.
                 if (string.IsNullOrEmpty(schemaNs))
-                {
                     throw new XmpException("Property name requires schema namespace", XmpErrorCode.BadParam);
-                }
+
                 var expPath = XmpPathParser.ExpandXPath(schemaNs, propName);
                 var propNode = XmpNodeUtils.FindNode(xmpImpl.GetRoot(), expPath, false, null);
                 if (propNode != null)
@@ -366,30 +352,21 @@ namespace XmpCore.Impl
                     // there might not be an actual schema node.
                     // XMP_NodePtrPos schemaPos;
                     var schemaNode = XmpNodeUtils.FindSchemaNode(xmpImpl.GetRoot(), schemaNs, false);
-                    if (schemaNode != null)
-                    {
-                        if (RemoveSchemaChildren(schemaNode, doAllProperties))
-                        {
-                            xmpImpl.GetRoot().RemoveChild(schemaNode);
-                        }
-                    }
+
+                    if (schemaNode != null && RemoveSchemaChildren(schemaNode, doAllProperties))
+                        xmpImpl.GetRoot().RemoveChild(schemaNode);
+
                     if (includeAliases)
                     {
-                        // We're removing the aliases also. Look them up by their
-                        // namespace prefix.
+                        // We're removing the aliases also. Look them up by their namespace prefix.
                         // But that takes more code and the extra speed isn't worth it.
-                        // Lookup the XMP node
-                        // from the alias, to make sure the actual exists.
-                        var aliases = XmpMetaFactory.GetSchemaRegistry().FindAliases(schemaNs);
-                        foreach (var info in aliases)
+                        // Lookup the XMP node from the alias, to make sure the actual exists.
+                        foreach (var info in XmpMetaFactory.SchemaRegistry.FindAliases(schemaNs))
                         {
                             var path = XmpPathParser.ExpandXPath(info.Namespace, info.PropName);
                             var actualProp = XmpNodeUtils.FindNode(xmpImpl.GetRoot(), path, false, null);
                             if (actualProp != null)
-                            {
-                                var parent = actualProp.Parent;
-                                parent.RemoveChild(actualProp);
-                            }
+                                actualProp.Parent.RemoveChild(actualProp);
                         }
                     }
                 }
@@ -403,9 +380,7 @@ namespace XmpCore.Impl
                     {
                         var schema = (XmpNode)it.Next();
                         if (RemoveSchemaChildren(schema, doAllProperties))
-                        {
                             it.Remove();
-                        }
                     }
                 }
             }
@@ -421,29 +396,32 @@ namespace XmpCore.Impl
         {
             ParameterAsserts.AssertImplementation(source);
             ParameterAsserts.AssertImplementation(destination);
+
             var src = (XmpMeta)source;
             var dest = (XmpMeta)destination;
             for (var it = src.GetRoot().IterateChildren(); it.HasNext(); )
             {
                 var sourceSchema = (XmpNode)it.Next();
+
                 // Make sure we have a destination schema node
                 var destSchema = XmpNodeUtils.FindSchemaNode(dest.GetRoot(), sourceSchema.Name, false);
                 var createdSchema = false;
+
                 if (destSchema == null)
                 {
                     destSchema = new XmpNode(sourceSchema.Name, sourceSchema.Value, new PropertyOptions { IsSchemaNode = true });
                     dest.GetRoot().AddChild(destSchema);
                     createdSchema = true;
                 }
+
                 // Process the source schema's children.
                 for (var ic = sourceSchema.IterateChildren(); ic.HasNext(); )
                 {
                     var sourceProp = (XmpNode)ic.Next();
                     if (doAllProperties || !Utils.IsInternalProperty(sourceSchema.Name, sourceProp.Name))
-                    {
                         AppendSubtree(dest, sourceProp, destSchema, replaceOldValues, deleteEmptyValues);
-                    }
                 }
+
                 if (!destSchema.HasChildren && (createdSchema || deleteEmptyValues))
                 {
                     // Don't create an empty schema / remove empty schema.
@@ -452,15 +430,8 @@ namespace XmpCore.Impl
             }
         }
 
-        /// <summary>
-        /// Remove all schema children according to the flag
-        /// <c>doAllProperties</c>.
-        /// </summary>
-        /// <remarks>
-        /// Remove all schema children according to the flag
-        /// <c>doAllProperties</c>. Empty schemas are automatically remove
-        /// by <c>XMPNode</c>
-        /// </remarks>
+        /// <summary>Remove all schema children according to the flag <c>doAllProperties</c>.</summary>
+        /// <remarks>Empty schemas are automatically remove by <c>XMPNode</c>.</remarks>
         /// <param name="schemaNode">a schema node</param>
         /// <param name="doAllProperties">flag if all properties or only externals shall be removed.</param>
         /// <returns>Returns true if the schema is empty after the operation.</returns>
@@ -481,25 +452,20 @@ namespace XmpCore.Impl
         /// <param name="sourceNode">the source node</param>
         /// <param name="destParent">the parent of the destination node</param>
         /// <param name="replaceOldValues">Replace the values of existing properties.</param>
-        /// <param name="deleteEmptyValues">
-        /// flag if properties with empty values should be deleted
-        /// in the destination object.
-        /// </param>
+        /// <param name="deleteEmptyValues">flag if properties with empty values should be deleted in the destination object.</param>
         /// <exception cref="XmpException"/>
         private static void AppendSubtree(XmpMeta destXmp, XmpNode sourceNode, XmpNode destParent, bool replaceOldValues, bool deleteEmptyValues)
         {
             var destNode = XmpNodeUtils.FindChildNode(destParent, sourceNode.Name, false);
             var valueIsEmpty = false;
+
             if (deleteEmptyValues)
-            {
                 valueIsEmpty = sourceNode.Options.IsSimple ? string.IsNullOrEmpty(sourceNode.Value) : !sourceNode.HasChildren;
-            }
+
             if (deleteEmptyValues && valueIsEmpty)
             {
                 if (destNode != null)
-                {
                     destParent.RemoveChild(destNode);
-                }
             }
             else
             {
@@ -520,14 +486,14 @@ namespace XmpCore.Impl
                     }
                     else
                     {
-                        // The destination exists and is not totally replaced. Structs and
-                        // arrays are merged.
+                        // The destination exists and is not totally replaced. Structs and arrays are merged.
                         var sourceForm = sourceNode.Options;
                         var destForm = destNode.Options;
                         if (sourceForm != destForm)
                         {
                             return;
                         }
+
                         if (sourceForm.IsStruct)
                         {
                             // To merge a struct process the fields recursively. E.g. add simple missing fields.
@@ -538,81 +504,68 @@ namespace XmpCore.Impl
                                 var sourceField = (XmpNode)it.Next();
                                 AppendSubtree(destXmp, sourceField, destNode, replaceOldValues, deleteEmptyValues);
                                 if (deleteEmptyValues && !destNode.HasChildren)
-                                {
                                     destParent.RemoveChild(destNode);
-                                }
                             }
                         }
-                        else
+                        else if (sourceForm.IsArrayAltText)
                         {
-                            if (sourceForm.IsArrayAltText)
+                            // Merge AltText arrays by the "xml:lang" qualifiers. Make sure x-default is first.
+                            // Make a special check for deletion of empty values. Meaningful in AltText arrays
+                            // because the "xml:lang" qualifier provides unambiguous source/dest correspondence.
+                            for (var it = sourceNode.IterateChildren(); it.HasNext(); )
                             {
-                                // Merge AltText arrays by the "xml:lang" qualifiers. Make sure x-default is first.
-                                // Make a special check for deletion of empty values. Meaningful in AltText arrays
-                                // because the "xml:lang" qualifier provides unambiguous source/dest correspondence.
-                                for (var it = sourceNode.IterateChildren(); it.HasNext(); )
+                                var sourceItem = (XmpNode)it.Next();
+
+                                if (!sourceItem.HasQualifier || !XmpConstConstants.XmlLang.Equals(sourceItem.GetQualifier(1).Name))
+                                    continue;
+
+                                var destIndex = XmpNodeUtils.LookupLanguageItem(destNode, sourceItem.GetQualifier(1).Value);
+                                if (deleteEmptyValues && string.IsNullOrEmpty(sourceItem.Value))
                                 {
-                                    var sourceItem = (XmpNode)it.Next();
-                                    if (!sourceItem.HasQualifier || !XmpConstConstants.XmlLang.Equals(sourceItem.GetQualifier(1).Name))
+                                    if (destIndex != -1)
                                     {
-                                        continue;
+                                        destNode.RemoveChild(destIndex);
+                                        if (!destNode.HasChildren)
+                                            destParent.RemoveChild(destNode);
                                     }
-                                    var destIndex = XmpNodeUtils.LookupLanguageItem(destNode, sourceItem.GetQualifier(1).Value);
-                                    if (deleteEmptyValues && string.IsNullOrEmpty(sourceItem.Value))
+                                }
+                                else if (destIndex == -1)
+                                {
+                                    // Not replacing, keep the existing item.
+                                    if (!XmpConstConstants.XDefault.Equals(sourceItem.GetQualifier(1).Value) || !destNode.HasChildren)
                                     {
-                                        if (destIndex != -1)
-                                        {
-                                            destNode.RemoveChild(destIndex);
-                                            if (!destNode.HasChildren)
-                                            {
-                                                destParent.RemoveChild(destNode);
-                                            }
-                                        }
+                                        sourceItem.CloneSubtree(destNode);
                                     }
                                     else
                                     {
-                                        if (destIndex == -1)
-                                        {
-                                            // Not replacing, keep the existing item.
-                                            if (!XmpConstConstants.XDefault.Equals(sourceItem.GetQualifier(1).Value) || !destNode.HasChildren)
-                                            {
-                                                sourceItem.CloneSubtree(destNode);
-                                            }
-                                            else
-                                            {
-                                                var destItem = new XmpNode(sourceItem.Name, sourceItem.Value, sourceItem.Options);
-                                                sourceItem.CloneSubtree(destItem);
-                                                destNode.AddChild(1, destItem);
-                                            }
-                                        }
+                                        var destItem = new XmpNode(sourceItem.Name, sourceItem.Value, sourceItem.Options);
+                                        sourceItem.CloneSubtree(destItem);
+                                        destNode.AddChild(1, destItem);
                                     }
                                 }
                             }
-                            else
+                        }
+                        else if (sourceForm.IsArray)
+                        {
+                            // Merge other arrays by item values. Don't worry about order or duplicates. Source
+                            // items with empty values do not cause deletion, that conflicts horribly with
+                            // merging.
+                            for (var children = sourceNode.IterateChildren(); children.HasNext(); )
                             {
-                                if (sourceForm.IsArray)
+                                var sourceItem = (XmpNode)children.Next();
+
+                                var match = false;
+                                for (var id = destNode.IterateChildren(); id.HasNext(); )
                                 {
-                                    // Merge other arrays by item values. Don't worry about order or duplicates. Source
-                                    // items with empty values do not cause deletion, that conflicts horribly with
-                                    // merging.
-                                    for (var children = sourceNode.IterateChildren(); children.HasNext(); )
-                                    {
-                                        var sourceItem = (XmpNode)children.Next();
-                                        var match = false;
-                                        for (var id = destNode.IterateChildren(); id.HasNext(); )
-                                        {
-                                            var destItem = (XmpNode)id.Next();
-                                            if (ItemValuesMatch(sourceItem, destItem))
-                                            {
-                                                match = true;
-                                            }
-                                        }
-                                        if (!match)
-                                        {
-                                            destNode = (XmpNode)sourceItem.Clone();
-                                            destParent.AddChild(destNode);
-                                        }
-                                    }
+                                    var destItem = (XmpNode)id.Next();
+                                    if (ItemValuesMatch(sourceItem, destItem))
+                                        match = true;
+                                }
+
+                                if (!match)
+                                {
+                                    destNode = (XmpNode)sourceItem.Clone();
+                                    destParent.AddChild(destNode);
                                 }
                             }
                         }
@@ -630,25 +583,19 @@ namespace XmpCore.Impl
         {
             var leftForm = leftNode.Options;
             var rightForm = rightNode.Options;
+
             if (leftForm.Equals(rightForm))
-            {
                 return false;
-            }
+
             if (leftForm.GetOptions() == 0)
             {
                 // Simple nodes, check the values and xml:lang qualifiers.
                 if (!leftNode.Value.Equals(rightNode.Value))
-                {
                     return false;
-                }
                 if (leftNode.Options.HasLanguage != rightNode.Options.HasLanguage)
-                {
                     return false;
-                }
                 if (leftNode.Options.HasLanguage && !leftNode.GetQualifier(1).Value.Equals(rightNode.GetQualifier(1).Value))
-                {
                     return false;
-                }
             }
             else
             {
@@ -656,17 +603,14 @@ namespace XmpCore.Impl
                 {
                     // Struct nodes, see if all fields match, ignoring order.
                     if (leftNode.GetChildrenLength() != rightNode.GetChildrenLength())
-                    {
                         return false;
-                    }
+
                     for (var it = leftNode.IterateChildren(); it.HasNext(); )
                     {
                         var leftField = (XmpNode)it.Next();
                         var rightField = XmpNodeUtils.FindChildNode(rightNode, leftField.Name, false);
                         if (rightField == null || !ItemValuesMatch(leftField, rightField))
-                        {
                             return false;
-                        }
                     }
                 }
                 else
@@ -680,6 +624,7 @@ namespace XmpCore.Impl
                     {
                         var leftItem = (XmpNode)il.Next();
                         var match = false;
+
                         for (var ir = rightNode.IterateChildren(); ir.HasNext(); )
                         {
                             var rightItem = (XmpNode)ir.Next();
@@ -689,51 +634,43 @@ namespace XmpCore.Impl
                                 break;
                             }
                         }
+
                         if (!match)
-                        {
                             return false;
-                        }
                     }
                 }
             }
             return true;
         }
 
-        // All of the checks passed.
         /// <summary>Make sure the separator is OK.</summary>
         /// <remarks>
-        /// Make sure the separator is OK. It must be one semicolon surrounded by
-        /// zero or more spaces. Any of the recognized semicolons or spaces are
-        /// allowed.
+        /// Separators must be one semicolon surrounded by zero or more spaces. Any of the recognized semicolons or spaces are allowed.
         /// </remarks>
         /// <param name="separator"/>
         /// <exception cref="XmpException"/>
         private static void CheckSeparator(string separator)
         {
             var haveSemicolon = false;
+
             foreach (var t in separator)
             {
                 var charKind = ClassifyCharacter(t);
                 if (charKind == UnicodeKind.Semicolon)
                 {
                     if (haveSemicolon)
-                    {
                         throw new XmpException("Separator can have only one semicolon", XmpErrorCode.BadParam);
-                    }
                     haveSemicolon = true;
                 }
                 else
                 {
                     if (charKind != UnicodeKind.Space)
-                    {
                         throw new XmpException("Separator can have only spaces and one semicolon", XmpErrorCode.BadParam);
-                    }
                 }
             }
+
             if (!haveSemicolon)
-            {
                 throw new XmpException("Separator must have one semicolon", XmpErrorCode.BadParam);
-            }
         }
 
         /// <summary>
@@ -749,9 +686,8 @@ namespace XmpCore.Impl
             char closeQuote;
             var charKind = ClassifyCharacter(openQuote);
             if (charKind != UnicodeKind.Quote)
-            {
                 throw new XmpException("Invalid quoting character", XmpErrorCode.BadParam);
-            }
+
             if (quotes.Length == 1)
             {
                 closeQuote = openQuote;
@@ -761,14 +697,12 @@ namespace XmpCore.Impl
                 closeQuote = quotes[1];
                 charKind = ClassifyCharacter(closeQuote);
                 if (charKind != UnicodeKind.Quote)
-                {
                     throw new XmpException("Invalid quoting character", XmpErrorCode.BadParam);
-                }
             }
+
             if (closeQuote != GetClosingQuote(openQuote))
-            {
                 throw new XmpException("Mismatched quote pair", XmpErrorCode.BadParam);
-            }
+
             return closeQuote;
         }
 
@@ -781,25 +715,16 @@ namespace XmpCore.Impl
         private static UnicodeKind ClassifyCharacter(char ch)
         {
             if (Spaces.IndexOf(ch) >= 0 || (0x2000 <= ch && ch <= 0x200B))
-            {
                 return UnicodeKind.Space;
-            }
             if (Commas.IndexOf(ch) >= 0)
-            {
                 return UnicodeKind.Comma;
-            }
             if (Semicola.IndexOf(ch) >= 0)
-            {
                 return UnicodeKind.Semicolon;
-            }
             if (Quotes.IndexOf(ch) >= 0 || (0x3008 <= ch && ch <= 0x300F) || (0x2018 <= ch && ch <= 0x201F))
-            {
                 return UnicodeKind.Quote;
-            }
             if (ch < 0x0020 || Controls.IndexOf(ch) >= 0)
-            {
                 return UnicodeKind.Control;
-            }
+
             // Assume typical case.
             return UnicodeKind.Normal;
         }
@@ -810,93 +735,46 @@ namespace XmpCore.Impl
         {
             switch (openQuote)
             {
+                // ! U+0022 is both opening and closing.
                 case (char)0x0022:
-                {
                     return (char)0x0022;
-                }
-
+                // Not interpreted as brackets anymore
+//              case 0x005B:
+//                  return 0x005D;
                 case (char)0x00AB:
-                {
-                    // ! U+0022 is both opening and closing.
-                    //        Not interpreted as brackets anymore
-                    //        case 0x005B:
-                    //            return 0x005D;
                     return (char)0x00BB;
-                }
-
                 case (char)0x00BB:
-                {
                     // ! U+00AB and U+00BB are reversible.
                     return (char)0x00AB;
-                }
-
                 case (char)0x2015:
-                {
                     return (char)0x2015;
-                }
-
                 case (char)0x2018:
-                {
                     // ! U+2015 is both opening and closing.
                     return (char)0x2019;
-                }
-
                 case (char)0x201A:
-                {
                     return (char)0x201B;
-                }
-
                 case (char)0x201C:
-                {
                     return (char)0x201D;
-                }
-
                 case (char)0x201E:
-                {
                     return (char)0x201F;
-                }
-
                 case (char)0x2039:
-                {
                     return (char)0x203A;
-                }
-
                 case (char)0x203A:
-                {
                     // ! U+2039 and U+203A are reversible.
                     return (char)0x2039;
-                }
-
                 case (char)0x3008:
-                {
                     return (char)0x3009;
-                }
-
                 case (char)0x300A:
-                {
                     return (char)0x300B;
-                }
-
                 case (char)0x300C:
-                {
                     return (char)0x300D;
-                }
-
                 case (char)0x300E:
-                {
                     return (char)0x300F;
-                }
-
                 case (char)0x301D:
-                {
                     return (char)0x301F;
-                }
-
                 default:
-                {
                     // ! U+301E also closes U+301D.
                     return (char)0;
-                }
             }
         }
 
@@ -909,49 +787,39 @@ namespace XmpCore.Impl
         private static string ApplyQuotes(string item, char openQuote, char closeQuote, bool allowCommas)
         {
             if (item == null)
-            {
                 item = string.Empty;
-            }
+
             var prevSpace = false;
-            // See if there are any separators in the value. Stop at the first
-            // occurrance. This is a bit
-            // tricky in order to make typical typing work conveniently. The purpose
-            // of applying quotes
-            // is to preserve the values when splitting them back apart. That is
-            // CatenateContainerItems
-            // and SeparateContainerItems must round trip properly. For the most
-            // part we only look for
-            // separators here. Internal quotes, as in -- Irving "Bud" Jones --
-            // won't cause problems in
-            // the separation. An initial quote will though, it will make the value
-            // look quoted.
+
+            // See if there are any separators in the value. Stop at the first occurrence. This is a bit
+            // tricky in order to make typical typing work conveniently. The purpose of applying quotes
+            // is to preserve the values when splitting them back apart. That is CatenateContainerItems
+            // and SeparateContainerItems must round trip properly. For the most part we only look for
+            // separators here. Internal quotes, as in -- Irving "Bud" Jones -- won't cause problems in
+            // the separation. An initial quote will though, it will make the value look quoted.
             int i;
             for (i = 0; i < item.Length; i++)
             {
                 var ch = item[i];
                 var charKind = ClassifyCharacter(ch);
                 if (i == 0 && charKind == UnicodeKind.Quote)
-                {
                     break;
-                }
+
                 if (charKind == UnicodeKind.Space)
                 {
                     // Multiple spaces are a separator.
                     if (prevSpace)
-                    {
                         break;
-                    }
                     prevSpace = true;
                 }
                 else
                 {
                     prevSpace = false;
                     if ((charKind == UnicodeKind.Semicolon || charKind == UnicodeKind.Control) || (charKind == UnicodeKind.Comma && !allowCommas))
-                    {
                         break;
-                    }
                 }
             }
+
             if (i < item.Length)
             {
                 // Create a quoted copy, doubling any internal quotes that match the
@@ -965,23 +833,22 @@ namespace XmpCore.Impl
                 for (splitPoint = 0; splitPoint <= i; splitPoint++)
                 {
                     if (ClassifyCharacter(item[i]) == UnicodeKind.Quote)
-                    {
                         break;
-                    }
                 }
+
                 // Copy the leading "normal" portion.
                 newItem.Append(openQuote).Append(item.Substring (0, splitPoint - 0));
                 for (var charOffset = splitPoint; charOffset < item.Length; charOffset++)
                 {
                     newItem.Append(item[charOffset]);
                     if (ClassifyCharacter(item[charOffset]) == UnicodeKind.Quote && IsSurroundingQuote(item[charOffset], openQuote, closeQuote))
-                    {
                         newItem.Append(item[charOffset]);
-                    }
                 }
+
                 newItem.Append(closeQuote);
                 item = newItem.ToString();
             }
+
             return item;
         }
 
@@ -991,14 +858,14 @@ namespace XmpCore.Impl
         /// <returns>Return it the character is a surrounding quote.</returns>
         private static bool IsSurroundingQuote(char ch, char openQuote, char closeQuote)
         {
-            return ch == openQuote || IsClosingingQuote(ch, openQuote, closeQuote);
+            return ch == openQuote || IsClosingQuote(ch, openQuote, closeQuote);
         }
 
         /// <param name="ch">a character</param>
         /// <param name="openQuote">the opening quote char</param>
         /// <param name="closeQuote">the closing quote char</param>
         /// <returns>Returns true if the character is a closing quote.</returns>
-        private static bool IsClosingingQuote(char ch, char openQuote, char closeQuote)
+        private static bool IsClosingQuote(char ch, char openQuote, char closeQuote)
         {
             return ch == closeQuote || (openQuote == 0x301D && ch == 0x301E || ch == 0x301F);
         }

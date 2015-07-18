@@ -286,7 +286,7 @@ namespace XmpCore.Impl.XPath
                 throw new XmpException("Empty initial XMPPath step", XmpErrorCode.BadXPath);
             }
             var rootProp = VerifyXPathRoot(schemaNs, pos.Path.Substring (pos.StepBegin, pos.StepEnd - pos.StepBegin));
-            var aliasInfo = XmpMetaFactory.GetSchemaRegistry().FindAlias(rootProp);
+            var aliasInfo = XmpMetaFactory.SchemaRegistry.FindAlias(rootProp);
             if (aliasInfo == null)
             {
                 // add schema xpath step
@@ -336,7 +336,7 @@ namespace XmpCore.Impl.XPath
                 var prefix = qualName.Substring (0, colonPos - 0);
                 if (Utils.IsXmlNameNs(prefix))
                 {
-                    var regUri = XmpMetaFactory.GetSchemaRegistry().GetNamespaceUri(prefix);
+                    var regUri = XmpMetaFactory.SchemaRegistry.GetNamespaceUri(prefix);
                     if (regUri != null)
                     {
                         return;
@@ -388,7 +388,7 @@ namespace XmpCore.Impl.XPath
             {
                 throw new XmpException("Top level name must be simple", XmpErrorCode.BadXPath);
             }
-            var prefix = XmpMetaFactory.GetSchemaRegistry().GetNamespacePrefix(schemaNs);
+            var prefix = XmpMetaFactory.SchemaRegistry.GetNamespacePrefix(schemaNs);
             if (prefix == null)
             {
                 throw new XmpException("Unregistered schema namespace URI", XmpErrorCode.BadSchema);
@@ -410,7 +410,7 @@ namespace XmpCore.Impl.XPath
             VerifySimpleXmlName(rootProp.Substring (0, colonPos - 0));
             VerifySimpleXmlName(rootProp.Substring (colonPos));
             prefix = rootProp.Substring (0, colonPos + 1 - 0);
-            var regPrefix = XmpMetaFactory.GetSchemaRegistry().GetNamespacePrefix(schemaNs);
+            var regPrefix = XmpMetaFactory.SchemaRegistry.GetNamespacePrefix(schemaNs);
             if (regPrefix == null)
             {
                 throw new XmpException("Unknown schema namespace prefix", XmpErrorCode.BadSchema);

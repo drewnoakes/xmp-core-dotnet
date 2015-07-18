@@ -17,8 +17,7 @@ namespace XmpCore.Impl
 {
     /// <summary>The schema registry handles the namespaces, aliases and global options for the XMP Toolkit.</summary>
     /// <remarks>
-    /// The schema registry handles the namespaces, aliases and global options for the XMP Toolkit. There
-    /// is only one single instance used by the toolkit.
+    /// There is only one singleton instance used by the toolkit, accessed via <see cref="XmpMetaFactory.SchemaRegistry"/>.
     /// </remarks>
     /// <since>27.01.2006</since>
     public sealed class XmpSchemaRegistry : IXmpSchemaRegistry
@@ -174,6 +173,7 @@ namespace XmpCore.Impl
             RegisterNamespace(XmpConstConstants.NsIptcext, "Iptc4xmpExt");
             RegisterNamespace(XmpConstConstants.NsDicom, "DICOM");
             RegisterNamespace(XmpConstConstants.NsPlus, "plus");
+
             // register Adobe standard namespaces
             RegisterNamespace(XmpConstConstants.NsX, "x");
             RegisterNamespace(XmpConstConstants.NsIx, "iX");
@@ -210,9 +210,11 @@ namespace XmpCore.Impl
             RegisterNamespace(XmpConstConstants.NsScript, "xmpScript");
             RegisterNamespace(XmpConstConstants.NsTxmp, "txmp");
             RegisterNamespace(XmpConstConstants.NsSwf, "swf");
+
             // register Adobe private namespaces
             RegisterNamespace(XmpConstConstants.NsDm, "xmpDM");
             RegisterNamespace(XmpConstConstants.NsTransient, "xmpx");
+
             // register Adobe standard type namespaces
             RegisterNamespace(XmpConstConstants.TypeText, "xmpT");
             RegisterNamespace(XmpConstConstants.TypePagedfile, "xmpTPg");
@@ -238,9 +240,7 @@ namespace XmpCore.Impl
             {
                 var aliasPrefix = GetNamespacePrefix(aliasNs);
                 if (aliasPrefix == null)
-                {
                     return null;
-                }
                 IXmpAliasInfo info;
                 return _aliasMap.TryGetValue(aliasPrefix + aliasProp, out info) ? info : null;
             }
@@ -291,32 +291,13 @@ namespace XmpCore.Impl
         /// which is only called by the constructor.
         /// Note2: The method is only package-private so that it can be tested with unittests
         /// </remarks>
-        /// <param name="aliasNs">
-        /// The namespace URI for the alias. Must not be null or the empty
-        /// string.
-        /// </param>
-        /// <param name="aliasProp">
-        /// The name of the alias. Must be a simple name, not null or the
-        /// empty string and not a general path expression.
-        /// </param>
-        /// <param name="actualNs">
-        /// The namespace URI for the actual. Must not be null or the
-        /// empty string.
-        /// </param>
-        /// <param name="actualProp">
-        /// The name of the actual. Must be a simple name, not null or the
-        /// empty string and not a general path expression.
-        /// </param>
-        /// <param name="aliasForm">
-        /// Provides options for aliases for simple aliases to array
-        /// items. This is needed to know what kind of array to create if
-        /// set for the first time via the simple alias. Pass
-        /// <c>XMP_NoOptions</c>, the default value, for all
-        /// direct aliases regardless of whether the actual data type is
-        /// an array or not (see
-        /// <see cref="AliasOptions"/>
-        /// ).
-        /// </param>
+        /// <param name="aliasNs">The namespace URI for the alias. Must not be null or the empty string.</param>
+        /// <param name="aliasProp">The name of the alias. Must be a simple name, not null or the empty string and not a general path expression.</param>
+        /// <param name="actualNs">The namespace URI for the actual. Must not be null or the empty string.</param>
+        /// <param name="actualProp">The name of the actual. Must be a simple name, not null or the empty string and not a general path expression.</param>
+        /// <param name="aliasForm">Provides options for aliases for simple aliases to array items. This is needed to know what kind of array to create if
+        /// set for the first time via the simple alias. Pass <c>XMP_NoOptions</c>, the default value, for all direct aliases regardless of whether the actual
+        /// data type is an array or not (see <see cref="AliasOptions"/>).</param>
         /// <exception cref="XmpException">for inconsistant aliases.</exception>
         private void RegisterAlias(string aliasNs, string aliasProp, string actualNs, string actualProp, AliasOptions aliasForm)
         {
@@ -326,35 +307,30 @@ namespace XmpCore.Impl
                 ParameterAsserts.AssertPropName(aliasProp);
                 ParameterAsserts.AssertSchemaNs(actualNs);
                 ParameterAsserts.AssertPropName(actualProp);
+
                 // Fix the alias options
                 var aliasOpts = aliasForm != null ? new AliasOptions(XmpNodeUtils.VerifySetOptions(aliasForm.ToPropertyOptions(), null).GetOptions()) : new AliasOptions();
                 if (_p.IsMatch(aliasProp) || _p.IsMatch(actualProp))
-                {
                     throw new XmpException("Alias and actual property names must be simple", XmpErrorCode.BadXPath);
-                }
+
                 // check if both namespaces are registered
                 var aliasPrefix = GetNamespacePrefix(aliasNs);
                 var actualPrefix = GetNamespacePrefix(actualNs);
+
                 if (aliasPrefix == null)
-                {
                     throw new XmpException("Alias namespace is not registered", XmpErrorCode.BadSchema);
-                }
                 if (actualPrefix == null)
-                {
                     throw new XmpException("Actual namespace is not registered", XmpErrorCode.BadSchema);
-                }
+
                 var key = aliasPrefix + aliasProp;
+
                 // check if alias is already existing
                 if (_aliasMap.ContainsKey(key))
-                {
                     throw new XmpException("Alias is already existing", XmpErrorCode.BadParam);
-                }
                 if (_aliasMap.ContainsKey(actualPrefix + actualProp))
-                {
                     throw new XmpException("Actual property is already an alias, use the base property", XmpErrorCode.BadParam);
-                }
-                IXmpAliasInfo aliasInfo = new XmpAliasInfo(actualNs, actualPrefix, actualProp, aliasOpts);
-                _aliasMap[key] = aliasInfo;
+
+                _aliasMap[key] = new XmpAliasInfo(actualNs, actualPrefix, actualProp, aliasOpts);
             }
         }
 
@@ -390,16 +366,11 @@ namespace XmpCore.Impl
             }
         }
 
-        /// <summary>Register the standard aliases.</summary>
-        /// <remarks>
-        /// Register the standard aliases.
-        /// Note: This method is not lock because only called by the constructor.
-        /// </remarks>
-        /// <exception cref="XmpException">If the registrations of at least one alias fails.</exception>
         private void RegisterStandardAliases()
         {
             var aliasToArrayOrdered = new AliasOptions { IsArrayOrdered = true };
             var aliasToArrayAltText = new AliasOptions { IsArrayAltText = true };
+
             // Aliases from XMP to DC.
             RegisterAlias(XmpConstConstants.NsXmp, "Author", XmpConstConstants.NsDc, "creator", aliasToArrayOrdered);
             RegisterAlias(XmpConstConstants.NsXmp, "Authors", XmpConstConstants.NsDc, "creator", null);
@@ -409,6 +380,7 @@ namespace XmpCore.Impl
             RegisterAlias(XmpConstConstants.NsXmp, "Locale", XmpConstConstants.NsDc, "language", null);
             RegisterAlias(XmpConstConstants.NsXmp, "Title", XmpConstConstants.NsDc, "title", null);
             RegisterAlias(XmpConstConstants.NsXmpRights, "Copyright", XmpConstConstants.NsDc, "rights", null);
+
             // Aliases from PDF to DC and XMP.
             RegisterAlias(XmpConstConstants.NsPdf, "Author", XmpConstConstants.NsDc, "creator", aliasToArrayOrdered);
             RegisterAlias(XmpConstConstants.NsPdf, "BaseURL", XmpConstConstants.NsXmp, "BaseURL", null);
@@ -417,6 +389,7 @@ namespace XmpCore.Impl
             RegisterAlias(XmpConstConstants.NsPdf, "ModDate", XmpConstConstants.NsXmp, "ModifyDate", null);
             RegisterAlias(XmpConstConstants.NsPdf, "Subject", XmpConstConstants.NsDc, "description", aliasToArrayAltText);
             RegisterAlias(XmpConstConstants.NsPdf, "Title", XmpConstConstants.NsDc, "title", aliasToArrayAltText);
+
             // Aliases from PHOTOSHOP to DC and XMP.
             RegisterAlias(XmpConstConstants.NsPhotoshop, "Author", XmpConstConstants.NsDc, "creator", aliasToArrayOrdered);
             RegisterAlias(XmpConstConstants.NsPhotoshop, "Caption", XmpConstConstants.NsDc, "description", aliasToArrayAltText);
@@ -425,12 +398,14 @@ namespace XmpCore.Impl
             RegisterAlias(XmpConstConstants.NsPhotoshop, "Marked", XmpConstConstants.NsXmpRights, "Marked", null);
             RegisterAlias(XmpConstConstants.NsPhotoshop, "Title", XmpConstConstants.NsDc, "title", aliasToArrayAltText);
             RegisterAlias(XmpConstConstants.NsPhotoshop, "WebStatement", XmpConstConstants.NsXmpRights, "WebStatement", null);
+
             // Aliases from TIFF and EXIF to DC and XMP.
             RegisterAlias(XmpConstConstants.NsTiff, "Artist", XmpConstConstants.NsDc, "creator", aliasToArrayOrdered);
             RegisterAlias(XmpConstConstants.NsTiff, "Copyright", XmpConstConstants.NsDc, "rights", null);
             RegisterAlias(XmpConstConstants.NsTiff, "DateTime", XmpConstConstants.NsXmp, "ModifyDate", null);
             RegisterAlias(XmpConstConstants.NsTiff, "ImageDescription", XmpConstConstants.NsDc, "description", null);
             RegisterAlias(XmpConstConstants.NsTiff, "Software", XmpConstConstants.NsXmp, "CreatorTool", null);
+
             // Aliases from PNG (Acrobat ImageCapture) to DC and XMP.
             RegisterAlias(XmpConstConstants.NsPng, "Author", XmpConstConstants.NsDc, "creator", aliasToArrayOrdered);
             RegisterAlias(XmpConstConstants.NsPng, "Copyright", XmpConstConstants.NsDc, "rights", aliasToArrayAltText);

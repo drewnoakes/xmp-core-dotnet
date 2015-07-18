@@ -79,12 +79,12 @@ namespace XmpCore.Impl
                 var po = new PropertyOptions { IsSchemaNode = true };
                 schemaNode = new XmpNode(namespaceUri, po) { IsImplicit = true };
                 // only previously registered schema namespaces are allowed in the XMP tree.
-                var prefix = XmpMetaFactory.GetSchemaRegistry().GetNamespacePrefix(namespaceUri);
+                var prefix = XmpMetaFactory.SchemaRegistry.GetNamespacePrefix(namespaceUri);
                 if (prefix == null)
                 {
                     if (!string.IsNullOrEmpty(suggestedPrefix))
                     {
-                        prefix = XmpMetaFactory.GetSchemaRegistry().RegisterNamespace(namespaceUri, suggestedPrefix);
+                        prefix = XmpMetaFactory.SchemaRegistry.RegisterNamespace(namespaceUri, suggestedPrefix);
                     }
                     else
                     {

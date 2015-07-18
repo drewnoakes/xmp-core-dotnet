@@ -273,7 +273,7 @@ namespace XmpCore.Impl
                     }
                     currProp.IsAlias = false;
                     // Find the base path, look for the base schema and root node.
-                    var info = XmpMetaFactory.GetSchemaRegistry().FindAlias(currProp.Name);
+                    var info = XmpMetaFactory.SchemaRegistry.FindAlias(currProp.Name);
                     if (info != null)
                     {
                         // find or create schema

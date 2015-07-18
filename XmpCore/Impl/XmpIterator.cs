@@ -350,7 +350,7 @@ namespace XmpCore.Impl
                         {
                             // determine namespace of leaf node
                             var qname = new QName(_node.Name);
-                            return XmpMetaFactory.GetSchemaRegistry().GetNamespaceUri(qname.GetPrefix());
+                            return XmpMetaFactory.SchemaRegistry.GetNamespaceUri(qname.GetPrefix());
                         }
                         return _baseNs;
                     }
