@@ -37,7 +37,6 @@ namespace XmpCore.Options
         /// <exception cref="XmpException">If the options are not correct</exception>
         protected Options(int options)
         {
-            // EMTPY
             AssertOptionsValid(options);
             SetOptions(options);
         }
@@ -131,9 +130,7 @@ namespace XmpCore.Options
                     var bitName = GetOptionName(singleBit);
                     sb.Append(bitName);
                     if (oneLessBit != 0)
-                    {
                         sb.Append(" | ");
-                    }
                     theBits = oneLessBit;
                 }
                 return sb.ToString();
@@ -147,11 +144,11 @@ namespace XmpCore.Options
             return string.Format("0x{0:X}", _options);
         }
 
-        /// <summary>To be implemeted by inheritants.</summary>
+        /// <summary>To be implemented by inheritants.</summary>
         /// <returns>Returns a bit mask where all valid option bits are set.</returns>
         protected abstract int GetValidOptions();
 
-        /// <summary>To be implemeted by inheritants.</summary>
+        /// <summary>To be implemented by inheritants.</summary>
         /// <param name="option">a single, valid option bit.</param>
         /// <returns>Returns a human readable name for an option bit.</returns>
         protected abstract string DefineOptionName(int option);
