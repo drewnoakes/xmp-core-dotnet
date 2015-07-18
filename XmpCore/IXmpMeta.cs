@@ -536,8 +536,6 @@ namespace XmpCore
         /// 3rd rule. The last 2 rules are fallbacks used when the specific and generic languages fail to
         /// produce a match. <c>getLocalizedText</c> returns information about a selected item in
         /// an alt-text array. The array item is selected according to the rules given above.
-        /// <em>Note:</em> In a future version of this API a method
-        /// using Java <c>java.lang.Locale</c> will be added.
         /// </remarks>
         /// <param name="schemaNs">
         /// The namespace URI for the alt-text array. Has the same usage as in
@@ -582,8 +580,6 @@ namespace XmpCore
         /// then a new item is created for the specific language. If the array only had an x-default
         /// item, the x-default item is also modified. If the array was empty, items are created for the
         /// specific language and x-default.
-        /// <em>Note:</em> In a future version of this API a method
-        /// using Java <c>java.lang.Locale</c> will be added.
         /// </remarks>
         /// <param name="schemaNs">
         /// The namespace URI for the alt-text array. Has the same usage as in
@@ -763,7 +759,7 @@ namespace XmpCore
         /// <summary>Convenience method to set a property with a Calendar-object, which is serialized to an ISO8601 date.</summary>
         /// <param name="schemaNs">The namespace URI for the property. Has the same usage as in <c>setProperty()</c>.</param>
         /// <param name="propName">The name of the property. Has the same usage as in <c>getProperty()</c>.</param>
-        /// <param name="propValue">the property value as Java <c>Calendar</c>.</param>
+        /// <param name="propValue">the property value as <c>Calendar</c>.</param>
         /// <param name="options">options of the property to set (optional).</param>
         /// <exception cref="XmpException">Wraps all exceptions that may occur.</exception>
         void SetPropertyCalendar(string schemaNs, string propName, Calendar propValue, PropertyOptions options);

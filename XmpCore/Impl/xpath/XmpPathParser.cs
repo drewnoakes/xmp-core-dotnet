@@ -79,62 +79,65 @@ namespace XmpCore.Impl.XPath
         public static XmpPath ExpandXPath(string schemaNs, string path)
         {
             if (schemaNs == null || path == null)
-            {
                 throw new XmpException("Parameter must not be null", XmpErrorCode.BadParam);
-            }
+
             var expandedXPath = new XmpPath();
             var pos = new PathPosition { Path = path };
+
             // Pull out the first component and do some special processing on it: add the schema
             // namespace prefix and and see if it is an alias. The start must be a "qualName".
             ParseRootNode(schemaNs, pos, expandedXPath);
+
             // Now continue to process the rest of the XMPPath string.
             while (pos.StepEnd < path.Length)
             {
                 pos.StepBegin = pos.StepEnd;
+
                 SkipPathDelimiter(path, pos);
+
                 pos.StepEnd = pos.StepBegin;
                 var segment = path[pos.StepBegin] != '['
                     ? ParseStructSegment(pos)
                     : ParseIndexSegment(pos);
+
                 if (segment.GetKind() == XmpPath.StructFieldStep)
                 {
                     if (segment.GetName()[0] == '@')
                     {
                         segment.SetName("?" + segment.GetName().Substring (1));
                         if (!"?xml:lang".Equals(segment.GetName()))
-                        {
                             throw new XmpException("Only xml:lang allowed with '@'", XmpErrorCode.BadXPath);
-                        }
                     }
+
                     if (segment.GetName()[0] == '?')
                     {
                         pos.NameStart++;
                         segment.SetKind(XmpPath.QualifierStep);
                     }
+
                     VerifyQualName(pos.Path.Substring (pos.NameStart, pos.NameEnd - pos.NameStart));
                 }
-                else
+                else if (segment.GetKind() == XmpPath.FieldSelectorStep)
                 {
-                    if (segment.GetKind() == XmpPath.FieldSelectorStep)
+                    if (segment.GetName()[1] == '@')
                     {
-                        if (segment.GetName()[1] == '@')
-                        {
-                            segment.SetName("[?" + segment.GetName().Substring (2));
-                            if (!segment.GetName().StartsWith("[?xml:lang="))
-                            {
-                                throw new XmpException("Only xml:lang allowed with '@'", XmpErrorCode.BadXPath);
-                            }
-                        }
-                        if (segment.GetName()[1] == '?')
-                        {
-                            pos.NameStart++;
-                            segment.SetKind(XmpPath.QualSelectorStep);
-                            VerifyQualName(pos.Path.Substring (pos.NameStart, pos.NameEnd - pos.NameStart));
-                        }
+                        segment.SetName("[?" + segment.GetName().Substring (2));
+
+                        if (!segment.GetName().StartsWith("[?xml:lang="))
+                            throw new XmpException("Only xml:lang allowed with '@'", XmpErrorCode.BadXPath);
+                    }
+
+                    if (segment.GetName()[1] == '?')
+                    {
+                        pos.NameStart++;
+                        segment.SetKind(XmpPath.QualSelectorStep);
+                        VerifyQualName(pos.Path.Substring (pos.NameStart, pos.NameEnd - pos.NameStart));
                     }
                 }
+
                 expandedXPath.Add(segment);
             }
+
             return expandedXPath;
         }
 
@@ -147,20 +150,17 @@ namespace XmpCore.Impl.XPath
             {
                 // skip slash
                 pos.StepBegin++;
-                // added for Java
+
                 if (pos.StepBegin >= path.Length)
-                {
                     throw new XmpException("Empty XMPPath segment", XmpErrorCode.BadXPath);
-                }
             }
+
             if (path[pos.StepBegin] == '*')
             {
                 // skip asterisk
                 pos.StepBegin++;
                 if (pos.StepBegin >= path.Length || path[pos.StepBegin] != '[')
-                {
                     throw new XmpException("Missing '[' after '*'", XmpErrorCode.BadXPath);
-                }
             }
         }
 
@@ -172,17 +172,15 @@ namespace XmpCore.Impl.XPath
         {
             pos.NameStart = pos.StepBegin;
             while (pos.StepEnd < pos.Path.Length && "/[*".IndexOf(pos.Path[pos.StepEnd]) < 0)
-            {
                 pos.StepEnd++;
-            }
+
             pos.NameEnd = pos.StepEnd;
+
             if (pos.StepEnd == pos.StepBegin)
-            {
                 throw new XmpException("Empty XMPPath segment", XmpErrorCode.BadXPath);
-            }
+
             // ! Touch up later, also changing '@' to '?'.
-            var segment = new XmpPathSegment(pos.Path.Substring (pos.StepBegin, pos.StepEnd - pos.StepBegin), XmpPath.StructFieldStep);
-            return segment;
+            return new XmpPathSegment(pos.Path.Substring (pos.StepBegin, pos.StepEnd - pos.StepBegin), XmpPath.StructFieldStep);
         }
 
         /// <summary>Parses an array index segment.</summary>
@@ -193,33 +191,30 @@ namespace XmpCore.Impl.XPath
         {
             XmpPathSegment segment;
             pos.StepEnd++;
+
             // Look at the character after the leading '['.
             if ('0' <= pos.Path[pos.StepEnd] && pos.Path[pos.StepEnd] <= '9')
             {
                 // A numeric (decimal integer) array index.
                 while (pos.StepEnd < pos.Path.Length && '0' <= pos.Path[pos.StepEnd] && pos.Path[pos.StepEnd] <= '9')
-                {
                     pos.StepEnd++;
-                }
+
                 segment = new XmpPathSegment(null, XmpPath.ArrayIndexStep);
             }
             else
             {
                 // Could be "[last()]" or one of the selector forms. Find the ']' or '='.
                 while (pos.StepEnd < pos.Path.Length && pos.Path[pos.StepEnd] != ']' && pos.Path[pos.StepEnd] != '=')
-                {
                     pos.StepEnd++;
-                }
+
                 if (pos.StepEnd >= pos.Path.Length)
-                {
                     throw new XmpException("Missing ']' or '=' for array index", XmpErrorCode.BadXPath);
-                }
+
                 if (pos.Path[pos.StepEnd] == ']')
                 {
-                    if (!"[last()".Equals(pos.Path.Substring (pos.StepBegin, pos.StepEnd - pos.StepBegin)))
-                    {
+                    if (!"[last()".Equals(pos.Path.Substring(pos.StepBegin, pos.StepEnd - pos.StepBegin)))
                         throw new XmpException("Invalid non-numeric array index", XmpErrorCode.BadXPath);
-                    }
+
                     segment = new XmpPathSegment(null, XmpPath.ArrayLastStep);
                 }
                 else
@@ -227,13 +222,14 @@ namespace XmpCore.Impl.XPath
                     pos.NameStart = pos.StepBegin + 1;
                     pos.NameEnd = pos.StepEnd;
                     pos.StepEnd++;
+
                     // Absorb the '=', remember the quote.
                     var quote = pos.Path[pos.StepEnd];
                     if (quote != '\'' && quote != '"')
-                    {
                         throw new XmpException("Invalid quote in array selector", XmpErrorCode.BadXPath);
-                    }
+
                     pos.StepEnd++;
+
                     // Absorb the leading quote.
                     while (pos.StepEnd < pos.Path.Length)
                     {
@@ -241,29 +237,30 @@ namespace XmpCore.Impl.XPath
                         {
                             // check for escaped quote
                             if (pos.StepEnd + 1 >= pos.Path.Length || pos.Path[pos.StepEnd + 1] != quote)
-                            {
                                 break;
-                            }
+
                             pos.StepEnd++;
                         }
                         pos.StepEnd++;
                     }
+
                     if (pos.StepEnd >= pos.Path.Length)
-                    {
                         throw new XmpException("No terminating quote for array selector", XmpErrorCode.BadXPath);
-                    }
+
                     pos.StepEnd++;
+
                     // Absorb the trailing quote.
                     // ! Touch up later, also changing '@' to '?'.
                     segment = new XmpPathSegment(null, XmpPath.FieldSelectorStep);
                 }
             }
+
             if (pos.StepEnd >= pos.Path.Length || pos.Path[pos.StepEnd] != ']')
-            {
                 throw new XmpException("Missing ']' for array index", XmpErrorCode.BadXPath);
-            }
+
             pos.StepEnd++;
             segment.SetName(pos.Path.Substring (pos.StepBegin, pos.StepEnd - pos.StepBegin));
+
             return segment;
         }
 
@@ -278,15 +275,14 @@ namespace XmpCore.Impl.XPath
         private static void ParseRootNode(string schemaNs, PathPosition pos, XmpPath expandedXPath)
         {
             while (pos.StepEnd < pos.Path.Length && "/[*".IndexOf(pos.Path[pos.StepEnd]) < 0)
-            {
                 pos.StepEnd++;
-            }
+
             if (pos.StepEnd == pos.StepBegin)
-            {
                 throw new XmpException("Empty initial XMPPath step", XmpErrorCode.BadXPath);
-            }
+
             var rootProp = VerifyXPathRoot(schemaNs, pos.Path.Substring (pos.StepBegin, pos.StepEnd - pos.StepBegin));
             var aliasInfo = XmpMetaFactory.SchemaRegistry.FindAlias(rootProp);
+
             if (aliasInfo == null)
             {
                 // add schema xpath step
@@ -302,6 +298,7 @@ namespace XmpCore.Impl.XPath
                 rootStep.SetAlias(true);
                 rootStep.SetAliasForm(aliasInfo.AliasForm.GetOptions());
                 expandedXPath.Add(rootStep);
+
                 if (aliasInfo.AliasForm.IsArrayAltText)
                 {
                     var qualSelectorStep = new XmpPathSegment("[?xml:lang='x-default']", XmpPath.QualSelectorStep);
@@ -309,15 +306,12 @@ namespace XmpCore.Impl.XPath
                     qualSelectorStep.SetAliasForm(aliasInfo.AliasForm.GetOptions());
                     expandedXPath.Add(qualSelectorStep);
                 }
-                else
+                else if (aliasInfo.AliasForm.IsArray)
                 {
-                    if (aliasInfo.AliasForm.IsArray)
-                    {
-                        var indexStep = new XmpPathSegment("[1]", XmpPath.ArrayIndexStep);
-                        indexStep.SetAlias(true);
-                        indexStep.SetAliasForm(aliasInfo.AliasForm.GetOptions());
-                        expandedXPath.Add(indexStep);
-                    }
+                    var indexStep = new XmpPathSegment("[1]", XmpPath.ArrayIndexStep);
+                    indexStep.SetAlias(true);
+                    indexStep.SetAliasForm(aliasInfo.AliasForm.GetOptions());
+                    expandedXPath.Add(indexStep);
                 }
             }
         }
@@ -331,19 +325,19 @@ namespace XmpCore.Impl.XPath
         private static void VerifyQualName(string qualName)
         {
             var colonPos = qualName.IndexOf(':');
-            if (colonPos > 0)
+
+            if (colonPos <= 0)
+                throw new XmpException("Ill-formed qualified name", XmpErrorCode.BadXPath);
+
+            var prefix = qualName.Substring(0, colonPos - 0);
+
+            if (Utils.IsXmlNameNs(prefix))
             {
-                var prefix = qualName.Substring (0, colonPos - 0);
-                if (Utils.IsXmlNameNs(prefix))
-                {
-                    var regUri = XmpMetaFactory.SchemaRegistry.GetNamespaceUri(prefix);
-                    if (regUri != null)
-                    {
-                        return;
-                    }
+                var regUri = XmpMetaFactory.SchemaRegistry.GetNamespaceUri(prefix);
+                if (regUri == null)
                     throw new XmpException("Unknown namespace prefix for qualified name", XmpErrorCode.BadXPath);
-                }
             }
+
             throw new XmpException("Ill-formed qualified name", XmpErrorCode.BadXPath);
         }
 
@@ -353,9 +347,7 @@ namespace XmpCore.Impl.XPath
         private static void VerifySimpleXmlName(string name)
         {
             if (!Utils.IsXmlName(name))
-            {
                 throw new XmpException("Bad XML name", XmpErrorCode.BadXPath);
-            }
         }
 
         /// <summary>Set up the first 2 components of the expanded XMPPath.</summary>
@@ -377,22 +369,16 @@ namespace XmpCore.Impl.XPath
             // Do some basic checks on the URI and name. Try to lookup the URI. See if the name is
             // qualified.
             if (string.IsNullOrEmpty(schemaNs))
-            {
                 throw new XmpException("Schema namespace URI is required", XmpErrorCode.BadSchema);
-            }
-            if ((rootProp[0] == '?') || (rootProp[0] == '@'))
-            {
+            if (rootProp[0] == '?' || rootProp[0] == '@')
                 throw new XmpException("Top level name must not be a qualifier", XmpErrorCode.BadXPath);
-            }
             if (rootProp.IndexOf('/') >= 0 || rootProp.IndexOf('[') >= 0)
-            {
                 throw new XmpException("Top level name must be simple", XmpErrorCode.BadXPath);
-            }
+
             var prefix = XmpMetaFactory.SchemaRegistry.GetNamespacePrefix(schemaNs);
             if (prefix == null)
-            {
                 throw new XmpException("Unregistered schema namespace URI", XmpErrorCode.BadSchema);
-            }
+
             // Verify the various URI and prefix combinations. Initialize the
             // expanded XMPPath.
             var colonPos = rootProp.IndexOf(':');
@@ -404,27 +390,28 @@ namespace XmpCore.Impl.XPath
                 // Verify the part before any colon
                 return prefix + rootProp;
             }
+
             // The propName is qualified. Make sure the prefix is legit. Use the associated URI and
             // qualified name.
             // Verify the part before any colon
             VerifySimpleXmlName(rootProp.Substring (0, colonPos - 0));
             VerifySimpleXmlName(rootProp.Substring (colonPos));
+
             prefix = rootProp.Substring (0, colonPos + 1 - 0);
+
             var regPrefix = XmpMetaFactory.SchemaRegistry.GetNamespacePrefix(schemaNs);
+
             if (regPrefix == null)
-            {
                 throw new XmpException("Unknown schema namespace prefix", XmpErrorCode.BadSchema);
-            }
-            if (!prefix.Equals(regPrefix))
-            {
+            if (prefix != regPrefix)
                 throw new XmpException("Schema namespace URI and prefix mismatch", XmpErrorCode.BadSchema);
-            }
+
             return rootProp;
         }
     }
 
     /// <summary>This objects contains all needed char positions to parse.</summary>
-    internal class PathPosition
+    internal sealed class PathPosition
     {
         /// <summary>the complete path</summary>
         public string Path;

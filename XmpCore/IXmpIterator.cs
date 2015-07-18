@@ -56,7 +56,7 @@ namespace XmpCore
     /// The default is to return the full xmp path.</item>
     /// <item>OMIT_QUALIFIERS - Do not visit the qualifiers.</item>
     /// <item>INCLUDE_ALIASES - Adds known alias properties to the properties in the iteration.
-    /// <em>Note:</em> Not supported in Java XMPCore!</item>
+    /// <em>Note:</em> Not supported in Java or .NET XMPCore!</item>
     /// </list>
     /// <para />
     /// <c>next()</c> returns <c>XMPPropertyInfo</c>-objects and throws

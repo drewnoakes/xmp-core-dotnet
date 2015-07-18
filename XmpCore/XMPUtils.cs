@@ -15,10 +15,6 @@ using XmpCore.Options;
 namespace XmpCore
 {
     /// <summary>Utility methods for XMP.</summary>
-    /// <remarks>
-    /// Utility methods for XMP. I included only those that are different from the
-    /// Java default conversion utilities.
-    /// </remarks>
     /// <since>21.02.2006</since>
     public static class XmpUtils
     {
@@ -213,9 +209,8 @@ namespace XmpCore
         public static bool ConvertToBoolean(string value)
         {
             if (string.IsNullOrEmpty(value))
-            {
                 throw new XmpException("Empty convert-string", XmpErrorCode.BadValue);
-            }
+
             value = value.ToLower();
             try
             {
@@ -224,7 +219,7 @@ namespace XmpCore
             }
             catch (FormatException)
             {
-                return "true".Equals(value) || "t".Equals(value) || "on".Equals(value) || "yes".Equals(value);
+                return value == "true" || value == "t" || value == "on" || value == "yes";
             }
         }
 
@@ -250,17 +245,14 @@ namespace XmpCore
         /// <exception cref="XmpException"/>
         public static int ConvertToInteger(string rawValue)
         {
+            if (string.IsNullOrEmpty(rawValue))
+                throw new XmpException("Empty convert-string", XmpErrorCode.BadValue);
+
             try
             {
-                if (string.IsNullOrEmpty(rawValue))
-                {
-                    throw new XmpException("Empty convert-string", XmpErrorCode.BadValue);
-                }
-                if (rawValue.StartsWith("0x"))
-                {
-                    return Convert.ToInt32(rawValue.Substring (2), 16);
-                }
-                return Convert.ToInt32(rawValue);
+                return rawValue.StartsWith("0x")
+                    ? Convert.ToInt32(rawValue.Substring(2), 16)
+                    : Convert.ToInt32(rawValue);
             }
             catch (FormatException)
             {
@@ -286,16 +278,13 @@ namespace XmpCore
         /// <exception cref="XmpException"/>
         public static long ConvertToLong(string rawValue)
         {
+            if (string.IsNullOrEmpty(rawValue))
+                throw new XmpException("Empty convert-string", XmpErrorCode.BadValue);
+
             try
             {
-                if (string.IsNullOrEmpty(rawValue))
-                {
-                    throw new XmpException("Empty convert-string", XmpErrorCode.BadValue);
-                }
                 if (rawValue.StartsWith("0x"))
-                {
-                    return Convert.ToInt64(rawValue.Substring (2), 16);
-                }
+                    return Convert.ToInt64(rawValue.Substring(2), 16);
                 return Convert.ToInt64(rawValue);
             }
             catch (FormatException)
@@ -322,18 +311,14 @@ namespace XmpCore
         /// <exception cref="XmpException"/>
         public static double ConvertToDouble(string rawValue)
         {
-            try
-            {
-                if (string.IsNullOrEmpty(rawValue))
-                {
-                    throw new XmpException("Empty convert-string", XmpErrorCode.BadValue);
-                }
-                return double.Parse(rawValue);
-            }
-            catch (FormatException)
-            {
+            if (string.IsNullOrEmpty(rawValue))
+                throw new XmpException("Empty convert-string", XmpErrorCode.BadValue);
+
+            double value;
+            if (!double.TryParse(rawValue, out value))
                 throw new XmpException("Invalid double string", XmpErrorCode.BadValue);
-            }
+
+            return value;
         }
 
         /// <summary>Convert from long to string.</summary>
@@ -355,9 +340,8 @@ namespace XmpCore
         public static IXmpDateTime ConvertToDate(string rawValue)
         {
             if (string.IsNullOrEmpty(rawValue))
-            {
                 throw new XmpException("Empty convert-string", XmpErrorCode.BadValue);
-            }
+
             return Iso8601Converter.Parse(rawValue);
         }
 

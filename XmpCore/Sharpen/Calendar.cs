@@ -129,7 +129,7 @@ namespace Sharpen
             switch (field)
             {
                 case CalendarEnum.Year:
-                    //  to avoid exception which is absent in java Calendar
+                    //  to avoid exception which is absent in Calendar
                     value = value % mod;
                     _mCalendarDate = _mCalendarDate.AddYears(value - _mCalendarDate.Year);
                     return;
