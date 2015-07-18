@@ -109,12 +109,11 @@ namespace XmpCore.Options
 
         /// <summary>Creates a human readable string from the set options.</summary>
         /// <remarks>
-        /// Creates a human readable string from the set options. <em>Note:</em> This method is quite
-        /// expensive and should only be used within tests or as
+        /// <em>Note:</em> This method is quite expensive and should only be used within tests or as
         /// </remarks>
         /// <returns>
-        /// Returns a String listing all options that are set to <c>true</c> by their name,
-        /// like &quot;option1 | option4&quot;.
+        /// Returns a string listing all options that are set to <c>true</c> by their name,
+        /// like "option1 | option4".
         /// </returns>
         public string GetOptionsString()
         {
@@ -170,11 +169,8 @@ namespace XmpCore.Options
 
         /// <summary>Checks options before they are set.</summary>
         /// <remarks>
-        /// Checks options before they are set.
-        /// First it is checked if only defined options are used,
-        /// second the additional
-        /// <see cref="AssertConsistency(int)"/>
-        /// -method is called.
+        /// First it is checked if only defined options are used, second the additional
+        /// <see cref="AssertConsistency(int)"/>-method is called.
         /// </remarks>
         /// <param name="options">the options to check</param>
         /// <exception cref="XmpException">Thrown if the options are invalid.</exception>
