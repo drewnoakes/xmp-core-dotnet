@@ -1033,7 +1033,7 @@ namespace XmpCore.Impl
                 case ValueType.Calendar:
                 {
                     var dt = XmpCore.XmpUtils.ConvertToDate(rawValue);
-                    value = dt.GetCalendar();
+                    value = dt.Calendar;
                     break;
                 }
 

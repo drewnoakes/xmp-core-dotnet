@@ -49,9 +49,9 @@ namespace XmpCore
         public static IXmpDateTime Create(int year, int month, int day)
         {
             IXmpDateTime dt = new XmpDateTime();
-            dt.SetYear(year);
-            dt.SetMonth(month);
-            dt.SetDay(day);
+            dt.Year = year;
+            dt.Month = month;
+            dt.Day = day;
             return dt;
         }
 
@@ -72,13 +72,13 @@ namespace XmpCore
         public static IXmpDateTime Create(int year, int month, int day, int hour, int minute, int second, int nanoSecond)
         {
             IXmpDateTime dt = new XmpDateTime();
-            dt.SetYear(year);
-            dt.SetMonth(month);
-            dt.SetDay(day);
-            dt.SetHour(hour);
-            dt.SetMinute(minute);
-            dt.SetSecond(second);
-            dt.SetNanosecond(nanoSecond);
+            dt.Year = year;
+            dt.Month = month;
+            dt.Day = day;
+            dt.Hour = hour;
+            dt.Minute = minute;
+            dt.Second = second;
+            dt.Nanosecond = nanoSecond;
             return dt;
         }
 
@@ -110,7 +110,7 @@ namespace XmpCore
         /// <returns>Returns an updated <c>XMPDateTime</c>-object.</returns>
         public static IXmpDateTime SetLocalTimeZone(IXmpDateTime dateTime)
         {
-            var cal = dateTime.GetCalendar();
+            var cal = dateTime.Calendar;
             cal.SetTimeZone(TimeZoneInfo.Local);
             return new XmpDateTime(cal);
         }
@@ -127,7 +127,7 @@ namespace XmpCore
         /// <returns>Returns an updated <c>XMPDateTime</c>-object.</returns>
         public static IXmpDateTime ConvertToUtcTime(IXmpDateTime dateTime)
         {
-            var timeInMillis = dateTime.GetCalendar().GetTimeInMillis();
+            var timeInMillis = dateTime.Calendar.GetTimeInMillis();
             var cal = new GregorianCalendar(TimeZoneInfo.Utc);
             cal.SetGregorianChange(XmpDateTime.UnixTimeToDateTime(long.MinValue));
             cal.SetTimeInMillis(timeInMillis);
@@ -143,7 +143,7 @@ namespace XmpCore
         /// <returns>Returns an updated <c>XMPDateTime</c>-object.</returns>
         public static IXmpDateTime ConvertToLocalTime(IXmpDateTime dateTime)
         {
-            var timeInMillis = dateTime.GetCalendar().GetTimeInMillis();
+            var timeInMillis = dateTime.Calendar.GetTimeInMillis();
             // has automatically local timezone
             var cal = new GregorianCalendar();
             cal.SetTimeInMillis(timeInMillis);

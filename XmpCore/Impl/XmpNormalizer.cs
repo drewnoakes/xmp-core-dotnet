@@ -384,17 +384,17 @@ namespace XmpCore.Impl
             try
             {
                 var binGpsStamp = XmpCore.XmpUtils.ConvertToDate(gpsDateTime.Value);
-                if (binGpsStamp.GetYear() != 0 || binGpsStamp.GetMonth() != 0 || binGpsStamp.GetDay() != 0)
+                if (binGpsStamp.Year != 0 || binGpsStamp.Month != 0 || binGpsStamp.Day != 0)
                     return;
 
                 var otherDate = XmpNodeUtils.FindChildNode(exifSchema, "exif:DateTimeOriginal", false)
                     ?? XmpNodeUtils.FindChildNode(exifSchema, "exif:DateTimeDigitized", false);
 
                 var binOtherDate = XmpCore.XmpUtils.ConvertToDate(otherDate.Value);
-                var cal = binGpsStamp.GetCalendar();
-                cal.Set(CalendarEnum.Year, binOtherDate.GetYear());
-                cal.Set(CalendarEnum.Month, binOtherDate.GetMonth());
-                cal.Set(CalendarEnum.DayOfMonth, binOtherDate.GetDay());
+                var cal = binGpsStamp.Calendar;
+                cal.Set(CalendarEnum.Year, binOtherDate.Year);
+                cal.Set(CalendarEnum.Month, binOtherDate.Month);
+                cal.Set(CalendarEnum.DayOfMonth, binOtherDate.Day);
                 binGpsStamp = new XmpDateTime(cal);
                 gpsDateTime.Value = XmpCore.XmpUtils.ConvertFromDate(binGpsStamp);
             }

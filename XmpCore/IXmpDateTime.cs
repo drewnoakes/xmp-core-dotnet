@@ -36,80 +36,50 @@ namespace XmpCore
     /// </remarks>
     public interface IXmpDateTime : IComparable
     {
-        /// <returns>Returns the year, can be negative.</returns>
-        int GetYear();
+        /// <value>Get and set the year value. Can be negative.</value>
+        int Year { get; set; }
 
-        /// <param name="year">Sets the year</param>
-        void SetYear(int year);
+        /// <value>Get and set the month, within range 1..12.</value>
+        int Month { get; set; }
 
-        /// <returns>Returns The month in the range 1..12.</returns>
-        int GetMonth();
+        /// <value>Get and set the day of the month, within range 1..31.</value>
+        int Day { get; set; }
 
-        /// <param name="month">Sets the month 1..12</param>
-        void SetMonth(int month);
+        /// <value>Returns hour - The hour in the range 0..23.</value>
+        int Hour { get; set; }
 
-        /// <returns>Returns the day of the month in the range 1..31.</returns>
-        int GetDay();
+        /// <value>Get and set the minute, within range 0..59.</value>
+        int Minute { get; set; }
 
-        /// <param name="day">Sets the day 1..31</param>
-        void SetDay(int day);
+        /// <value>Get and set the second, within range 0..59.</value>
+        int Second { get; set; }
 
-        /// <returns>Returns hour - The hour in the range 0..23.</returns>
-        int GetHour();
+        /// <value>Get and set the sub-second period, in nanoseconds.</value>
+        int Nanosecond { get; set; }
 
-        /// <param name="hour">Sets the hour in the range 0..23.</param>
-        void SetHour(int hour);
-
-        /// <returns>Returns the minute in the range 0..59.</returns>
-        int GetMinute();
-
-        /// <param name="minute">Sets the minute in the range 0..59.</param>
-        void SetMinute(int minute);
-
-        /// <returns>Returns the second in the range 0..59.</returns>
-        int GetSecond();
-
-        /// <param name="second">Sets the second in the range 0..59.</param>
-        void SetSecond(int second);
-
-        /// <returns>
-        /// Returns milli-, micro- and nano seconds.
-        /// Nanoseconds within a second, often left as zero?
-        /// </returns>
-        int GetNanosecond();
-
-        /// <param name="nanosecond">
-        /// Sets the milli-, micro- and nano seconds.
-        /// Granularity goes down to milli seconds.
-        /// </param>
-        void SetNanosecond(int nanosecond);
-
-        /// <returns>Returns the time zone.</returns>
-        TimeZoneInfo GetTimeZone();
-
-        /// <param name="tz">a time zone to set</param>
-        void SetTimeZone(TimeZoneInfo tz);
+        /// <value>Get and set the time zone.</value>
+        TimeZoneInfo TimeZone { get; set; }
 
         /// <summary>This flag is set either by parsing or by setting year, month or day.</summary>
-        /// <returns>Returns true if the XMPDateTime object has a date portion.</returns>
-        bool HasDate();
+        /// <value>Returns true if the XMPDateTime object has a date portion.</value>
+        bool HasDate { get; }
 
         /// <summary>This flag is set either by parsing or by setting hours, minutes, seconds or milliseconds.</summary>
-        /// <returns>Returns true if the XMPDateTime object has a time portion.</returns>
-        bool HasTime();
+        /// <value>Returns true if the XMPDateTime object has a time portion.</value>
+        bool HasTime { get; }
 
         /// <summary>This flag is set either by parsing or by setting hours, minutes, seconds or milliseconds.</summary>
-        /// <returns>Returns true if the XMPDateTime object has a defined timezone.</returns>
-        bool HasTimeZone();
+        /// <value>Returns true if the XMPDateTime object has a defined timezone.</value>
+        bool HasTimeZone { get; }
 
-        /// <returns>
+        /// <value>
         /// Returns a <c>Calendar</c> (only with milli second precision). <br />
         /// <em>Note:</em> the dates before Oct 15th 1585 (which normally fall into validity of
         /// the Julian calendar) are also rendered internally as Gregorian dates.
-        /// </returns>
-        Calendar GetCalendar();
+        /// </value>
+        Calendar Calendar { get; }
 
         /// <returns>Returns the ISO 8601 string representation of the date and time.</returns>
-        string GetIso8601String();
+        string ToIso8601String();
     }
 }

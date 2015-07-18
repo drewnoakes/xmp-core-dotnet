@@ -88,7 +88,7 @@ namespace XmpCore.Impl
             {
                 value = -value;
             }
-            binValue.SetYear(value);
+            binValue.Year = value;
             if (!input.HasNext)
             {
                 return binValue;
@@ -100,7 +100,7 @@ namespace XmpCore.Impl
             {
                 throw new XmpException("Invalid date string, after month", XmpErrorCode.BadValue);
             }
-            binValue.SetMonth(value);
+            binValue.Month = value;
             if (!input.HasNext)
             {
                 return binValue;
@@ -112,7 +112,7 @@ namespace XmpCore.Impl
             {
                 throw new XmpException("Invalid date string, after day", XmpErrorCode.BadValue);
             }
-            binValue.SetDay(value);
+            binValue.Day = value;
             if (!input.HasNext)
             {
                 return binValue;
@@ -120,7 +120,7 @@ namespace XmpCore.Impl
             input.Skip();
             // Extract the hour.
             value = input.GatherInt("Invalid hour in date string", 23);
-            binValue.SetHour(value);
+            binValue.Hour = value;
             if (!input.HasNext)
             {
                 return binValue;
@@ -134,7 +134,7 @@ namespace XmpCore.Impl
                 {
                     throw new XmpException("Invalid date string, after minute", XmpErrorCode.BadValue);
                 }
-                binValue.SetMinute(value);
+                binValue.Minute = value;
             }
             if (!input.HasNext)
             {
@@ -148,7 +148,7 @@ namespace XmpCore.Impl
                 {
                     throw new XmpException("Invalid date string, after whole seconds", XmpErrorCode.BadValue);
                 }
-                binValue.SetSecond(value);
+                binValue.Second = value;
                 if (input.Ch() == '.')
                 {
                     input.Skip();
@@ -167,7 +167,7 @@ namespace XmpCore.Impl
                     {
                         value = value * 10;
                     }
-                    binValue.SetNanosecond(value);
+                    binValue.Nanosecond = value;
                 }
             }
             else
@@ -231,7 +231,7 @@ namespace XmpCore.Impl
             if (tzSign < 0)
                 offset = -offset;
 
-            binValue.SetTimeZone(TimeZoneInfo.CreateCustomTimeZone("OFFSET" + offset, offset, string.Empty, string.Empty));
+            binValue.TimeZone = TimeZoneInfo.CreateCustomTimeZone("OFFSET" + offset, offset, string.Empty, string.Empty);
 
             if (input.HasNext)
                 throw new XmpException("Invalid date string, extra chars at end", XmpErrorCode.BadValue);
@@ -274,44 +274,44 @@ namespace XmpCore.Impl
         public static string Render(IXmpDateTime dateTime)
         {
             var buffer = new StringBuilder();
-            if (dateTime.HasDate())
+            if (dateTime.HasDate)
             {
                 // year is rendered in any case, even 0000
-                buffer.Append(dateTime.GetYear().ToString("0000"));
-                if (dateTime.GetMonth() == 0)
+                buffer.Append(dateTime.Year.ToString("0000"));
+                if (dateTime.Month == 0)
                     return buffer.ToString();
 
                 // month
                 buffer.Append('-');
-                buffer.Append(dateTime.GetMonth().ToString("00"));
-                if (dateTime.GetDay() == 0)
+                buffer.Append(dateTime.Month.ToString("00"));
+                if (dateTime.Day == 0)
                     return buffer.ToString();
 
                 // day
                 buffer.Append('-');
-                buffer.Append(dateTime.GetDay().ToString("00"));
+                buffer.Append(dateTime.Day.ToString("00"));
 
                 // time, rendered if any time field is not zero
-                if (dateTime.HasTime())
+                if (dateTime.HasTime)
                 {
                     // hours and minutes
                     buffer.Append('T');
-                    buffer.Append(dateTime.GetHour().ToString("00"));
+                    buffer.Append(dateTime.Hour.ToString("00"));
                     buffer.Append(':');
-                    buffer.Append(dateTime.GetMinute().ToString("00"));
+                    buffer.Append(dateTime.Minute.ToString("00"));
                     // seconds and nanoseconds
-                    if (dateTime.GetSecond() != 0 || dateTime.GetNanosecond() != 0)
+                    if (dateTime.Second != 0 || dateTime.Nanosecond != 0)
                     {
                         buffer.Append(':');
-                        var seconds = dateTime.GetSecond() + dateTime.GetNanosecond() / 1e9d;
+                        var seconds = dateTime.Second + dateTime.Nanosecond / 1e9d;
                         buffer.AppendFormat("{0:00.#########}", seconds);
                     }
                     // time zone
-                    if (dateTime.HasTimeZone())
+                    if (dateTime.HasTimeZone)
                     {
                         // used to calculate the time zone offset incl. Daylight Savings
-                        var timeInMillis = dateTime.GetCalendar().GetTimeInMillis();
-                        var offset = (int) dateTime.GetTimeZone().GetUtcOffset(XmpDateTime.UnixTimeToDateTimeOffset(timeInMillis).DateTime).TotalMilliseconds;
+                        var timeInMillis = dateTime.Calendar.GetTimeInMillis();
+                        var offset = (int) dateTime.TimeZone.GetUtcOffset(XmpDateTime.UnixTimeToDateTimeOffset(timeInMillis).DateTime).TotalMilliseconds;
                         if (offset == 0)
                         {
                             // UTC

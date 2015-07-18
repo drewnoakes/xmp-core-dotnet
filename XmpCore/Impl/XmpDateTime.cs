@@ -17,25 +17,15 @@ using GregorianCalendar = Sharpen.GregorianCalendar;
 
 namespace XmpCore.Impl
 {
-    /// <summary>The implementation of <c>XMPDateTime</c>.</summary>
-    /// <remarks>
-    /// The implementation of <c>XMPDateTime</c>. Internally a <c>calendar</c> is used
-    /// plus an additional nano seconds field, because <c>Calendar</c> supports only milli
-    /// seconds. The <c>nanoSeconds</c> convers only the resolution beyond a milli second.
-    /// </remarks>
+    /// <summary>The default implementation of <see cref="IXmpDateTime"/>.</summary>
     /// <since>16.02.2006</since>
     public sealed class XmpDateTime : IXmpDateTime
     {
         private int _year;
-
         private int _month;
-
         private int _day;
-
         private int _hour;
-
         private int _minute;
-
         private int _second;
 
         /// <summary>Use NO time zone as default</summary>
@@ -44,15 +34,8 @@ namespace XmpCore.Impl
         /// <summary>The nano seconds take micro and nano seconds, while the milli seconds are in the calendar.</summary>
         private int _nanoseconds;
 
-        private bool _hasDate;
-
-        private bool _hasTime;
-
-        private bool _hasTimeZone;
-
         /// <summary>
-        /// Creates an <c>XMPDateTime</c>-instance with the current time in the default time
-        /// zone.
+        /// Creates an <c>XMPDateTime</c>-instance with the current time in the default time zone.
         /// </summary>
         public XmpDateTime()
         {
@@ -81,7 +64,7 @@ namespace XmpCore.Impl
             _nanoseconds = intCalendar.Get(CalendarEnum.Millisecond) * 1000000;
             _timeZone = intCalendar.GetTimeZone();
             // object contains all date components
-            _hasDate = _hasTime = _hasTimeZone = true;
+            HasDate = HasTime = HasTimeZone = true;
         }
 
         /// <summary>
@@ -104,7 +87,7 @@ namespace XmpCore.Impl
             _nanoseconds = calendar.Get(CalendarEnum.Millisecond) * 1000000;
             _timeZone = timeZone;
             // object contains all date components
-            _hasDate = _hasTime = _hasTimeZone = true;
+            HasDate = HasTime = HasTimeZone = true;
         }
 
         /// <summary>Creates an <c>XMPDateTime</c>-instance from an ISO 8601 string.</summary>
@@ -115,149 +98,132 @@ namespace XmpCore.Impl
             Iso8601Converter.Parse(strValue, this);
         }
 
-        public int GetYear()
+        public int Year
         {
-            return _year;
+            get { return _year; }
+            set
+            {
+                _year = Math.Min(Math.Abs(value), 9999);
+                HasDate = true;
+            }
         }
 
-        public void SetYear(int year)
+        public int Month
         {
-            _year = Math.Min(Math.Abs(year), 9999);
-            _hasDate = true;
+            get { return _month; }
+            set
+            {
+                _month = value < 1
+                    ? 1
+                    : value > 12
+                        ? 12
+                        : value;
+                HasDate = true;
+            }
         }
 
-        public int GetMonth()
+        public int Day
         {
-            return _month;
+            get { return _day; }
+            set
+            {
+                _day = value < 1
+                    ? 1
+                    : value > 31
+                        ? 31
+                        : value;
+                HasDate = true;
+            }
         }
 
-        public void SetMonth(int month)
+        public int Hour
         {
-            _month = month < 1
-                ? 1
-                : month > 12
-                    ? 12
-                    : month;
-            _hasDate = true;
+            get { return _hour; }
+            set
+            {
+                _hour = Math.Min(Math.Abs(value), 23);
+                HasTime = true;
+            }
         }
 
-        public int GetDay()
+        public int Minute
         {
-            return _day;
+            get { return _minute; }
+            set
+            {
+                _minute = Math.Min(Math.Abs(value), 59);
+                HasTime = true;
+            }
         }
 
-        public void SetDay(int day)
+        public int Second
         {
-            _day = day < 1
-                ? 1
-                : day > 31
-                    ? 31
-                    : day;
-            _hasDate = true;
+            get { return _second; }
+            set
+            {
+                _second = Math.Min(Math.Abs(value), 59);
+                HasTime = true;
+            }
         }
 
-        public int GetHour()
+        public int Nanosecond
         {
-            return _hour;
-        }
-
-        public void SetHour(int hour)
-        {
-            _hour = Math.Min(Math.Abs(hour), 23);
-            _hasTime = true;
-        }
-
-        public int GetMinute()
-        {
-            return _minute;
-        }
-
-        public void SetMinute(int minute)
-        {
-            _minute = Math.Min(Math.Abs(minute), 59);
-            _hasTime = true;
-        }
-
-        public int GetSecond()
-        {
-            return _second;
-        }
-
-        public void SetSecond(int second)
-        {
-            _second = Math.Min(Math.Abs(second), 59);
-            _hasTime = true;
-        }
-
-        public int GetNanosecond()
-        {
-            return _nanoseconds;
-        }
-
-        public void SetNanosecond(int nanosecond)
-        {
-            _nanoseconds = nanosecond;
-            _hasTime = true;
+            get { return _nanoseconds; }
+            set
+            {
+                _nanoseconds = value;
+                HasTime = true;
+            }
         }
 
         public int CompareTo(object dt)
         {
-            var d = GetCalendar().GetTimeInMillis() - ((IXmpDateTime)dt).GetCalendar().GetTimeInMillis();
+            var xmpDateTime = (IXmpDateTime)dt;
+            var d = Calendar.GetTimeInMillis() - xmpDateTime.Calendar.GetTimeInMillis();
             if (d != 0)
-            {
                 return Math.Sign(d);
-            }
             // if millis are equal, compare nanoseconds
-            d = _nanoseconds - ((IXmpDateTime)dt).GetNanosecond();
+            d = _nanoseconds - xmpDateTime.Nanosecond;
             return Math.Sign(d);
         }
 
-        public TimeZoneInfo GetTimeZone()
+        public TimeZoneInfo TimeZone
         {
-            return _timeZone;
-        }
-
-        public void SetTimeZone(TimeZoneInfo timeZone)
-        {
-            _timeZone = timeZone;
-            _hasTime = true;
-            _hasTimeZone = true;
-        }
-
-        public bool HasDate()
-        {
-            return _hasDate;
-        }
-
-        public bool HasTime()
-        {
-            return _hasTime;
-        }
-
-        public bool HasTimeZone()
-        {
-            return _hasTimeZone;
-        }
-
-        public Calendar GetCalendar()
-        {
-            var calendar = (GregorianCalendar)Calendar.GetInstance(CultureInfo.InvariantCulture);
-            calendar.SetGregorianChange(UnixTimeToDateTime(long.MinValue));
-            if (_hasTimeZone)
+            get { return _timeZone; }
+            set
             {
-                calendar.SetTimeZone(_timeZone);
+                _timeZone = value;
+                HasTime = true;
+                HasTimeZone = true;
             }
-            calendar.Set(CalendarEnum.Year, _year);
-            calendar.Set(CalendarEnum.Month, _month - 1);
-            calendar.Set(CalendarEnum.DayOfMonth, _day);
-            calendar.Set(CalendarEnum.HourOfDay, _hour);
-            calendar.Set(CalendarEnum.Minute, _minute);
-            calendar.Set(CalendarEnum.Second, _second);
-            calendar.Set(CalendarEnum.Millisecond, _nanoseconds / 1000000);
-            return calendar;
         }
 
-        public string GetIso8601String()
+        public bool HasDate { get; private set; }
+
+        public bool HasTime { get; private set; }
+
+        public bool HasTimeZone { get; private set; }
+
+        public Calendar Calendar
+        {
+            get
+            {
+                var calendar = (GregorianCalendar)Calendar.GetInstance(CultureInfo.InvariantCulture);
+                calendar.SetGregorianChange(UnixTimeToDateTime(long.MinValue));
+                if (HasTimeZone)
+                    calendar.SetTimeZone(_timeZone);
+                calendar.Set(CalendarEnum.Year, _year);
+                calendar.Set(CalendarEnum.Month, _month - 1);
+                calendar.Set(CalendarEnum.DayOfMonth, _day);
+                calendar.Set(CalendarEnum.HourOfDay, _hour);
+                calendar.Set(CalendarEnum.Minute, _minute);
+                calendar.Set(CalendarEnum.Second, _second);
+                calendar.Set(CalendarEnum.Millisecond, _nanoseconds/1000000);
+                return calendar;
+            }
+        }
+
+        public string ToIso8601String()
         {
             return Iso8601Converter.Render(this);
         }
@@ -265,7 +231,7 @@ namespace XmpCore.Impl
         /// <returns>Returns the ISO string representation.</returns>
         public override string ToString()
         {
-            return GetIso8601String();
+            return ToIso8601String();
         }
 
         #region Conversions
