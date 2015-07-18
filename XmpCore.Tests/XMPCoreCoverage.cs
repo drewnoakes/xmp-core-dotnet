@@ -23,18 +23,18 @@ namespace XmpCore.Tests
         [Fact]
         public void SchemaRegistryDefaultNamespaces()
         {
-            var registry = XmpMetaFactory.GetSchemaRegistry();
+            var registry = XmpMetaFactory.SchemaRegistry;
 
             Assert.Equal(56, registry.Namespaces.Count);
-            Assert.Equal(34, registry.Aliases.Count);
             Assert.Equal(56, registry.Prefixes.Count);
+            Assert.Equal(34, registry.Aliases.Count);
         }
     }
 
     public static class XmpCoreCoverage
     {
         private static TextWriter log;
-        private static readonly IXmpSchemaRegistry registry = XmpMetaFactory.GetSchemaRegistry();
+        private static readonly IXmpSchemaRegistry registry = XmpMetaFactory.SchemaRegistry;
 
         public static void Main()
         {
@@ -43,7 +43,7 @@ namespace XmpCore.Tests
                 log = Console.Out;
 
                 log.WriteLine("XmpCoreCoverage starting   " + DateTime.Now);
-                log.WriteLine("XmpCore Version: " + XmpMetaFactory.GetVersionInfo());
+                log.WriteLine("XmpCore Version: " + XmpMetaFactory.VersionInfo);
                 log.WriteLine();
 
 

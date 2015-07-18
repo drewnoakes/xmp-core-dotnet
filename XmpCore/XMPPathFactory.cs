@@ -7,6 +7,7 @@
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
 
+
 using XmpCore.Impl;
 using XmpCore.Impl.XPath;
 

@@ -7,6 +7,7 @@
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
 
+
 using XmpCore.Options;
 
 namespace XmpCore

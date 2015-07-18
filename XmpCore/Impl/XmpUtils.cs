@@ -8,7 +8,6 @@
 // =================================================================================================
 
 
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using XmpCore.Impl.XPath;
@@ -240,6 +239,7 @@ namespace XmpCore.Impl
                         }
                     }
                 }
+
                 // Add the separated item to the array.
                 // Keep a matching old value in case it had separators.
                 var foundIndex = -1;

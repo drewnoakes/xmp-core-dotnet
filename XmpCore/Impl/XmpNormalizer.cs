@@ -7,6 +7,7 @@
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
 
+
 using System.Collections;
 using Sharpen;
 using XmpCore.Impl.XPath;
