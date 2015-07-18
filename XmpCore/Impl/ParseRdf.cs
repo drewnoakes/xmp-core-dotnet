@@ -94,7 +94,7 @@ namespace XmpCore.Impl
         /// </remarks>
         /// <param name="xmp">the xmp metadata object that is generated</param>
         /// <param name="rdfRdfNode">the top-level xml node</param>
-        /// <exception cref="XmpException">thown on parsing errors</exception>
+        /// <exception cref="XmpException">thrown on parsing errors</exception>
         internal static void Rdf_RDF(XmpMeta xmp, XmlNode rdfRdfNode)
         {
             if (rdfRdfNode.Attributes != null && rdfRdfNode.Attributes.Count > 0)
@@ -115,7 +115,7 @@ namespace XmpCore.Impl
         /// <param name="xmp">the xmp metadata object that is generated</param>
         /// <param name="xmpParent">the parent xmp node</param>
         /// <param name="rdfRdfNode">the top-level xml node</param>
-        /// <exception cref="XmpException">thown on parsing errors</exception>
+        /// <exception cref="XmpException">thrown on parsing errors</exception>
         private static void Rdf_NodeElementList(XmpMeta xmp, XmpNode xmpParent, XmlNode rdfRdfNode)
         {
             for (var i = 0; i < rdfRdfNode.ChildNodes.Count; i++)
@@ -144,7 +144,7 @@ namespace XmpCore.Impl
         /// <param name="xmpParent">the parent xmp node</param>
         /// <param name="xmlNode">the currently processed XML node</param>
         /// <param name="isTopLevel">Flag if the node is a top-level node</param>
-        /// <exception cref="XmpException">thown on parsing errors</exception>
+        /// <exception cref="XmpException">thrown on parsing errors</exception>
         private static void Rdf_NodeElement(XmpMeta xmp, XmpNode xmpParent, XmlNode xmlNode, bool isTopLevel)
         {
             var nodeTerm = GetRdfTermKind(xmlNode);
@@ -186,7 +186,7 @@ namespace XmpCore.Impl
         /// <param name="xmpParent">the parent xmp node</param>
         /// <param name="xmlNode">the currently processed XML node</param>
         /// <param name="isTopLevel">Flag if the node is a top-level node</param>
-        /// <exception cref="XmpException">thown on parsing errors</exception>
+        /// <exception cref="XmpException">thrown on parsing errors</exception>
         private static void Rdf_NodeElementAttrs(XmpMeta xmp, XmpNode xmpParent, XmlNode xmlNode, bool isTopLevel)
         {
             // Used to detect attributes that are mutually exclusive.
@@ -255,7 +255,7 @@ namespace XmpCore.Impl
         /// <param name="xmpParent">the parent xmp node</param>
         /// <param name="xmlParent">the currently processed XML node</param>
         /// <param name="isTopLevel">Flag if the node is a top-level node</param>
-        /// <exception cref="XmpException">thown on parsing errors</exception>
+        /// <exception cref="XmpException">thrown on parsing errors</exception>
         private static void Rdf_PropertyElementList(XmpMeta xmp, XmpNode xmpParent, XmlNode xmlParent, bool isTopLevel)
         {
             for (var i = 0; i < xmlParent.ChildNodes.Count; i++)
@@ -360,7 +360,7 @@ namespace XmpCore.Impl
         /// <param name="xmpParent">the parent xmp node</param>
         /// <param name="xmlNode">the currently processed XML node</param>
         /// <param name="isTopLevel">Flag if the node is a top-level node</param>
-        /// <exception cref="XmpException">thown on parsing errors</exception>
+        /// <exception cref="XmpException">thrown on parsing errors</exception>
         private static void Rdf_PropertyElement(XmpMeta xmp, XmpNode xmpParent, XmlNode xmlNode, bool isTopLevel)
         {
             var nodeTerm = GetRdfTermKind(xmlNode);
@@ -491,7 +491,7 @@ namespace XmpCore.Impl
         /// <param name="xmpParent">the parent xmp node</param>
         /// <param name="xmlNode">the currently processed XML node</param>
         /// <param name="isTopLevel">Flag if the node is a top-level node</param>
-        /// <exception cref="XmpException">thown on parsing errors</exception>
+        /// <exception cref="XmpException">thrown on parsing errors</exception>
         private static void Rdf_ResourcePropertyElement(XmpMeta xmp, XmpNode xmpParent, XmlNode xmlNode, bool isTopLevel)
         {
             if (isTopLevel && "iX:changes".Equals(xmlNode.Name))
@@ -601,7 +601,7 @@ namespace XmpCore.Impl
         /// <param name="xmpParent">the parent xmp node</param>
         /// <param name="xmlNode">the currently processed XML node</param>
         /// <param name="isTopLevel">Flag if the node is a top-level node</param>
-        /// <exception cref="XmpException">thown on parsing errors</exception>
+        /// <exception cref="XmpException">thrown on parsing errors</exception>
         private static void Rdf_LiteralPropertyElement(XmpMeta xmp, XmpNode xmpParent, XmlNode xmlNode, bool isTopLevel)
         {
             var newChild = AddChildNode(xmp, xmpParent, xmlNode, null, isTopLevel);
@@ -651,7 +651,7 @@ namespace XmpCore.Impl
         /// literal
         /// end-element()
         /// </summary>
-        /// <exception cref="XmpException">thown on parsing errors</exception>
+        /// <exception cref="XmpException">thrown on parsing errors</exception>
         private static void Rdf_ParseTypeLiteralPropertyElement()
         {
             throw new XmpException("ParseTypeLiteral property element not allowed", XmpErrorCode.BadXmp);
@@ -678,7 +678,7 @@ namespace XmpCore.Impl
         /// <param name="xmpParent">the parent xmp node</param>
         /// <param name="xmlNode">the currently processed XML node</param>
         /// <param name="isTopLevel">Flag if the node is a top-level node</param>
-        /// <exception cref="XmpException">thown on parsing errors</exception>
+        /// <exception cref="XmpException">thrown on parsing errors</exception>
         private static void Rdf_ParseTypeResourcePropertyElement(XmpMeta xmp, XmpNode xmpParent, XmlNode xmlNode, bool isTopLevel)
         {
             var newStruct = AddChildNode(xmp, xmpParent, xmlNode, string.Empty, isTopLevel);
@@ -721,7 +721,7 @@ namespace XmpCore.Impl
         /// nodeElementList
         /// end-element()
         /// </summary>
-        /// <exception cref="XmpException">thown on parsing errors</exception>
+        /// <exception cref="XmpException">thrown on parsing errors</exception>
         private static void Rdf_ParseTypeCollectionPropertyElement()
         {
             throw new XmpException("ParseTypeCollection property element not allowed", XmpErrorCode.BadXmp);
@@ -733,7 +733,7 @@ namespace XmpCore.Impl
         /// propertyEltList
         /// end-element()
         /// </summary>
-        /// <exception cref="XmpException">thown on parsing errors</exception>
+        /// <exception cref="XmpException">thrown on parsing errors</exception>
         private static void Rdf_ParseTypeOtherPropertyElement()
         {
             throw new XmpException("ParseTypeOther property element not allowed", XmpErrorCode.BadXmp);
@@ -790,7 +790,7 @@ namespace XmpCore.Impl
         /// <param name="xmpParent">the parent xmp node</param>
         /// <param name="xmlNode">the currently processed XML node</param>
         /// <param name="isTopLevel">Flag if the node is a top-level node</param>
-        /// <exception cref="XmpException">thown on parsing errors</exception>
+        /// <exception cref="XmpException">thrown on parsing errors</exception>
         private static void Rdf_EmptyPropertyElement(XmpMeta xmp, XmpNode xmpParent, XmlNode xmlNode, bool isTopLevel)
         {
             var hasPropertyAttrs = false;
@@ -958,7 +958,7 @@ namespace XmpCore.Impl
         /// <param name="value">Node value</param>
         /// <param name="isTopLevel">Flag if the node is a top-level node</param>
         /// <returns>Returns the newly created child node.</returns>
-        /// <exception cref="XmpException">thown on parsing errors</exception>
+        /// <exception cref="XmpException">thrown on parsing errors</exception>
         private static XmpNode AddChildNode(XmpMeta xmp, XmpNode xmpParent, XmlNode xmlNode, string value, bool isTopLevel)
         {
             var registry = XmpMetaFactory.GetSchemaRegistry();
@@ -1064,7 +1064,7 @@ namespace XmpCore.Impl
         /// the others.
         /// </remarks>
         /// <param name="xmpParent">the parent xmp node</param>
-        /// <exception cref="XmpException">thown on parsing errors</exception>
+        /// <exception cref="XmpException">thrown on parsing errors</exception>
         private static void FixupQualifiedNode(XmpNode xmpParent)
         {
             Debug.Assert(xmpParent.Options.IsStruct && xmpParent.HasChildren);
