@@ -60,7 +60,6 @@ namespace XmpCore
         /// </param>
         /// <returns>Returns the <c>XMPMeta</c>-object created from the input.</returns>
         /// <exception cref="XmpException">If the file is not well-formed XML or if the parsing fails.</exception>
-        /// <exception cref="XmpException"/>
         public static IXmpMeta Parse(Stream @in, ParseOptions options = null)
         {
             return XmpMetaParser.Parse(@in, options);
@@ -72,7 +71,6 @@ namespace XmpCore
         /// <param name="options">Options controlling the parsing.</param>
         /// <returns>Returns the <c>XMPMeta</c>-object created from the input.</returns>
         /// <exception cref="XmpException">If the file is not well-formed XML or if the parsing fails.</exception>
-        /// <exception cref="XmpException"/>
         public static IXmpMeta ParseFromString(string packet, ParseOptions options = null)
         {
             return XmpMetaParser.Parse(packet, options);
@@ -84,7 +82,6 @@ namespace XmpCore
         /// <param name="options">Options controlling the parsing.</param>
         /// <returns>Returns the <c>XMPMeta</c>-object created from the input.</returns>
         /// <exception cref="XmpException">If the file is not well-formed XML or if the parsing fails.</exception>
-        /// <exception cref="XmpException"/>
         public static IXmpMeta ParseFromBuffer(byte[] buffer, ParseOptions options = null)
         {
             return XmpMetaParser.Parse(buffer, options);
@@ -95,7 +92,6 @@ namespace XmpCore
         /// <param name="options">Options to control the serialization (see <see cref="SerializeOptions"/>).</param>
         /// <param name="stream">an <c>OutputStream</c> to write the serialized RDF to.</param>
         /// <exception cref="XmpException">on serialization errors.</exception>
-        /// <exception cref="XmpException"/>
         public static void Serialize(IXmpMeta xmp, Stream stream, SerializeOptions options = null)
         {
             AssertImplementation(xmp);
@@ -107,7 +103,6 @@ namespace XmpCore
         /// <param name="options">Options to control the serialization (see <see cref="SerializeOptions"/>).</param>
         /// <returns>Returns a byte buffer containing the serialized RDF.</returns>
         /// <exception cref="XmpException">on serialization errors.</exception>
-        /// <exception cref="XmpException"/>
         public static byte[] SerializeToBuffer(IXmpMeta xmp, SerializeOptions options)
         {
             AssertImplementation(xmp);
@@ -123,7 +118,6 @@ namespace XmpCore
         /// <param name="options">Options to control the serialization (see <see cref="SerializeOptions"/>).</param>
         /// <returns>Returns a string containing the serialized RDF.</returns>
         /// <exception cref="XmpException">on serialization errors.</exception>
-        /// <exception cref="XmpException"/>
         public static string SerializeToString(IXmpMeta xmp, SerializeOptions options)
         {
             AssertImplementation(xmp);
