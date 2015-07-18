@@ -1045,7 +1045,7 @@ namespace XmpCore.Impl
         /// </param>
         /// <param name="value">the value of the qualifier</param>
         /// <returns>Returns the newly created child node.</returns>
-        /// <exception cref="XmpException">thown on parsing errors</exception>
+        /// <exception cref="XmpException">thrown on parsing errors</exception>
         private static XmpNode AddQualifierNode(XmpNode xmpParent, string name, string value)
         {
             var isLang = XmpConstConstants.XmlLang.Equals(name);
