@@ -1179,55 +1179,23 @@ namespace XmpCore.Impl
 
             if (ns == XmpConstConstants.NsRdf)
             {
-                if ("li".Equals(localName))
+                switch (localName)
                 {
-                    return RdftermLi;
-                }
-                if ("parseType".Equals(localName))
-                {
-                    return RdftermParseType;
-                }
-                if ("Description".Equals(localName))
-                {
-                    return RdftermDescription;
-                }
-                if ("about".Equals(localName))
-                {
-                    return RdftermAbout;
-                }
-                if ("resource".Equals(localName))
-                {
-                    return RdftermResource;
-                }
-                if ("RDF".Equals(localName))
-                {
-                    return RdftermRdf;
-                }
-                if ("ID".Equals(localName))
-                {
-                    return RdftermId;
-                }
-                if ("nodeID".Equals(localName))
-                {
-                    return RdftermNodeId;
-                }
-                if ("datatype".Equals(localName))
-                {
-                    return RdftermDatatype;
-                }
-                if ("aboutEach".Equals(localName))
-                {
-                    return RdftermAboutEach;
-                }
-                if ("aboutEachPrefix".Equals(localName))
-                {
-                    return RdftermAboutEachPrefix;
-                }
-                if ("bagID".Equals(localName))
-                {
-                    return RdftermBagId;
+                    case "li": return RdftermLi;
+                    case "parseType": return RdftermParseType;
+                    case "Description": return RdftermDescription;
+                    case "about": return RdftermAbout;
+                    case "resource": return RdftermResource;
+                    case "RDF": return RdftermRdf;
+                    case "ID": return RdftermId;
+                    case "nodeID": return RdftermNodeId;
+                    case "datatype": return RdftermDatatype;
+                    case "aboutEach": return RdftermAboutEach;
+                    case "aboutEachPrefix": return RdftermAboutEachPrefix;
+                    case "bagID": return RdftermBagId;
                 }
             }
+
             return RdftermOther;
         }
     }
