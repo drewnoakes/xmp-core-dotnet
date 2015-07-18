@@ -1174,10 +1174,10 @@ namespace XmpCore.Impl
             var localName = node.LocalName;
             var ns = node.NamespaceURI;
 
-            if (ns == string.Empty && ("about".Equals(localName) || "ID".Equals(localName)) && (node is XmlAttribute) && XmpConstConstants.NsRdf.Equals(((XmlAttribute)node).OwnerElement.NamespaceURI))
+            if (ns == string.Empty && (localName == "about" || localName == "ID") && (node is XmlAttribute) && ((XmlAttribute)node).OwnerElement.NamespaceURI == XmpConstConstants.NsRdf)
                 ns = XmpConstConstants.NsRdf;
 
-            if (XmpConstConstants.NsRdf.Equals(ns))
+            if (ns == XmpConstConstants.NsRdf)
             {
                 if ("li".Equals(localName))
                 {
