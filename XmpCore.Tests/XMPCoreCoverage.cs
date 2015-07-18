@@ -572,7 +572,7 @@ namespace XmpCore.Tests
             offset *= -1;
             dateValue.SetTimeZone(new SimpleTimeZone(offset, "test"));
             meta.SetPropertyDate (NS1, "Date12", dateValue);
-            dateValue.SetNanoSecond(9);
+            dateValue.SetNanosecond(9);
             meta.SetPropertyDate (NS1, "Date13", dateValue);
 */
 

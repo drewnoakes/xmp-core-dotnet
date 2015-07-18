@@ -18,8 +18,7 @@ namespace XmpCore
     /// metadata.
     /// </summary>
     /// <remarks>
-    /// The schema registry keeps track of all namespaces and aliases used in the XMP
-    /// metadata. At initialisation time, the default namespaces and default aliases
+    /// At initialisation time, the default namespaces and default aliases
     /// are automatically registered. <b>Namespaces</b> must be registered before
     /// used in namespace URI parameters or path expressions. Within the XMP Toolkit
     /// the registered namespace URIs and prefixes must be unique. Additional
@@ -50,10 +49,9 @@ namespace XmpCore
 
         /// <summary>Register a namespace URI with a suggested prefix.</summary>
         /// <remarks>
-        /// Register a namespace URI with a suggested prefix. It is not an error if
-        /// the URI is already registered, no matter what the prefix is. If the URI
-        /// is not registered but the suggested prefix is in use, a unique prefix is
-        /// created from the suggested one. The actual registeed prefix is always
+        /// It is not an error if the URI is already registered, no matter what the prefix is.
+        /// If the URI is not registered but the suggested prefix is in use, a unique prefix is
+        /// created from the suggested one. The actual registered prefix is always
         /// returned. The function result tells if the registered prefix is the
         /// suggested one.
         /// <para />
@@ -75,8 +73,6 @@ namespace XmpCore
 
         /// <summary>Obtain the prefix for a registered namespace URI.</summary>
         /// <remarks>
-        /// Obtain the prefix for a registered namespace URI.
-        /// <para />
         /// It is not an error if the namespace URI is not registered.
         /// </remarks>
         /// <param name="namespaceUri">
@@ -89,8 +85,6 @@ namespace XmpCore
 
         /// <summary>Obtain the URI for a registered namespace prefix.</summary>
         /// <remarks>
-        /// Obtain the URI for a registered namespace prefix.
-        /// <para />
         /// It is not an error if the namespace prefix is not registered.
         /// </remarks>
         /// <param name="namespacePrefix">
@@ -131,8 +125,7 @@ namespace XmpCore
 
         /// <summary>Determines if a name is an alias, and what it is aliased to.</summary>
         /// <param name="aliasNs">
-        /// The namespace URI of the alias. Must not be <c>null</c> or the empty
-        /// string.
+        /// The namespace URI of the alias. Must not be <c>null</c> or the empty string.
         /// </param>
         /// <param name="aliasProp">
         /// The name of the alias. May be an arbitrary path expression

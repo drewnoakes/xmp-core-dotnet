@@ -78,7 +78,7 @@ namespace XmpCore
             dt.SetHour(hour);
             dt.SetMinute(minute);
             dt.SetSecond(second);
-            dt.SetNanoSecond(nanoSecond);
+            dt.SetNanosecond(nanoSecond);
             return dt;
         }
 

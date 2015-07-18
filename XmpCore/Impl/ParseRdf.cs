@@ -973,7 +973,7 @@ namespace XmpCore.Impl
                 if (XmpConstConstants.NsDcDeprecated.Equals(ns))
                 {
                     // Fix a legacy DC namespace
-                    ns = XmpConstConstants.NsDc;
+                    ns = XmpConstConstants.NsDC;
                 }
                 var prefix = registry.GetNamespacePrefix(ns);
                 if (prefix == null)

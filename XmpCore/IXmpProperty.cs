@@ -12,7 +12,7 @@ using XmpCore.Options;
 
 namespace XmpCore
 {
-    /// <summary>This interface is used to return a text property together with its and options.</summary>
+    /// <summary>Models a a text property together with its language and options.</summary>
     /// <since>23.01.2006</since>
     public interface IXmpProperty
     {

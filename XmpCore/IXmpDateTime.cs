@@ -14,12 +14,10 @@ using Sharpen;
 namespace XmpCore
 {
     /// <summary>
-    /// The <c>XMPDateTime</c>-class represents a point in time up to a resolution of nano
-    /// seconds.
+    /// The <c>XMPDateTime</c>-class represents a point in time up to a resolution of nano seconds.
     /// </summary>
     /// <remarks>
-    /// The <c>XMPDateTime</c>-class represents a point in time up to a resolution of nano
-    /// seconds. Dates and time in the serialized XMP are ISO 8601 strings. There are utility functions
+    /// Dates and time in the serialized XMP are ISO 8601 strings. There are utility functions
     /// to convert to the ISO format, a <c>Calendar</c> or get the Timezone. The fields of
     /// <c>XMPDateTime</c> are:
     /// <list type="bullet">
@@ -28,7 +26,7 @@ namespace XmpCore
     /// <item>minute - The minute in the range 0..59.</item>
     /// <item>hour - The time zone hour in the range 0..23.</item>
     /// <item>minute - The time zone minute in the range 0..59.</item>
-    /// <item>nanoSecond - The nano seconds within a second. <em>Note:</em> if the XMPDateTime is
+    /// <item>nanosecond - The nano seconds within a second. <em>Note:</em> if the XMPDateTime is
     /// converted into a calendar, the resolution is reduced to milli seconds.</item>
     /// <item>timeZone - a <c>TimeZone</c>-object.</item>
     /// </list>
@@ -78,13 +76,13 @@ namespace XmpCore
         /// Returns milli-, micro- and nano seconds.
         /// Nanoseconds within a second, often left as zero?
         /// </returns>
-        int GetNanoSecond();
+        int GetNanosecond();
 
-        /// <param name="nanoSecond">
+        /// <param name="nanosecond">
         /// Sets the milli-, micro- and nano seconds.
         /// Granularity goes down to milli seconds.
         /// </param>
-        void SetNanoSecond(int nanoSecond);
+        void SetNanosecond(int nanosecond);
 
         /// <returns>Returns the time zone.</returns>
         TimeZoneInfo GetTimeZone();

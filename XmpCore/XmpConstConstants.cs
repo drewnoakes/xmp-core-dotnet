@@ -18,7 +18,7 @@ namespace XmpCore
         public const string NsRdf = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
 
         /// <summary>The XML namespace for the Dublin Core schema.</summary>
-        public const string NsDc = "http://purl.org/dc/elements/1.1/";
+        public const string NsDC = "http://purl.org/dc/elements/1.1/";
 
         /// <summary>The XML namespace for the IPTC Core schema.</summary>
         public const string NsIptccore = "http://iptc.org/std/Iptc4xmpCore/1.0/xmlns/";

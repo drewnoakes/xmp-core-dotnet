@@ -15,7 +15,7 @@ namespace XmpCore
 {
     /// <summary>Utility services for the metadata object.</summary>
     /// <remarks>
-    /// Utility services for the metadata object. It has only public static functions, you cannot create
+    /// It has only public static functions, you cannot create
     /// an object. These are all functions that layer cleanly on top of the core XMP toolkit.
     /// <para />
     /// These functions provide support for composing path expressions to deeply nested properties. The
@@ -33,10 +33,9 @@ namespace XmpCore
     /// <para />
     /// <blockquote>
     /// <pre>
-    /// String path = XMPPathFactory.composeStructFieldPath (schemaNS, &quot;Struct&quot;, fieldNS,
-    /// &quot;Array&quot;);
-    /// String path += XMPPathFactory.composeArrayItemPath (schemaNS, &quot;Array&quot; index);
-    /// PropertyInteger result = xmpObj.getPropertyAsInteger(schemaNS, path);
+    /// string path = XmpPathFactory.ComposeStructFieldPath(schemaNS, "Struct", fieldNS, "Array");
+    /// string path += XmpPathFactory.ComposeArrayItemPath(schemaNS, "Array", index);
+    /// PropertyInteger result = xmpObj.GetPropertyAsInteger(schemaNS, path);
     /// </pre>
     /// </blockquote> You could also use this code if you want the string form of the integer:
     /// <blockquote>
@@ -75,29 +74,17 @@ namespace XmpCore
         public static string ComposeArrayItemPath(string arrayName, int itemIndex)
         {
             if (itemIndex > 0)
-            {
-                return arrayName + '[' + itemIndex + ']';
-            }
+                return string.Format("{0}{1}{2}{3}", arrayName, '[', itemIndex, ']');
+
             if (itemIndex == XmpConstConstants.ArrayLastItem)
-            {
                 return arrayName + "[last()]";
-            }
+
             throw new XmpException("Array index must be larger than zero", XmpErrorCode.BadIndex);
         }
 
         /// <summary>Compose the path expression for a field in a struct.</summary>
-        /// <remarks>
-        /// Compose the path expression for a field in a struct. The result can be added to the
-        /// path of
-        /// </remarks>
-        /// <param name="fieldNs">
-        /// The namespace URI for the field. Must not be <c>null</c> or the empty
-        /// string.
-        /// </param>
-        /// <param name="fieldName">
-        /// The name of the field. Must be a simple XML name, must not be
-        /// <c>null</c> or the empty string.
-        /// </param>
+        /// <param name="fieldNs">The namespace URI for the field. Must not be <c>null</c> or the empty string.</param>
+        /// <param name="fieldName">The name of the field. Must be a simple XML name, must not be <c>null</c> or the empty string.</param>
         /// <returns>
         /// Returns the composed path. This will be of the form
         /// <tt>ns:structName/fNS:fieldName</tt>, where &quot;ns&quot; is the prefix for
@@ -109,11 +96,11 @@ namespace XmpCore
         {
             AssertFieldNs(fieldNs);
             AssertFieldName(fieldName);
+
             var fieldPath = XmpPathParser.ExpandXPath(fieldNs, fieldName);
             if (fieldPath.Size() != 2)
-            {
                 throw new XmpException("The field name must be simple", XmpErrorCode.BadXPath);
-            }
+
             return '/' + fieldPath.GetSegment(XmpPath.StepRootProp).GetName();
         }
 
@@ -137,18 +124,17 @@ namespace XmpCore
         {
             AssertQualNs(qualNs);
             AssertQualName(qualName);
+
             var qualPath = XmpPathParser.ExpandXPath(qualNs, qualName);
             if (qualPath.Size() != 2)
-            {
                 throw new XmpException("The qualifier name must be simple", XmpErrorCode.BadXPath);
-            }
+
             return "/?" + qualPath.GetSegment(XmpPath.StepRootProp).GetName();
         }
 
         /// <summary>Compose the path expression to select an alternate item by language.</summary>
         /// <remarks>
-        /// Compose the path expression to select an alternate item by language. The
-        /// path syntax allows two forms of &quot;content addressing&quot; that may
+        /// The path syntax allows two forms of &quot;content addressing&quot; that may
         /// be used to select an item in an array of alternatives. The form used in
         /// ComposeLangSelector lets you select an item in an alt-text array based on
         /// the value of its <tt>xml:lang</tt> qualifier. The other form of content
@@ -171,13 +157,12 @@ namespace XmpCore
         /// </returns>
         public static string ComposeLangSelector(string arrayName, string langName)
         {
-            return arrayName + "[?xml:lang=\"" + Utils.NormalizeLangValue(langName) + "\"]";
+            return string.Format("{0}[?xml:lang=\"{1}\"]", arrayName, Utils.NormalizeLangValue(langName));
         }
 
         /// <summary>Compose the path expression to select an alternate item by a field's value.</summary>
         /// <remarks>
-        /// Compose the path expression to select an alternate item by a field's value. The path syntax
-        /// allows two forms of &quot;content addressing&quot; that may be used to select an item in an
+        /// The path syntax allows two forms of &quot;content addressing&quot; that may be used to select an item in an
         /// array of alternatives. The form used in ComposeFieldSelector lets you select an item in an
         /// array of structs based on the value of one of the fields in the structs. The other form of
         /// content addressing is shown in ComposeLangSelector. For example, consider a simple struct
@@ -217,11 +202,11 @@ namespace XmpCore
         public static string ComposeFieldSelector(string arrayName, string fieldNs, string fieldName, string fieldValue)
         {
             var fieldPath = XmpPathParser.ExpandXPath(fieldNs, fieldName);
+
             if (fieldPath.Size() != 2)
-            {
                 throw new XmpException("The fieldName name must be simple", XmpErrorCode.BadXPath);
-            }
-            return arrayName + '[' + fieldPath.GetSegment(XmpPath.StepRootProp).GetName() + "=\"" + fieldValue + "\"]";
+
+            return string.Format("{0}{1}{2}=\"{3}\"]", arrayName, "[", fieldPath.GetSegment(XmpPath.StepRootProp).GetName(), fieldValue);
         }
 
         /// <summary>ParameterAsserts that a qualifier namespace is set.</summary>
@@ -231,9 +216,7 @@ namespace XmpCore
         private static void AssertQualNs(string qualNs)
         {
             if (string.IsNullOrEmpty(qualNs))
-            {
                 throw new XmpException("Empty qualifier namespace URI", XmpErrorCode.BadSchema);
-            }
         }
 
         /// <summary>ParameterAsserts that a qualifier name is set.</summary>
@@ -243,9 +226,7 @@ namespace XmpCore
         private static void AssertQualName(string qualName)
         {
             if (string.IsNullOrEmpty(qualName))
-            {
                 throw new XmpException("Empty qualifier name", XmpErrorCode.BadXPath);
-            }
         }
 
         /// <summary>ParameterAsserts that a struct field namespace is set.</summary>
@@ -255,9 +236,7 @@ namespace XmpCore
         private static void AssertFieldNs(string fieldNs)
         {
             if (string.IsNullOrEmpty(fieldNs))
-            {
                 throw new XmpException("Empty field namespace URI", XmpErrorCode.BadSchema);
-            }
         }
 
         /// <summary>ParameterAsserts that a struct field name is set.</summary>
@@ -267,9 +246,7 @@ namespace XmpCore
         private static void AssertFieldName(string fieldName)
         {
             if (string.IsNullOrEmpty(fieldName))
-            {
                 throw new XmpException("Empty f name", XmpErrorCode.BadXPath);
-            }
         }
     }
 }

@@ -9,11 +9,8 @@
 
 namespace XmpCore
 {
-    /// <summary>This interface is used to return a property together with its path and namespace.</summary>
-    /// <remarks>
-    /// This interface is used to return a property together with its path and namespace.
-    /// It is returned when properties are iterated with the <c>XMPIterator</c>.
-    /// </remarks>
+    /// <summary>Models a property together with its path and namespace.</summary>
+    /// <remarks>Instances of this type are are iterated via <see cref="IXmpIterator"/>.</remarks>
     /// <since>06.07.2006</since>
     public interface IXmpPropertyInfo : IXmpProperty
     {

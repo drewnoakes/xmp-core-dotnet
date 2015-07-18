@@ -149,7 +149,7 @@ namespace XmpCore.Impl
         internal static bool IsInternalProperty(string schema, string prop)
         {
             var isInternal = false;
-            if (XmpConstConstants.NsDc.Equals(schema))
+            if (XmpConstConstants.NsDC.Equals(schema))
             {
                 if ("dc:format".Equals(prop) || "dc:language".Equals(prop))
                 {

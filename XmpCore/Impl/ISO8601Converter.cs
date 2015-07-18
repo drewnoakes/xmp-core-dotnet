@@ -167,7 +167,7 @@ namespace XmpCore.Impl
                     {
                         value = value * 10;
                     }
-                    binValue.SetNanoSecond(value);
+                    binValue.SetNanosecond(value);
                 }
             }
             else
@@ -300,10 +300,10 @@ namespace XmpCore.Impl
                     buffer.Append(':');
                     buffer.Append(dateTime.GetMinute().ToString("00"));
                     // seconds and nanoseconds
-                    if (dateTime.GetSecond() != 0 || dateTime.GetNanoSecond() != 0)
+                    if (dateTime.GetSecond() != 0 || dateTime.GetNanosecond() != 0)
                     {
                         buffer.Append(':');
-                        var seconds = dateTime.GetSecond() + dateTime.GetNanoSecond() / 1e9d;
+                        var seconds = dateTime.GetSecond() + dateTime.GetNanosecond() / 1e9d;
                         buffer.AppendFormat("{0:00.#########}", seconds);
                     }
                     // time zone

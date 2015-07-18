@@ -11,11 +11,7 @@ namespace XmpCore
 {
     /// <summary>XMP Toolkit Version Information.</summary>
     /// <remarks>
-    /// XMP Toolkit Version Information.
-    /// <para />
-    /// Version information for the XMP toolkit is stored in the jar-library and available through a
-    /// runtime call, <see cref="XmpMetaFactory.GetVersionInfo()"/>, addition static version numbers are
-    /// defined in "version.properties".
+    /// Version information for the XMP toolkit is available at runtime via <see cref="XmpMetaFactory.VersionInfo"/>.
     /// </remarks>
     /// <since>23.01.2006</since>
     public interface IXmpVersionInfo

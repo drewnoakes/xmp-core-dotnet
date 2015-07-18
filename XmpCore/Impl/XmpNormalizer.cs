@@ -95,12 +95,12 @@ namespace XmpCore.Impl
         {
             // make sure the DC schema is existing, because it might be needed within the normalization
             // if not touched it will be removed by removeEmptySchemas
-            XmpNodeUtils.FindSchemaNode(xmp.GetRoot(), XmpConstConstants.NsDc, true);
+            XmpNodeUtils.FindSchemaNode(xmp.GetRoot(), XmpConstConstants.NsDC, true);
             // Do the special case fixes within each schema.
             for (var it = xmp.GetRoot().IterateChildren(); it.HasNext(); )
             {
                 var currSchema = (XmpNode)it.Next();
-                if (XmpConstConstants.NsDc.Equals(currSchema.Name))
+                if (XmpConstConstants.NsDC.Equals(currSchema.Name))
                 {
                     NormalizeDcArrays(currSchema);
                 }
@@ -485,7 +485,7 @@ namespace XmpCore.Impl
         {
             try
             {
-                var dcSchema = XmpNodeUtils.FindSchemaNode(((XmpMeta)xmp).GetRoot(), XmpConstConstants.NsDc, true);
+                var dcSchema = XmpNodeUtils.FindSchemaNode(((XmpMeta)xmp).GetRoot(), XmpConstConstants.NsDC, true);
                 var dmValue = dmCopyright.Value;
                 var doubleLf = "\n\n";
                 var dcRightsArray = XmpNodeUtils.FindChildNode(dcSchema, "dc:rights", false);
@@ -493,7 +493,7 @@ namespace XmpCore.Impl
                 {
                     // 1. No dc:rights array, create from double linefeed and xmpDM:copyright.
                     dmValue = doubleLf + dmValue;
-                    xmp.SetLocalizedText(XmpConstConstants.NsDc, "rights", string.Empty, XmpConstConstants.XDefault, dmValue, null);
+                    xmp.SetLocalizedText(XmpConstConstants.NsDC, "rights", string.Empty, XmpConstConstants.XDefault, dmValue, null);
                 }
                 else
                 {
@@ -502,7 +502,7 @@ namespace XmpCore.Impl
                     {
                         // 2. No x-default item, create from the first item.
                         var firstValue = dcRightsArray.GetChild(1).Value;
-                        xmp.SetLocalizedText(XmpConstConstants.NsDc, "rights", string.Empty, XmpConstConstants.XDefault, firstValue, null);
+                        xmp.SetLocalizedText(XmpConstConstants.NsDC, "rights", string.Empty, XmpConstConstants.XDefault, firstValue, null);
                         xdIndex = XmpNodeUtils.LookupLanguageItem(dcRightsArray, XmpConstConstants.XDefault);
                     }
                     // 3. Look for a double linefeed in the x-default value.

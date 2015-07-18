@@ -42,7 +42,7 @@ namespace XmpCore.Impl
         private TimeZoneInfo _timeZone;
 
         /// <summary>The nano seconds take micro and nano seconds, while the milli seconds are in the calendar.</summary>
-        private int _nanoSeconds;
+        private int _nanoseconds;
 
         private bool _hasDate;
 
@@ -78,7 +78,7 @@ namespace XmpCore.Impl
             _hour = intCalendar.Get(CalendarEnum.HourOfDay);
             _minute = intCalendar.Get(CalendarEnum.Minute);
             _second = intCalendar.Get(CalendarEnum.Second);
-            _nanoSeconds = intCalendar.Get(CalendarEnum.Millisecond) * 1000000;
+            _nanoseconds = intCalendar.Get(CalendarEnum.Millisecond) * 1000000;
             _timeZone = intCalendar.GetTimeZone();
             // object contains all date components
             _hasDate = _hasTime = _hasTimeZone = true;
@@ -101,7 +101,7 @@ namespace XmpCore.Impl
             _hour = calendar.Get(CalendarEnum.HourOfDay);
             _minute = calendar.Get(CalendarEnum.Minute);
             _second = calendar.Get(CalendarEnum.Second);
-            _nanoSeconds = calendar.Get(CalendarEnum.Millisecond) * 1000000;
+            _nanoseconds = calendar.Get(CalendarEnum.Millisecond) * 1000000;
             _timeZone = timeZone;
             // object contains all date components
             _hasDate = _hasTime = _hasTimeZone = true;
@@ -189,14 +189,14 @@ namespace XmpCore.Impl
             _hasTime = true;
         }
 
-        public int GetNanoSecond()
+        public int GetNanosecond()
         {
-            return _nanoSeconds;
+            return _nanoseconds;
         }
 
-        public void SetNanoSecond(int nanoSecond)
+        public void SetNanosecond(int nanosecond)
         {
-            _nanoSeconds = nanoSecond;
+            _nanoseconds = nanosecond;
             _hasTime = true;
         }
 
@@ -208,7 +208,7 @@ namespace XmpCore.Impl
                 return Math.Sign(d);
             }
             // if millis are equal, compare nanoseconds
-            d = _nanoSeconds - ((IXmpDateTime)dt).GetNanoSecond();
+            d = _nanoseconds - ((IXmpDateTime)dt).GetNanosecond();
             return Math.Sign(d);
         }
 
@@ -253,7 +253,7 @@ namespace XmpCore.Impl
             calendar.Set(CalendarEnum.HourOfDay, _hour);
             calendar.Set(CalendarEnum.Minute, _minute);
             calendar.Set(CalendarEnum.Second, _second);
-            calendar.Set(CalendarEnum.Millisecond, _nanoSeconds / 1000000);
+            calendar.Set(CalendarEnum.Millisecond, _nanoseconds / 1000000);
             return calendar;
         }
 

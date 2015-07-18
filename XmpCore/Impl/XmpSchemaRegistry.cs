@@ -169,7 +169,7 @@ namespace XmpCore.Impl
             // register standard namespaces
             RegisterNamespace(XmpConstConstants.NsXml, "xml");
             RegisterNamespace(XmpConstConstants.NsRdf, "rdf");
-            RegisterNamespace(XmpConstConstants.NsDc, "dc");
+            RegisterNamespace(XmpConstConstants.NsDC, "dc");
             RegisterNamespace(XmpConstConstants.NsIptccore, "Iptc4xmpCore");
             RegisterNamespace(XmpConstConstants.NsIptcext, "Iptc4xmpExt");
             RegisterNamespace(XmpConstConstants.NsDicom, "DICOM");
@@ -373,48 +373,48 @@ namespace XmpCore.Impl
             var aliasToArrayAltText = new AliasOptions { IsArrayAltText = true };
 
             // Aliases from XMP to DC.
-            RegisterAlias(XmpConstConstants.NsXmp, "Author", XmpConstConstants.NsDc, "creator", aliasToArrayOrdered);
-            RegisterAlias(XmpConstConstants.NsXmp, "Authors", XmpConstConstants.NsDc, "creator", null);
-            RegisterAlias(XmpConstConstants.NsXmp, "Description", XmpConstConstants.NsDc, "description", null);
-            RegisterAlias(XmpConstConstants.NsXmp, "Format", XmpConstConstants.NsDc, "format", null);
-            RegisterAlias(XmpConstConstants.NsXmp, "Keywords", XmpConstConstants.NsDc, "subject", null);
-            RegisterAlias(XmpConstConstants.NsXmp, "Locale", XmpConstConstants.NsDc, "language", null);
-            RegisterAlias(XmpConstConstants.NsXmp, "Title", XmpConstConstants.NsDc, "title", null);
-            RegisterAlias(XmpConstConstants.NsXmpRights, "Copyright", XmpConstConstants.NsDc, "rights", null);
+            RegisterAlias(XmpConstConstants.NsXmp, "Author", XmpConstConstants.NsDC, "creator", aliasToArrayOrdered);
+            RegisterAlias(XmpConstConstants.NsXmp, "Authors", XmpConstConstants.NsDC, "creator", null);
+            RegisterAlias(XmpConstConstants.NsXmp, "Description", XmpConstConstants.NsDC, "description", null);
+            RegisterAlias(XmpConstConstants.NsXmp, "Format", XmpConstConstants.NsDC, "format", null);
+            RegisterAlias(XmpConstConstants.NsXmp, "Keywords", XmpConstConstants.NsDC, "subject", null);
+            RegisterAlias(XmpConstConstants.NsXmp, "Locale", XmpConstConstants.NsDC, "language", null);
+            RegisterAlias(XmpConstConstants.NsXmp, "Title", XmpConstConstants.NsDC, "title", null);
+            RegisterAlias(XmpConstConstants.NsXmpRights, "Copyright", XmpConstConstants.NsDC, "rights", null);
 
             // Aliases from PDF to DC and XMP.
-            RegisterAlias(XmpConstConstants.NsPdf, "Author", XmpConstConstants.NsDc, "creator", aliasToArrayOrdered);
+            RegisterAlias(XmpConstConstants.NsPdf, "Author", XmpConstConstants.NsDC, "creator", aliasToArrayOrdered);
             RegisterAlias(XmpConstConstants.NsPdf, "BaseURL", XmpConstConstants.NsXmp, "BaseURL", null);
             RegisterAlias(XmpConstConstants.NsPdf, "CreationDate", XmpConstConstants.NsXmp, "CreateDate", null);
             RegisterAlias(XmpConstConstants.NsPdf, "Creator", XmpConstConstants.NsXmp, "CreatorTool", null);
             RegisterAlias(XmpConstConstants.NsPdf, "ModDate", XmpConstConstants.NsXmp, "ModifyDate", null);
-            RegisterAlias(XmpConstConstants.NsPdf, "Subject", XmpConstConstants.NsDc, "description", aliasToArrayAltText);
-            RegisterAlias(XmpConstConstants.NsPdf, "Title", XmpConstConstants.NsDc, "title", aliasToArrayAltText);
+            RegisterAlias(XmpConstConstants.NsPdf, "Subject", XmpConstConstants.NsDC, "description", aliasToArrayAltText);
+            RegisterAlias(XmpConstConstants.NsPdf, "Title", XmpConstConstants.NsDC, "title", aliasToArrayAltText);
 
             // Aliases from PHOTOSHOP to DC and XMP.
-            RegisterAlias(XmpConstConstants.NsPhotoshop, "Author", XmpConstConstants.NsDc, "creator", aliasToArrayOrdered);
-            RegisterAlias(XmpConstConstants.NsPhotoshop, "Caption", XmpConstConstants.NsDc, "description", aliasToArrayAltText);
-            RegisterAlias(XmpConstConstants.NsPhotoshop, "Copyright", XmpConstConstants.NsDc, "rights", aliasToArrayAltText);
-            RegisterAlias(XmpConstConstants.NsPhotoshop, "Keywords", XmpConstConstants.NsDc, "subject", null);
+            RegisterAlias(XmpConstConstants.NsPhotoshop, "Author", XmpConstConstants.NsDC, "creator", aliasToArrayOrdered);
+            RegisterAlias(XmpConstConstants.NsPhotoshop, "Caption", XmpConstConstants.NsDC, "description", aliasToArrayAltText);
+            RegisterAlias(XmpConstConstants.NsPhotoshop, "Copyright", XmpConstConstants.NsDC, "rights", aliasToArrayAltText);
+            RegisterAlias(XmpConstConstants.NsPhotoshop, "Keywords", XmpConstConstants.NsDC, "subject", null);
             RegisterAlias(XmpConstConstants.NsPhotoshop, "Marked", XmpConstConstants.NsXmpRights, "Marked", null);
-            RegisterAlias(XmpConstConstants.NsPhotoshop, "Title", XmpConstConstants.NsDc, "title", aliasToArrayAltText);
+            RegisterAlias(XmpConstConstants.NsPhotoshop, "Title", XmpConstConstants.NsDC, "title", aliasToArrayAltText);
             RegisterAlias(XmpConstConstants.NsPhotoshop, "WebStatement", XmpConstConstants.NsXmpRights, "WebStatement", null);
 
             // Aliases from TIFF and EXIF to DC and XMP.
-            RegisterAlias(XmpConstConstants.NsTiff, "Artist", XmpConstConstants.NsDc, "creator", aliasToArrayOrdered);
-            RegisterAlias(XmpConstConstants.NsTiff, "Copyright", XmpConstConstants.NsDc, "rights", null);
+            RegisterAlias(XmpConstConstants.NsTiff, "Artist", XmpConstConstants.NsDC, "creator", aliasToArrayOrdered);
+            RegisterAlias(XmpConstConstants.NsTiff, "Copyright", XmpConstConstants.NsDC, "rights", null);
             RegisterAlias(XmpConstConstants.NsTiff, "DateTime", XmpConstConstants.NsXmp, "ModifyDate", null);
-            RegisterAlias(XmpConstConstants.NsTiff, "ImageDescription", XmpConstConstants.NsDc, "description", null);
+            RegisterAlias(XmpConstConstants.NsTiff, "ImageDescription", XmpConstConstants.NsDC, "description", null);
             RegisterAlias(XmpConstConstants.NsTiff, "Software", XmpConstConstants.NsXmp, "CreatorTool", null);
 
             // Aliases from PNG (Acrobat ImageCapture) to DC and XMP.
-            RegisterAlias(XmpConstConstants.NsPng, "Author", XmpConstConstants.NsDc, "creator", aliasToArrayOrdered);
-            RegisterAlias(XmpConstConstants.NsPng, "Copyright", XmpConstConstants.NsDc, "rights", aliasToArrayAltText);
+            RegisterAlias(XmpConstConstants.NsPng, "Author", XmpConstConstants.NsDC, "creator", aliasToArrayOrdered);
+            RegisterAlias(XmpConstConstants.NsPng, "Copyright", XmpConstConstants.NsDC, "rights", aliasToArrayAltText);
             RegisterAlias(XmpConstConstants.NsPng, "CreationTime", XmpConstConstants.NsXmp, "CreateDate", null);
-            RegisterAlias(XmpConstConstants.NsPng, "Description", XmpConstConstants.NsDc, "description", aliasToArrayAltText);
+            RegisterAlias(XmpConstConstants.NsPng, "Description", XmpConstConstants.NsDC, "description", aliasToArrayAltText);
             RegisterAlias(XmpConstConstants.NsPng, "ModificationTime", XmpConstConstants.NsXmp, "ModifyDate", null);
             RegisterAlias(XmpConstConstants.NsPng, "Software", XmpConstConstants.NsXmp, "CreatorTool", null);
-            RegisterAlias(XmpConstConstants.NsPng, "Title", XmpConstConstants.NsDc, "title", aliasToArrayAltText);
+            RegisterAlias(XmpConstConstants.NsPng, "Title", XmpConstConstants.NsDC, "title", aliasToArrayAltText);
         }
 
         #endregion

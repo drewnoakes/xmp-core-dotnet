@@ -14,7 +14,6 @@ namespace XmpCore
 {
     /// <summary>Interface for the <c>XMPMeta</c> iteration services.</summary>
     /// <remarks>
-    /// Interface for the <c>XMPMeta</c> iteration services.
     /// <c>XMPIterator</c> provides a uniform means to iterate over the
     /// schema and properties within an XMP object.
     /// <para />
@@ -32,7 +31,7 @@ namespace XmpCore
     /// nodes are the property nodes. The nodes below a property node depend on its
     /// type (simple, struct, or array) and whether it has qualifiers.
     /// <para />
-    /// An <c>XMPIterator</c> is created by XMPMeta#interator() constructor
+    /// An <c>XMPIterator</c> is created by XMPMeta#iterator() constructor
     /// defines a starting point for the iteration and options that control how it
     /// proceeds. By default the iteration starts at the root and visits all nodes
     /// beneath it in a depth first manner. The root node is not visited, the first
