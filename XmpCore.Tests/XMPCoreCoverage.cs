@@ -14,28 +14,28 @@ using System.Text;
 using Sharpen;
 using XmpCore.Impl;
 using XmpCore.Options;
+using Xunit;
 
 namespace XmpCore.Tests
 {
-    /**
-     * An example for XmpCore.
-     * It covers most of the functionality of XmpCore,
-     * but does not provide any meaningful workflow.
-     *
-     * @since   11.02.2007
-     */
+    public class SchemaRegistryTests
+    {
+        [Fact]
+        public void SchemaRegistryDefaultNamespaces()
+        {
+            var registry = XmpMetaFactory.GetSchemaRegistry();
+
+            Assert.Equal(56, registry.Namespaces.Count);
+            Assert.Equal(34, registry.Aliases.Count);
+            Assert.Equal(56, registry.Prefixes.Count);
+        }
+    }
+
     public static class XmpCoreCoverage
     {
-        /** the log stream for all outputs */
         private static TextWriter log;
-
-        /** shortcut for the schema registry */
         private static readonly IXmpSchemaRegistry registry = XmpMetaFactory.GetSchemaRegistry();
 
-        /**
-         * Runs the example
-         * @param args not used
-         */
         public static void Main()
         {
             try
@@ -63,11 +63,6 @@ namespace XmpCore.Tests
             }
         }
 
-
-        /**
-         * Runs example functions that explain some features of XmpCore.
-         * @throws Exception Forwards exceptions
-         */
         private static void DoCoreCoverage()
         {
             CoverNamespaceRegistry();
@@ -101,7 +96,6 @@ namespace XmpCore.Tests
             CoverDateTime();
         }
 
-
         /**
          * List predefined namespaces and aliases;
          * register new namespaces and aliases.
@@ -112,41 +106,33 @@ namespace XmpCore.Tests
             writeMajorLabel ("Test of namespace registry");
 
             // Lists of predefined namespaces
-/*
-            TODO reinstate this code
+            //TODO reinstate this code
 
             writeMinorLabel ("List predefined namespaces");
-            var namespaces = registry.GetNamespaces();
-            foreach (string pair in namespaces)
-            {
-                String prefix = (String)pair.Key;
-                String ns = (String) pair.Value;
-                log.WriteLine(prefix + "   --->   " + ns);
-            }
-            log.WriteLine();
-*/
+            var namespaces = registry.Namespaces;
+            foreach (var pair in namespaces)
+                log.WriteLine(pair.Key + "   --->   " + pair.Value);
 
+            log.WriteLine();
 
             // Registry namespace functions
             writeMinorLabel ("Test namespace registry functions");
 
             string prefix = registry.RegisterNamespace(TestData.NS1, "ns1");
-            log.WriteLine ("registerNamespace ns1:   " + prefix + "   --->   " +
-                registry.GetNamespaceUri(prefix));
+            log.WriteLine ("registerNamespace ns1:   {0}   --->   {1}", prefix, registry.GetNamespaceUri(prefix));
 
             prefix = registry.RegisterNamespace(TestData.NS2, "ns2");
-            log.WriteLine ("registerNamespace ns2:   " + prefix + "   --->   " +
-                registry.GetNamespaceUri(prefix));
+            log.WriteLine ("registerNamespace ns2:   {0}   --->   {1}", prefix, registry.GetNamespaceUri(prefix));
 
             prefix = registry.GetNamespacePrefix(TestData.NS1);
-            log.WriteLine ("getNamespacePrefix ns1:   " + prefix);
+            log.WriteLine ("getNamespacePrefix ns1:   {0}", prefix);
 
-            log.WriteLine("getNamespaceURI ns1:   " + registry.GetNamespaceUri("ns1"));
+            log.WriteLine("getNamespaceURI ns1:   {0}", registry.GetNamespaceUri("ns1"));
 
             prefix = registry.GetNamespacePrefix("bogus");
-            log.WriteLine ("getNamespacePrefix bogus:   " + prefix);
+            log.WriteLine ("getNamespacePrefix bogus:   {0}", prefix);
 
-            log.WriteLine("getNamespaceURI ns1:   " + registry.GetNamespaceUri("bogus"));
+            log.WriteLine("getNamespaceURI ns1:   {0}", registry.GetNamespaceUri("bogus"));
         }
 
 
