@@ -102,14 +102,6 @@ namespace XmpCore.Impl
             return _length;
         }
 
-        //    /**
-        //     * <em>Note:</em> Only the byte up to length are valid!
-        //     * @return Returns the inner byte buffer.
-        //     */
-        //    public byte[] getBuffer()
-        //    {
-        //        return buffer;
-        //    }
         /// <param name="index">the index to retrieve the byte from</param>
         /// <returns>Returns a byte from the buffer</returns>
         public byte ByteAt(int index)
