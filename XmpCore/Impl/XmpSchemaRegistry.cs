@@ -375,7 +375,7 @@ namespace XmpCore.Impl
 
             public override string ToString()
             {
-                return Prefix + PropName + " NS(" + Namespace + "), FORM (" + AliasForm + ")";
+                return string.Format("{0}{1} NS({2}), FORM ({3})", Prefix, PropName, Namespace, AliasForm);
             }
         }
 
