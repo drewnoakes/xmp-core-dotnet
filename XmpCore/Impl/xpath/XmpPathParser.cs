@@ -297,25 +297,25 @@ namespace XmpCore.Impl.XPath
             else
             {
                 // add schema xpath step and base step of alias
-                expandedXPath.Add(new XmpPathSegment(aliasInfo.GetNamespace(), XmpPath.SchemaNode));
-                var rootStep = new XmpPathSegment(VerifyXPathRoot(aliasInfo.GetNamespace(), aliasInfo.GetPropName()), XmpPath.StructFieldStep);
+                expandedXPath.Add(new XmpPathSegment(aliasInfo.Namespace, XmpPath.SchemaNode));
+                var rootStep = new XmpPathSegment(VerifyXPathRoot(aliasInfo.Namespace, aliasInfo.PropName), XmpPath.StructFieldStep);
                 rootStep.SetAlias(true);
-                rootStep.SetAliasForm(aliasInfo.GetAliasForm().GetOptions());
+                rootStep.SetAliasForm(aliasInfo.AliasForm.GetOptions());
                 expandedXPath.Add(rootStep);
-                if (aliasInfo.GetAliasForm().IsArrayAltText)
+                if (aliasInfo.AliasForm.IsArrayAltText)
                 {
                     var qualSelectorStep = new XmpPathSegment("[?xml:lang='x-default']", XmpPath.QualSelectorStep);
                     qualSelectorStep.SetAlias(true);
-                    qualSelectorStep.SetAliasForm(aliasInfo.GetAliasForm().GetOptions());
+                    qualSelectorStep.SetAliasForm(aliasInfo.AliasForm.GetOptions());
                     expandedXPath.Add(qualSelectorStep);
                 }
                 else
                 {
-                    if (aliasInfo.GetAliasForm().IsArray)
+                    if (aliasInfo.AliasForm.IsArray)
                     {
                         var indexStep = new XmpPathSegment("[1]", XmpPath.ArrayIndexStep);
                         indexStep.SetAlias(true);
-                        indexStep.SetAliasForm(aliasInfo.GetAliasForm().GetOptions());
+                        indexStep.SetAliasForm(aliasInfo.AliasForm.GetOptions());
                         expandedXPath.Add(indexStep);
                     }
                 }

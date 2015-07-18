@@ -353,50 +353,30 @@ namespace XmpCore.Impl
                 {
                     throw new XmpException("Actual property is already an alias, use the base property", XmpErrorCode.BadParam);
                 }
-                IXmpAliasInfo aliasInfo = new XmpAliasInfo390(actualNs, actualPrefix, actualProp, aliasOpts);
+                IXmpAliasInfo aliasInfo = new XmpAliasInfo(actualNs, actualPrefix, actualProp, aliasOpts);
                 _aliasMap[key] = aliasInfo;
             }
         }
 
-        private sealed class XmpAliasInfo390 : IXmpAliasInfo
+        private sealed class XmpAliasInfo : IXmpAliasInfo
         {
-            public XmpAliasInfo390(string actualNs, string actualPrefix, string actualProp, AliasOptions aliasOpts)
+            public XmpAliasInfo(string actualNs, string actualPrefix, string actualProp, AliasOptions aliasOpts)
             {
-                _actualNs = actualNs;
-                _actualPrefix = actualPrefix;
-                _actualProp = actualProp;
-                _aliasOpts = aliasOpts;
+                Namespace = actualNs;
+                Prefix = actualPrefix;
+                PropName = actualProp;
+                AliasForm = aliasOpts;
             }
 
-            public string GetNamespace()
-            {
-                return _actualNs;
-            }
-
-            public string GetPrefix()
-            {
-                return _actualPrefix;
-            }
-
-            public string GetPropName()
-            {
-                return _actualProp;
-            }
-
-            public AliasOptions GetAliasForm()
-            {
-                return _aliasOpts;
-            }
+            public string Namespace { get; private set; }
+            public string Prefix { get; private set; }
+            public string PropName { get; private set; }
+            public AliasOptions AliasForm { get; private set; }
 
             public override string ToString()
             {
-                return _actualPrefix + _actualProp + " NS(" + _actualNs + "), FORM (" + GetAliasForm() + ")";
+                return Prefix + PropName + " NS(" + Namespace + "), FORM (" + AliasForm + ")";
             }
-
-            private readonly string _actualNs;
-            private readonly string _actualPrefix;
-            private readonly string _actualProp;
-            private readonly AliasOptions _aliasOpts;
         }
 
         public IDictionary<string, IXmpAliasInfo> Aliases

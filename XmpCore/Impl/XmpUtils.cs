@@ -383,7 +383,7 @@ namespace XmpCore.Impl
                         var aliases = XmpMetaFactory.GetSchemaRegistry().FindAliases(schemaNs);
                         foreach (var info in aliases)
                         {
-                            var path = XmpPathParser.ExpandXPath(info.GetNamespace(), info.GetPropName());
+                            var path = XmpPathParser.ExpandXPath(info.Namespace, info.PropName);
                             var actualProp = XmpNodeUtils.FindNode(xmpImpl.GetRoot(), path, false, null);
                             if (actualProp != null)
                             {

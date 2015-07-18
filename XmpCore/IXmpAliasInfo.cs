@@ -15,22 +15,22 @@ namespace XmpCore
     /// <since>27.01.2006</since>
     public interface IXmpAliasInfo
     {
-        /// <returns>Returns Returns the namespace URI for the base property.</returns>
-        string GetNamespace();
+        /// <value>Gets the namespace URI for the base property.</value>
+        string Namespace { get; }
 
-        /// <returns>Returns the default prefix for the given base property.</returns>
-        string GetPrefix();
+        /// <value>Gets the default prefix for the given base property.</value>
+        string Prefix { get; }
 
-        /// <returns>Returns the path of the base property.</returns>
-        string GetPropName();
+        /// <value>Gets the path of the base property.</value>
+        string PropName { get; }
 
-        /// <returns>
-        /// Returns the kind of the alias. This can be a direct alias
+        /// <value>
+        /// Gets the kind of the alias. This can be a direct alias
         /// (ARRAY), a simple property to an ordered array
         /// (ARRAY_ORDERED), to an alternate array
         /// (ARRAY_ALTERNATE) or to an alternate text array
         /// (ARRAY_ALT_TEXT).
-        /// </returns>
-        AliasOptions GetAliasForm();
+        /// </value>
+        AliasOptions AliasForm { get; }
     }
 }

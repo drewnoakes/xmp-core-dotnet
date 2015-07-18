@@ -277,16 +277,16 @@ namespace XmpCore.Impl
                     if (info != null)
                     {
                         // find or create schema
-                        var baseSchema = XmpNodeUtils.FindSchemaNode(tree, info.GetNamespace(), null, true);
+                        var baseSchema = XmpNodeUtils.FindSchemaNode(tree, info.Namespace, null, true);
                         baseSchema.IsImplicit = false;
-                        var baseNode = XmpNodeUtils.FindChildNode(baseSchema, info.GetPrefix() + info.GetPropName(), false);
+                        var baseNode = XmpNodeUtils.FindChildNode(baseSchema, info.Prefix + info.PropName, false);
                         if (baseNode == null)
                         {
-                            if (info.GetAliasForm().IsSimple())
+                            if (info.AliasForm.IsSimple())
                             {
                                 // A top-to-top alias, transplant the property.
                                 // change the alias property name to the base name
-                                var qname = info.GetPrefix() + info.GetPropName();
+                                var qname = info.Prefix + info.PropName;
                                 currProp.Name = qname;
                                 baseSchema.AddChild(currProp);
                                 // remove the alias property
@@ -296,12 +296,12 @@ namespace XmpCore.Impl
                             {
                                 // An alias to an array item,
                                 // create the array and transplant the property.
-                                baseNode = new XmpNode(info.GetPrefix() + info.GetPropName(), info.GetAliasForm().ToPropertyOptions());
+                                baseNode = new XmpNode(info.Prefix + info.PropName, info.AliasForm.ToPropertyOptions());
                                 baseSchema.AddChild(baseNode);
                                 TransplantArrayItemAlias(propertyIt, currProp, baseNode);
                             }
                         }
-                        else if (info.GetAliasForm().IsSimple())
+                        else if (info.AliasForm.IsSimple())
                         {
                             // The base node does exist and this is a top-to-top alias.
                             // Check for conflicts if strict aliasing is on.
@@ -318,7 +318,7 @@ namespace XmpCore.Impl
                             // Look for the aliased item.
                             // Then transplant or check & delete as appropriate.
                             XmpNode itemNode = null;
-                            if (info.GetAliasForm().IsArrayAltText)
+                            if (info.AliasForm.IsArrayAltText)
                             {
                                 var xdIndex = XmpNodeUtils.LookupLanguageItem(baseNode, XmpConstConstants.XDefault);
                                 if (xdIndex != -1)
