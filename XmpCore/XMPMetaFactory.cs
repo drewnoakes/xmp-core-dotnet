@@ -37,11 +37,11 @@ namespace XmpCore
         }
 
         /// <summary>
-        /// These functions support parsing serialized RDF into an XMP object, and serailizing an XMP
+        /// These functions support parsing serialized RDF into an XMP object, and serializing an XMP
         /// object into RDF.
         /// </summary>
         /// <remarks>
-        /// These functions support parsing serialized RDF into an XMP object, and serailizing an XMP
+        /// These functions support parsing serialized RDF into an XMP object, and serializing an XMP
         /// object into RDF. The input for parsing may be any valid Unicode
         /// encoding. ISO Latin-1 is also recognized, but its use is strongly discouraged. Serialization
         /// is always as UTF-8.
