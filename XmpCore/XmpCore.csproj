@@ -75,7 +75,7 @@
     <Compile Include="Sharpen\EnumeratorWrapper.cs" />
     <Compile Include="Sharpen\IIterator.cs" />
     <Compile Include="Sharpen\PushbackReader.cs" />
-    <Compile Include="XmpConstConstants.cs" />
+    <Compile Include="XmpConstants.cs" />
     <Compile Include="IXmpDateTime.cs" />
     <Compile Include="XmpDateTimeFactory.cs" />
     <Compile Include="XmpErrorCode.cs" />

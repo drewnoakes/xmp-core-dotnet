@@ -108,7 +108,7 @@ namespace XmpCore.Impl
                     throw new XmpException("Explicit arrayOptions required to create new array", XmpErrorCode.BadOptions);
                 }
             }
-            DoSetArrayItem(arrayNode, XmpConstConstants.ArrayLastItem, itemValue, itemOptions, true);
+            DoSetArrayItem(arrayNode, XmpConstants.ArrayLastItem, itemValue, itemOptions, true);
         }
 
         /// <exception cref="XmpException"/>
@@ -355,11 +355,11 @@ namespace XmpCore.Impl
             for (var it = arrayNode.IterateChildren(); it.HasNext(); )
             {
                 var currItem = (XmpNode)it.Next();
-                if (!currItem.HasQualifier || !XmpConstConstants.XmlLang.Equals(currItem.GetQualifier(1).Name))
+                if (!currItem.HasQualifier || !XmpConstants.XmlLang.Equals(currItem.GetQualifier(1).Name))
                 {
                     throw new XmpException("Language qualifier must be first", XmpErrorCode.BadXPath);
                 }
-                if (XmpConstConstants.XDefault.Equals(currItem.GetQualifier(1).Value))
+                if (XmpConstants.XDefault.Equals(currItem.GetQualifier(1).Value))
                 {
                     xdItem = currItem;
                     haveXDefault = true;
@@ -378,14 +378,14 @@ namespace XmpCore.Impl
             var result = XmpNodeUtils.ChooseLocalizedText(arrayNode, genericLang, specificLang);
             var match = (int)result[0];
             var itemNode = (XmpNode)result[1];
-            var specificXDefault = XmpConstConstants.XDefault.Equals(specificLang);
+            var specificXDefault = XmpConstants.XDefault.Equals(specificLang);
             switch (match)
             {
                 case XmpNodeUtils.CltNoValues:
                 {
                     // Create the array items for the specificLang and x-default, with
                     // x-default first.
-                    XmpNodeUtils.AppendLangItem(arrayNode, XmpConstConstants.XDefault, itemValue);
+                    XmpNodeUtils.AppendLangItem(arrayNode, XmpConstants.XDefault, itemValue);
                     haveXDefault = true;
                     if (!specificXDefault)
                     {
@@ -487,7 +487,7 @@ namespace XmpCore.Impl
             // Add an x-default at the front if needed.
             if (!haveXDefault && arrayNode.GetChildrenLength() == 1)
             {
-                XmpNodeUtils.AppendLangItem(arrayNode, XmpConstConstants.XDefault, itemValue);
+                XmpNodeUtils.AppendLangItem(arrayNode, XmpConstants.XDefault, itemValue);
             }
         }
 
@@ -598,13 +598,13 @@ namespace XmpCore.Impl
         /// <exception cref="XmpException"/>
         public void SetPropertyBoolean(string schemaNs, string propName, bool propValue, PropertyOptions options)
         {
-            SetProperty(schemaNs, propName, propValue ? XmpConstConstants.TrueString : XmpConstConstants.FalseString, options);
+            SetProperty(schemaNs, propName, propValue ? XmpConstants.TrueString : XmpConstants.FalseString, options);
         }
 
         /// <exception cref="XmpException"/>
         public void SetPropertyBoolean(string schemaNs, string propName, bool propValue)
         {
-            SetProperty(schemaNs, propName, propValue ? XmpConstConstants.TrueString : XmpConstConstants.FalseString, null);
+            SetProperty(schemaNs, propName, propValue ? XmpConstants.TrueString : XmpConstants.FalseString, null);
         }
 
         /// <exception cref="XmpException"/>
@@ -930,12 +930,12 @@ namespace XmpCore.Impl
         /// <exception cref="XmpException"/>
         private void DoSetArrayItem(XmpNode arrayNode, int itemIndex, string itemValue, PropertyOptions itemOptions, bool insert)
         {
-            var itemNode = new XmpNode(XmpConstConstants.ArrayItemName, null);
+            var itemNode = new XmpNode(XmpConstants.ArrayItemName, null);
             itemOptions = XmpNodeUtils.VerifySetOptions(itemOptions, itemValue);
             // in insert mode the index after the last is allowed,
             // even ARRAY_LAST_ITEM points to the index *after* the last.
             var maxIndex = insert ? arrayNode.GetChildrenLength() + 1 : arrayNode.GetChildrenLength();
-            if (itemIndex == XmpConstConstants.ArrayLastItem)
+            if (itemIndex == XmpConstants.ArrayLastItem)
             {
                 itemIndex = maxIndex;
             }

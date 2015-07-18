@@ -69,7 +69,7 @@ namespace XmpCore.Impl
                 if (Utils.CheckUuidFormat(nameStr))
                 {
                     // move UUID to xmpMM:InstanceID and remove it from the root node
-                    var path = XmpPathParser.ExpandXPath(XmpConstConstants.NsXmpMm, "InstanceID");
+                    var path = XmpPathParser.ExpandXPath(XmpConstants.NsXmpMm, "InstanceID");
                     var idNode = XmpNodeUtils.FindNode(tree, path, true, null);
                     if (idNode != null)
                     {
@@ -95,18 +95,18 @@ namespace XmpCore.Impl
         {
             // make sure the DC schema is existing, because it might be needed within the normalization
             // if not touched it will be removed by removeEmptySchemas
-            XmpNodeUtils.FindSchemaNode(xmp.GetRoot(), XmpConstConstants.NsDC, true);
+            XmpNodeUtils.FindSchemaNode(xmp.GetRoot(), XmpConstants.NsDC, true);
             // Do the special case fixes within each schema.
             for (var it = xmp.GetRoot().IterateChildren(); it.HasNext(); )
             {
                 var currSchema = (XmpNode)it.Next();
-                if (XmpConstConstants.NsDC.Equals(currSchema.Name))
+                if (XmpConstants.NsDC.Equals(currSchema.Name))
                 {
                     NormalizeDcArrays(currSchema);
                 }
                 else
                 {
-                    if (XmpConstConstants.NsExif.Equals(currSchema.Name))
+                    if (XmpConstants.NsExif.Equals(currSchema.Name))
                     {
                         // Do a special case fix for exif:GPSTimeStamp.
                         FixGpsTimeStamp(currSchema);
@@ -118,7 +118,7 @@ namespace XmpCore.Impl
                     }
                     else
                     {
-                        if (XmpConstConstants.NsDm.Equals(currSchema.Name))
+                        if (XmpConstants.NsDm.Equals(currSchema.Name))
                         {
                             // Do a special case migration of xmpDM:copyright to
                             // dc:rights['x-default'].
@@ -130,7 +130,7 @@ namespace XmpCore.Impl
                         }
                         else
                         {
-                            if (XmpConstConstants.NsXmpRights.Equals(currSchema.Name))
+                            if (XmpConstants.NsXmpRights.Equals(currSchema.Name))
                             {
                                 var arrayNode = XmpNodeUtils.FindChildNode(currSchema, "xmpRights:UsageTerms", false);
                                 if (arrayNode != null)
@@ -173,13 +173,13 @@ namespace XmpCore.Impl
                     // create a new array and add the current property as child,
                     // if it was formerly simple
                     var newArray = new XmpNode(currProp.Name, arrayForm);
-                    currProp.Name = XmpConstConstants.ArrayItemName;
+                    currProp.Name = XmpConstants.ArrayItemName;
                     newArray.AddChild(currProp);
                     dcSchema.ReplaceChild(i, newArray);
                     // fix language alternatives
                     if (arrayForm.IsArrayAltText && !currProp.Options.HasLanguage)
                     {
-                        var newLang = new XmpNode(XmpConstConstants.XmlLang, XmpConstConstants.XDefault, null);
+                        var newLang = new XmpNode(XmpConstants.XmlLang, XmpConstants.XDefault, null);
                         currProp.AddQualifier(newLang);
                     }
                 }
@@ -234,7 +234,7 @@ namespace XmpCore.Impl
                     else
                     {
                         // Add an xml:lang qualifier with the value "x-repair".
-                        var repairLang = new XmpNode(XmpConstConstants.XmlLang, "x-repair", null);
+                        var repairLang = new XmpNode(XmpConstants.XmlLang, "x-repair", null);
                         currChild.AddQualifier(repairLang);
                     }
                 }
@@ -321,7 +321,7 @@ namespace XmpCore.Impl
                             XmpNode itemNode = null;
                             if (info.AliasForm.IsArrayAltText)
                             {
-                                var xdIndex = XmpNodeUtils.LookupLanguageItem(baseNode, XmpConstConstants.XDefault);
+                                var xdIndex = XmpNodeUtils.LookupLanguageItem(baseNode, XmpConstants.XDefault);
                                 if (xdIndex != -1)
                                 {
                                     itemNode = baseNode.GetChild(xdIndex);
@@ -361,11 +361,11 @@ namespace XmpCore.Impl
                 {
                     throw new XmpException("Alias to x-default already has a language qualifier", XmpErrorCode.BadXmp);
                 }
-                var langQual = new XmpNode(XmpConstConstants.XmlLang, XmpConstConstants.XDefault, null);
+                var langQual = new XmpNode(XmpConstants.XmlLang, XmpConstants.XDefault, null);
                 childNode.AddQualifier(langQual);
             }
             propertyIt.Remove();
-            childNode.Name = XmpConstConstants.ArrayItemName;
+            childNode.Name = XmpConstants.ArrayItemName;
             baseArray.AddChild(childNode);
         }
 
@@ -485,7 +485,7 @@ namespace XmpCore.Impl
         {
             try
             {
-                var dcSchema = XmpNodeUtils.FindSchemaNode(((XmpMeta)xmp).GetRoot(), XmpConstConstants.NsDC, true);
+                var dcSchema = XmpNodeUtils.FindSchemaNode(((XmpMeta)xmp).GetRoot(), XmpConstants.NsDC, true);
                 var dmValue = dmCopyright.Value;
                 var doubleLf = "\n\n";
                 var dcRightsArray = XmpNodeUtils.FindChildNode(dcSchema, "dc:rights", false);
@@ -493,17 +493,17 @@ namespace XmpCore.Impl
                 {
                     // 1. No dc:rights array, create from double linefeed and xmpDM:copyright.
                     dmValue = doubleLf + dmValue;
-                    xmp.SetLocalizedText(XmpConstConstants.NsDC, "rights", string.Empty, XmpConstConstants.XDefault, dmValue, null);
+                    xmp.SetLocalizedText(XmpConstants.NsDC, "rights", string.Empty, XmpConstants.XDefault, dmValue, null);
                 }
                 else
                 {
-                    var xdIndex = XmpNodeUtils.LookupLanguageItem(dcRightsArray, XmpConstConstants.XDefault);
+                    var xdIndex = XmpNodeUtils.LookupLanguageItem(dcRightsArray, XmpConstants.XDefault);
                     if (xdIndex < 0)
                     {
                         // 2. No x-default item, create from the first item.
                         var firstValue = dcRightsArray.GetChild(1).Value;
-                        xmp.SetLocalizedText(XmpConstConstants.NsDC, "rights", string.Empty, XmpConstConstants.XDefault, firstValue, null);
-                        xdIndex = XmpNodeUtils.LookupLanguageItem(dcRightsArray, XmpConstConstants.XDefault);
+                        xmp.SetLocalizedText(XmpConstants.NsDC, "rights", string.Empty, XmpConstants.XDefault, firstValue, null);
+                        xdIndex = XmpNodeUtils.LookupLanguageItem(dcRightsArray, XmpConstants.XDefault);
                     }
                     // 3. Look for a double linefeed in the x-default value.
                     var defaultNode = dcRightsArray.GetChild(xdIndex);

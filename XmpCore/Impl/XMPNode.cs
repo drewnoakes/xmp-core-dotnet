@@ -549,7 +549,7 @@ namespace XmpCore.Impl
         /// </summary>
         private bool IsLanguageNode
         {
-            get { return XmpConstConstants.XmlLang.Equals(Name); }
+            get { return XmpConstants.XmlLang.Equals(Name); }
         }
 
         /// <summary>
@@ -596,7 +596,7 @@ namespace XmpCore.Impl
         /// <exception cref="XmpException">Thrown if a node with the same name is existing.</exception>
         private void AssertChildNotExisting(string childName)
         {
-            if (!XmpConstConstants.ArrayItemName.Equals(childName) && FindChildByName(childName) != null)
+            if (!XmpConstants.ArrayItemName.Equals(childName) && FindChildByName(childName) != null)
             {
                 throw new XmpException("Duplicate property or field node '" + childName + "'", XmpErrorCode.BadXmp);
             }
@@ -607,7 +607,7 @@ namespace XmpCore.Impl
         /// <exception cref="XmpException">Thrown if a node with the same name is existing.</exception>
         private void AssertQualifierNotExisting(string qualifierName)
         {
-            if (!XmpConstConstants.ArrayItemName.Equals(qualifierName) && FindQualifierByName(qualifierName) != null)
+            if (!XmpConstants.ArrayItemName.Equals(qualifierName) && FindQualifierByName(qualifierName) != null)
             {
                 throw new XmpException("Duplicate '" + qualifierName + "' qualifier", XmpErrorCode.BadXmp);
             }
@@ -622,7 +622,7 @@ namespace XmpCore.Impl
                 if (string.Equals(x, y))
                     return 0;
 
-                const string xml = XmpConstConstants.XmlLang;
+                const string xml = XmpConstants.XmlLang;
                 const string rdf = "rdf:type"; // TODO extract to a constant too
 
                 if (x == xml)

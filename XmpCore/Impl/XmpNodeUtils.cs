@@ -267,7 +267,7 @@ namespace XmpCore.Impl
         internal static void SetNodeValue(XmpNode node, object value)
         {
             var strValue = SerializeNodeValue(value);
-            if (!(node.Options.IsQualifier && XmpConstConstants.XmlLang.Equals(node.Name)))
+            if (!(node.Options.IsQualifier && XmpConstants.XmlLang.Equals(node.Name)))
             {
                 node.Value = strValue;
             }
@@ -505,7 +505,7 @@ namespace XmpCore.Impl
             if (createNodes && index == arrayNode.GetChildrenLength() + 1)
             {
                 // Append a new last + 1 node.
-                var newItem = new XmpNode(XmpConstConstants.ArrayItemName, null) { IsImplicit = true };
+                var newItem = new XmpNode(XmpConstants.ArrayItemName, null) { IsImplicit = true };
                 arrayNode.AddChild(newItem);
             }
             return index;
@@ -573,14 +573,14 @@ namespace XmpCore.Impl
         /// <exception cref="XmpException"></exception>
         private static int LookupQualSelector(XmpNode arrayNode, string qualName, string qualValue, int aliasForm)
         {
-            if (XmpConstConstants.XmlLang.Equals(qualName))
+            if (XmpConstants.XmlLang.Equals(qualName))
             {
                 qualValue = Utils.NormalizeLangValue(qualValue);
                 var index = LookupLanguageItem(arrayNode, qualValue);
                 if (index < 0 && (aliasForm & AliasOptions.PropArrayAltText) > 0)
                 {
-                    var langNode = new XmpNode(XmpConstConstants.ArrayItemName, null);
-                    var xdefault = new XmpNode(XmpConstConstants.XmlLang, XmpConstConstants.XDefault, null);
+                    var langNode = new XmpNode(XmpConstants.ArrayItemName, null);
+                    var xdefault = new XmpNode(XmpConstants.XmlLang, XmpConstants.XDefault, null);
                     langNode.AddQualifier(xdefault);
                     arrayNode.AddChild(1, langNode);
                     return 1;
@@ -621,7 +621,7 @@ namespace XmpCore.Impl
             for (var i = 2; i <= arrayNode.GetChildrenLength(); i++)
             {
                 var child = arrayNode.GetChild(i);
-                if (child.HasQualifier && XmpConstConstants.XDefault.Equals(child.GetQualifier(1).Value))
+                if (child.HasQualifier && XmpConstants.XDefault.Equals(child.GetQualifier(1).Value))
                 {
                     // move node to first place
                     try
@@ -678,10 +678,10 @@ namespace XmpCore.Impl
         /// <exception cref="XmpException">Thrown if a duplicate property is added</exception>
         internal static void AppendLangItem(XmpNode arrayNode, string itemLang, string itemValue)
         {
-            var newItem = new XmpNode(XmpConstConstants.ArrayItemName, itemValue, null);
-            var langQual = new XmpNode(XmpConstConstants.XmlLang, itemLang, null);
+            var newItem = new XmpNode(XmpConstants.ArrayItemName, itemValue, null);
+            var langQual = new XmpNode(XmpConstants.XmlLang, itemLang, null);
             newItem.AddQualifier(langQual);
-            if (!XmpConstConstants.XDefault.Equals(langQual.Value))
+            if (!XmpConstants.XDefault.Equals(langQual.Value))
             {
                 arrayNode.AddChild(newItem);
             }
@@ -733,7 +733,7 @@ namespace XmpCore.Impl
                 {
                     throw new XmpException("Alt-text array item is not simple", XmpErrorCode.BadXPath);
                 }
-                if (!currItem.HasQualifier || !XmpConstConstants.XmlLang.Equals(currItem.GetQualifier(1).Name))
+                if (!currItem.HasQualifier || !XmpConstants.XmlLang.Equals(currItem.GetQualifier(1).Name))
                 {
                     throw new XmpException("Alt-text array item has no language qualifier", XmpErrorCode.BadXPath);
                 }
@@ -754,7 +754,7 @@ namespace XmpCore.Impl
                 }
                 else
                 {
-                    if (XmpConstConstants.XDefault.Equals(currLang))
+                    if (XmpConstants.XDefault.Equals(currLang))
                     {
                         xDefault = currItem;
                     }
@@ -791,7 +791,7 @@ namespace XmpCore.Impl
             for (var index = 1; index <= arrayNode.GetChildrenLength(); index++)
             {
                 var child = arrayNode.GetChild(index);
-                if (!child.HasQualifier || !XmpConstConstants.XmlLang.Equals(child.GetQualifier(1).Name))
+                if (!child.HasQualifier || !XmpConstants.XmlLang.Equals(child.GetQualifier(1).Name))
                 {
                     continue;
                 }

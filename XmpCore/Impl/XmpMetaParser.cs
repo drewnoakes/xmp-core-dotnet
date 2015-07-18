@@ -259,7 +259,7 @@ namespace XmpCore.Impl
             for (var i = 0; i < children.Count; i++)
             {
                 root = children.Item(i);
-                if (XmlNodeType.ProcessingInstruction == root.NodeType && XmpConstConstants.XmpPi.Equals(((XmlProcessingInstruction)root).Target))
+                if (XmlNodeType.ProcessingInstruction == root.NodeType && XmpConstants.XmpPi.Equals(((XmlProcessingInstruction)root).Target))
                 {
                     // Store the processing instructions content
                     result[2] = ((XmlProcessingInstruction)root).Data;
@@ -270,12 +270,12 @@ namespace XmpCore.Impl
                     {
                         var rootNs = root.NamespaceURI;
                         var rootLocal = root.LocalName;
-                        if ((XmpConstConstants.TagXmpmeta.Equals(rootLocal) || XmpConstConstants.TagXapmeta.Equals(rootLocal)) && XmpConstConstants.NsX.Equals(rootNs))
+                        if ((XmpConstants.TagXmpmeta.Equals(rootLocal) || XmpConstants.TagXapmeta.Equals(rootLocal)) && XmpConstants.NsX.Equals(rootNs))
                         {
                             // by not passing the RequireXMPMeta-option, the rdf-Node will be valid
                             return FindRootNode(root, false, out result);
                         }
-                        if (!xmpmetaRequired && "RDF".Equals(rootLocal) && XmpConstConstants.NsRdf.Equals(rootNs))
+                        if (!xmpmetaRequired && "RDF".Equals(rootLocal) && XmpConstants.NsRdf.Equals(rootNs))
                         {
                             if (result != null)
                             {

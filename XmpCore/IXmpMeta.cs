@@ -74,7 +74,7 @@ namespace XmpCore
         /// </param>
         /// <param name="itemIndex">
         /// The index of the desired item. Arrays in XMP are indexed from 1. The constant
-        /// <see cref="XmpConstConstants.ArrayLastItem"/> always refers to the last existing array item.
+        /// <see cref="XmpConstants.ArrayLastItem"/> always refers to the last existing array item.
         /// </param>
         /// <returns>
         /// Returns a <c>XMPProperty</c> containing the value and the options or

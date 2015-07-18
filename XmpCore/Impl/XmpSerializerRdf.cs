@@ -52,7 +52,7 @@ namespace XmpCore.Impl
         private const string RdfEmptyStruct = "<rdf:Description/>";
 
         /// <summary>a set of all rdf attribute qualifier</summary>
-        internal static readonly ICollection<object> RdfAttrQualifier = new HashSet<object>(new[] { XmpConstConstants.XmlLang, "rdf:resource", "rdf:ID", "rdf:bagID", "rdf:nodeID" });
+        internal static readonly ICollection<object> RdfAttrQualifier = new HashSet<object>(new[] { XmpConstants.XmlLang, "rdf:resource", "rdf:ID", "rdf:bagID", "rdf:nodeID" });
 
         /// <summary>the metadata object to be serialized.</summary>
         private XmpMeta _xmp;
@@ -202,7 +202,7 @@ namespace XmpCore.Impl
                         }
                         if (_options.IncludeThumbnailPad)
                         {
-                            if (!_xmp.DoesPropertyExist(XmpConstConstants.NsXmp, "Thumbnails"))
+                            if (!_xmp.DoesPropertyExist(XmpConstants.NsXmp, "Thumbnails"))
                             {
                                 _padding += 10000 * _unicodeSize;
                             }
@@ -456,7 +456,7 @@ namespace XmpCore.Impl
                 // qualifiers to decide on "normal" versus "rdf:value" form. Emit the attribute
                 // qualifiers at the same time.
                 var elemName = node.Name;
-                if (XmpConstConstants.ArrayItemName.Equals(elemName))
+                if (XmpConstants.ArrayItemName.Equals(elemName))
                 {
                     elemName = "rdf:li";
                 }
@@ -886,7 +886,7 @@ namespace XmpCore.Impl
             }
             else
             {
-                if (XmpConstConstants.ArrayItemName.Equals(elemName))
+                if (XmpConstants.ArrayItemName.Equals(elemName))
                 {
                     elemName = "rdf:li";
                 }
@@ -1170,7 +1170,7 @@ namespace XmpCore.Impl
         /// <returns>Returns true if the node serialized as RDF-Attribute</returns>
         private static bool CanBeRdfAttrProp(XmpNode node)
         {
-            return !node.HasQualifier && !node.Options.IsUri && !node.Options.IsCompositeProperty && !XmpConstConstants.ArrayItemName.Equals(node.Name);
+            return !node.HasQualifier && !node.Options.IsUri && !node.Options.IsCompositeProperty && !XmpConstants.ArrayItemName.Equals(node.Name);
         }
 
         /// <summary>Writes indents and automatically includes the baseindend from the options.</summary>

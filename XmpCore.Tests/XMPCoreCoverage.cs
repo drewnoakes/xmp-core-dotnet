@@ -284,11 +284,11 @@ namespace XmpCore.Tests
             var meta3 = XmpMetaFactory.ParseFromString(TestData.RDF_COVERAGE);
             printXmpMeta(meta3, "Construct and parse from buffer");
 
-            meta3.SetProperty(XmpConstConstants.NsXmpMm, "InstanceID", "meta2:Original");
+            meta3.SetProperty(XmpConstants.NsXmpMm, "InstanceID", "meta2:Original");
             printXmpMeta(meta3, "Add instance ID");
 
             XmpMeta meta4 = (XmpMeta) meta3.Clone();
-            meta4.SetProperty (XmpConstConstants.NsXmpMm, "InstanceID", "meta2:Clone");
+            meta4.SetProperty (XmpConstants.NsXmpMm, "InstanceID", "meta2:Clone");
             printXmpMeta(meta3, "Clone and add instance ID");
         }
 
@@ -335,16 +335,16 @@ namespace XmpCore.Tests
             meta.SetProperty (TestData.NS1, "QualProp1/?xml:lang", "x-qual");
 
             meta.SetProperty (TestData.NS1, "QualProp2", "Prop value");
-            meta.SetQualifier (TestData.NS1, "QualProp2", XmpConstConstants.NsXml, "lang", "en-us");
+            meta.SetQualifier (TestData.NS1, "QualProp2", XmpConstants.NsXml, "lang", "en-us");
             meta.SetProperty (TestData.NS1, "QualProp2/@xml:lang", "x-attr");
 
             meta.SetProperty (TestData.NS1, "QualProp3", "Prop value");
-            meta.SetQualifier (TestData.NS1, "ns1:QualProp3", XmpConstConstants.NsXml, "xml:lang", "en-us");
+            meta.SetQualifier (TestData.NS1, "ns1:QualProp3", XmpConstants.NsXml, "xml:lang", "en-us");
             meta.SetQualifier (TestData.NS1, "ns1:QualProp3", TestData.NS2, "ns2:Qual", "Qual value");
 
             meta.SetProperty (TestData.NS1, "QualProp4", "Prop value");
             meta.SetQualifier (TestData.NS1, "QualProp4", TestData.NS2, "Qual", "Qual value");
-            meta.SetQualifier (TestData.NS1, "QualProp4", XmpConstConstants.NsXml, "lang", "en-us");
+            meta.SetQualifier (TestData.NS1, "QualProp4", XmpConstants.NsXml, "lang", "en-us");
             printXmpMeta(meta, "Add some qualifiers");
 
             meta.SetProperty (TestData.NS1, "QualProp1", "new value");
@@ -378,15 +378,15 @@ namespace XmpCore.Tests
             meta.SetQualifier (TestData.NS1, "QualProp1", TestData.NS2, "Qual1", "Qual1 value");
 
             meta.SetProperty (TestData.NS1, "QualProp2", "Prop value");
-            meta.SetQualifier (TestData.NS1, "QualProp2", XmpConstConstants.NsXml, "lang", "en-us");
+            meta.SetQualifier (TestData.NS1, "QualProp2", XmpConstants.NsXml, "lang", "en-us");
 
             meta.SetProperty (TestData.NS1, "QualProp3", "Prop value");
-            meta.SetQualifier (TestData.NS1, "QualProp3", XmpConstConstants.NsXml, "lang", "en-us");
+            meta.SetQualifier (TestData.NS1, "QualProp3", XmpConstants.NsXml, "lang", "en-us");
             meta.SetQualifier (TestData.NS1, "QualProp3", TestData.NS2, "Qual", "Qual value");
 
             meta.SetProperty (TestData.NS1, "QualProp4", "Prop value");
             meta.SetQualifier (TestData.NS1, "QualProp4", TestData.NS2, "Qual", "Qual value");
-            meta.SetQualifier (TestData.NS1, "QualProp4", XmpConstConstants.NsXml, "lang", "en-us");
+            meta.SetQualifier (TestData.NS1, "QualProp4", XmpConstants.NsXml, "lang", "en-us");
 
             printXmpMeta (meta, "XMP object");
 
@@ -455,7 +455,7 @@ namespace XmpCore.Tests
                 log.WriteLine("getQualifier with no schema URI - threw XmpException #" + e.GetErrorCode() + " :   " + e.Message);
             }
 
-            property = meta.GetQualifier(TestData.NS1, "QualProp3", XmpConstConstants.NsXml, "xml:lang");
+            property = meta.GetQualifier(TestData.NS1, "QualProp3", XmpConstants.NsXml, "xml:lang");
             log.WriteLine("getQualifier ns1:QualProp3/@xml-lang =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
 
             property = meta.GetQualifier(TestData.NS1, "QualProp3", TestData.NS2, "ns2:Qual");
@@ -522,18 +522,18 @@ namespace XmpCore.Tests
             log.WriteLine("doesPropertyExist ns1:Struct =    " + meta.DoesPropertyExist(TestData.NS1, "ns1:Struct"));
             log.WriteLine("doesArrayItemExist ns1:Bag[2] =    " + meta.DoesArrayItemExist(TestData.NS1, "Bag", 2));
             log.WriteLine("doesArrayItemExist ns1:Seq[last()] =    "
-                    + meta.DoesArrayItemExist(TestData.NS1, "ns1:Seq", XmpConstConstants.ArrayLastItem));
+                    + meta.DoesArrayItemExist(TestData.NS1, "ns1:Seq", XmpConstants.ArrayLastItem));
             log.WriteLine("doesStructFieldExist ns1:Struct/ns2:Field1 =    "
                     + meta.DoesStructFieldExist(TestData.NS1, "Struct", TestData.NS2, "Field1"));
             log.WriteLine("doesQualifierExist ns1:QualProp1/?ns2:Qual1 =    "
                     + meta.DoesQualifierExist(TestData.NS1, "QualProp1", TestData.NS2, "Qual1"));
             log.WriteLine("doesQualifierExist ns1:QualProp2/?xml:lang =    "
-                    + meta.DoesQualifierExist(TestData.NS1, "QualProp2", XmpConstConstants.NsXml, "lang"));
+                    + meta.DoesQualifierExist(TestData.NS1, "QualProp2", XmpConstants.NsXml, "lang"));
             log.WriteLine();
             log.WriteLine("doesPropertyExist (namespace is null) =    "
                     + meta.DoesPropertyExist(null, "ns1:Bag"));
             log.WriteLine("doesArrayItemExist (namespace is null) =    "
-                    + meta.DoesArrayItemExist(null, "ns1:Bag", XmpConstConstants.ArrayLastItem));
+                    + meta.DoesArrayItemExist(null, "ns1:Bag", XmpConstants.ArrayLastItem));
             log.WriteLine("doesQualifierExist ns:Bogus (namespace not existing) =    "
                     + meta.DoesPropertyExist("ns:bogus/", "Bogus"));
             log.WriteLine("doesPropertyExist ns1:Bogus =    " + meta.DoesPropertyExist(TestData.NS1, "Bogus"));
@@ -560,9 +560,9 @@ namespace XmpCore.Tests
             printXmpMeta (meta, "Delete Prop, Bag[2], and Struct1/Field1");
 
             meta.DeleteQualifier (TestData.NS1, "QualProp1", TestData.NS2, "Qual1");
-            meta.DeleteQualifier (TestData.NS1, "QualProp2", XmpConstConstants.NsXml, "lang");
+            meta.DeleteQualifier (TestData.NS1, "QualProp2", XmpConstants.NsXml, "lang");
             meta.DeleteQualifier (TestData.NS1, "QualProp3", TestData.NS2, "Qual");
-            meta.DeleteQualifier (TestData.NS1, "QualProp4", XmpConstConstants.NsXml, "lang");
+            meta.DeleteQualifier (TestData.NS1, "QualProp4", XmpConstants.NsXml, "lang");
 
             printXmpMeta(meta,
                 "Delete QualProp1/?ns2:Qual1, QualProp2/?xml:lang, " +
@@ -916,7 +916,7 @@ namespace XmpCore.Tests
 
             meta.SetLocalizedText(TestData.NS1, "AltTextProp", null, "en-US", "initival value");
             path = "AltTextProp";
-            path += XmpPathFactory.ComposeQualifierPath(XmpConstConstants.NsXml, "lang");
+            path += XmpPathFactory.ComposeQualifierPath(XmpConstants.NsXml, "lang");
             log.WriteLine ("composeQualifierPath ns1:AltTextProp/?xml:lang =   " + path);
             meta.SetProperty (TestData.NS1, path, "new ns1:AltTextProp/?xml:lang value");
 

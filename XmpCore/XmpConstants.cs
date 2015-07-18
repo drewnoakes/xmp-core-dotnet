@@ -9,7 +9,7 @@
 
 namespace XmpCore
 {
-    public static class XmpConstConstants
+    public static class XmpConstants
     {
         /// <summary>The XML namespace for XML.</summary>
         public const string NsXml = "http://www.w3.org/XML/1998/namespace";

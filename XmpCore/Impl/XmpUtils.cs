@@ -253,7 +253,7 @@ namespace XmpCore.Impl
                 }
 
                 if (foundIndex < 0)
-                    arrayNode.AddChild(new XmpNode(XmpConstConstants.ArrayItemName, itemValue, null));
+                    arrayNode.AddChild(new XmpNode(XmpConstants.ArrayItemName, itemValue, null));
             }
         }
 
@@ -516,7 +516,7 @@ namespace XmpCore.Impl
                             {
                                 var sourceItem = (XmpNode)it.Next();
 
-                                if (!sourceItem.HasQualifier || !XmpConstConstants.XmlLang.Equals(sourceItem.GetQualifier(1).Name))
+                                if (!sourceItem.HasQualifier || !XmpConstants.XmlLang.Equals(sourceItem.GetQualifier(1).Name))
                                     continue;
 
                                 var destIndex = XmpNodeUtils.LookupLanguageItem(destNode, sourceItem.GetQualifier(1).Value);
@@ -532,7 +532,7 @@ namespace XmpCore.Impl
                                 else if (destIndex == -1)
                                 {
                                     // Not replacing, keep the existing item.
-                                    if (!XmpConstConstants.XDefault.Equals(sourceItem.GetQualifier(1).Value) || !destNode.HasChildren)
+                                    if (!XmpConstants.XDefault.Equals(sourceItem.GetQualifier(1).Value) || !destNode.HasChildren)
                                     {
                                         sourceItem.CloneSubtree(destNode);
                                     }

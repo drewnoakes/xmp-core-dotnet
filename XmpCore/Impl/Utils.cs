@@ -55,7 +55,7 @@ namespace XmpCore.Impl
         public static string NormalizeLangValue(string value)
         {
             // don't normalize x-default
-            if (XmpConstConstants.XDefault.Equals(value))
+            if (XmpConstants.XDefault.Equals(value))
             {
                 return value;
             }
@@ -149,7 +149,7 @@ namespace XmpCore.Impl
         internal static bool IsInternalProperty(string schema, string prop)
         {
             var isInternal = false;
-            if (XmpConstConstants.NsDC.Equals(schema))
+            if (XmpConstants.NsDC.Equals(schema))
             {
                 if ("dc:format".Equals(prop) || "dc:language".Equals(prop))
                 {
@@ -158,7 +158,7 @@ namespace XmpCore.Impl
             }
             else
             {
-                if (XmpConstConstants.NsXmp.Equals(schema))
+                if (XmpConstants.NsXmp.Equals(schema))
                 {
                     if ("xmp:BaseURL".Equals(prop) || "xmp:CreatorTool".Equals(prop) || "xmp:Format".Equals(prop) || "xmp:Locale".Equals(prop) || "xmp:MetadataDate".Equals(prop) || "xmp:ModifyDate".Equals(prop))
                     {
@@ -167,7 +167,7 @@ namespace XmpCore.Impl
                 }
                 else
                 {
-                    if (XmpConstConstants.NsPdf.Equals(schema))
+                    if (XmpConstants.NsPdf.Equals(schema))
                     {
                         if ("pdf:BaseURL".Equals(prop) || "pdf:Creator".Equals(prop) || "pdf:ModDate".Equals(prop) || "pdf:PDFVersion".Equals(prop) || "pdf:Producer".Equals(prop))
                         {
@@ -176,7 +176,7 @@ namespace XmpCore.Impl
                     }
                     else
                     {
-                        if (XmpConstConstants.NsTiff.Equals(schema))
+                        if (XmpConstants.NsTiff.Equals(schema))
                         {
                             isInternal = true;
                             if ("tiff:ImageDescription".Equals(prop) || "tiff:Artist".Equals(prop) || "tiff:Copyright".Equals(prop))
@@ -186,7 +186,7 @@ namespace XmpCore.Impl
                         }
                         else
                         {
-                            if (XmpConstConstants.NsExif.Equals(schema))
+                            if (XmpConstants.NsExif.Equals(schema))
                             {
                                 isInternal = true;
                                 if ("exif:UserComment".Equals(prop))
@@ -196,13 +196,13 @@ namespace XmpCore.Impl
                             }
                             else
                             {
-                                if (XmpConstConstants.NsExifAux.Equals(schema))
+                                if (XmpConstants.NsExifAux.Equals(schema))
                                 {
                                     isInternal = true;
                                 }
                                 else
                                 {
-                                    if (XmpConstConstants.NsPhotoshop.Equals(schema))
+                                    if (XmpConstants.NsPhotoshop.Equals(schema))
                                     {
                                         if ("photoshop:ICCProfile".Equals(prop))
                                         {
@@ -211,7 +211,7 @@ namespace XmpCore.Impl
                                     }
                                     else
                                     {
-                                        if (XmpConstConstants.NsCameraraw.Equals(schema))
+                                        if (XmpConstants.NsCameraraw.Equals(schema))
                                         {
                                             if ("crs:Version".Equals(prop) || "crs:RawFileName".Equals(prop) || "crs:ToneCurveName".Equals(prop))
                                             {
@@ -220,43 +220,43 @@ namespace XmpCore.Impl
                                         }
                                         else
                                         {
-                                            if (XmpConstConstants.NsAdobestockphoto.Equals(schema))
+                                            if (XmpConstants.NsAdobestockphoto.Equals(schema))
                                             {
                                                 isInternal = true;
                                             }
                                             else
                                             {
-                                                if (XmpConstConstants.NsXmpMm.Equals(schema))
+                                                if (XmpConstants.NsXmpMm.Equals(schema))
                                                 {
                                                     isInternal = true;
                                                 }
                                                 else
                                                 {
-                                                    if (XmpConstConstants.TypeText.Equals(schema))
+                                                    if (XmpConstants.TypeText.Equals(schema))
                                                     {
                                                         isInternal = true;
                                                     }
                                                     else
                                                     {
-                                                        if (XmpConstConstants.TypePagedfile.Equals(schema))
+                                                        if (XmpConstants.TypePagedfile.Equals(schema))
                                                         {
                                                             isInternal = true;
                                                         }
                                                         else
                                                         {
-                                                            if (XmpConstConstants.TypeGraphics.Equals(schema))
+                                                            if (XmpConstants.TypeGraphics.Equals(schema))
                                                             {
                                                                 isInternal = true;
                                                             }
                                                             else
                                                             {
-                                                                if (XmpConstConstants.TypeImage.Equals(schema))
+                                                                if (XmpConstants.TypeImage.Equals(schema))
                                                                 {
                                                                     isInternal = true;
                                                                 }
                                                                 else
                                                                 {
-                                                                    if (XmpConstConstants.TypeFont.Equals(schema))
+                                                                    if (XmpConstants.TypeFont.Equals(schema))
                                                                     {
                                                                         isInternal = true;
                                                                     }

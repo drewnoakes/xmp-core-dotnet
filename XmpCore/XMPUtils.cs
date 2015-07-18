@@ -201,7 +201,7 @@ namespace XmpCore
         /// The appropriate boolean value for the string. The checked values
         /// for <c>true</c> and <c>false</c> are:
         /// <list type="bullet">
-        /// <item><see cref="XmpConstConstants.TrueString"/> and <see cref="XmpConstConstants.FalseString"/></item>
+        /// <item><see cref="XmpConstants.TrueString"/> and <see cref="XmpConstants.FalseString"/></item>
         /// <item>&quot;t&quot; and &quot;f&quot;</item>
         /// <item>&quot;on&quot; and &quot;off&quot;</item>
         /// <item>&quot;yes&quot; and &quot;no&quot;</item>
@@ -232,12 +232,12 @@ namespace XmpCore
         /// <param name="value">a boolean value</param>
         /// <returns>
         /// The XMP string representation of the boolean. The values used are
-        /// given by the constants <see cref="XmpConstConstants.TrueString"/> and
-        /// <see cref="XmpConstConstants.FalseString"/>.
+        /// given by the constants <see cref="XmpConstants.TrueString"/> and
+        /// <see cref="XmpConstants.FalseString"/>.
         /// </returns>
         public static string ConvertFromBoolean(bool value)
         {
-            return value ? XmpConstConstants.TrueString : XmpConstConstants.FalseString;
+            return value ? XmpConstants.TrueString : XmpConstants.FalseString;
         }
 
         /// <summary>Converts a string value to an <c>int</c>.</summary>

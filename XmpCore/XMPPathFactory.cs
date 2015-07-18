@@ -76,7 +76,7 @@ namespace XmpCore
             if (itemIndex > 0)
                 return string.Format("{0}{1}{2}{3}", arrayName, '[', itemIndex, ']');
 
-            if (itemIndex == XmpConstConstants.ArrayLastItem)
+            if (itemIndex == XmpConstants.ArrayLastItem)
                 return arrayName + "[last()]";
 
             throw new XmpException("Array index must be larger than zero", XmpErrorCode.BadIndex);

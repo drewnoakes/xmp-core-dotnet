@@ -411,15 +411,15 @@ namespace XmpCore.Impl
                     var attrLocal = attribute.LocalName;
                     var attrNs = attribute.NamespaceURI;
                     var attrValue = attribute.Value;
-                    if (!(XmpConstConstants.XmlLang.Equals(attribute.Name) && !("ID".Equals(attrLocal) && XmpConstConstants.NsRdf.Equals(attrNs))))
+                    if (!(XmpConstants.XmlLang.Equals(attribute.Name) && !("ID".Equals(attrLocal) && XmpConstants.NsRdf.Equals(attrNs))))
                     {
-                        if ("datatype".Equals(attrLocal) && XmpConstConstants.NsRdf.Equals(attrNs))
+                        if ("datatype".Equals(attrLocal) && XmpConstants.NsRdf.Equals(attrNs))
                         {
                             Rdf_LiteralPropertyElement(xmp, xmpParent, xmlNode, isTopLevel);
                         }
                         else
                         {
-                            if (!("parseType".Equals(attrLocal) && XmpConstConstants.NsRdf.Equals(attrNs)))
+                            if (!("parseType".Equals(attrLocal) && XmpConstants.NsRdf.Equals(attrNs)))
                             {
                                 Rdf_EmptyPropertyElement(xmp, xmpParent, xmlNode, isTopLevel);
                             }
@@ -514,13 +514,13 @@ namespace XmpCore.Impl
                 }
                 var attrLocal = attribute.LocalName;
                 var attrNs = attribute.NamespaceURI;
-                if (XmpConstConstants.XmlLang.Equals(attribute.Name))
+                if (XmpConstants.XmlLang.Equals(attribute.Name))
                 {
-                    AddQualifierNode(newCompound, XmpConstConstants.XmlLang, attribute.Value);
+                    AddQualifierNode(newCompound, XmpConstants.XmlLang, attribute.Value);
                 }
                 else
                 {
-                    if ("ID".Equals(attrLocal) && XmpConstConstants.NsRdf.Equals(attrNs))
+                    if ("ID".Equals(attrLocal) && XmpConstants.NsRdf.Equals(attrNs))
                     {
                         continue;
                     }
@@ -537,7 +537,7 @@ namespace XmpCore.Impl
                 {
                     if (currChild.NodeType == XmlNodeType.Element && !found)
                     {
-                        var isRdf = XmpConstConstants.NsRdf.Equals(currChild.NamespaceURI);
+                        var isRdf = XmpConstants.NsRdf.Equals(currChild.NamespaceURI);
                         var childLocal = currChild.LocalName;
                         if (isRdf && "Bag".Equals(childLocal))
                         {
@@ -618,13 +618,13 @@ namespace XmpCore.Impl
                 }
                 var attrNs = attribute.NamespaceURI;
                 var attrLocal = attribute.LocalName;
-                if (XmpConstConstants.XmlLang.Equals(attribute.Name))
+                if (XmpConstants.XmlLang.Equals(attribute.Name))
                 {
-                    AddQualifierNode(newChild, XmpConstConstants.XmlLang, attribute.Value);
+                    AddQualifierNode(newChild, XmpConstants.XmlLang, attribute.Value);
                 }
                 else
                 {
-                    if (XmpConstConstants.NsRdf.Equals(attrNs) && ("ID".Equals(attrLocal) || "datatype".Equals(attrLocal)))
+                    if (XmpConstants.NsRdf.Equals(attrNs) && ("ID".Equals(attrLocal) || "datatype".Equals(attrLocal)))
                     {
                         continue;
                     }
@@ -696,13 +696,13 @@ namespace XmpCore.Impl
                 }
                 var attrLocal = attribute.LocalName;
                 var attrNs = attribute.NamespaceURI;
-                if (XmpConstConstants.XmlLang.Equals(attribute.Name))
+                if (XmpConstants.XmlLang.Equals(attribute.Name))
                 {
-                    AddQualifierNode(newStruct, XmpConstConstants.XmlLang, attribute.Value);
+                    AddQualifierNode(newStruct, XmpConstants.XmlLang, attribute.Value);
                 }
                 else
                 {
-                    if (XmpConstConstants.NsRdf.Equals(attrNs) && ("ID".Equals(attrLocal) || "parseType".Equals(attrLocal)))
+                    if (XmpConstants.NsRdf.Equals(attrNs) && ("ID".Equals(attrLocal) || "parseType".Equals(attrLocal)))
                     {
                         continue;
                     }
@@ -854,7 +854,7 @@ namespace XmpCore.Impl
 
                     case RdfTerm.Other:
                     {
-                        if ("value".Equals(attribute.LocalName) && XmpConstConstants.NsRdf.Equals(attribute.NamespaceURI))
+                        if ("value".Equals(attribute.LocalName) && XmpConstants.NsRdf.Equals(attribute.NamespaceURI))
                         {
                             if (hasResourceAttr)
                             {
@@ -865,7 +865,7 @@ namespace XmpCore.Impl
                         }
                         else
                         {
-                            if (!XmpConstConstants.XmlLang.Equals(attribute.Name))
+                            if (!XmpConstants.XmlLang.Equals(attribute.Name))
                             {
                                 hasPropertyAttrs = true;
                             }
@@ -935,9 +935,9 @@ namespace XmpCore.Impl
                         }
                         else
                         {
-                            if (XmpConstConstants.XmlLang.Equals(attribute.Name))
+                            if (XmpConstants.XmlLang.Equals(attribute.Name))
                             {
-                                AddQualifierNode(childNode, XmpConstConstants.XmlLang, attribute.Value);
+                                AddQualifierNode(childNode, XmpConstants.XmlLang, attribute.Value);
                             }
                             else
                             {
@@ -970,10 +970,10 @@ namespace XmpCore.Impl
             string childName;
             if (ns != string.Empty)
             {
-                if (XmpConstConstants.NsDcDeprecated.Equals(ns))
+                if (XmpConstants.NsDcDeprecated.Equals(ns))
                 {
                     // Fix a legacy DC namespace
-                    ns = XmpConstConstants.NsDC;
+                    ns = XmpConstants.NsDC;
                 }
                 var prefix = registry.GetNamespacePrefix(ns);
                 if (prefix == null)
@@ -1036,7 +1036,7 @@ namespace XmpCore.Impl
                 {
                     throw new XmpException("Misplaced rdf:li element", XmpErrorCode.BadRdf);
                 }
-                newChild.Name = XmpConstConstants.ArrayItemName;
+                newChild.Name = XmpConstants.ArrayItemName;
             }
             return newChild;
         }
@@ -1053,7 +1053,7 @@ namespace XmpCore.Impl
         private static void AddQualifierNode(XmpNode xmpParent, string name, string value)
         {
             // normalize value of language qualifiers
-            if (name == XmpConstConstants.XmlLang)
+            if (name == XmpConstants.XmlLang)
                 value = Utils.NormalizeLangValue(value);
 
             xmpParent.AddQualifier(new XmpNode(name, value, null));
@@ -1178,10 +1178,10 @@ namespace XmpCore.Impl
             var localName = node.LocalName;
             var ns = node.NamespaceURI;
 
-            if (ns == string.Empty && (localName == "about" || localName == "ID") && (node is XmlAttribute) && ((XmlAttribute)node).OwnerElement.NamespaceURI == XmpConstConstants.NsRdf)
-                ns = XmpConstConstants.NsRdf;
+            if (ns == string.Empty && (localName == "about" || localName == "ID") && (node is XmlAttribute) && ((XmlAttribute)node).OwnerElement.NamespaceURI == XmpConstants.NsRdf)
+                ns = XmpConstants.NsRdf;
 
-            if (ns == XmpConstConstants.NsRdf)
+            if (ns == XmpConstants.NsRdf)
             {
                 switch (localName)
                 {

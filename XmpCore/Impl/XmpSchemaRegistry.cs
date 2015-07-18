@@ -162,68 +162,68 @@ namespace XmpCore.Impl
         private void RegisterStandardNamespaces()
         {
             // register standard namespaces
-            RegisterNamespace(XmpConstConstants.NsXml, "xml");
-            RegisterNamespace(XmpConstConstants.NsRdf, "rdf");
-            RegisterNamespace(XmpConstConstants.NsDC, "dc");
-            RegisterNamespace(XmpConstConstants.NsIptccore, "Iptc4xmpCore");
-            RegisterNamespace(XmpConstConstants.NsIptcext, "Iptc4xmpExt");
-            RegisterNamespace(XmpConstConstants.NsDicom, "DICOM");
-            RegisterNamespace(XmpConstConstants.NsPlus, "plus");
+            RegisterNamespace(XmpConstants.NsXml, "xml");
+            RegisterNamespace(XmpConstants.NsRdf, "rdf");
+            RegisterNamespace(XmpConstants.NsDC, "dc");
+            RegisterNamespace(XmpConstants.NsIptccore, "Iptc4xmpCore");
+            RegisterNamespace(XmpConstants.NsIptcext, "Iptc4xmpExt");
+            RegisterNamespace(XmpConstants.NsDicom, "DICOM");
+            RegisterNamespace(XmpConstants.NsPlus, "plus");
 
             // register Adobe standard namespaces
-            RegisterNamespace(XmpConstConstants.NsX, "x");
-            RegisterNamespace(XmpConstConstants.NsIx, "iX");
-            RegisterNamespace(XmpConstConstants.NsXmp, "xmp");
-            RegisterNamespace(XmpConstConstants.NsXmpRights, "xmpRights");
-            RegisterNamespace(XmpConstConstants.NsXmpMm, "xmpMM");
-            RegisterNamespace(XmpConstConstants.NsXmpBj, "xmpBJ");
-            RegisterNamespace(XmpConstConstants.NsXmpNote, "xmpNote");
-            RegisterNamespace(XmpConstConstants.NsPdf, "pdf");
-            RegisterNamespace(XmpConstConstants.NsPdfx, "pdfx");
-            RegisterNamespace(XmpConstConstants.NsPdfxId, "pdfxid");
-            RegisterNamespace(XmpConstConstants.NsPdfaSchema, "pdfaSchema");
-            RegisterNamespace(XmpConstConstants.NsPdfaProperty, "pdfaProperty");
-            RegisterNamespace(XmpConstConstants.NsPdfaType, "pdfaType");
-            RegisterNamespace(XmpConstConstants.NsPdfaField, "pdfaField");
-            RegisterNamespace(XmpConstConstants.NsPdfaId, "pdfaid");
-            RegisterNamespace(XmpConstConstants.NsPdfaExtension, "pdfaExtension");
-            RegisterNamespace(XmpConstConstants.NsPhotoshop, "photoshop");
-            RegisterNamespace(XmpConstConstants.NsPsalbum, "album");
-            RegisterNamespace(XmpConstConstants.NsExif, "exif");
-            RegisterNamespace(XmpConstConstants.NsExifx, "exifEX");
-            RegisterNamespace(XmpConstConstants.NsExifAux, "aux");
-            RegisterNamespace(XmpConstConstants.NsTiff, "tiff");
-            RegisterNamespace(XmpConstConstants.NsPng, "png");
-            RegisterNamespace(XmpConstConstants.NsJpeg, "jpeg");
-            RegisterNamespace(XmpConstConstants.NsJp2K, "jp2k");
-            RegisterNamespace(XmpConstConstants.NsCameraraw, "crs");
-            RegisterNamespace(XmpConstConstants.NsAdobestockphoto, "bmsp");
-            RegisterNamespace(XmpConstConstants.NsCreatorAtom, "creatorAtom");
-            RegisterNamespace(XmpConstConstants.NsAsf, "asf");
-            RegisterNamespace(XmpConstConstants.NsWav, "wav");
-            RegisterNamespace(XmpConstConstants.NsBwf, "bext");
-            RegisterNamespace(XmpConstConstants.NsRiffinfo, "riffinfo");
-            RegisterNamespace(XmpConstConstants.NsScript, "xmpScript");
-            RegisterNamespace(XmpConstConstants.NsTxmp, "txmp");
-            RegisterNamespace(XmpConstConstants.NsSwf, "swf");
+            RegisterNamespace(XmpConstants.NsX, "x");
+            RegisterNamespace(XmpConstants.NsIx, "iX");
+            RegisterNamespace(XmpConstants.NsXmp, "xmp");
+            RegisterNamespace(XmpConstants.NsXmpRights, "xmpRights");
+            RegisterNamespace(XmpConstants.NsXmpMm, "xmpMM");
+            RegisterNamespace(XmpConstants.NsXmpBj, "xmpBJ");
+            RegisterNamespace(XmpConstants.NsXmpNote, "xmpNote");
+            RegisterNamespace(XmpConstants.NsPdf, "pdf");
+            RegisterNamespace(XmpConstants.NsPdfx, "pdfx");
+            RegisterNamespace(XmpConstants.NsPdfxId, "pdfxid");
+            RegisterNamespace(XmpConstants.NsPdfaSchema, "pdfaSchema");
+            RegisterNamespace(XmpConstants.NsPdfaProperty, "pdfaProperty");
+            RegisterNamespace(XmpConstants.NsPdfaType, "pdfaType");
+            RegisterNamespace(XmpConstants.NsPdfaField, "pdfaField");
+            RegisterNamespace(XmpConstants.NsPdfaId, "pdfaid");
+            RegisterNamespace(XmpConstants.NsPdfaExtension, "pdfaExtension");
+            RegisterNamespace(XmpConstants.NsPhotoshop, "photoshop");
+            RegisterNamespace(XmpConstants.NsPsalbum, "album");
+            RegisterNamespace(XmpConstants.NsExif, "exif");
+            RegisterNamespace(XmpConstants.NsExifx, "exifEX");
+            RegisterNamespace(XmpConstants.NsExifAux, "aux");
+            RegisterNamespace(XmpConstants.NsTiff, "tiff");
+            RegisterNamespace(XmpConstants.NsPng, "png");
+            RegisterNamespace(XmpConstants.NsJpeg, "jpeg");
+            RegisterNamespace(XmpConstants.NsJp2K, "jp2k");
+            RegisterNamespace(XmpConstants.NsCameraraw, "crs");
+            RegisterNamespace(XmpConstants.NsAdobestockphoto, "bmsp");
+            RegisterNamespace(XmpConstants.NsCreatorAtom, "creatorAtom");
+            RegisterNamespace(XmpConstants.NsAsf, "asf");
+            RegisterNamespace(XmpConstants.NsWav, "wav");
+            RegisterNamespace(XmpConstants.NsBwf, "bext");
+            RegisterNamespace(XmpConstants.NsRiffinfo, "riffinfo");
+            RegisterNamespace(XmpConstants.NsScript, "xmpScript");
+            RegisterNamespace(XmpConstants.NsTxmp, "txmp");
+            RegisterNamespace(XmpConstants.NsSwf, "swf");
 
             // register Adobe private namespaces
-            RegisterNamespace(XmpConstConstants.NsDm, "xmpDM");
-            RegisterNamespace(XmpConstConstants.NsTransient, "xmpx");
+            RegisterNamespace(XmpConstants.NsDm, "xmpDM");
+            RegisterNamespace(XmpConstants.NsTransient, "xmpx");
 
             // register Adobe standard type namespaces
-            RegisterNamespace(XmpConstConstants.TypeText, "xmpT");
-            RegisterNamespace(XmpConstConstants.TypePagedfile, "xmpTPg");
-            RegisterNamespace(XmpConstConstants.TypeGraphics, "xmpG");
-            RegisterNamespace(XmpConstConstants.TypeImage, "xmpGImg");
-            RegisterNamespace(XmpConstConstants.TypeFont, "stFnt");
-            RegisterNamespace(XmpConstConstants.TypeDimensions, "stDim");
-            RegisterNamespace(XmpConstConstants.TypeResourceevent, "stEvt");
-            RegisterNamespace(XmpConstConstants.TypeResourceref, "stRef");
-            RegisterNamespace(XmpConstConstants.TypeStVersion, "stVer");
-            RegisterNamespace(XmpConstConstants.TypeStJob, "stJob");
-            RegisterNamespace(XmpConstConstants.TypeManifestitem, "stMfs");
-            RegisterNamespace(XmpConstConstants.TypeIdentifierqual, "xmpidq");
+            RegisterNamespace(XmpConstants.TypeText, "xmpT");
+            RegisterNamespace(XmpConstants.TypePagedfile, "xmpTPg");
+            RegisterNamespace(XmpConstants.TypeGraphics, "xmpG");
+            RegisterNamespace(XmpConstants.TypeImage, "xmpGImg");
+            RegisterNamespace(XmpConstants.TypeFont, "stFnt");
+            RegisterNamespace(XmpConstants.TypeDimensions, "stDim");
+            RegisterNamespace(XmpConstants.TypeResourceevent, "stEvt");
+            RegisterNamespace(XmpConstants.TypeResourceref, "stRef");
+            RegisterNamespace(XmpConstants.TypeStVersion, "stVer");
+            RegisterNamespace(XmpConstants.TypeStJob, "stJob");
+            RegisterNamespace(XmpConstants.TypeManifestitem, "stMfs");
+            RegisterNamespace(XmpConstants.TypeIdentifierqual, "xmpidq");
         }
 
         #endregion
@@ -368,48 +368,48 @@ namespace XmpCore.Impl
             var aliasToArrayAltText = new AliasOptions { IsArrayAltText = true };
 
             // Aliases from XMP to DC.
-            RegisterAlias(XmpConstConstants.NsXmp, "Author", XmpConstConstants.NsDC, "creator", aliasToArrayOrdered);
-            RegisterAlias(XmpConstConstants.NsXmp, "Authors", XmpConstConstants.NsDC, "creator", null);
-            RegisterAlias(XmpConstConstants.NsXmp, "Description", XmpConstConstants.NsDC, "description", null);
-            RegisterAlias(XmpConstConstants.NsXmp, "Format", XmpConstConstants.NsDC, "format", null);
-            RegisterAlias(XmpConstConstants.NsXmp, "Keywords", XmpConstConstants.NsDC, "subject", null);
-            RegisterAlias(XmpConstConstants.NsXmp, "Locale", XmpConstConstants.NsDC, "language", null);
-            RegisterAlias(XmpConstConstants.NsXmp, "Title", XmpConstConstants.NsDC, "title", null);
-            RegisterAlias(XmpConstConstants.NsXmpRights, "Copyright", XmpConstConstants.NsDC, "rights", null);
+            RegisterAlias(XmpConstants.NsXmp, "Author", XmpConstants.NsDC, "creator", aliasToArrayOrdered);
+            RegisterAlias(XmpConstants.NsXmp, "Authors", XmpConstants.NsDC, "creator", null);
+            RegisterAlias(XmpConstants.NsXmp, "Description", XmpConstants.NsDC, "description", null);
+            RegisterAlias(XmpConstants.NsXmp, "Format", XmpConstants.NsDC, "format", null);
+            RegisterAlias(XmpConstants.NsXmp, "Keywords", XmpConstants.NsDC, "subject", null);
+            RegisterAlias(XmpConstants.NsXmp, "Locale", XmpConstants.NsDC, "language", null);
+            RegisterAlias(XmpConstants.NsXmp, "Title", XmpConstants.NsDC, "title", null);
+            RegisterAlias(XmpConstants.NsXmpRights, "Copyright", XmpConstants.NsDC, "rights", null);
 
             // Aliases from PDF to DC and XMP.
-            RegisterAlias(XmpConstConstants.NsPdf, "Author", XmpConstConstants.NsDC, "creator", aliasToArrayOrdered);
-            RegisterAlias(XmpConstConstants.NsPdf, "BaseURL", XmpConstConstants.NsXmp, "BaseURL", null);
-            RegisterAlias(XmpConstConstants.NsPdf, "CreationDate", XmpConstConstants.NsXmp, "CreateDate", null);
-            RegisterAlias(XmpConstConstants.NsPdf, "Creator", XmpConstConstants.NsXmp, "CreatorTool", null);
-            RegisterAlias(XmpConstConstants.NsPdf, "ModDate", XmpConstConstants.NsXmp, "ModifyDate", null);
-            RegisterAlias(XmpConstConstants.NsPdf, "Subject", XmpConstConstants.NsDC, "description", aliasToArrayAltText);
-            RegisterAlias(XmpConstConstants.NsPdf, "Title", XmpConstConstants.NsDC, "title", aliasToArrayAltText);
+            RegisterAlias(XmpConstants.NsPdf, "Author", XmpConstants.NsDC, "creator", aliasToArrayOrdered);
+            RegisterAlias(XmpConstants.NsPdf, "BaseURL", XmpConstants.NsXmp, "BaseURL", null);
+            RegisterAlias(XmpConstants.NsPdf, "CreationDate", XmpConstants.NsXmp, "CreateDate", null);
+            RegisterAlias(XmpConstants.NsPdf, "Creator", XmpConstants.NsXmp, "CreatorTool", null);
+            RegisterAlias(XmpConstants.NsPdf, "ModDate", XmpConstants.NsXmp, "ModifyDate", null);
+            RegisterAlias(XmpConstants.NsPdf, "Subject", XmpConstants.NsDC, "description", aliasToArrayAltText);
+            RegisterAlias(XmpConstants.NsPdf, "Title", XmpConstants.NsDC, "title", aliasToArrayAltText);
 
             // Aliases from PHOTOSHOP to DC and XMP.
-            RegisterAlias(XmpConstConstants.NsPhotoshop, "Author", XmpConstConstants.NsDC, "creator", aliasToArrayOrdered);
-            RegisterAlias(XmpConstConstants.NsPhotoshop, "Caption", XmpConstConstants.NsDC, "description", aliasToArrayAltText);
-            RegisterAlias(XmpConstConstants.NsPhotoshop, "Copyright", XmpConstConstants.NsDC, "rights", aliasToArrayAltText);
-            RegisterAlias(XmpConstConstants.NsPhotoshop, "Keywords", XmpConstConstants.NsDC, "subject", null);
-            RegisterAlias(XmpConstConstants.NsPhotoshop, "Marked", XmpConstConstants.NsXmpRights, "Marked", null);
-            RegisterAlias(XmpConstConstants.NsPhotoshop, "Title", XmpConstConstants.NsDC, "title", aliasToArrayAltText);
-            RegisterAlias(XmpConstConstants.NsPhotoshop, "WebStatement", XmpConstConstants.NsXmpRights, "WebStatement", null);
+            RegisterAlias(XmpConstants.NsPhotoshop, "Author", XmpConstants.NsDC, "creator", aliasToArrayOrdered);
+            RegisterAlias(XmpConstants.NsPhotoshop, "Caption", XmpConstants.NsDC, "description", aliasToArrayAltText);
+            RegisterAlias(XmpConstants.NsPhotoshop, "Copyright", XmpConstants.NsDC, "rights", aliasToArrayAltText);
+            RegisterAlias(XmpConstants.NsPhotoshop, "Keywords", XmpConstants.NsDC, "subject", null);
+            RegisterAlias(XmpConstants.NsPhotoshop, "Marked", XmpConstants.NsXmpRights, "Marked", null);
+            RegisterAlias(XmpConstants.NsPhotoshop, "Title", XmpConstants.NsDC, "title", aliasToArrayAltText);
+            RegisterAlias(XmpConstants.NsPhotoshop, "WebStatement", XmpConstants.NsXmpRights, "WebStatement", null);
 
             // Aliases from TIFF and EXIF to DC and XMP.
-            RegisterAlias(XmpConstConstants.NsTiff, "Artist", XmpConstConstants.NsDC, "creator", aliasToArrayOrdered);
-            RegisterAlias(XmpConstConstants.NsTiff, "Copyright", XmpConstConstants.NsDC, "rights", null);
-            RegisterAlias(XmpConstConstants.NsTiff, "DateTime", XmpConstConstants.NsXmp, "ModifyDate", null);
-            RegisterAlias(XmpConstConstants.NsTiff, "ImageDescription", XmpConstConstants.NsDC, "description", null);
-            RegisterAlias(XmpConstConstants.NsTiff, "Software", XmpConstConstants.NsXmp, "CreatorTool", null);
+            RegisterAlias(XmpConstants.NsTiff, "Artist", XmpConstants.NsDC, "creator", aliasToArrayOrdered);
+            RegisterAlias(XmpConstants.NsTiff, "Copyright", XmpConstants.NsDC, "rights", null);
+            RegisterAlias(XmpConstants.NsTiff, "DateTime", XmpConstants.NsXmp, "ModifyDate", null);
+            RegisterAlias(XmpConstants.NsTiff, "ImageDescription", XmpConstants.NsDC, "description", null);
+            RegisterAlias(XmpConstants.NsTiff, "Software", XmpConstants.NsXmp, "CreatorTool", null);
 
             // Aliases from PNG (Acrobat ImageCapture) to DC and XMP.
-            RegisterAlias(XmpConstConstants.NsPng, "Author", XmpConstConstants.NsDC, "creator", aliasToArrayOrdered);
-            RegisterAlias(XmpConstConstants.NsPng, "Copyright", XmpConstConstants.NsDC, "rights", aliasToArrayAltText);
-            RegisterAlias(XmpConstConstants.NsPng, "CreationTime", XmpConstConstants.NsXmp, "CreateDate", null);
-            RegisterAlias(XmpConstConstants.NsPng, "Description", XmpConstConstants.NsDC, "description", aliasToArrayAltText);
-            RegisterAlias(XmpConstConstants.NsPng, "ModificationTime", XmpConstConstants.NsXmp, "ModifyDate", null);
-            RegisterAlias(XmpConstConstants.NsPng, "Software", XmpConstConstants.NsXmp, "CreatorTool", null);
-            RegisterAlias(XmpConstConstants.NsPng, "Title", XmpConstConstants.NsDC, "title", aliasToArrayAltText);
+            RegisterAlias(XmpConstants.NsPng, "Author", XmpConstants.NsDC, "creator", aliasToArrayOrdered);
+            RegisterAlias(XmpConstants.NsPng, "Copyright", XmpConstants.NsDC, "rights", aliasToArrayAltText);
+            RegisterAlias(XmpConstants.NsPng, "CreationTime", XmpConstants.NsXmp, "CreateDate", null);
+            RegisterAlias(XmpConstants.NsPng, "Description", XmpConstants.NsDC, "description", aliasToArrayAltText);
+            RegisterAlias(XmpConstants.NsPng, "ModificationTime", XmpConstants.NsXmp, "ModifyDate", null);
+            RegisterAlias(XmpConstants.NsPng, "Software", XmpConstants.NsXmp, "CreatorTool", null);
+            RegisterAlias(XmpConstants.NsPng, "Title", XmpConstants.NsDC, "title", aliasToArrayAltText);
         }
 
         #endregion
