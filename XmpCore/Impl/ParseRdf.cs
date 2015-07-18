@@ -964,7 +964,7 @@ namespace XmpCore.Impl
             var registry = XmpMetaFactory.GetSchemaRegistry();
             var ns = xmlNode.NamespaceURI;
             string childName;
-            if (ns != null)
+            if (ns != string.Empty)
             {
                 if (XmpConstConstants.NsDcDeprecated.Equals(ns))
                 {
