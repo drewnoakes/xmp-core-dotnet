@@ -8,7 +8,7 @@
 // =================================================================================================
 
 
-using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 
 namespace XmpCore.Options
@@ -25,7 +25,7 @@ namespace XmpCore.Options
         private int _options;
 
         /// <summary>a map containing the bit names</summary>
-        private IDictionary _optionNames;
+        private IDictionary<int, string> _optionNames;
 
         /// <summary>The default constructor.</summary>
         protected Options()
@@ -181,14 +181,11 @@ namespace XmpCore.Options
         private void AssertOptionsValid(int options)
         {
             var invalidOptions = options & ~GetValidOptions();
-            if (invalidOptions == 0)
-            {
-                AssertConsistency(options);
-            }
-            else
-            {
+
+            if (invalidOptions != 0)
                 throw new XmpException(string.Format("The option bit(s) 0x{0:X} are invalid!", invalidOptions), XmpErrorCode.BadOptions);
-            }
+
+            AssertConsistency(options);
         }
 
         /// <summary>Looks up or asks the inherited class for the name of an option bit.</summary>
@@ -202,26 +199,24 @@ namespace XmpCore.Options
         {
             var optionsNames = ProcureOptionNames();
             var key = option;
-            var result = (string)optionsNames[key];
+            var result = optionsNames[key];
+
             if (result == null)
             {
                 result = DefineOptionName(option);
                 if (result != null)
-                {
                     optionsNames[key] = result;
-                }
                 else
-                {
                     result = "<option name not defined>";
-                }
             }
+
             return result;
         }
 
         /// <returns>Returns the optionNames map and creates it if required.</returns>
-        private IDictionary ProcureOptionNames()
+        private IDictionary<int, string> ProcureOptionNames()
         {
-            return _optionNames ?? (_optionNames = new Hashtable());
+            return _optionNames ?? (_optionNames = new Dictionary<int, string>());
         }
     }
 }
