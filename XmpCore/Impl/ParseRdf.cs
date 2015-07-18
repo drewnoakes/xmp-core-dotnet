@@ -16,55 +16,58 @@ using XmpCore.Options;
 
 namespace XmpCore.Impl
 {
+    public enum RdfTerm
+    {
+        Other = 0,
+
+        /// <summary>Start of coreSyntaxTerms.</summary>
+        Rdf = 1,
+
+        Id = 2,
+
+        About = 3,
+
+        ParseType = 4,
+
+        Resource = 5,
+
+        NodeId = 6,
+
+        /// <summary>End of coreSyntaxTerms</summary>
+        Datatype = 7,
+
+        /// <summary>Start of additions for syntax Terms.</summary>
+        Description = 8,
+
+        /// <summary>End of of additions for syntaxTerms.</summary>
+        Li = 9,
+
+        /// <summary>Start of oldTerms.</summary>
+        AboutEach = 10,
+
+        AboutEachPrefix = 11,
+
+        /// <summary>End of oldTerms.</summary>
+        BagId = 12,
+
+        FirstCore = Rdf,
+
+        LastCore = Datatype,
+
+        /// <summary>! Yes, the syntax terms include the core terms.</summary>
+        FirstSyntax = FirstCore,
+
+        LastSyntax = Li,
+
+        FirstOld = AboutEach,
+
+        LastOld = BagId
+    }
+
     /// <summary>Parser for "normal" XML serialisation of RDF.</summary>
     /// <since>14.07.2006</since>
     public static class ParseRdf
     {
-        public const int RdftermOther = 0;
-
-        /// <summary>Start of coreSyntaxTerms.</summary>
-        public const int RdftermRdf = 1;
-
-        public const int RdftermId = 2;
-
-        public const int RdftermAbout = 3;
-
-        public const int RdftermParseType = 4;
-
-        public const int RdftermResource = 5;
-
-        public const int RdftermNodeId = 6;
-
-        /// <summary>End of coreSyntaxTerms</summary>
-        public const int RdftermDatatype = 7;
-
-        /// <summary>Start of additions for syntax Terms.</summary>
-        public const int RdftermDescription = 8;
-
-        /// <summary>End of of additions for syntaxTerms.</summary>
-        public const int RdftermLi = 9;
-
-        /// <summary>Start of oldTerms.</summary>
-        public const int RdftermAboutEach = 10;
-
-        public const int RdftermAboutEachPrefix = 11;
-
-        /// <summary>End of oldTerms.</summary>
-        public const int RdftermBagId = 12;
-
-        public const int RdftermFirstCore = RdftermRdf;
-
-        public const int RdftermLastCore = RdftermDatatype;
-
-        /// <summary>! Yes, the syntax terms include the core terms.</summary>
-        public const int RdftermFirstSyntax = RdftermFirstCore;
-
-        public const int RdftermLastSyntax = RdftermLi;
-
-        public const int RdftermFirstOld = RdftermAboutEach;
-
-        public const int RdftermLastOld = RdftermBagId;
-
         /// <summary>this prefix is used for default namespaces</summary>
         public const string DefaultPrefix = "_dflt";
 
@@ -148,11 +151,11 @@ namespace XmpCore.Impl
         private static void Rdf_NodeElement(XmpMeta xmp, XmpNode xmpParent, XmlNode xmlNode, bool isTopLevel)
         {
             var nodeTerm = GetRdfTermKind(xmlNode);
-            if (nodeTerm != RdftermDescription && nodeTerm != RdftermOther)
+            if (nodeTerm != RdfTerm.Description && nodeTerm != RdfTerm.Other)
             {
                 throw new XmpException("Node element must be rdf:Description or typed node", XmpErrorCode.BadRdf);
             }
-            if (isTopLevel && nodeTerm == RdftermOther)
+            if (isTopLevel && nodeTerm == RdfTerm.Other)
             {
                 throw new XmpException("Top level typed node not allowed", XmpErrorCode.BadXmp);
             }
@@ -203,16 +206,16 @@ namespace XmpCore.Impl
                 var attrTerm = GetRdfTermKind(attribute);
                 switch (attrTerm)
                 {
-                    case RdftermId:
-                    case RdftermNodeId:
-                    case RdftermAbout:
+                    case RdfTerm.Id:
+                    case RdfTerm.NodeId:
+                    case RdfTerm.About:
                     {
                         if (exclusiveAttrs > 0)
                         {
                             throw new XmpException("Mutally exclusive about, ID, nodeID attributes", XmpErrorCode.BadRdf);
                         }
                         exclusiveAttrs++;
-                        if (isTopLevel && (attrTerm == RdftermAbout))
+                        if (isTopLevel && (attrTerm == RdfTerm.About))
                         {
                             // This is the rdf:about attribute on a top level node. Set
                             // the XMP tree name if
@@ -233,7 +236,7 @@ namespace XmpCore.Impl
                         break;
                     }
 
-                    case RdftermOther:
+                    case RdfTerm.Other:
                     {
                         AddChildNode(xmp, xmpParent, attribute, attribute.Value, isTopLevel);
                         break;
@@ -814,13 +817,13 @@ namespace XmpCore.Impl
                 var attrTerm = GetRdfTermKind(attribute);
                 switch (attrTerm)
                 {
-                    case RdftermId:
+                    case RdfTerm.Id:
                     {
                         // Nothing to do.
                         break;
                     }
 
-                    case RdftermResource:
+                    case RdfTerm.Resource:
                     {
                         if (hasNodeIdAttr)
                         {
@@ -838,7 +841,7 @@ namespace XmpCore.Impl
                         break;
                     }
 
-                    case RdftermNodeId:
+                    case RdfTerm.NodeId:
                     {
                         if (hasResourceAttr)
                         {
@@ -848,7 +851,7 @@ namespace XmpCore.Impl
                         break;
                     }
 
-                    case RdftermOther:
+                    case RdfTerm.Other:
                     {
                         if ("value".Equals(attribute.LocalName) && XmpConstConstants.NsRdf.Equals(attribute.NamespaceURI))
                         {
@@ -910,20 +913,20 @@ namespace XmpCore.Impl
                 var attrTerm = GetRdfTermKind(attribute);
                 switch (attrTerm)
                 {
-                    case RdftermId:
-                    case RdftermNodeId:
+                    case RdfTerm.Id:
+                    case RdfTerm.NodeId:
                     {
                         break;
                     }
 
-                    case RdftermResource:
+                    case RdfTerm.Resource:
                     {
                         // Ignore all rdf:ID and rdf:nodeID attributes.
                         AddQualifierNode(childNode, "rdf:resource", attribute.Value);
                         break;
                     }
 
-                    case RdftermOther:
+                    case RdfTerm.Other:
                     {
                         if (!childIsStruct)
                         {
@@ -1130,9 +1133,9 @@ namespace XmpCore.Impl
         /// </summary>
         /// <param name="term">the term id</param>
         /// <returns>Return true if the term is a property element name.</returns>
-        private static bool IsPropertyElementName(int term)
+        private static bool IsPropertyElementName(RdfTerm term)
         {
-            if (term == RdftermDescription || IsOldTerm(term))
+            if (term == RdfTerm.Description || IsOldTerm(term))
             {
                 return false;
             }
@@ -1145,9 +1148,9 @@ namespace XmpCore.Impl
         /// </summary>
         /// <param name="term">the term id</param>
         /// <returns>Returns true if the term is an old term.</returns>
-        private static bool IsOldTerm(int term)
+        private static bool IsOldTerm(RdfTerm term)
         {
-            return RdftermFirstOld <= term && term <= RdftermLastOld;
+            return RdfTerm.FirstOld <= term && term <= RdfTerm.LastOld;
         }
 
         /// <summary>
@@ -1157,9 +1160,9 @@ namespace XmpCore.Impl
         /// </summary>
         /// <param name="term">the term id</param>
         /// <returns>Return true if the term is a core syntax term</returns>
-        private static bool IsCoreSyntaxTerm(int term)
+        private static bool IsCoreSyntaxTerm(RdfTerm term)
         {
-            return RdftermFirstCore <= term && term <= RdftermLastCore;
+            return RdfTerm.FirstCore <= term && term <= RdfTerm.LastCore;
         }
 
         /// <summary>Determines the ID for a certain RDF Term.</summary>
@@ -1169,7 +1172,7 @@ namespace XmpCore.Impl
         /// </remarks>
         /// <param name="node">an XML node</param>
         /// <returns>Returns the term ID.</returns>
-        private static int GetRdfTermKind(XmlNode node)
+        private static RdfTerm GetRdfTermKind(XmlNode node)
         {
             var localName = node.LocalName;
             var ns = node.NamespaceURI;
@@ -1181,22 +1184,22 @@ namespace XmpCore.Impl
             {
                 switch (localName)
                 {
-                    case "li": return RdftermLi;
-                    case "parseType": return RdftermParseType;
-                    case "Description": return RdftermDescription;
-                    case "about": return RdftermAbout;
-                    case "resource": return RdftermResource;
-                    case "RDF": return RdftermRdf;
-                    case "ID": return RdftermId;
-                    case "nodeID": return RdftermNodeId;
-                    case "datatype": return RdftermDatatype;
-                    case "aboutEach": return RdftermAboutEach;
-                    case "aboutEachPrefix": return RdftermAboutEachPrefix;
-                    case "bagID": return RdftermBagId;
+                    case "li": return RdfTerm.Li;
+                    case "parseType": return RdfTerm.ParseType;
+                    case "Description": return RdfTerm.Description;
+                    case "about": return RdfTerm.About;
+                    case "resource": return RdfTerm.Resource;
+                    case "RDF": return RdfTerm.Rdf;
+                    case "ID": return RdfTerm.Id;
+                    case "nodeID": return RdfTerm.NodeId;
+                    case "datatype": return RdfTerm.Datatype;
+                    case "aboutEach": return RdfTerm.AboutEach;
+                    case "aboutEachPrefix": return RdfTerm.AboutEachPrefix;
+                    case "bagID": return RdfTerm.BagId;
                 }
             }
 
-            return RdftermOther;
+            return RdfTerm.Other;
         }
     }
 }
