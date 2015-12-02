@@ -269,6 +269,9 @@ namespace XmpCore.Impl
                 {
                     continue;
                 }
+                if (currChild.NodeType == XmlNodeType.Comment)
+                    continue;
+
                 if (currChild.NodeType != XmlNodeType.Element)
                 {
                     throw new XmpException("Expected property element node not found", XmpErrorCode.BadRdf);

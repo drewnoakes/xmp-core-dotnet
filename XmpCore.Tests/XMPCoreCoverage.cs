@@ -861,7 +861,7 @@ namespace XmpCore.Tests
             writeMajorLabel ("Test date/time utilities and special values");
 
             var    date1    = XmpDateTimeFactory.Create(2000, 1, 31, 12, 34, 56, -1);
-            date1.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("PST");
+            date1.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
 
             var    date2    = XmpDateTimeFactory.Create(0, 0, 0, 0, 0, 0, 0);
 

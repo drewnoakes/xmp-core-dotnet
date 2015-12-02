@@ -334,7 +334,9 @@ namespace XmpCore.Impl.XPath
             if (Utils.IsXmlNameNs(prefix))
             {
                 var regUri = XmpMetaFactory.SchemaRegistry.GetNamespaceUri(prefix);
-                if (regUri == null)
+                if (regUri != null)
+                    return;
+                else
                     throw new XmpException("Unknown namespace prefix for qualified name", XmpErrorCode.BadXPath);
             }
 

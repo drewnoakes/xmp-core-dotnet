@@ -22,7 +22,7 @@ namespace XmpCore.Options
     public abstract class Options
     {
         /// <summary>the internal int containing all options</summary>
-        private int _options;
+        private int _options = 0;
 
         /// <summary>a map containing the bit names</summary>
         private IDictionary<int, string> _optionNames;
@@ -195,7 +195,8 @@ namespace XmpCore.Options
         {
             var optionsNames = ProcureOptionNames();
             var key = option;
-            var result = optionsNames[key];
+            string result = null;
+            optionsNames.TryGetValue(key, out result);
 
             if (result == null)
             {

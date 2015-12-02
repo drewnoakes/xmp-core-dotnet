@@ -16,6 +16,7 @@ namespace XmpCore.Options
     /// <since>03.07.2006</since>
     public sealed class PropertyOptions : Options
     {
+        internal const int NoOptionsFlag = 0x00000000;
         internal const int IsUriFlag = 0x00000002;
         internal const int HasQualifiersFlag = 0x00000010;
         internal const int QualifierFlag = 0x00000020;
