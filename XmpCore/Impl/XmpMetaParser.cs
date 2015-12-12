@@ -11,7 +11,7 @@
 using System;
 using System.IO;
 using System.Text;
-using System.Xml;
+using System.Xml.Linq;
 using XmpCore.Options;
 
 namespace XmpCore.Impl
@@ -65,13 +65,15 @@ namespace XmpCore.Impl
             var doc = ParseXmlString(xmlStr, options);
             return ParseXmlDoc(doc, options);
         }
-
-        private static IXmpMeta ParseXmlDoc(XmlDocument document, ParseOptions options)
+        
+        private static IXmpMeta ParseXmlDoc(XDocument document, ParseOptions options)
         {
-            object[] result;
-            if (FindRootNode(document, options.RequireXmpMeta, out result) && result[1] == XmpRdf)
+            object[] result = new object[3];
+
+            result = FindRootNode(document.Nodes(), options.RequireXmpMeta, result);
+            if (result != null && result[1] == XmpRdf)
             {
-                var xmp = ParseRdf.Parse((XmlNode)result[0]);
+                var xmp = ParseRdf.Parse((XElement)result[0]);
                 xmp.SetPacketHeader((string)result[2]);
                 // Check if the XMP object shall be normalized
                 if (!options.OmitNormalization)
@@ -92,7 +94,7 @@ namespace XmpCore.Impl
         /// <param name="options">the parsing options</param>
         /// <returns>Returns an XML DOM-Document.</returns>
         /// <exception cref="XmpException">Thrown when the parsing fails.</exception>
-        private static XmlDocument ParseXmlFromInputStream(Stream stream, ParseOptions options)
+        private static XDocument ParseXmlFromInputStream(Stream stream, ParseOptions options)
         {
             if (!options.AcceptLatin1 && !options.FixControlChars)
             {
@@ -118,7 +120,7 @@ namespace XmpCore.Impl
         /// <param name="options">the parsing options</param>
         /// <returns>Returns an XML DOM-Document.</returns>
         /// <exception cref="XmpException">Thrown when the parsing fails.</exception>
-        private static XmlDocument ParseXmlFromByteBuffer(ByteBuffer buffer, ParseOptions options)
+        private static XDocument ParseXmlFromByteBuffer(ByteBuffer buffer, ParseOptions options)
         {
             try
             {
@@ -157,7 +159,7 @@ namespace XmpCore.Impl
         /// <param name="options">the parsing options</param>
         /// <returns>Returns an XML DOM-Document.</returns>
         /// <exception cref="XmpException">Thrown when the parsing fails.</exception>
-        private static XmlDocument ParseXmlString(string input, ParseOptions options)
+        private static XDocument ParseXmlString(string input, ParseOptions options)
         {
             try
             {
@@ -172,15 +174,19 @@ namespace XmpCore.Impl
         }
 
         /// <exception cref="XmpException">Wraps parsing and I/O-exceptions into an XMPException.</exception>
-        private static XmlDocument ParseStream(Stream stream)
+        private static XDocument ParseStream(Stream stream)
         {
             try
             {
-                var doc = new XmlDocument();
-                doc.Load(stream);
+                string streamContents;
+                using (var sr = new StreamReader(stream))
+                {
+                    streamContents = sr.ReadToEnd();
+                }
+                var doc = XDocument.Parse(streamContents);
                 return doc;
             }
-            catch (XmlException e)
+            catch (System.Xml.XmlException e)
             {
                 throw new XmpException("XML parsing failure", XmpErrorCode.BadXml, e);
             }
@@ -194,15 +200,14 @@ namespace XmpCore.Impl
             }
         }
         /// <exception cref="XmpException">Wraps parsing and I/O-exceptions into an XMPException.</exception>
-        private static XmlDocument ParseTextReader(TextReader reader)
+        private static XDocument ParseTextReader(TextReader reader)
         {
             try
             {
-                var doc = new XmlDocument();
-                doc.Load(reader);
+                var doc = XDocument.Parse(reader.ReadToEnd());
                 return doc;
             }
-            catch (XmlException e)
+            catch (System.Xml.XmlException e)
             {
                 throw new XmpException("XML parsing failure", XmpErrorCode.BadXml, e);
             }
@@ -248,51 +253,62 @@ namespace XmpCore.Impl
         /// <item>[2] - the body text of the xpacket-instruction.</item>
         /// </list>
         /// </returns>
-        private static bool FindRootNode(XmlNode root, bool xmpmetaRequired, out object[] result)
+        private static object[] FindRootNode(System.Collections.Generic.IEnumerable<XNode> nodes, bool xmpmetaRequired, object[] result)
         {
-            result = new object[3];
 
-            // Look among this parent's content for x:xapmeta or x:xmpmeta.
-            // The recursion for x:xmpmeta is broader than the strictly defined choice,
-            // but gives us smaller code.
-            var children = root.ChildNodes;
-            for (var i = 0; i < children.Count; i++)
+            foreach (var root in nodes)
             {
-                root = children.Item(i);
-                if (XmlNodeType.ProcessingInstruction == root.NodeType && XmpConstants.XmpPi.Equals(((XmlProcessingInstruction)root).Target))
+                if (System.Xml.XmlNodeType.ProcessingInstruction == root.NodeType && XmpConstants.XmpPi.Equals(((XProcessingInstruction)root).Target))
                 {
                     // Store the processing instructions content
-                    result[2] = ((XmlProcessingInstruction)root).Data;
+                    result[2] = ((XProcessingInstruction)root).Data;
                 }
                 else
                 {
-                    if (XmlNodeType.Text != root.NodeType && XmlNodeType.ProcessingInstruction != root.NodeType)
+                    if(System.Xml.XmlNodeType.Element == root.NodeType)
                     {
-                        var rootNs = root.NamespaceURI;
-                        var rootLocal = root.LocalName;
-                        if ((XmpConstants.TagXmpmeta.Equals(rootLocal) || XmpConstants.TagXapmeta.Equals(rootLocal)) && XmpConstants.NsX.Equals(rootNs))
+                        XElement rootElem = (XElement)root;
+                        string rootNS = rootElem.Name.NamespaceName;
+                        string rootLocal = rootElem.Name.LocalName;
+
+                        if (
+                               (XmpConstants.TagXmpmeta.Equals(rootLocal) || XmpConstants.TagXapmeta.Equals(rootLocal)) &&
+                                XmpConstants.NsX.Equals(rootNS)
+                           )
                         {
                             // by not passing the RequireXMPMeta-option, the rdf-Node will be valid
-                            return FindRootNode(root, false, out result);
+                            return FindRootNode(rootElem.Nodes(), false, result);
                         }
-                        if (!xmpmetaRequired && "RDF".Equals(rootLocal) && XmpConstants.NsRdf.Equals(rootNs))
+                        else if (!xmpmetaRequired &&
+                                "RDF".Equals(rootLocal) &&
+                                 XmpConstants.NsRdf.Equals(rootNS))
                         {
                             if (result != null)
                             {
                                 result[0] = root;
                                 result[1] = XmpRdf;
                             }
-                            return true;
+                            return result;
                         }
-                        // continue searching
-                        if (FindRootNode(root, xmpmetaRequired, out result))
-                            return true;
+                        else
+                        {
+                            // continue searching
+                            object[] newResult = FindRootNode(rootElem.Nodes(), xmpmetaRequired, result);
+                            if (newResult != null)
+                            {
+                                return newResult;
+                            }
+                            else
+                            {
+                                continue;
+                            }
+                        }
                     }
                 }
             }
-            // no appropriate node has been found
-            result = null;
-            return false;
+
+            //    // no appropriate node has been found
+            return null;
         }
     }
 }
