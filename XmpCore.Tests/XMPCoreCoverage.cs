@@ -585,6 +585,9 @@ namespace XmpCore.Tests
             {
                 var dateName = "Date" + i;
                 var dt = meta.GetPropertyDate (TestData.NS1, dateName);
+                if(dt != null && dt.HasTimeZone)
+                    dt.TimeZone = TimeZoneInfo.CreateCustomTimeZone("OFFSET" + dt.Offset, dt.Offset, string.Empty, string.Empty);
+
                 log.WriteLine ("getPropertyDate (" + i + ") =   " + dt);
                 meta.SetPropertyDate (TestData.NS2, dateName, dateValue);
             }
