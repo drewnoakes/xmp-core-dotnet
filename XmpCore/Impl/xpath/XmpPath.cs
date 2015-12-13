@@ -36,7 +36,7 @@ namespace XmpCore.Impl.XPath
 
         public const int FieldSelectorStep = 0x06;
 
-        public const int SchemaNode = unchecked((int)(0x80000000));
+        public const int SchemaNode = unchecked((int)0x80000000);
 
         public const int StepSchema = 0;
 
