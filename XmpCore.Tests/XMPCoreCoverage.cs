@@ -26,7 +26,11 @@ namespace XmpCore.Tests
         {
             try
             {
+#if PORTABLE
+                log = TextWriter.Null;
+#else
                 log = Console.Out;
+#endif
 
                 log.WriteLine("XmpCoreCoverage starting   " + DateTime.Now);
                 log.WriteLine("XmpCore Version: " + XmpMetaFactory.VersionInfo);
@@ -703,7 +707,7 @@ namespace XmpCore.Tests
 
             // with the flag "exact packet size" the padding becomes the overall length of the packet
             byte[] buffer = XmpMetaFactory.SerializeToBuffer(meta, new SerializeOptions { ExactPacketLength = true, Padding = s });
-            log.WriteLine(Encoding.UTF8.GetString(buffer));
+            log.WriteLine(Encoding.UTF8.GetString(buffer, 0, buffer.Length));
 
             try
             {
@@ -863,6 +867,7 @@ namespace XmpCore.Tests
         {
             writeMajorLabel ("Test date/time utilities and special values");
 
+#if !PORTABLE
             var    date1    = XmpDateTimeFactory.Create(2000, 1, 31, 12, 34, 56, -1);
             date1.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
 
@@ -877,6 +882,7 @@ namespace XmpCore.Tests
             log.WriteLine("Print zero date =   {0}", date2);
             log.WriteLine("Print date created by a calendar =   {0}", date3);
             log.WriteLine("Print current date =   {0}", currentDateTime);
+#endif
             log.WriteLine();
         }
 

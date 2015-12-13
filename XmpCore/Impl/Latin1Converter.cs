@@ -166,7 +166,7 @@ namespace XmpCore.Impl
                 }
                 // space for undefined
                 // interpret byte as Windows Cp1252 char
-                return Encoding.UTF8.GetBytes(Encoding.GetEncoding(1252).GetString(new[] { ch }));
+                return Encoding.UTF8.GetBytes(Encoding.GetEncoding("windows-1252").GetString(new[] { ch }, 0, 1));
             }
             return new[] { ch };
         }

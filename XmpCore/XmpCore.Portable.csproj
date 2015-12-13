@@ -1,46 +1,40 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
+    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5A1F2AFF-7219-4543-97C4-364D4502C3C5}</ProjectGuid>
+    <ProjectGuid>{55CB0869-98DC-4F37-987C-304734541A1C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>XmpCore</RootNamespace>
-    <AssemblyName>XmpCore</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <AssemblyName>XmpCore.Portable</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
-    <BaseIntermediateOutputPath>obj\net35\</BaseIntermediateOutputPath>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile>Profile344</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <BaseIntermediateOutputPath>obj\Portable\</BaseIntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\NET35\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET35</DefineConstants>
+    <OutputPath>bin\Debug\Portable\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;PORTABLE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\net35\</OutputPath>
-    <DefineConstants>TRACE;NET35</DefineConstants>
+    <OutputPath>bin\Release\Portable\</OutputPath>
+    <DefineConstants>TRACE;PORTABLE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\net35\XmpCore.xml</DocumentationFile>
-    <NoWarn>1591</NoWarn>
+    <DocumentationFile>bin\Release\Portable\XmpCore.Portable.XML</DocumentationFile>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="JetBrains.Annotations">
-      <HintPath>..\packages\JetBrains.Annotations.10.0.0\lib\net20\JetBrains.Annotations.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
-  </ItemGroup>
   <ItemGroup>
     <Compile Include="Impl\ByteBuffer.cs" />
     <Compile Include="Impl\FixASCIIControlsReader.cs" />
@@ -58,51 +52,51 @@
     <Compile Include="Impl\XmpNodeUtils.cs" />
     <Compile Include="Impl\XmpNormalizer.cs" />
     <Compile Include="Impl\XmpSchemaRegistry.cs" />
-    <Compile Include="Impl\XmpSerializerHelper.cs" />
+    <Compile Include="Impl\XMPSerializerHelper.cs" />
     <Compile Include="Impl\XmpSerializerRdf.cs" />
     <Compile Include="Impl\XmpUtils.cs" />
-    <Compile Include="Impl\XPath\XmpPath.cs" />
-    <Compile Include="Impl\XPath\XmpPathParser.cs" />
-    <Compile Include="Impl\XPath\XmpPathSegment.cs" />
-    <Compile Include="Options\AliasOptions.cs" />
-    <Compile Include="Options\IteratorOptions.cs" />
-    <Compile Include="Options\Options.cs" />
-    <Compile Include="Options\ParseOptions.cs" />
-    <Compile Include="Options\PropertyOptions.cs" />
-    <Compile Include="Options\SerializeOptions.cs" />
+    <Compile Include="Impl\xpath\XmpPath.cs" />
+    <Compile Include="Impl\xpath\XmpPathParser.cs" />
+    <Compile Include="Impl\xpath\XMPPathSegment.cs" />
     <Compile Include="IXmpAliasInfo.cs" />
+    <Compile Include="IXmpDateTime.cs" />
+    <Compile Include="IXmpIterator.cs" />
+    <Compile Include="IXmpMeta.cs" />
     <Compile Include="IXmpProperty.cs" />
     <Compile Include="IXmpPropertyInfo.cs" />
+    <Compile Include="IXmpSchemaRegistry.cs" />
+    <Compile Include="IXmpVersionInfo.cs" />
+    <Compile Include="options\AliasOptions.cs" />
+    <Compile Include="options\IteratorOptions.cs" />
+    <Compile Include="options\Options.cs" />
+    <Compile Include="options\ParseOptions.cs" />
+    <Compile Include="options\PropertyOptions.cs" />
+    <Compile Include="options\SerializeOptions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sharpen\Calendar.cs" />
     <Compile Include="Sharpen\EnumeratorWrapper.cs" />
+    <Compile Include="Sharpen\Extensions.cs" />
+    <Compile Include="Sharpen\GregorianCalendar.cs" />
     <Compile Include="Sharpen\IIterator.cs" />
     <Compile Include="Sharpen\PushbackReader.cs" />
     <Compile Include="XmpConstants.cs" />
-    <Compile Include="IXmpDateTime.cs" />
-    <Compile Include="XmpDateTimeFactory.cs" />
+    <Compile Include="XMPDateTimeFactory.cs" />
     <Compile Include="XmpErrorCode.cs" />
-    <Compile Include="XmpException.cs" />
-    <Compile Include="IXmpIterator.cs" />
-    <Compile Include="IXmpMeta.cs" />
-    <Compile Include="XmpMetaFactory.cs" />
-    <Compile Include="XmpPathFactory.cs" />
-    <Compile Include="IXmpSchemaRegistry.cs" />
-    <Compile Include="XmpUtils.cs" />
-    <Compile Include="IXmpVersionInfo.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sharpen\Calendar.cs" />
-    <Compile Include="Sharpen\Extensions.cs" />
-    <Compile Include="Sharpen\GregorianCalendar.cs" />
+    <Compile Include="XMPException.cs" />
+    <Compile Include="XMPMetaFactory.cs" />
+    <Compile Include="XMPPathFactory.cs" />
+    <Compile Include="XMPUtils.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="JetBrains.Annotations.PCL328, Version=10.0.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.Annotations.10.0.0\lib\portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\JetBrains.Annotations.PCL328.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="XmpCore.nuspec">
-      <SubType>Designer</SubType>
-    </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="props\" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
