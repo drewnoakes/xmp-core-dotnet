@@ -62,9 +62,9 @@
     <Compile Include="XmpSchemaRegistryTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\XmpCore\XmpCore.csproj">
-      <Project>{5A1F2AFF-7219-4543-97C4-364D4502C3C5}</Project>
-      <Name>XmpCore</Name>
+    <ProjectReference Include="..\XmpCore.Portable\XmpCore.Portable.csproj">
+      <Project>{55cb0869-98dc-4f37-987c-304734541a1c}</Project>
+      <Name>XmpCore.Portable</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
