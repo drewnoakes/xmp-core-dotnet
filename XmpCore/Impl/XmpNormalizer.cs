@@ -9,6 +9,9 @@
 
 
 using System.Collections;
+#if PORTABLE
+using System.Collections.Generic;
+#endif
 using Sharpen;
 using XmpCore.Impl.XPath;
 using XmpCore.Options;
@@ -544,7 +547,12 @@ namespace XmpCore.Impl
         /// </summary>
         private static void InitDcArrays()
         {
-            _dcArrayForms = new Hashtable();
+            _dcArrayForms = new
+#if !PORTABLE
+                Hashtable();
+#else
+                Dictionary<string, PropertyOptions>();
+#endif
             // Properties supposed to be a "Bag".
             var bagForm = new PropertyOptions { IsArray = true };
             _dcArrayForms["dc:contributor"] = bagForm;

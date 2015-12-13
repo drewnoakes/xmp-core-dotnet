@@ -62,14 +62,14 @@
     <Compile Include="XmpSchemaRegistryTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\XmpCore.Portable\XmpCore.Portable.csproj">
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\XmpCore\XmpCore.Portable.csproj">
       <Project>{55cb0869-98dc-4f37-987c-304734541a1c}</Project>
       <Name>XmpCore.Portable</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

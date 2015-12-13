@@ -197,7 +197,10 @@ namespace XmpCore.Impl
                 HasTimeZone = true;
             }
         }
+#if PORTABLE
+        public TimeSpan Offset { get; set; }
 
+#endif
         public bool HasDate { get; private set; }
 
         public bool HasTime { get; private set; }
