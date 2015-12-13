@@ -8,7 +8,7 @@
 // =================================================================================================
 
 
-using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 
 namespace XmpCore.Impl.XPath
@@ -43,7 +43,7 @@ namespace XmpCore.Impl.XPath
         public const int StepRootProp = 1;
 
         /// <summary>stores the segments of an XMPPath</summary>
-        private readonly IList _segments = new ArrayList(5);
+        private readonly List<XmpPathSegment> _segments = new List<XmpPathSegment>(5);
 
         // Bits for XPathStepInfo options.
         //
@@ -58,7 +58,7 @@ namespace XmpCore.Impl.XPath
         /// <returns>Returns a path segment.</returns>
         public XmpPathSegment GetSegment(int index)
         {
-            return (XmpPathSegment)_segments[index];
+            return _segments[index];
         }
 
         /// <returns>Returns the size of the xmp path.</returns>
