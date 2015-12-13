@@ -33,7 +33,13 @@ namespace XmpCore.Impl
         private readonly Dictionary<string, IXmpAliasInfo> _aliasMap = new Dictionary<string, IXmpAliasInfo>();
 
         /// <summary>The pattern that must not be contained in simple properties</summary>
-        private readonly Regex _p = new Regex ("[/*?\\[\\]]", RegexOptions.Compiled);
+        private static RegexOptions _defaultRegexOptions =
+#if PORTABLE
+                                        RegexOptions.None;
+#else
+                                        RegexOptions.Compiled;
+#endif
+        private readonly Regex _p = new Regex("[/*?\\[\\]]", _defaultRegexOptions);
 
         private readonly object _lock = new object();
 
@@ -54,7 +60,7 @@ namespace XmpCore.Impl
             }
         }
 
-        #region Namespaces
+#region Namespaces
 
         public string RegisterNamespace(string namespaceUri, string suggestedPrefix)
         {
@@ -226,9 +232,9 @@ namespace XmpCore.Impl
             RegisterNamespace(XmpConstants.TypeIdentifierqual, "xmpidq");
         }
 
-        #endregion
+#endregion
 
-        #region Aliases
+#region Aliases
 
         public IXmpAliasInfo ResolveAlias(string aliasNs, string aliasProp)
         {
@@ -412,6 +418,6 @@ namespace XmpCore.Impl
             RegisterAlias(XmpConstants.NsPng, "Title", XmpConstants.NsDC, "title", aliasToArrayAltText);
         }
 
-        #endregion
+#endregion
     }
 }

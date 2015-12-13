@@ -14,7 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmpCore.Tests", "XmpCore.Tests\XmpCore.Tests.csproj", "{2A95AF33-EA9E-4F40-85C4-A0E582F884A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmpCore.Portable", "XmpCore.Portable\XmpCore.Portable.csproj", "{55CB0869-98DC-4F37-987C-304734541A1C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmpCore.Portable", "XmpCore\XmpCore.Portable.csproj", "{55CB0869-98DC-4F37-987C-304734541A1C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -238,7 +238,7 @@ namespace XmpCore.Impl
         /// breadth first, so a higher level candiate is chosen over a lower level
         /// one that was textually earlier in the serialized XML.
         /// </remarks>
-        /// <param name="root">the root of the xml document</param>
+        /// <param name="nodes">initially, the root of the xml document as a list</param>
         /// <param name="xmpmetaRequired">
         /// flag if the xmpmeta-tag is still required, might be set
         /// initially to <c>true</c>, if the parse option "REQUIRE_XMP_META" is set

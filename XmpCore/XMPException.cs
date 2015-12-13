@@ -14,7 +14,9 @@ namespace XmpCore
 {
     /// <summary>This exception wraps all errors that occur in the XMP Toolkit.</summary>
     /// <since>16.02.2006</since>
+#if !PORTABLE
     [Serializable]
+#endif
     public sealed class XmpException : Exception
     {
         /// <summary>the errorCode of the XMP toolkit</summary>
