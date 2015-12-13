@@ -549,23 +549,21 @@ namespace XmpCore.Impl
             var seqForm = new PropertyOptions { IsArray = true, IsArrayOrdered = true };
             var altTextForm = new PropertyOptions { IsArray = true, IsArrayOrdered = true, IsArrayAlternate = true, IsArrayAltText = true };
 
-            _dcArrayForms = new Dictionary<string, PropertyOptions>
-            {
-                // Properties supposed to be a "Bag".
-                ["dc:contributor"] = bagForm,
-                ["dc:language"] = bagForm,
-                ["dc:publisher"] = bagForm,
-                ["dc:relation"] = bagForm,
-                ["dc:subject"] = bagForm,
-                ["dc:type"] = bagForm,
-                // Properties supposed to be a "Seq".
-                ["dc:creator"] = seqForm,
-                ["dc:date"] = seqForm,
-                // Properties supposed to be an "Alt" in alternative-text form.
-                ["dc:description"] = altTextForm,
-                ["dc:rights"] = altTextForm,
-                ["dc:title"] = altTextForm
-            };
+            _dcArrayForms = new Dictionary<string, PropertyOptions>();
+            // Properties supposed to be a "Bag".
+            _dcArrayForms["dc:contributor"] = bagForm;
+            _dcArrayForms["dc:language"] = bagForm;
+            _dcArrayForms["dc:publisher"] = bagForm;
+            _dcArrayForms["dc:relation"] = bagForm;
+            _dcArrayForms["dc:subject"] = bagForm;
+            _dcArrayForms["dc:type"] = bagForm;
+            // Properties supposed to be a "Seq".
+            _dcArrayForms["dc:creator"] = seqForm;
+            _dcArrayForms["dc:date"] = seqForm;
+            // Properties supposed to be an "Alt" in alternative-text form.
+            _dcArrayForms["dc:description"] = altTextForm;
+            _dcArrayForms["dc:rights"] = altTextForm;
+            _dcArrayForms["dc:title"] = altTextForm;
         }
     }
 }
