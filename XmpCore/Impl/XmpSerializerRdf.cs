@@ -108,7 +108,6 @@ namespace XmpCore.Impl
                 // writes the tail
                 Write(tailStr);
                 _writer.Flush();
-                _stream.Dispose();
             }
             catch (IOException)
             {
