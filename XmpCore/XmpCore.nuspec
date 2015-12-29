@@ -20,7 +20,9 @@
     <tags>XMP Metadata Exif IPTC ICC</tags>
   </metadata>
   <files>
-    <file src="bin\Release\XmpCore.dll" target="lib\net35\" />
-    <file src="bin\Release\XmpCore.xml" target="lib\net35\" />
+    <file src="bin\Release\net35\XmpCore.dll" target="lib\net35\" />
+    <file src="bin\Release\net35\XmpCore.xml" target="lib\net35\" />
+    <file src="bin\Release\Portable\XmpCore.Portable.dll" target="lib\portable-net45+sl50+netcore45+wpa81+wp8\" />
+    <file src="bin\Release\Portable\XmpCore.Portable.xml" target="lib\portable-net45+sl50+netcore45+wpa81+wp8\" />
   </files>
 </package>
