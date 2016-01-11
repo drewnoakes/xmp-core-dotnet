@@ -1183,13 +1183,21 @@ namespace XmpCore.Impl
             }
         }
 
-        /// <summary>Writes a char to the output.</summary>
-        /// <param name="c">a char</param>
+        /// <summary>Writes a int to the output.</summary>
+        /// <param name="c">an int</param>
         /// <exception cref="System.IO.IOException">forwards writer exceptions</exception>
         private void Write(int c)
         {
             _writer.Write(c);
         }
+
+		/// <summary>Writes a char to the output.</summary>
+		/// <param name="c">a char</param>
+		/// <exception cref="System.IO.IOException">forwards writer exceptions</exception>
+		private void Write(char c)
+		{
+			_writer.Write(c);
+		}
 
         /// <summary>Writes a String to the output.</summary>
         /// <param name="str">a String</param>
