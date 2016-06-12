@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Xml.Linq;
 using XmpCore.Options;
+using System.Collections.Generic;
 
 namespace XmpCore.Impl
 {
@@ -374,7 +375,19 @@ namespace XmpCore.Impl
 
             var attributes = xmlNode.Attributes();
 
-            if (attributes.Count() > 3)
+            // remove the namespace-definitions from the list (original Java)
+            // (for C#, put them in an ignore list and don't count or process them)
+            List<string> ignoreNodes = new List<string>();
+            foreach(var attribute in attributes)
+            {
+                var prefix = xmlNode.GetPrefixOfNamespace(attribute.Name.Namespace);
+                if ("xmlns".Equals(prefix) || (prefix == null && "xmlns".Equals(attribute.Name)))
+                {
+                    ignoreNodes.Add(attribute.Name.ToString());
+                }
+            }
+
+            if (attributes.Count() - ignoreNodes.Count > 3)
             {
                 // Only an emptyPropertyElt can have more than 3 attributes.
                 Rdf_EmptyPropertyElement(xmp, xmpParent, xmlNode, isTopLevel);
@@ -384,6 +397,7 @@ namespace XmpCore.Impl
                 // Look through the attributes for one that isn't rdf:ID or xml:lang,
                 // it will usually tell what we should be dealing with.
                 // The called routines must verify their specific syntax!
+                // (Also don't consider an ignored attribute as 'found')
 
                 var attrLocal = "";
                 var attrNs = "";
@@ -396,7 +410,8 @@ namespace XmpCore.Impl
                     attrNs = attribute.Name.NamespaceName;
                     attrValue = attribute.Value;
 
-                    if (!(XmpConstants.XmlLang.Equals("xml:" + attrLocal)) && !("ID".Equals(attrLocal) && XmpConstants.NsRdf.Equals(attrNs)))
+                    if (!(XmpConstants.XmlLang.Equals("xml:" + attrLocal)) && !("ID".Equals(attrLocal) && XmpConstants.NsRdf.Equals(attrNs))
+                        && !ignoreNodes.Contains(attribute.Name.ToString()))
                     {
                         foundAttrib = attribute;
                         break;
