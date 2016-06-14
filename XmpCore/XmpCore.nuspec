@@ -16,7 +16,7 @@
       The API should be familiar to users of Adobe's XMPCore 5.1.2, though it has been modified in places to better suit .NET development.
     </description>
 <!--<releaseNotes>Summary of changes made in this release of the package.</releaseNotes>-->
-    <copyright>Copyright 2015</copyright>
+    <copyright>Copyright 2015-2016</copyright>
     <tags>XMP Metadata Exif IPTC ICC</tags>
   </metadata>
   <files>
