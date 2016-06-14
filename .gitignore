@@ -1,3 +1,4 @@
+/.vs/
 *.suo
 *.user
 bin
@@ -5,4 +6,3 @@ obj
 /packages/*
 *.swp
 *.nupkg
-
