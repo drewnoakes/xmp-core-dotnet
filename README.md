@@ -13,11 +13,11 @@ The easiest way to reference this project is to install [its NuGet package](http
 
     PM> Install-Package XmpCore
 
-## Requirements
+The NuGet package has no other dependencies.
 
-Requires .NET 4.0 Client Profile or higher.
+## Framework support
 
-The NuGet package comprises a single DLL with no other dependencies.
+.NET 3.5+, as well as PCL (portable-net45+sl50+netcore45+wpa81+wp8).
 
 ## History
 
