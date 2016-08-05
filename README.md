@@ -7,6 +7,20 @@ This library is a port of Adobe's XMP SDK to .NET.
 The API should be familiar to users of Adobe's XMPCore 5.1.2, though it has been modified
 in places to better suit .NET development.
 
+## Sample Usage
+
+```csharp
+IXmpMeta xmp;
+using (var stream = File.OpenRead("some-file.xmp"))
+    xmp = XmpMetaFactory.Parse(stream);
+
+foreach (var property in xmp.Properties)
+    Console.WriteLine($"Path={property.Path} Namespace={property.Namespace} Value={property.Value}");
+```
+
+`XmpMetaFactory` has other methods for reading from `string` and `byte[]`, as well as support for parsing options.
+Returned properties provide additional information, but the above example should be enough to get you started.
+
 ## Installation
 
 The easiest way to reference this project is to install [its NuGet package](https://www.nuget.org/packages/XmpCore/):
