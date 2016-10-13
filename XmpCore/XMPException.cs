@@ -19,8 +19,8 @@ namespace XmpCore
 #endif
     public sealed class XmpException : Exception
     {
-        /// <summary>the errorCode of the XMP toolkit</summary>
-        private readonly XmpErrorCode _errorCode;
+        /// <value>Gets the error code of the XMP toolkit.</value>
+        public XmpErrorCode ErrorCode { get; }
 
         /// <summary>Constructs an exception with a message and an error code.</summary>
         /// <param name="message">the message</param>
@@ -28,23 +28,17 @@ namespace XmpCore
         public XmpException(string message, XmpErrorCode errorCode)
             : base(message)
         {
-            _errorCode = errorCode;
+            ErrorCode = errorCode;
         }
 
-        /// <summary>Constructs an exception with a message, an error code and a <c>Throwable</c></summary>
+        /// <summary>Constructs an exception with a message, an error code and an inner exception.</summary>
         /// <param name="message">the error message.</param>
         /// <param name="errorCode">the error code</param>
-        /// <param name="t">the exception source</param>
-        public XmpException(string message, XmpErrorCode errorCode, Exception t)
-            : base(message, t)
+        /// <param name="innerException">the exception source</param>
+        public XmpException(string message, XmpErrorCode errorCode, Exception innerException)
+            : base(message, innerException)
         {
-            _errorCode = errorCode;
-        }
-
-        /// <returns>Returns the error code.</returns>
-        public XmpErrorCode GetErrorCode()
-        {
-            return _errorCode;
+            ErrorCode = errorCode;
         }
     }
 }

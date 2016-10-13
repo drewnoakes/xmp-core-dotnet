@@ -45,7 +45,7 @@ namespace XmpCore.Tests
             }
             catch (XmpException e)
             {
-                log.WriteLine("Caught XmpException " + e.GetErrorCode() + " :   " +e.Message);
+                log.WriteLine("Caught XmpException " + e.ErrorCode + " :   " +e.Message);
             }
             catch (Exception e)
             {
@@ -347,7 +347,7 @@ namespace XmpCore.Tests
             }
             catch (XmpException e)
             {
-                log.WriteLine("getArrayItem with no schema URI - threw XmpException #" + e.GetErrorCode() +" :   " + e.Message + ")");
+                log.WriteLine("getArrayItem with no schema URI - threw XmpException #" + e.ErrorCode +" :   " + e.Message + ")");
             }
 
 
@@ -388,7 +388,7 @@ namespace XmpCore.Tests
             }
             catch (XmpException e)
             {
-                log.WriteLine("getQualifier with no schema URI - threw XmpException #" + e.GetErrorCode() + " :   " + e.Message);
+                log.WriteLine("getQualifier with no schema URI - threw XmpException #" + e.ErrorCode + " :   " + e.Message);
             }
 
             property = meta.GetQualifier(TestData.NS1, "QualProp3", XmpConstants.NsXml, "xml:lang");
@@ -427,7 +427,7 @@ namespace XmpCore.Tests
             }
             catch (XmpException e)
             {
-                log.WriteLine("getProperty with bogus schema URI - threw XmpException #" + e.GetErrorCode() + " :   " + e.Message);
+                log.WriteLine("getProperty with bogus schema URI - threw XmpException #" + e.ErrorCode + " :   " + e.Message);
             }
 
             property = meta.GetProperty (TestData.NS1, "Bogus");
@@ -626,7 +626,7 @@ namespace XmpCore.Tests
             }
             catch (XmpException e)
             {
-                log.WriteLine("Parse and do not reconcile inconsistent aliases - threw XmpException #{0} :   {1}", e.GetErrorCode(), e.Message);
+                log.WriteLine("Parse and do not reconcile inconsistent aliases - threw XmpException #{0} :   {1}", e.ErrorCode, e.Message);
             }
         }
 
@@ -715,7 +715,7 @@ namespace XmpCore.Tests
             }
             catch (XmpException e)
             {
-                log.WriteLine("\nExact packet size smaller than minimal packet length - threw XmpException #{0} :   {1}", e.GetErrorCode(), e.Message);
+                log.WriteLine("\nExact packet size smaller than minimal packet length - threw XmpException #{0} :   {1}", e.ErrorCode, e.Message);
             }
         }
 

@@ -128,7 +128,7 @@ namespace XmpCore.Impl
             }
             catch (XmpException e)
             {
-                if (e.GetErrorCode() == XmpErrorCode.BadXml || e.GetErrorCode() == XmpErrorCode.BadStream)
+                if (e.ErrorCode == XmpErrorCode.BadXml || e.ErrorCode == XmpErrorCode.BadStream)
                 {
                     if (options.AcceptLatin1)
                     {
@@ -167,7 +167,7 @@ namespace XmpCore.Impl
             }
             catch (XmpException e)
             {
-                if (e.GetErrorCode() == XmpErrorCode.BadXml && options.FixControlChars)
+                if (e.ErrorCode == XmpErrorCode.BadXml && options.FixControlChars)
                     return ParseTextReader(new FixAsciiControlsReader(new StreamReader(new MemoryStream(Encoding.UTF8.GetBytes(input)))));
                 throw;
             }
