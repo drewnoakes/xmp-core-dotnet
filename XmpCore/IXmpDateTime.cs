@@ -59,10 +59,12 @@ namespace XmpCore
 
         /// <value>Get and set the time zone.</value>
         TimeZoneInfo TimeZone { get; set; }
+
 #if PORTABLE
-        /// <value>Get and set the offset, primarily for ISO8601 converter. </value>
+        /// <value>Get and set the offset, primarily for ISO8601 converter.</value>
         TimeSpan Offset { get; set; }
 #endif
+
         /// <summary>This flag is set either by parsing or by setting year, month or day.</summary>
         /// <value>Returns true if the XMPDateTime object has a date portion.</value>
         bool HasDate { get; }
