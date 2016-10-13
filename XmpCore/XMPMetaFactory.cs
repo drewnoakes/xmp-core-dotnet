@@ -147,12 +147,12 @@ namespace XmpCore
 
         private sealed class XmpVersionInfo : IXmpVersionInfo
         {
-            public int Major { get; private set; }
-            public int Minor { get; private set; }
-            public int Micro { get; private set; }
-            public bool IsDebug { get; private set; }
-            public int Build { get; private set; }
-            public string Message { get; private set; }
+            public int Major { get; }
+            public int Minor { get; }
+            public int Micro { get; }
+            public bool IsDebug { get; }
+            public int Build { get; }
+            public string Message { get; }
 
             public XmpVersionInfo(int major, int minor, int micro, bool debug, int engBuild, string message)
             {
