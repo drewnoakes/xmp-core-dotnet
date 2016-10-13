@@ -73,10 +73,10 @@ namespace XmpCore
         public static string ComposeArrayItemPath(string arrayName, int itemIndex)
         {
             if (itemIndex > 0)
-                return string.Format("{0}{1}{2}{3}", arrayName, '[', itemIndex, ']');
+                return $"{arrayName}[{itemIndex}]";
 
             if (itemIndex == XmpConstants.ArrayLastItem)
-                return arrayName + "[last()]";
+                return $"{arrayName}[last()]";
 
             throw new XmpException("Array index must be larger than zero", XmpErrorCode.BadIndex);
         }
@@ -154,7 +154,7 @@ namespace XmpCore
         /// </returns>
         public static string ComposeLangSelector(string arrayName, string langName)
         {
-            return string.Format("{0}[?xml:lang=\"{1}\"]", arrayName, Utils.NormalizeLangValue(langName));
+            return $"{arrayName}[?xml:lang=\"{Utils.NormalizeLangValue(langName)}\"]";
         }
 
         /// <summary>Compose the path expression to select an alternate item by a field's value.</summary>
@@ -202,7 +202,7 @@ namespace XmpCore
             if (fieldPath.Size() != 2)
                 throw new XmpException("The fieldName name must be simple", XmpErrorCode.BadXPath);
 
-            return string.Format("{0}{1}{2}=\"{3}\"]", arrayName, "[", fieldPath.GetSegment(XmpPath.StepRootProp).Name, fieldValue);
+            return $"{arrayName}[{fieldPath.GetSegment(XmpPath.StepRootProp).Name}=\"{fieldValue}\"]";
         }
 
         /// <summary>ParameterAsserts that a qualifier namespace is set.</summary>
