@@ -20,12 +20,7 @@ namespace XmpCore
     public static class XmpMetaFactory
     {
         /// <value>Returns the singleton instance of the <see cref="XmpSchemaRegistry"/>.</value>
-        public static IXmpSchemaRegistry SchemaRegistry { get; private set; }
-
-        static XmpMetaFactory()
-        {
-            SchemaRegistry = new XmpSchemaRegistry();
-        }
+        public static IXmpSchemaRegistry SchemaRegistry { get; private set; } = new XmpSchemaRegistry();
 
         /// <returns>Returns an empty <c>XMPMeta</c>-object.</returns>
         public static IXmpMeta Create()
