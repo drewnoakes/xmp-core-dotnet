@@ -23,10 +23,7 @@ namespace XmpCore
         public static IXmpSchemaRegistry SchemaRegistry { get; private set; } = new XmpSchemaRegistry();
 
         /// <returns>Returns an empty <c>XMPMeta</c>-object.</returns>
-        public static IXmpMeta Create()
-        {
-            return new XmpMeta();
-        }
+        public static IXmpMeta Create() => new XmpMeta();
 
         /// <summary>
         /// These functions support parsing serialized RDF into an XMP object, and serializing an XMP
@@ -52,10 +49,7 @@ namespace XmpCore
         /// </param>
         /// <returns>Returns the <c>XMPMeta</c>-object created from the input.</returns>
         /// <exception cref="XmpException">If the file is not well-formed XML or if the parsing fails.</exception>
-        public static IXmpMeta Parse(Stream stream, ParseOptions options = null)
-        {
-            return XmpMetaParser.Parse(stream, options);
-        }
+        public static IXmpMeta Parse(Stream stream, ParseOptions options = null) => XmpMetaParser.Parse(stream, options);
 
         /// <summary>Creates an <c>XMPMeta</c>-object from a string.</summary>
         /// <seealso cref="ParseFromString(string, ParseOptions)"/>
@@ -63,10 +57,7 @@ namespace XmpCore
         /// <param name="options">Options controlling the parsing.</param>
         /// <returns>Returns the <c>XMPMeta</c>-object created from the input.</returns>
         /// <exception cref="XmpException">If the file is not well-formed XML or if the parsing fails.</exception>
-        public static IXmpMeta ParseFromString(string packet, ParseOptions options = null)
-        {
-            return XmpMetaParser.Parse(packet, options);
-        }
+        public static IXmpMeta ParseFromString(string packet, ParseOptions options = null) => XmpMetaParser.Parse(packet, options);
 
         /// <summary>Creates an <c>XMPMeta</c>-object from a byte-buffer.</summary>
         /// <seealso cref="Parse(Stream, ParseOptions)"/>
@@ -74,10 +65,7 @@ namespace XmpCore
         /// <param name="options">Options controlling the parsing.</param>
         /// <returns>Returns the <c>XMPMeta</c>-object created from the input.</returns>
         /// <exception cref="XmpException">If the file is not well-formed XML or if the parsing fails.</exception>
-        public static IXmpMeta ParseFromBuffer(byte[] buffer, ParseOptions options = null)
-        {
-            return XmpMetaParser.Parse(buffer, options);
-        }
+        public static IXmpMeta ParseFromBuffer(byte[] buffer, ParseOptions options = null) => XmpMetaParser.Parse(buffer, options);
 
         /// <summary>Serializes an <c>XMPMeta</c>-object as RDF into an <c>OutputStream</c>.</summary>
         /// <param name="xmp">a metadata object</param>
@@ -135,10 +123,7 @@ namespace XmpCore
         }
 
         /// <summary>Obtain version information.</summary>
-        public static IXmpVersionInfo VersionInfo
-        {
-            get { return new XmpVersionInfo(5, 1, 0, false, 3, "Adobe XMP Core 5.1.0-jc003"); }
-        }
+        public static IXmpVersionInfo VersionInfo => new XmpVersionInfo(5, 1, 0, false, 3, "Adobe XMP Core 5.1.0-jc003");
 
         private sealed class XmpVersionInfo : IXmpVersionInfo
         {
@@ -159,10 +144,7 @@ namespace XmpCore
                 Message = message;
             }
 
-            public override string ToString()
-            {
-                return Message;
-            }
+            public override string ToString() => Message;
         }
     }
 }
