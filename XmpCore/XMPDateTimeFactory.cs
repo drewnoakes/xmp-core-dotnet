@@ -15,28 +15,22 @@ using XmpCore.Impl;
 namespace XmpCore
 {
     /// <summary>
-    /// A factory to create <c>XMPDateTime</c>-instances from a <c>Calendar</c> or an
+    /// A factory to create <see cref="XmpDateTime"/> instances from a <see cref="Calendar"/> or an
     /// ISO 8601 string or for the current time.
     /// </summary>
     /// <since>16.02.2006</since>
     public static class XmpDateTimeFactory
     {
-        /// <summary>Creates an <c>XMPDateTime</c> from a <c>Calendar</c>-object.</summary>
-        /// <param name="calendar">a <c>Calendar</c>-object.</param>
-        /// <returns>An <c>XMPDateTime</c>-object.</returns>
-        public static IXmpDateTime CreateFromCalendar(Calendar calendar)
-        {
-            return new XmpDateTime(calendar);
-        }
+        /// <summary>Creates an <see cref="XmpDateTime"/> from a <see cref="Calendar"/>-object.</summary>
+        /// <param name="calendar">a <see cref="Calendar"/>-object.</param>
+        /// <returns>An <see cref="XmpDateTime"/>-object.</returns>
+        public static IXmpDateTime CreateFromCalendar(Calendar calendar) => new XmpDateTime(calendar);
 
-        /// <summary>Creates an empty <c>XMPDateTime</c>-object.</summary>
-        /// <returns>Returns an <c>XMPDateTime</c>-object.</returns>
-        public static IXmpDateTime Create()
-        {
-            return new XmpDateTime();
-        }
+        /// <summary>Creates an empty <see cref="XmpDateTime"/>-object.</summary>
+        /// <returns>Returns an <see cref="XmpDateTime"/>-object.</returns>
+        public static IXmpDateTime Create() => new XmpDateTime();
 
-        /// <summary>Creates an <c>XMPDateTime</c>-object from initial values.</summary>
+        /// <summary>Creates an <see cref="XmpDateTime"/>-object from initial values.</summary>
         /// <param name="year">years</param>
         /// <param name="month">
         /// months from 1 to 12<br />
@@ -45,17 +39,15 @@ namespace XmpCore
         /// is defined from 0 to 11.
         /// </param>
         /// <param name="day">days</param>
-        /// <returns>Returns an <c>XMPDateTime</c>-object.</returns>
-        public static IXmpDateTime Create(int year, int month, int day)
+        /// <returns>Returns an <see cref="XmpDateTime"/>-object.</returns>
+        public static IXmpDateTime Create(int year, int month, int day) => new XmpDateTime
         {
-            IXmpDateTime dt = new XmpDateTime();
-            dt.Year = year;
-            dt.Month = month;
-            dt.Day = day;
-            return dt;
-        }
+            Year = year,
+            Month = month,
+            Day = day
+        };
 
-        /// <summary>Creates an <c>XMPDateTime</c>-object from initial values.</summary>
+        /// <summary>Creates an <see cref="XmpDateTime"/>-object from initial values.</summary>
         /// <param name="year">years</param>
         /// <param name="month">
         /// months from 1 to 12<br />
@@ -68,46 +60,38 @@ namespace XmpCore
         /// <param name="minute">minutes</param>
         /// <param name="second">seconds</param>
         /// <param name="nanoSecond">nanoseconds</param>
-        /// <returns>Returns an <c>XMPDateTime</c>-object.</returns>
-        public static IXmpDateTime Create(int year, int month, int day, int hour, int minute, int second, int nanoSecond)
+        /// <returns>Returns an <see cref="XmpDateTime"/>-object.</returns>
+        public static IXmpDateTime Create(int year, int month, int day, int hour, int minute, int second, int nanoSecond) => new XmpDateTime
         {
-            IXmpDateTime dt = new XmpDateTime();
-            dt.Year = year;
-            dt.Month = month;
-            dt.Day = day;
-            dt.Hour = hour;
-            dt.Minute = minute;
-            dt.Second = second;
-            dt.Nanosecond = nanoSecond;
-            return dt;
-        }
+            Year = year,
+            Month = month,
+            Day = day,
+            Hour = hour,
+            Minute = minute,
+            Second = second,
+            Nanosecond = nanoSecond
+        };
 
-        /// <summary>Creates an <c>XMPDateTime</c> from an ISO 8601 string.</summary>
+        /// <summary>Creates an <see cref="XmpDateTime"/> from an ISO 8601 string.</summary>
         /// <param name="strValue">The ISO 8601 string representation of the date/time.</param>
-        /// <returns>An <c>XMPDateTime</c>-object.</returns>
+        /// <returns>An <see cref="XmpDateTime"/>-object.</returns>
         /// <exception cref="XmpException">When the ISO 8601 string is non-conform</exception>
         /// <exception cref="XmpException"/>
-        public static IXmpDateTime CreateFromIso8601(string strValue)
-        {
-            return new XmpDateTime(strValue);
-        }
+        public static IXmpDateTime CreateFromIso8601(string strValue) => new XmpDateTime(strValue);
 
         /// <summary>Obtain the current date and time.</summary>
         /// <returns>
         /// Returns The returned time is UTC, properly adjusted for the local time zone. The
         /// resolution of the time is not guaranteed to be finer than seconds.
         /// </returns>
-        public static IXmpDateTime GetCurrentDateTime()
-        {
-            return new XmpDateTime(new GregorianCalendar());
-        }
+        public static IXmpDateTime GetCurrentDateTime() => new XmpDateTime(new GregorianCalendar());
 
         /// <summary>
         /// Sets the local time zone without touching any other Any existing time zone value is replaced,
         /// the other date/time fields are not adjusted in any way.
         /// </summary>
-        /// <param name="dateTime">the <c>XMPDateTime</c> variable containing the value to be modified.</param>
-        /// <returns>Returns an updated <c>XMPDateTime</c>-object.</returns>
+        /// <param name="dateTime">the <see cref="XmpDateTime"/> variable containing the value to be modified.</param>
+        /// <returns>Returns an updated <see cref="XmpDateTime"/>-object.</returns>
         public static IXmpDateTime SetLocalTimeZone(IXmpDateTime dateTime)
         {
             var cal = dateTime.Calendar;
@@ -121,10 +105,10 @@ namespace XmpCore
         /// adjusted and the time zone set to be UTC.
         /// </remarks>
         /// <param name="dateTime">
-        /// the <c>XMPDateTime</c> variable containing the time to
+        /// the <see cref="XmpDateTime"/> variable containing the time to
         /// be modified.
         /// </param>
-        /// <returns>Returns an updated <c>XMPDateTime</c>-object.</returns>
+        /// <returns>Returns an updated <see cref="XmpDateTime"/>-object.</returns>
         public static IXmpDateTime ConvertToUtcTime(IXmpDateTime dateTime)
         {
             var timeInMillis = dateTime.Calendar.GetTimeInMillis();
@@ -139,8 +123,8 @@ namespace XmpCore
         /// Make sure a time is local. If the time zone is not the local zone, the time is adjusted and
         /// the time zone set to be local.
         /// </remarks>
-        /// <param name="dateTime">the <c>XMPDateTime</c> variable containing the time to be modified.</param>
-        /// <returns>Returns an updated <c>XMPDateTime</c>-object.</returns>
+        /// <param name="dateTime">the <see cref="XmpDateTime"/> variable containing the time to be modified.</param>
+        /// <returns>Returns an updated <see cref="XmpDateTime"/>-object.</returns>
         public static IXmpDateTime ConvertToLocalTime(IXmpDateTime dateTime)
         {
             var timeInMillis = dateTime.Calendar.GetTimeInMillis();
