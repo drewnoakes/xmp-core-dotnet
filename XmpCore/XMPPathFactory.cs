@@ -69,7 +69,7 @@ namespace XmpCore
         /// <tt>ns:arrayName[i]</tt>, where &quot;ns&quot; is the prefix for schemaNS and
         /// &quot;i&quot; is the decimal representation of itemIndex.
         /// </returns>
-        /// <exception cref="XmpException">Throws exeption if index zero is used.</exception>
+        /// <exception cref="XmpException">Throws exception if index zero is used.</exception>
         public static string ComposeArrayItemPath(string arrayName, int itemIndex)
         {
             if (itemIndex > 0)
