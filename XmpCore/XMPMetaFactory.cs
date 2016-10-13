@@ -125,7 +125,7 @@ namespace XmpCore
         private static void AssertImplementation(IXmpMeta xmp)
         {
             if (!(xmp is XmpMeta))
-                throw new NotSupportedException("The serializing service works only with the XMPMeta implementation of this library");
+                throw new NotSupportedException($"The serializing service works only with the {nameof(XmpMeta)} implementation of this library");
         }
 
         /// <summary>Resets the schema registry to its original state (creates a new one).</summary>
