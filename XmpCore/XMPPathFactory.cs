@@ -70,7 +70,6 @@ namespace XmpCore
         /// &quot;i&quot; is the decimal representation of itemIndex.
         /// </returns>
         /// <exception cref="XmpException">Throws exeption if index zero is used.</exception>
-        /// <exception cref="XmpException"/>
         public static string ComposeArrayItemPath(string arrayName, int itemIndex)
         {
             if (itemIndex > 0)
@@ -91,7 +90,6 @@ namespace XmpCore
         /// schemaNS and &quot;fNS&quot; is the prefix for fieldNS.
         /// </returns>
         /// <exception cref="XmpException">Thrown if the path to create is not valid.</exception>
-        /// <exception cref="XmpException"/>
         public static string ComposeStructFieldPath(string fieldNs, string fieldName)
         {
             AssertFieldNs(fieldNs);
@@ -119,7 +117,6 @@ namespace XmpCore
         /// schemaNS and &quot;qNS&quot; is the prefix for qualNS.
         /// </returns>
         /// <exception cref="XmpException">Thrown if the path to create is not valid.</exception>
-        /// <exception cref="XmpException"/>
         public static string ComposeQualifierPath(string qualNs, string qualName)
         {
             AssertQualNs(qualNs);
@@ -198,7 +195,6 @@ namespace XmpCore
         /// prefix for schemaNS and &quot;fNS&quot; is the prefix for fieldNS.
         /// </returns>
         /// <exception cref="XmpException">Thrown if the path to create is not valid.</exception>
-        /// <exception cref="XmpException"/>
         public static string ComposeFieldSelector(string arrayName, string fieldNs, string fieldName, string fieldValue)
         {
             var fieldPath = XmpPathParser.ExpandXPath(fieldNs, fieldName);
@@ -212,7 +208,6 @@ namespace XmpCore
         /// <summary>ParameterAsserts that a qualifier namespace is set.</summary>
         /// <param name="qualNs">a qualifier namespace</param>
         /// <exception cref="XmpException">Qualifier schema is null or empty</exception>
-        /// <exception cref="XmpException"/>
         private static void AssertQualNs(string qualNs)
         {
             if (string.IsNullOrEmpty(qualNs))
@@ -222,7 +217,6 @@ namespace XmpCore
         /// <summary>ParameterAsserts that a qualifier name is set.</summary>
         /// <param name="qualName">a qualifier name or path</param>
         /// <exception cref="XmpException">Qualifier name is null or empty</exception>
-        /// <exception cref="XmpException"/>
         private static void AssertQualName(string qualName)
         {
             if (string.IsNullOrEmpty(qualName))
@@ -232,7 +226,6 @@ namespace XmpCore
         /// <summary>ParameterAsserts that a struct field namespace is set.</summary>
         /// <param name="fieldNs">a struct field namespace</param>
         /// <exception cref="XmpException">Struct field schema is null or empty</exception>
-        /// <exception cref="XmpException"/>
         private static void AssertFieldNs(string fieldNs)
         {
             if (string.IsNullOrEmpty(fieldNs))
@@ -242,7 +235,6 @@ namespace XmpCore
         /// <summary>ParameterAsserts that a struct field name is set.</summary>
         /// <param name="fieldName">a struct field name or path</param>
         /// <exception cref="XmpException">Struct field name is null or empty</exception>
-        /// <exception cref="XmpException"/>
         private static void AssertFieldName(string fieldName)
         {
             if (string.IsNullOrEmpty(fieldName))
