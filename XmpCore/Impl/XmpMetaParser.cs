@@ -79,7 +79,7 @@ namespace XmpCore.Impl
         /// Parses XML from a byte buffer,
         /// fixing the encoding (Latin-1 to UTF-8) and illegal control character optionally.
         /// </summary>
-        /// <param name="buffer">a byte buffer containing the XMP packet</param>
+        /// <param name="bytes">a byte buffer containing the XMP packet</param>
         /// <param name="options">the parsing options</param>
         /// <returns>Returns an XML DOM-Document.</returns>
         /// <exception cref="XmpException">Thrown when the parsing fails.</exception>
