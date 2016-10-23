@@ -151,9 +151,7 @@ namespace XmpCore.Impl
         private void CleanupChildren()
         {
             if (_children.Count == 0)
-            {
                 _children = null;
-            }
         }
 
         /// <summary>Removes all children from the node.</summary>
@@ -163,30 +161,18 @@ namespace XmpCore.Impl
         }
 
         /// <returns>Returns the number of children without necessarily creating a list.</returns>
-        public int GetChildrenLength()
-        {
-            return _children?.Count ?? 0;
-        }
+        public int GetChildrenLength() => _children?.Count ?? 0;
 
         /// <param name="expr">child node name to look for</param>
         /// <returns>Returns an <c>XMPNode</c> if node has been found, <c>null</c> otherwise.</returns>
-        public XmpNode FindChildByName(string expr)
-        {
-            return Find(GetChildren(), expr);
-        }
+        public XmpNode FindChildByName(string expr) => Find(GetChildren(), expr);
 
         /// <param name="index">an index [1..size]</param>
         /// <returns>Returns the qualifier with the requested index.</returns>
-        public XmpNode GetQualifier(int index)
-        {
-            return GetQualifier()[index - 1];
-        }
+        public XmpNode GetQualifier(int index) => GetQualifier()[index - 1];
 
         /// <returns>Returns the number of qualifier without necessarily creating a list.</returns>
-        public int GetQualifierLength()
-        {
-            return _qualifier?.Count ?? 0;
-        }
+        public int GetQualifierLength() => _qualifier?.Count ?? 0;
 
         /// <summary>Appends a qualifier to the qualifier list and sets respective options.</summary>
         /// <param name="qualNode">a qualifier node.</param>
@@ -262,10 +248,7 @@ namespace XmpCore.Impl
         /// Returns a qualifier <c>XMPNode</c> if node has been found,
         /// <c>null</c> otherwise.
         /// </returns>
-        public XmpNode FindQualifierByName(string expr)
-        {
-            return Find(_qualifier, expr);
-        }
+        public XmpNode FindQualifierByName(string expr) => Find(_qualifier, expr);
 
         /// <summary>
         /// Get whether the node has children.
@@ -314,15 +297,9 @@ namespace XmpCore.Impl
                 _it = it;
             }
 
-            public bool HasNext()
-            {
-                return _it.HasNext();
-            }
+            public bool HasNext() => _it.HasNext();
 
-            public object Next()
-            {
-                return _it.Next();
-            }
+            public object Next() => _it.Next();
 
             public void Remove()
             {
@@ -389,11 +366,9 @@ namespace XmpCore.Impl
 
         public int CompareTo(object xmpNode)
         {
-            if (Options.IsSchemaNode)
-            {
-                return string.CompareOrdinal(Value, ((XmpNode)xmpNode).Value);
-            }
-            return string.CompareOrdinal(Name, ((XmpNode)xmpNode).Name);
+            return Options.IsSchemaNode
+                ? string.CompareOrdinal(Value, ((XmpNode)xmpNode).Value)
+                : string.CompareOrdinal(Name, ((XmpNode)xmpNode).Name);
         }
 
         public string Name { set; get; }
@@ -553,31 +528,19 @@ namespace XmpCore.Impl
         /// that its initialized.
         /// </summary>
         /// <returns>Returns list of children that is lazy initialized.</returns>
-        private List<XmpNode> GetChildren()
-        {
-            return _children ?? (_children = new List<XmpNode>(0));
-        }
+        private List<XmpNode> GetChildren() => _children ?? (_children = new List<XmpNode>(0));
 
         /// <returns>Returns a read-only copy of child nodes list.</returns>
-        public IEnumerable<object> GetUnmodifiableChildren()
-        {
-            return GetChildren().Cast<object>().ToList();
-        }
+        public IEnumerable<object> GetUnmodifiableChildren() => GetChildren().Cast<object>().ToList();
 
         /// <returns>Returns list of qualifier that is lazy initialized.</returns>
-        private List<XmpNode> GetQualifier()
-        {
-            return _qualifier ?? (_qualifier = new List<XmpNode>(0));
-        }
+        private List<XmpNode> GetQualifier() => _qualifier ?? (_qualifier = new List<XmpNode>(0));
 
         /// <summary>Internal find.</summary>
         /// <param name="list">the list to search in</param>
         /// <param name="expr">the search expression</param>
         /// <returns>Returns the found node or <c>nulls</c>.</returns>
-        private static XmpNode Find(IList<XmpNode> list, string expr)
-        {
-            return list?.FirstOrDefault(node => node.Name == expr);
-        }
+        private static XmpNode Find(IList<XmpNode> list, string expr) => list?.FirstOrDefault(node => node.Name == expr);
 
         /// <summary>Checks that a node name is not existing on the same level, except for array items.</summary>
         /// <param name="childName">the node name to check</param>
@@ -585,9 +548,7 @@ namespace XmpCore.Impl
         private void AssertChildNotExisting(string childName)
         {
             if (childName != XmpConstants.ArrayItemName && FindChildByName(childName) != null)
-            {
                 throw new XmpException("Duplicate property or field node '" + childName + "'", XmpErrorCode.BadXmp);
-            }
         }
 
         /// <summary>Checks that a qualifier name is not existing on the same level.</summary>
@@ -596,9 +557,7 @@ namespace XmpCore.Impl
         private void AssertQualifierNotExisting(string qualifierName)
         {
             if (qualifierName != XmpConstants.ArrayItemName && FindQualifierByName(qualifierName) != null)
-            {
                 throw new XmpException("Duplicate '" + qualifierName + "' qualifier", XmpErrorCode.BadXmp);
-            }
         }
 
         private sealed class QualifierOrderComparer : IComparer<string>
