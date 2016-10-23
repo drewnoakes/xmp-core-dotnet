@@ -8,11 +8,12 @@
 // =================================================================================================
 
 
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Xml;
 using System.Xml.Linq;
 using XmpCore.Options;
-using System.Collections.Generic;
 
 namespace XmpCore.Impl
 {
@@ -266,10 +267,10 @@ namespace XmpCore.Impl
                 {
                     continue;
                 }
-                if (currChild.NodeType == System.Xml.XmlNodeType.Comment)
+                if (currChild.NodeType == XmlNodeType.Comment)
                     continue;
 
-                if (currChild.NodeType != System.Xml.XmlNodeType.Element)
+                if (currChild.NodeType != XmlNodeType.Element)
                 {
                     throw new XmpException("Expected property element node not found", XmpErrorCode.BadRdf);
                 }
@@ -458,7 +459,7 @@ namespace XmpCore.Impl
                     }
                     else
                     {
-                        var nonTextNode = xmlNode.Nodes().FirstOrDefault(t => t.NodeType != System.Xml.XmlNodeType.Text);
+                        var nonTextNode = xmlNode.Nodes().FirstOrDefault(t => t.NodeType != XmlNodeType.Text);
                         if(nonTextNode == null)
                             Rdf_LiteralPropertyElement(xmp, xmpParent, xmlNode, isTopLevel);
                         else
@@ -530,7 +531,7 @@ namespace XmpCore.Impl
             {
                 if (!IsWhitespaceNode(currChild))
                 {
-                    if (currChild.NodeType == System.Xml.XmlNodeType.Element && !found)
+                    if (currChild.NodeType == XmlNodeType.Element && !found)
                     {
                         var currChildElem = (XElement)currChild;
                         var isRdf = XmpConstants.NsRdf.Equals(currChildElem.Name.NamespaceName);
@@ -631,7 +632,7 @@ namespace XmpCore.Impl
             var textValue = string.Empty;
             foreach(var child in xmlNode.Nodes())
             {
-                if (child.NodeType == System.Xml.XmlNodeType.Text)
+                if (child.NodeType == XmlNodeType.Text)
                 {
                     textValue += ((XText)child).Value;
                 }
@@ -1130,7 +1131,7 @@ namespace XmpCore.Impl
         /// </returns>
         private static bool IsWhitespaceNode(XNode node)
         {
-            return node.NodeType == System.Xml.XmlNodeType.Text && ((XText)node).Value
+            return node.NodeType == XmlNodeType.Text && ((XText)node).Value
                                                                             #if PORTABLE
                                                                                     .ToCharArray()
                                                                             #endif
@@ -1192,13 +1193,13 @@ namespace XmpCore.Impl
             return GetRdfTermKind(node.Name, node.NodeType, node.Parent.Name);
         }
 
-        private static RdfTerm GetRdfTermKind(XName name, System.Xml.XmlNodeType nodeType, XName parentName = null)
+        private static RdfTerm GetRdfTermKind(XName name, XmlNodeType nodeType, XName parentName = null)
         {
             var localName = name.LocalName;
             var ns = name.NamespaceName;
             var parentNamespaceName = (parentName != null ? parentName.NamespaceName : string.Empty);
 
-            if (ns == string.Empty && (localName == "about" || localName == "ID") && (nodeType == System.Xml.XmlNodeType.Attribute) && parentNamespaceName == XmpConstants.NsRdf)
+            if (ns == string.Empty && (localName == "about" || localName == "ID") && (nodeType == XmlNodeType.Attribute) && parentNamespaceName == XmpConstants.NsRdf)
                 ns = XmpConstants.NsRdf;
 
             if (ns == XmpConstants.NsRdf)

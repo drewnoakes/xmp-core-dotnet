@@ -9,8 +9,10 @@
 
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Xml;
 using System.Xml.Linq;
 using XmpCore.Options;
 
@@ -210,7 +212,7 @@ namespace XmpCore.Impl
                 var doc = XDocument.Parse(streamContents);
                 return doc;
             }
-            catch (System.Xml.XmlException e)
+            catch (XmlException e)
             {
                 throw new XmpException("XML parsing failure", XmpErrorCode.BadXml, e);
             }
@@ -231,7 +233,7 @@ namespace XmpCore.Impl
                 var doc = XDocument.Parse(reader.ReadToEnd());
                 return doc;
             }
-            catch (System.Xml.XmlException e)
+            catch (XmlException e)
             {
                 throw new XmpException("XML parsing failure", XmpErrorCode.BadXml, e);
             }
@@ -277,19 +279,19 @@ namespace XmpCore.Impl
         /// <item>[2] - the body text of the xpacket-instruction.</item>
         /// </list>
         /// </returns>
-        private static object[] FindRootNode(System.Collections.Generic.IEnumerable<XNode> nodes, bool xmpmetaRequired, object[] result)
+        private static object[] FindRootNode(IEnumerable<XNode> nodes, bool xmpmetaRequired, object[] result)
         {
 
             foreach (var root in nodes)
             {
-                if (System.Xml.XmlNodeType.ProcessingInstruction == root.NodeType && XmpConstants.XmpPi.Equals(((XProcessingInstruction)root).Target))
+                if (XmlNodeType.ProcessingInstruction == root.NodeType && XmpConstants.XmpPi.Equals(((XProcessingInstruction)root).Target))
                 {
                     // Store the processing instructions content
                     result[2] = ((XProcessingInstruction)root).Data;
                 }
                 else
                 {
-                    if(System.Xml.XmlNodeType.Element == root.NodeType)
+                    if(XmlNodeType.Element == root.NodeType)
                     {
                         XElement rootElem = (XElement)root;
                         string rootNS = rootElem.Name.NamespaceName;
@@ -303,9 +305,9 @@ namespace XmpCore.Impl
                             // by not passing the RequireXMPMeta-option, the rdf-Node will be valid
                             return FindRootNode(rootElem.Nodes(), false, result);
                         }
-                        else if (!xmpmetaRequired &&
-                                "RDF".Equals(rootLocal) &&
-                                 XmpConstants.NsRdf.Equals(rootNS))
+                        if (!xmpmetaRequired &&
+                            "RDF".Equals(rootLocal) &&
+                            XmpConstants.NsRdf.Equals(rootNS))
                         {
                             if (result != null)
                             {
@@ -314,18 +316,11 @@ namespace XmpCore.Impl
                             }
                             return result;
                         }
-                        else
+                        // continue searching
+                        object[] newResult = FindRootNode(rootElem.Nodes(), xmpmetaRequired, result);
+                        if (newResult != null)
                         {
-                            // continue searching
-                            object[] newResult = FindRootNode(rootElem.Nodes(), xmpmetaRequired, result);
-                            if (newResult != null)
-                            {
-                                return newResult;
-                            }
-                            else
-                            {
-                                continue;
-                            }
+                            return newResult;
                         }
                     }
                 }
