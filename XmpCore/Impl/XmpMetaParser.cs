@@ -65,6 +65,32 @@ namespace XmpCore.Impl
             var doc = ParseXmlString(xmlStr, options);
             return ParseXmlDoc(doc, options);
         }
+
+        /// <summary>
+        /// Parses an XMP metadata object from a XDocument, including de-aliasing and normalisation.
+        /// </summary>
+        /// <exception cref="XmpException">Thrown if parsing or normalisation fails.</exception>
+        public static IXmpMeta Parse(XDocument doc, ParseOptions options = null)
+        {
+            ParameterAsserts.AssertNotNull(doc);
+            options = options ?? new ParseOptions();
+            return ParseXmlDoc(doc, options);
+        }
+
+        /// <summary>
+        /// Parses XML from a byte buffer,
+        /// fixing the encoding (Latin-1 to UTF-8) and illegal control character optionally.
+        /// </summary>
+        /// <param name="buffer">a byte buffer containing the XMP packet</param>
+        /// <param name="options">the parsing options</param>
+        /// <returns>Returns an XML DOM-Document.</returns>
+        /// <exception cref="XmpException">Thrown when the parsing fails.</exception>
+        public static XDocument Extract(byte[] bytes, ParseOptions options = null)
+        {
+            ParameterAsserts.AssertNotNull(bytes);
+            options = options ?? new ParseOptions();
+            return ParseXmlFromByteBuffer(new ByteBuffer(bytes), options);
+        }
         
         private static IXmpMeta ParseXmlDoc(XDocument document, ParseOptions options)
         {
