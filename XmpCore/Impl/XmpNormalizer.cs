@@ -24,7 +24,27 @@ namespace XmpCore.Impl
 
         static XmpNormalizer()
         {
-            InitDcArrays();
+            var bagForm = new PropertyOptions { IsArray = true };
+            var seqForm = new PropertyOptions { IsArray = true, IsArrayOrdered = true };
+            var altTextForm = new PropertyOptions { IsArray = true, IsArrayOrdered = true, IsArrayAlternate = true, IsArrayAltText = true };
+
+            _dcArrayForms = new Dictionary<string, PropertyOptions>
+            {
+                // Properties supposed to be a "Bag".
+                ["dc:contributor"] = bagForm,
+                ["dc:language"] = bagForm,
+                ["dc:publisher"] = bagForm,
+                ["dc:relation"] = bagForm,
+                ["dc:subject"] = bagForm,
+                ["dc:type"] = bagForm,
+                // Properties supposed to be a "Seq".
+                ["dc:creator"] = seqForm,
+                ["dc:date"] = seqForm,
+                // Properties supposed to be an "Alt" in alternative-text form.
+                ["dc:description"] = altTextForm,
+                ["dc:rights"] = altTextForm,
+                ["dc:title"] = altTextForm
+            };
         }
 
         /// <summary>Normalizes a raw parsed XMPMeta-Object</summary>
@@ -547,30 +567,5 @@ namespace XmpCore.Impl
 
         // Don't let failures (like a bad dc:rights form) stop other
         // cleanup.
-        /// <summary>
-        /// Initializes the map that contains the known arrays, that are fixed by <see cref="NormalizeDcArrays"/>.
-        /// </summary>
-        private static void InitDcArrays()
-        {
-            var bagForm = new PropertyOptions { IsArray = true };
-            var seqForm = new PropertyOptions { IsArray = true, IsArrayOrdered = true };
-            var altTextForm = new PropertyOptions { IsArray = true, IsArrayOrdered = true, IsArrayAlternate = true, IsArrayAltText = true };
-
-            _dcArrayForms = new Dictionary<string, PropertyOptions>();
-            // Properties supposed to be a "Bag".
-            _dcArrayForms["dc:contributor"] = bagForm;
-            _dcArrayForms["dc:language"] = bagForm;
-            _dcArrayForms["dc:publisher"] = bagForm;
-            _dcArrayForms["dc:relation"] = bagForm;
-            _dcArrayForms["dc:subject"] = bagForm;
-            _dcArrayForms["dc:type"] = bagForm;
-            // Properties supposed to be a "Seq".
-            _dcArrayForms["dc:creator"] = seqForm;
-            _dcArrayForms["dc:date"] = seqForm;
-            // Properties supposed to be an "Alt" in alternative-text form.
-            _dcArrayForms["dc:description"] = altTextForm;
-            _dcArrayForms["dc:rights"] = altTextForm;
-            _dcArrayForms["dc:title"] = altTextForm;
-        }
     }
 }

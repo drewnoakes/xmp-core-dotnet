@@ -294,24 +294,27 @@ namespace XmpCore.Impl.XPath
             {
                 // add schema xpath step and base step of alias
                 expandedXPath.Add(new XmpPathSegment(aliasInfo.Namespace, XmpPath.SchemaNode));
-                var rootStep = new XmpPathSegment(VerifyXPathRoot(aliasInfo.Namespace, aliasInfo.PropName), XmpPath.StructFieldStep);
-                rootStep.IsAlias = true;
-                rootStep.AliasForm = aliasInfo.AliasForm.GetOptions();
-                expandedXPath.Add(rootStep);
+                expandedXPath.Add(new XmpPathSegment(VerifyXPathRoot(aliasInfo.Namespace, aliasInfo.PropName), XmpPath.StructFieldStep)
+                {
+                    IsAlias = true,
+                    AliasForm = aliasInfo.AliasForm.GetOptions()
+                });
 
                 if (aliasInfo.AliasForm.IsArrayAltText)
                 {
-                    var qualSelectorStep = new XmpPathSegment("[?xml:lang='x-default']", XmpPath.QualSelectorStep);
-                    qualSelectorStep.IsAlias = true;
-                    qualSelectorStep.AliasForm = aliasInfo.AliasForm.GetOptions();
-                    expandedXPath.Add(qualSelectorStep);
+                    expandedXPath.Add(new XmpPathSegment("[?xml:lang='x-default']", XmpPath.QualSelectorStep)
+                    {
+                        IsAlias = true,
+                        AliasForm = aliasInfo.AliasForm.GetOptions()
+                    });
                 }
                 else if (aliasInfo.AliasForm.IsArray)
                 {
-                    var indexStep = new XmpPathSegment("[1]", XmpPath.ArrayIndexStep);
-                    indexStep.IsAlias = true;
-                    indexStep.AliasForm = aliasInfo.AliasForm.GetOptions();
-                    expandedXPath.Add(indexStep);
+                    expandedXPath.Add(new XmpPathSegment("[1]", XmpPath.ArrayIndexStep)
+                    {
+                        IsAlias = true,
+                        AliasForm = aliasInfo.AliasForm.GetOptions()
+                    });
                 }
             }
         }
