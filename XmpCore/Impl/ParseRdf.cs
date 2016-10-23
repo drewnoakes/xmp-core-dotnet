@@ -378,7 +378,7 @@ namespace XmpCore.Impl
 
             // remove the namespace-definitions from the list (original Java)
             // (for C#, put them in an ignore list and don't count or process them)
-            List<string> ignoreNodes = new List<string>();
+            var ignoreNodes = new List<string>();
             foreach(var attribute in attributes)
             {
                 var prefix = xmlNode.GetPrefixOfNamespace(attribute.Name.Namespace);

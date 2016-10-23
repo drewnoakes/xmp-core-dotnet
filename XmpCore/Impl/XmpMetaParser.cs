@@ -279,9 +279,9 @@ namespace XmpCore.Impl
                 }
                 else if (XmlNodeType.Element == root.NodeType)
                 {
-                    XElement rootElem = (XElement)root;
-                    string rootNS = rootElem.Name.NamespaceName;
-                    string rootLocal = rootElem.Name.LocalName;
+                    var rootElem = (XElement)root;
+                    var rootNS = rootElem.Name.NamespaceName;
+                    var rootLocal = rootElem.Name.LocalName;
 
                     if ((XmpConstants.TagXmpmeta.Equals(rootLocal) || XmpConstants.TagXapmeta.Equals(rootLocal)) &&
                             XmpConstants.NsX.Equals(rootNS))
@@ -301,7 +301,7 @@ namespace XmpCore.Impl
                     }
 
                     // continue searching
-                    object[] newResult = FindRootNode(rootElem.Nodes(), xmpmetaRequired, result);
+                    var newResult = FindRootNode(rootElem.Nodes(), xmpmetaRequired, result);
                     if (newResult != null)
                         return newResult;
                 }

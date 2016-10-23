@@ -111,7 +111,7 @@ namespace XmpCore.Tests
             // Registry namespace functions
             writeMinorLabel ("Test namespace registry functions");
 
-            string prefix = registry.RegisterNamespace(TestData.NS1, "ns1");
+            var prefix = registry.RegisterNamespace(TestData.NS1, "ns1");
             log.WriteLine ("registerNamespace ns1:   {0}   --->   {1}", prefix, registry.GetNamespaceUri(prefix));
 
             prefix = registry.RegisterNamespace(TestData.NS2, "ns2");
@@ -223,7 +223,7 @@ namespace XmpCore.Tests
             meta3.SetProperty(XmpConstants.NsXmpMm, "InstanceID", "meta2:Original");
             printXmpMeta(meta3, "Add instance ID");
 
-            XmpMeta meta4 = (XmpMeta) meta3.Clone();
+            var meta4 = (XmpMeta) meta3.Clone();
             meta4.SetProperty (XmpConstants.NsXmpMm, "InstanceID", "meta2:Clone");
             printXmpMeta(meta3, "Clone and add instance ID");
         }
@@ -572,20 +572,20 @@ namespace XmpCore.Tests
             printXmpMeta (meta, "A few basic binary Set... calls");
             log.WriteLine();
 
-            bool b = meta.GetPropertyBoolean(TestData.NS1, "Bool0");
+            var b = meta.GetPropertyBoolean(TestData.NS1, "Bool0");
             log.WriteLine ("getPropertyBoolean ns1:Bool0 =   " + b);
 
             b = meta.GetPropertyBoolean(TestData.NS1, "Bool1");
             log.WriteLine ("getPropertyBoolean ns1:Bool1 =   " + b);
 
-            int integer = meta.GetPropertyInteger(TestData.NS1, "Int");
+            var integer = meta.GetPropertyInteger(TestData.NS1, "Int");
             log.WriteLine ("getPropertyBoolean ns1:Int =   " + integer);
 
-            double d = meta.GetPropertyDouble(TestData.NS1, "Double");
+            var d = meta.GetPropertyDouble(TestData.NS1, "Double");
             log.WriteLine ("getPropertyBoolean ns1:Int =   " + d);
             log.WriteLine();
 
-            for (int i = 1; i <= 13; i++)
+            for (var i = 1; i <= 13; i++)
             {
                 var dateName = "Date" + i;
                 var dt = meta.GetPropertyDate (TestData.NS1, dateName);
@@ -649,7 +649,7 @@ namespace XmpCore.Tests
             meta.SetProperty (TestData.NS2, "HasLF", valueWithLF);
             meta.SetProperty (TestData.NS2, "HasCRLF", valueWithCRLF);
 
-            string result = XmpMetaFactory.SerializeToString(meta, new SerializeOptions { OmitPacketWrapper = true });
+            var result = XmpMetaFactory.SerializeToString(meta, new SerializeOptions { OmitPacketWrapper = true });
             log.WriteLine(result);
 
             var hasCR = meta.GetPropertyString (TestData.NS1, "HasCR");
@@ -702,11 +702,11 @@ namespace XmpCore.Tests
             log.WriteLine(XmpMetaFactory.SerializeToString(meta, new SerializeOptions { Padding = 10 }));
 
             writeMinorLabel ("Serialize with exact packet size");
-            int s = XmpMetaFactory.SerializeToBuffer(meta, new SerializeOptions { ReadOnlyPacket = true }).Length;
+            var s = XmpMetaFactory.SerializeToBuffer(meta, new SerializeOptions { ReadOnlyPacket = true }).Length;
             log.WriteLine ("Minimum packet size is " + s + " bytes\n");
 
             // with the flag "exact packet size" the padding becomes the overall length of the packet
-            byte[] buffer = XmpMetaFactory.SerializeToBuffer(meta, new SerializeOptions { ExactPacketLength = true, Padding = s });
+            var buffer = XmpMetaFactory.SerializeToBuffer(meta, new SerializeOptions { ExactPacketLength = true, Padding = s });
             log.WriteLine(Encoding.UTF8.GetString(buffer, 0, buffer.Length));
 
             try
@@ -836,7 +836,7 @@ namespace XmpCore.Tests
 
             meta.AppendArrayItem(TestData.NS1, "ArrayProp", new PropertyOptions { IsArray = true }, "Item 1", null);
 
-            string path = XmpPathFactory.ComposeArrayItemPath("ArrayProp", 2);
+            var path = XmpPathFactory.ComposeArrayItemPath("ArrayProp", 2);
             log.WriteLine ("composeArrayItemPath ArrayProp[2] =   " + path);
             meta.SetProperty (TestData.NS1, path, "new ns1:ArrayProp[2] value");
 
@@ -873,7 +873,7 @@ namespace XmpCore.Tests
 
             var    date2    = XmpDateTimeFactory.Create(0, 0, 0, 0, 0, 0, 0);
 
-            GregorianCalendar cal = new GregorianCalendar(2007, 1, 28);
+            var cal = new GregorianCalendar(2007, 1, 28);
             var    date3    = XmpDateTimeFactory.CreateFromCalendar(cal);
 
             var currentDateTime = XmpDateTimeFactory.GetCurrentDateTime();
@@ -900,7 +900,7 @@ namespace XmpCore.Tests
          */
         private static void printXmpMeta(IXmpMeta meta, string title)
         {
-            string name = meta.GetObjectName();
+            var name = meta.GetObjectName();
             if (!string.IsNullOrEmpty(name))
             {
                 log.WriteLine("{0} (Name: '{1}'):", title, name);
