@@ -99,7 +99,8 @@ namespace XmpCore.Options
 
         public override bool Equals(object obj)
         {
-            return GetOptions() == ((Options)obj).GetOptions();
+            var options = obj as Options;
+            return options != null && GetOptions() == options.GetOptions();
         }
 
         public override int GetHashCode()
