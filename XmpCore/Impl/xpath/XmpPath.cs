@@ -13,7 +13,7 @@ using System.Text;
 
 namespace XmpCore.Impl.XPath
 {
-    /// <summary>Representates an XMP XMPPath with segment accessor methods.</summary>
+    /// <summary>Represents an XMP XMPPath with segment accessor methods.</summary>
     /// <since>28.02.2006</since>
     public sealed class XmpPath
     {

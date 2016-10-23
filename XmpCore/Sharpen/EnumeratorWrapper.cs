@@ -5,11 +5,11 @@ namespace Sharpen
 {
     public class EnumeratorWrapper<T> : Iterator<T>
     {
-        readonly object _collection;
-        IEnumerator<T> _e;
-        T _lastVal;
-        bool _more;
-        bool _copied;
+        private readonly object _collection;
+        private IEnumerator<T> _e;
+        private T _lastVal;
+        private bool _more;
+        private bool _copied;
 
         public EnumeratorWrapper (object collection, IEnumerator<T> e)
         {

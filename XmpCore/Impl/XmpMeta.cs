@@ -34,6 +34,7 @@ namespace XmpCore.Impl
             Calendar = 6,
             Base64 = 7
         }
+
         /// <summary>root of the metadata tree</summary>
         private readonly XmpNode _tree;
 
@@ -171,7 +172,7 @@ namespace XmpCore.Impl
         {
             try
             {
-                // Note: qualNS and qualName are checked inside composeQualfierPath
+                // Note: qualNS and qualName are checked inside composeQualifierPath
                 ParameterAsserts.AssertSchemaNs(schemaNs);
                 ParameterAsserts.AssertPropName(propName);
                 var qualPath = propName + XmpPathFactory.ComposeQualifierPath(qualNs, qualName);
@@ -706,7 +707,7 @@ namespace XmpCore.Impl
         /// <exception cref="XmpException"/>
         public IXmpProperty GetQualifier(string schemaNs, string propName, string qualNs, string qualName)
         {
-            // qualNS and qualName are checked inside composeQualfierPath
+            // qualNS and qualName are checked inside composeQualifierPath
             ParameterAsserts.AssertSchemaNs(schemaNs);
             ParameterAsserts.AssertPropName(propName);
             var qualPath = propName + XmpPathFactory.ComposeQualifierPath(qualNs, qualName);

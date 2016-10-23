@@ -166,8 +166,8 @@ namespace XmpCore.Impl.XPath
 
         /// <summary>Parses a struct segment</summary>
         /// <param name="pos">the current position in the path</param>
-        /// <returns>Retusn the segment or an errror</returns>
-        /// <exception cref="XmpException">If the sement is empty</exception>
+        /// <returns>The segment or an error</returns>
+        /// <exception cref="XmpException">If the segment is empty</exception>
         private static XmpPathSegment ParseStructSegment(PathPosition pos)
         {
             pos.NameStart = pos.StepBegin;

@@ -37,11 +37,11 @@ namespace XmpCore.Impl
 
         /// <summary>
         /// Normalize an xml:lang value so that comparisons are effectively case
-        /// insensitive as required by RFC 3066 (which superceeds RFC 1766).
+        /// insensitive as required by RFC 3066 (which supersedes RFC 1766).
         /// </summary>
         /// <remarks>
         /// Normalize an xml:lang value so that comparisons are effectively case
-        /// insensitive as required by RFC 3066 (which superceeds RFC 1766). The
+        /// insensitive as required by RFC 3066 (which supersedes RFC 1766). The
         /// normalization rules:
         /// <list type="bullet">
         /// <item> The primary subtag is lower case, the suggested practice of ISO 639.</item>
