@@ -639,9 +639,9 @@ namespace XmpCore.Tests
         {
             writeMajorLabel ("Test CR and LF in values");
 
-            string valueWithCR        = "ASCII \r CR";
-            string valueWithLF        = "ASCII \n LF";
-            string valueWithCRLF    = "ASCII \r\n CRLF";
+            const string valueWithCR = "ASCII \r CR";
+            const string valueWithLF = "ASCII \n LF";
+            const string valueWithCRLF = "ASCII \r\n CRLF";
 
             var meta = XmpMetaFactory.ParseFromString(TestData.NEWLINE_RDF);
 

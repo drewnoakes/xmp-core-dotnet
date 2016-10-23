@@ -499,7 +499,7 @@ namespace XmpCore.Impl
             {
                 var dcSchema = XmpNodeUtils.FindSchemaNode(((XmpMeta)xmp).GetRoot(), XmpConstants.NsDC, true);
                 var dmValue = dmCopyright.Value;
-                var doubleLf = "\n\n";
+                const string doubleLf = "\n\n";
                 var dcRightsArray = XmpNodeUtils.FindChildNode(dcSchema, "dc:rights", false);
                 if (dcRightsArray == null || !dcRightsArray.HasChildren)
                 {

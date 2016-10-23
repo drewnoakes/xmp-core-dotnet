@@ -56,7 +56,7 @@ namespace XmpCore.Impl
         public ByteBuffer(Stream stream)
         {
             // load stream into buffer
-            var chunk = 16384;
+            const int chunk = 16384;
             _length = 0;
             _buffer = new byte[chunk];
             int read;
