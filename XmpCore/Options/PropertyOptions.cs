@@ -37,7 +37,7 @@ namespace XmpCore.Options
         {
         }
 
-        /// <summary>Intialization constructor</summary>
+        /// <summary>Initialization constructor</summary>
         /// <param name="options">the initialization options</param>
         /// <exception cref="XmpException">If the options are not valid</exception>
         public PropertyOptions(int options)

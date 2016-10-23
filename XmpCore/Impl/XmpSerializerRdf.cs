@@ -724,7 +724,7 @@ namespace XmpCore.Impl
         /// <summary>Writes all used namespaces of the subtree in node to the output.</summary>
         /// <remarks>
         /// Writes all used namespaces of the subtree in node to the output.
-        /// The subtree is recursivly traversed.
+        /// The subtree is recursively traversed.
         /// </remarks>
         /// <param name="node">the root node of the subtree</param>
         /// <param name="usedPrefixes">a set containing currently used prefixes</param>
