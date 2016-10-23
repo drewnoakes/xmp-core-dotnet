@@ -105,31 +105,26 @@ namespace XmpCore.Impl
         /// correct
         /// </remarks>
         /// <param name="selector">the selector</param>
-        /// <returns>
-        /// Returns an array where the first entry contains the name and the
-        /// second the value.
-        /// </returns>
-        internal static string[] SplitNameAndValue(string selector)
+        internal static void SplitNameAndValue(string selector, out string name, out string value)
         {
-            // TODO use out params and avoid array allocation
             // get the name
             var eq = selector.IndexOf('=');
             var pos = 1;
             if (selector[pos] == '?')
-            {
                 pos++;
-            }
-            var name = selector.Substring (pos, eq - pos);
+            name = selector.Substring (pos, eq - pos);
+
             // get the value
             pos = eq + 1;
             var quote = selector[pos];
             pos++;
             var end = selector.Length - 2;
+
             // quote and ]
-            var value = new StringBuilder(end - eq);
+            var valueStr = new StringBuilder(end - eq);
             while (pos < end)
             {
-                value.Append(selector[pos]);
+                valueStr.Append(selector[pos]);
                 pos++;
                 if (selector[pos] == quote)
                 {
@@ -137,7 +132,8 @@ namespace XmpCore.Impl
                     pos++;
                 }
             }
-            return new[] { name, value.ToString() };
+
+            value = valueStr.ToString();
         }
 
         /// <param name="schema">a schema namespace</param>

@@ -419,16 +419,16 @@ namespace XmpCore.Impl
                 }
                 else if (stepKind == XmpPath.FieldSelectorStep)
                 {
-                    var result = Utils.SplitNameAndValue(nextStep.Name);
-                    var fieldName = result[0];
-                    var fieldValue = result[1];
+                    string fieldName;
+                    string fieldValue;
+                    Utils.SplitNameAndValue(nextStep.Name, out fieldName, out fieldValue);
                     index = LookupFieldSelector(parentNode, fieldName, fieldValue);
                 }
                 else if (stepKind == XmpPath.QualSelectorStep)
                 {
-                    var result = Utils.SplitNameAndValue(nextStep.Name);
-                    var qualName = result[0];
-                    var qualValue = result[1];
+                    string qualName;
+                    string qualValue;
+                    Utils.SplitNameAndValue(nextStep.Name, out qualName, out qualValue);
                     index = LookupQualSelector(parentNode, qualName, qualValue, nextStep.AliasForm);
                 }
                 else
