@@ -165,7 +165,7 @@ namespace XmpCore.Impl
         /// <returns>Returns the number of children without necessarily creating a list.</returns>
         public int GetChildrenLength()
         {
-            return _children != null ? _children.Count : 0;
+            return _children?.Count ?? 0;
         }
 
         /// <param name="expr">child node name to look for</param>
@@ -185,7 +185,7 @@ namespace XmpCore.Impl
         /// <returns>Returns the number of qualifier without necessarily creating a list.</returns>
         public int GetQualifierLength()
         {
-            return _qualifier != null ? _qualifier.Count : 0;
+            return _qualifier?.Count ?? 0;
         }
 
         /// <summary>Appends a qualifier to the qualifier list and sets respective options.</summary>
@@ -576,7 +576,7 @@ namespace XmpCore.Impl
         /// <returns>Returns the found node or <c>nulls</c>.</returns>
         private static XmpNode Find(IList<XmpNode> list, string expr)
         {
-            return list != null ? list.FirstOrDefault(node => node.Name == expr) : null;
+            return list?.FirstOrDefault(node => node.Name == expr);
         }
 
         /// <summary>Checks that a node name is not existing on the same level, except for array items.</summary>

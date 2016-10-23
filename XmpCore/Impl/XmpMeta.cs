@@ -529,7 +529,7 @@ namespace XmpCore.Impl
                 _propNode = propNode;
             }
 
-            public string Value => _value != null ? _value.ToString() : null;
+            public string Value => _value?.ToString();
 
             public PropertyOptions Options => _propNode.Options;
 
