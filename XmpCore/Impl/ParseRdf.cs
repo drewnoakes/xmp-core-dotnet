@@ -400,9 +400,9 @@ namespace XmpCore.Impl
                 // The called routines must verify their specific syntax!
                 // (Also don't consider an ignored attribute as 'found')
 
-                var attrLocal = "";
-                var attrNs = "";
-                var attrValue = "";
+                string attrLocal;
+                string attrNs;
+                string attrValue;
 
                 XAttribute foundAttrib = null;
                 foreach (var attribute in attributes)

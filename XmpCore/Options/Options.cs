@@ -195,15 +195,15 @@ namespace XmpCore.Options
         private string GetOptionName(int option)
         {
             var optionsNames = ProcureOptionNames();
-            var key = option;
-            string result = null;
-            optionsNames.TryGetValue(key, out result);
+
+            string result;
+            optionsNames.TryGetValue(option, out result);
 
             if (result == null)
             {
                 result = DefineOptionName(option);
                 if (result != null)
-                    optionsNames[key] = result;
+                    optionsNames[option] = result;
                 else
                     result = "<option name not defined>";
             }

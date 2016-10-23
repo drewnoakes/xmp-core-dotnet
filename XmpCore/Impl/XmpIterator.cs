@@ -44,7 +44,7 @@ namespace XmpCore.Impl
             // make sure that options is defined at least with defaults
             Options = options ?? new IteratorOptions();
             // the start node of the iteration depending on the schema and property filter
-            XmpNode startNode = null;
+            XmpNode startNode;
             string initialPath = null;
             var baseSchema = !string.IsNullOrEmpty(schemaNs);
             var baseProperty = !string.IsNullOrEmpty(propPath);
@@ -53,37 +53,32 @@ namespace XmpCore.Impl
                 // complete tree will be iterated
                 startNode = xmp.GetRoot();
             }
+            else if (baseSchema && baseProperty)
+            {
+                // Schema and property node provided
+                var path = XmpPathParser.ExpandXPath(schemaNs, propPath);
+                // base path is the prop path without the property leaf
+                var basePath = new XmpPath();
+                for (var i = 0; i < path.Size() - 1; i++)
+                {
+                    basePath.Add(path.GetSegment(i));
+                }
+                startNode = XmpNodeUtils.FindNode(xmp.GetRoot(), path, false, null);
+                BaseNamespace = schemaNs;
+                initialPath = basePath.ToString();
+            }
+            else if (baseSchema && !baseProperty)
+            {
+                // Only Schema provided
+                startNode = XmpNodeUtils.FindSchemaNode(xmp.GetRoot(), schemaNs, false);
+            }
             else
             {
-                if (baseSchema && baseProperty)
-                {
-                    // Schema and property node provided
-                    var path = XmpPathParser.ExpandXPath(schemaNs, propPath);
-                    // base path is the prop path without the property leaf
-                    var basePath = new XmpPath();
-                    for (var i = 0; i < path.Size() - 1; i++)
-                    {
-                        basePath.Add(path.GetSegment(i));
-                    }
-                    startNode = XmpNodeUtils.FindNode(xmp.GetRoot(), path, false, null);
-                    BaseNamespace = schemaNs;
-                    initialPath = basePath.ToString();
-                }
-                else
-                {
-                    if (baseSchema && !baseProperty)
-                    {
-                        // Only Schema provided
-                        startNode = XmpNodeUtils.FindSchemaNode(xmp.GetRoot(), schemaNs, false);
-                    }
-                    else
-                    {
-                        // !baseSchema  &&  baseProperty
-                        // No schema but property provided -> error
-                        throw new XmpException("Schema namespace URI is required", XmpErrorCode.BadSchema);
-                    }
-                }
+                // !baseSchema  &&  baseProperty
+                // No schema but property provided -> error
+                throw new XmpException("Schema namespace URI is required", XmpErrorCode.BadSchema);
             }
+
             // create iterator
             _nodeIterator = startNode != null
                 ? (IIterator)(!Options.IsJustChildren

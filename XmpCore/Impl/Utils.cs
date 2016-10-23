@@ -111,6 +111,7 @@ namespace XmpCore.Impl
         /// </returns>
         internal static string[] SplitNameAndValue(string selector)
         {
+            // TODO use out params and avoid array allocation
             // get the name
             var eq = selector.IndexOf('=');
             var pos = 1;
@@ -189,13 +190,12 @@ namespace XmpCore.Impl
         /// <returns>true - this is a well formed UUID, false - UUID has not the expected format</returns>
         internal static bool CheckUuidFormat(string uuid)
         {
+            if (uuid == null)
+                return false;
+
             var result = true;
             var delimCnt = 0;
-            var delimPos = 0;
-            if (uuid == null)
-            {
-                return false;
-            }
+            int delimPos;
             for (delimPos = 0; delimPos < uuid.Length; delimPos++)
             {
                 if (uuid[delimPos] == '-')

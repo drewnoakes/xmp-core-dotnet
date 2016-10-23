@@ -156,25 +156,25 @@ namespace XmpCore.Impl
         {
             // check if xpath is set.
             if (xpath == null || xpath.Size() == 0)
-            {
                 throw new XmpException("Empty XMPPath", XmpErrorCode.BadXPath);
-            }
+
             // Root of implicitly created subtree to possible delete it later.
             // Valid only if leaf is new.
             XmpNode rootImplicitNode = null;
-            XmpNode currNode = null;
+
             // resolve schema step
-            currNode = FindSchemaNode(xmpTree, xpath.GetSegment(XmpPath.StepSchema).Name, createNodes);
+            var currNode = FindSchemaNode(xmpTree, xpath.GetSegment(XmpPath.StepSchema).Name, createNodes);
+
             if (currNode == null)
-            {
                 return null;
-            }
+
             if (currNode.IsImplicit)
             {
                 currNode.IsImplicit = false;
                 // Clear the implicit node bit.
                 rootImplicitNode = currNode;
             }
+
             // Save the top most implicit node.
             // Now follow the remaining steps of the original XMPPath.
             try
@@ -191,6 +191,7 @@ namespace XmpCore.Impl
                         }
                         return null;
                     }
+
                     if (currNode.IsImplicit)
                     {
                         // clear the implicit node flag
@@ -397,61 +398,48 @@ namespace XmpCore.Impl
             {
                 nextNode = FindChildNode(parentNode, nextStep.Name, createNodes);
             }
+            else if (stepKind == XmpPath.QualifierStep)
+            {
+                nextNode = FindQualifierNode(parentNode, nextStep.Name.Substring(1), createNodes);
+            }
             else
             {
-                if (stepKind == XmpPath.QualifierStep)
+                // This is an array indexing step. First get the index, then get the node.
+                if (!parentNode.Options.IsArray)
+                    throw new XmpException("Indexing applied to non-array", XmpErrorCode.BadXPath);
+
+                int index;
+                if (stepKind == XmpPath.ArrayIndexStep)
                 {
-                    nextNode = FindQualifierNode(parentNode, nextStep.Name.Substring(1), createNodes);
+                    index = FindIndexedItem(parentNode, nextStep.Name, createNodes);
+                }
+                else if (stepKind == XmpPath.ArrayLastStep)
+                {
+                    index = parentNode.GetChildrenLength();
+                }
+                else if (stepKind == XmpPath.FieldSelectorStep)
+                {
+                    var result = Utils.SplitNameAndValue(nextStep.Name);
+                    var fieldName = result[0];
+                    var fieldValue = result[1];
+                    index = LookupFieldSelector(parentNode, fieldName, fieldValue);
+                }
+                else if (stepKind == XmpPath.QualSelectorStep)
+                {
+                    var result = Utils.SplitNameAndValue(nextStep.Name);
+                    var qualName = result[0];
+                    var qualValue = result[1];
+                    index = LookupQualSelector(parentNode, qualName, qualValue, nextStep.AliasForm);
                 }
                 else
                 {
-                    // This is an array indexing step. First get the index, then get the node.
-                    if (!parentNode.Options.IsArray)
-                    {
-                        throw new XmpException("Indexing applied to non-array", XmpErrorCode.BadXPath);
-                    }
-                    var index = 0;
-                    if (stepKind == XmpPath.ArrayIndexStep)
-                    {
-                        index = FindIndexedItem(parentNode, nextStep.Name, createNodes);
-                    }
-                    else
-                    {
-                        if (stepKind == XmpPath.ArrayLastStep)
-                        {
-                            index = parentNode.GetChildrenLength();
-                        }
-                        else
-                        {
-                            if (stepKind == XmpPath.FieldSelectorStep)
-                            {
-                                var result = Utils.SplitNameAndValue(nextStep.Name);
-                                var fieldName = result[0];
-                                var fieldValue = result[1];
-                                index = LookupFieldSelector(parentNode, fieldName, fieldValue);
-                            }
-                            else
-                            {
-                                if (stepKind == XmpPath.QualSelectorStep)
-                                {
-                                    var result = Utils.SplitNameAndValue(nextStep.Name);
-                                    var qualName = result[0];
-                                    var qualValue = result[1];
-                                    index = LookupQualSelector(parentNode, qualName, qualValue, nextStep.AliasForm);
-                                }
-                                else
-                                {
-                                    throw new XmpException("Unknown array indexing step in FollowXPathStep", XmpErrorCode.InternalFailure);
-                                }
-                            }
-                        }
-                    }
-                    if (1 <= index && index <= parentNode.GetChildrenLength())
-                    {
-                        nextNode = parentNode.GetChild(index);
-                    }
+                    throw new XmpException("Unknown array indexing step in FollowXPathStep", XmpErrorCode.InternalFailure);
                 }
+
+                if (1 <= index && index <= parentNode.GetChildrenLength())
+                    nextNode = parentNode.GetChild(index);
             }
+
             return nextNode;
         }
 
@@ -488,26 +476,26 @@ namespace XmpCore.Impl
         /// <exception cref="XmpException">Throws Exceptions</exception>
         private static int FindIndexedItem(XmpNode arrayNode, string segment, bool createNodes)
         {
-            var index = 0;
+            int index;
             try
             {
                 segment = segment.Substring(1, segment.Length - 1 - 1);
                 index = Convert.ToInt32(segment);
                 if (index < 1)
-                {
                     throw new XmpException("Array index must be larger than zero", XmpErrorCode.BadXPath);
-                }
             }
             catch (FormatException)
             {
                 throw new XmpException("Array index not digits.", XmpErrorCode.BadXPath);
             }
+
             if (createNodes && index == arrayNode.GetChildrenLength() + 1)
             {
                 // Append a new last + 1 node.
                 var newItem = new XmpNode(XmpConstants.ArrayItemName, null) {IsImplicit = true};
                 arrayNode.AddChild(newItem);
             }
+
             return index;
         }
 
