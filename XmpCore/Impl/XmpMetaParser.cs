@@ -7,7 +7,6 @@
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
 
-
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,7 +22,7 @@ namespace XmpCore.Impl
     /// XML-parsing and fixes the prefix.
     /// </summary>
     /// <remarks>
-    /// After the parsing several normalisations are applied to the XMPTree.
+    /// After the parsing several normalisations are applied to the XMP tree.
     /// </remarks>
     /// <since>01.02.2006</since>
     public static class XmpMetaParser
@@ -94,22 +93,19 @@ namespace XmpCore.Impl
 
         private static IXmpMeta ParseXmlDoc(XDocument document, ParseOptions options)
         {
-            object[] result = new object[3];
+            var result = FindRootNode(document.Nodes(), options.RequireXmpMeta, new object[3]);
 
-            result = FindRootNode(document.Nodes(), options.RequireXmpMeta, result);
-            if (result != null && result[1] == XmpRdf)
-            {
-                var xmp = ParseRdf.Parse((XElement)result[0]);
-                xmp.SetPacketHeader((string)result[2]);
-                // Check if the XMP object shall be normalized
-                if (!options.OmitNormalization)
-                {
-                    return XmpNormalizer.Process(xmp, options);
-                }
-                return xmp;
-            }
-            // no appropriate root node found, return empty metadata object
-            return new XmpMeta();
+            if (result == null || result[1] != XmpRdf)
+                // no appropriate root node found, return empty metadata object
+                return new XmpMeta();
+
+            var xmp = ParseRdf.Parse((XElement)result[0]);
+            xmp.SetPacketHeader((string)result[2]);
+
+            // Check if the XMP object shall be normalized
+            return !options.OmitNormalization
+                ? XmpNormalizer.Process(xmp, options)
+                : xmp;
         }
 
         /// <summary>
@@ -123,14 +119,12 @@ namespace XmpCore.Impl
         private static XDocument ParseXmlFromInputStream(Stream stream, ParseOptions options)
         {
             if (!options.AcceptLatin1 && !options.FixControlChars)
-            {
                 return ParseStream(stream);
-            }
-            // load stream into bytebuffer
+
             try
             {
-                var buffer = new ByteBuffer(stream);
-                return ParseXmlFromByteBuffer(buffer, options);
+                // load stream into bytebuffer
+                return ParseXmlFromByteBuffer(new ByteBuffer(stream), options);
             }
             catch (IOException e)
             {
@@ -157,9 +151,8 @@ namespace XmpCore.Impl
                 if (e.ErrorCode == XmpErrorCode.BadXml || e.ErrorCode == XmpErrorCode.BadStream)
                 {
                     if (options.AcceptLatin1)
-                    {
                         buffer = Latin1Converter.Convert(buffer);
-                    }
+
                     if (options.FixControlChars)
                     {
                         try
@@ -172,8 +165,10 @@ namespace XmpCore.Impl
                             throw new XmpException("Unsupported Encoding", XmpErrorCode.InternalFailure, e);
                         }
                     }
+
                     return ParseStream(buffer.GetByteStream());
                 }
+
                 throw;
             }
         }
@@ -204,13 +199,8 @@ namespace XmpCore.Impl
         {
             try
             {
-                string streamContents;
                 using (var sr = new StreamReader(stream))
-                {
-                    streamContents = sr.ReadToEnd();
-                }
-                var doc = XDocument.Parse(streamContents);
-                return doc;
+                    return XDocument.Parse(sr.ReadToEnd());
             }
             catch (XmlException e)
             {
@@ -230,8 +220,7 @@ namespace XmpCore.Impl
         {
             try
             {
-                var doc = XDocument.Parse(reader.ReadToEnd());
-                return doc;
+                return XDocument.Parse(reader.ReadToEnd());
             }
             catch (XmlException e)
             {
@@ -281,7 +270,6 @@ namespace XmpCore.Impl
         /// </returns>
         private static object[] FindRootNode(IEnumerable<XNode> nodes, bool xmpmetaRequired, object[] result)
         {
-
             foreach (var root in nodes)
             {
                 if (XmlNodeType.ProcessingInstruction == root.NodeType && XmpConstants.XmpPi.Equals(((XProcessingInstruction)root).Target))
@@ -289,44 +277,37 @@ namespace XmpCore.Impl
                     // Store the processing instructions content
                     result[2] = ((XProcessingInstruction)root).Data;
                 }
-                else
+                else if (XmlNodeType.Element == root.NodeType)
                 {
-                    if(XmlNodeType.Element == root.NodeType)
-                    {
-                        XElement rootElem = (XElement)root;
-                        string rootNS = rootElem.Name.NamespaceName;
-                        string rootLocal = rootElem.Name.LocalName;
+                    XElement rootElem = (XElement)root;
+                    string rootNS = rootElem.Name.NamespaceName;
+                    string rootLocal = rootElem.Name.LocalName;
 
-                        if (
-                               (XmpConstants.TagXmpmeta.Equals(rootLocal) || XmpConstants.TagXapmeta.Equals(rootLocal)) &&
-                                XmpConstants.NsX.Equals(rootNS)
-                           )
-                        {
-                            // by not passing the RequireXMPMeta-option, the rdf-Node will be valid
-                            return FindRootNode(rootElem.Nodes(), false, result);
-                        }
-                        if (!xmpmetaRequired &&
-                            "RDF".Equals(rootLocal) &&
-                            XmpConstants.NsRdf.Equals(rootNS))
-                        {
-                            if (result != null)
-                            {
-                                result[0] = root;
-                                result[1] = XmpRdf;
-                            }
-                            return result;
-                        }
-                        // continue searching
-                        object[] newResult = FindRootNode(rootElem.Nodes(), xmpmetaRequired, result);
-                        if (newResult != null)
-                        {
-                            return newResult;
-                        }
+                    if ((XmpConstants.TagXmpmeta.Equals(rootLocal) || XmpConstants.TagXapmeta.Equals(rootLocal)) &&
+                            XmpConstants.NsX.Equals(rootNS))
+                    {
+                        // by not passing the RequireXMPMeta-option, the rdf-Node will be valid
+                        return FindRootNode(rootElem.Nodes(), false, result);
                     }
+
+                    if (!xmpmetaRequired && "RDF".Equals(rootLocal) && XmpConstants.NsRdf.Equals(rootNS))
+                    {
+                        if (result != null)
+                        {
+                            result[0] = root;
+                            result[1] = XmpRdf;
+                        }
+                        return result;
+                    }
+
+                    // continue searching
+                    object[] newResult = FindRootNode(rootElem.Nodes(), xmpmetaRequired, result);
+                    if (newResult != null)
+                        return newResult;
                 }
             }
 
-            //    // no appropriate node has been found
+            // no appropriate node has been found
             return null;
         }
     }
