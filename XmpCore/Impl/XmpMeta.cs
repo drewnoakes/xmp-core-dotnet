@@ -978,53 +978,22 @@ namespace XmpCore.Impl
         /// <exception cref="XmpException"/>
         private static object EvaluateNodeValue(ValueType valueType, XmpNode propNode)
         {
-            object value;
-            var rawValue = propNode.Value;
             switch (valueType)
             {
                 case ValueType.Boolean:
-                {
-                    value = XmpCore.XmpUtils.ConvertToBoolean(rawValue);
-                    break;
-                }
-
+                    return XmpCore.XmpUtils.ConvertToBoolean(propNode.Value);
                 case ValueType.Integer:
-                {
-                    value = XmpCore.XmpUtils.ConvertToInteger(rawValue);
-                    break;
-                }
-
+                    return XmpCore.XmpUtils.ConvertToInteger(propNode.Value);
                 case ValueType.Long:
-                {
-                    value = XmpCore.XmpUtils.ConvertToLong(rawValue);
-                    break;
-                }
-
+                    return XmpCore.XmpUtils.ConvertToLong(propNode.Value);
                 case ValueType.Double:
-                {
-                    value = XmpCore.XmpUtils.ConvertToDouble(rawValue);
-                    break;
-                }
-
+                    return XmpCore.XmpUtils.ConvertToDouble(propNode.Value);
                 case ValueType.Date:
-                {
-                    value = XmpCore.XmpUtils.ConvertToDate(rawValue);
-                    break;
-                }
-
+                    return XmpCore.XmpUtils.ConvertToDate(propNode.Value);
                 case ValueType.Calendar:
-                {
-                    var dt = XmpCore.XmpUtils.ConvertToDate(rawValue);
-                    value = dt.Calendar;
-                    break;
-                }
-
+                    return XmpCore.XmpUtils.ConvertToDate(propNode.Value).Calendar;
                 case ValueType.Base64:
-                {
-                    value = XmpCore.XmpUtils.DecodeBase64(rawValue);
-                    break;
-                }
-
+                    return XmpCore.XmpUtils.DecodeBase64(propNode.Value);
                 case ValueType.String:
                 default:
                 {
@@ -1032,11 +1001,9 @@ namespace XmpCore.Impl
                     // for the other cases the converter methods provides a "null"
                     // value.
                     // a default value can only occur if this method is made public.
-                    value = rawValue != null || propNode.Options.IsCompositeProperty ? rawValue : string.Empty;
-                    break;
+                    return propNode.Value != null || propNode.Options.IsCompositeProperty ? propNode.Value : string.Empty;
                 }
             }
-            return value;
         }
     }
 }
