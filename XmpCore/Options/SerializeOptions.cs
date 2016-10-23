@@ -28,14 +28,14 @@ namespace XmpCore.Options
         private const int SortFlag = 0x2000;
 
         /// <summary>Bit indicating little endian encoding, unset is big endian</summary>
-        private const int LittleendianBit = 0x0001;
+        private const int LittleEndianBit = 0x0001;
         /// <summary>Bit indication UTF16 encoding.</summary>
         private const int Utf16Bit = 0x0002;
         /// <summary>UTF8 encoding; this is the default</summary>
         public const int EncodeUtf8 = 0;
         public const int EncodeUtf16BeFlag = Utf16Bit;
-        public const int EncodeUtf16LeFlag = Utf16Bit | LittleendianBit;
-        private const int EncodingMask = Utf16Bit | LittleendianBit;
+        public const int EncodeUtf16LeFlag = Utf16Bit | LittleEndianBit;
+        private const int EncodingMask = Utf16Bit | LittleEndianBit;
 
         /// <summary>Default constructor.</summary>
         public SerializeOptions()
@@ -136,7 +136,7 @@ namespace XmpCore.Options
             set
             {
                 // clear unicode bits
-                SetOption(Utf16Bit | LittleendianBit, false);
+                SetOption(Utf16Bit | LittleEndianBit, false);
                 SetOption(EncodeUtf16BeFlag, value);
             }
         }
@@ -148,7 +148,7 @@ namespace XmpCore.Options
             set
             {
                 // clear unicode bits
-                SetOption(Utf16Bit | LittleendianBit, false);
+                SetOption(Utf16Bit | LittleEndianBit, false);
                 SetOption(EncodeUtf16LeFlag, value);
             }
         }
