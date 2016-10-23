@@ -488,7 +488,7 @@ namespace XmpCore.Impl
                         // The destination exists and is not totally replaced. Structs and arrays are merged.
                         var sourceForm = sourceNode.Options;
                         var destForm = destNode.Options;
-                        if (sourceForm != destForm)
+                        if (!Equals(sourceForm, destForm))
                         {
                             return;
                         }
