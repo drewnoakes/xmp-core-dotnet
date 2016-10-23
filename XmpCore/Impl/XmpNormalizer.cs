@@ -20,7 +20,7 @@ namespace XmpCore.Impl
     public static class XmpNormalizer
     {
         /// <summary>caches the correct dc-property array forms</summary>
-        private static IDictionary _dcArrayForms;
+        private static readonly IDictionary _dcArrayForms;
 
         static XmpNormalizer()
         {
