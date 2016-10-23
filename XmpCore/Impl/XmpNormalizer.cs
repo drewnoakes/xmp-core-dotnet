@@ -434,22 +434,20 @@ namespace XmpCore.Impl
         private static void CompareAliasedSubtrees(XmpNode aliasNode, XmpNode baseNode, bool outerCall)
         {
             if (!aliasNode.Value.Equals(baseNode.Value) || aliasNode.GetChildrenLength() != baseNode.GetChildrenLength())
-            {
                 throw new XmpException("Mismatch between alias and base nodes", XmpErrorCode.BadXmp);
-            }
             if (!outerCall && (!aliasNode.Name.Equals(baseNode.Name) || !aliasNode.Options.Equals(baseNode.Options) || aliasNode.GetQualifierLength() != baseNode.GetQualifierLength()))
-            {
                 throw new XmpException("Mismatch between alias and base nodes", XmpErrorCode.BadXmp);
-            }
+
             for (IIterator an = aliasNode.IterateChildren(), bn = baseNode.IterateChildren(); an.HasNext() && bn.HasNext(); )
             {
                 var aliasChild = (XmpNode)an.Next();
                 var baseChild = (XmpNode)bn.Next();
                 CompareAliasedSubtrees(aliasChild, baseChild, false);
             }
-            for (IIterator an1 = aliasNode.IterateQualifier(), bn1 = baseNode.IterateQualifier(); an1.HasNext() && bn1.HasNext(); )
+
+            for (IIterator an = aliasNode.IterateQualifier(), bn1 = baseNode.IterateQualifier(); an.HasNext() && bn1.HasNext(); )
             {
-                var aliasQual = (XmpNode)an1.Next();
+                var aliasQual = (XmpNode)an.Next();
                 var baseQual = (XmpNode)bn1.Next();
                 CompareAliasedSubtrees(aliasQual, baseQual, false);
             }
