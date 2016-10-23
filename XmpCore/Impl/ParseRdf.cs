@@ -374,7 +374,7 @@ namespace XmpCore.Impl
                 throw new XmpException("Invalid property element name", XmpErrorCode.BadRdf);
             }
 
-            var attributes = xmlNode.Attributes();
+            var attributes = xmlNode.Attributes().ToList();
 
             // remove the namespace-definitions from the list (original Java)
             // (for C#, put them in an ignore list and don't count or process them)
