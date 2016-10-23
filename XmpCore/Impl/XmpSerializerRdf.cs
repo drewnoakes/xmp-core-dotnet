@@ -406,8 +406,7 @@ namespace XmpCore.Impl
         /// field of a struct, or an item of an array. The indent is that for the
         /// property element. The patterns bwlow ignore attribute qualifiers such as
         /// xml:lang, they don't affect the output form.
-        /// <blockquote>
-        /// <pre>
+        /// <code>
         /// &lt;ns:UnqualifiedStructProperty-1
         /// ... The fields as attributes, if all are simple and unqualified
         /// /&gt;
@@ -431,8 +430,7 @@ namespace XmpCore.Impl
         /// following the unqualified forms ... &lt;/rdf:value&gt;
         /// ... Qualifiers looking like named struct fields
         /// &lt;/ns:QualifiedProperty&gt;
-        /// </pre>
-        /// </blockquote>
+        /// </code>
         /// *** Consider numbered array items, but has compatibility problems.
         /// Consider qualified form with rdf:Description and attributes.
         /// </remarks>
@@ -698,14 +696,12 @@ namespace XmpCore.Impl
         /// entire serialization, that of the x:xmpmeta element. An xml:lang
         /// qualifier is written as an attribute of the property start tag, not by
         /// itself forcing the qualified property form.
-        /// <blockquote>
-        /// <pre>
+        /// <code>
         /// &lt;rdf:Description rdf:about=&quot;TreeName&quot; xmlns:ns=&quot;URI&quot; ... &gt;
         /// ... The actual properties of the schema, see SerializePrettyRDFProperty
         /// &lt;!-- ns1:Alias is aliased to ns2:Actual --&gt;  ... If alias comments are wanted
         /// &lt;/rdf:Description&gt;
-        /// </pre>
-        /// </blockquote>
+        /// </code>
         /// </remarks>
         /// <param name="schemaNode">a schema node</param>
         /// <param name="level"></param>
@@ -837,8 +833,7 @@ namespace XmpCore.Impl
         /// qualified property form. The patterns below mostly ignore attribute
         /// qualifiers like xml:lang. Except for the one struct case, attribute
         /// qualifiers don't affect the output form.
-        /// <blockquote>
-        /// <pre>
+        /// <code>
         /// &lt;ns:UnqualifiedSimpleProperty&gt;value&lt;/ns:UnqualifiedSimpleProperty&gt;
         /// &lt;ns:UnqualifiedStructProperty&gt; (If no rdf:resource qualifier)
         /// &lt;rdf:Description&gt;
@@ -860,8 +855,7 @@ namespace XmpCore.Impl
         /// ... Qualifiers looking like named struct fields
         /// &lt;/rdf:Description&gt;
         /// &lt;/ns:QualifiedProperty&gt;
-        /// </pre>
-        /// </blockquote>
+        /// </code>
         /// </remarks>
         /// <param name="node">the property node</param>
         /// <param name="emitAsRdfValue">property shall be rendered as attribute rather than tag</param>

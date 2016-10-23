@@ -141,9 +141,9 @@ namespace XmpCore
         /// values the same as non-empty values. An empty value is any of a simple empty string, an array
         /// with no items, or a struct with no fields. Qualifiers are ignored.</item>
         /// </list>
-        /// <para />The detailed behavior is defined by the following pseudo-code:
-        /// <blockquote>
-        /// <pre>
+        /// <para />
+        /// The detailed behavior is defined by the following pseudo-code:
+        /// <code>
         /// appendProperties ( sourceXMP, destXMP, doAllProperties,
         /// replaceOldValues, deleteEmptyValues ):
         /// for all source schema (top level namespaces):
@@ -169,8 +169,7 @@ namespace XmpCore
         /// copy new items by "xml:lang" value into the destination
         /// else if form is an array:
         /// copy new items by value into the destination, ignoring order and duplicates
-        /// </pre>
-        /// </blockquote>
+        /// </code>
         /// <para /><em>Note:</em> appendProperties can be expensive if replaceOldValues is not passed and
         /// the XMP contains large arrays. The array item checking described above is n-squared.
         /// Each source item is checked to see if it already exists in the destination,

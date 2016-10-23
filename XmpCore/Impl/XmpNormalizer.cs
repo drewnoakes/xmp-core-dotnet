@@ -461,22 +461,35 @@ namespace XmpCore.Impl
         /// The initial support for WAV files mapped a legacy ID3 audio copyright
         /// into a new xmpDM:copyright property. This is special case code to migrate
         /// that into dc:rights['x-default']. The rules:
-        /// <pre>
-        /// 1. If there is no dc:rights array, or an empty array -
-        /// Create one with dc:rights['x-default'] set from double linefeed and xmpDM:copyright.
-        /// 2. If there is a dc:rights array but it has no x-default item -
-        /// Create an x-default item as a copy of the first item then apply rule #3.
-        /// 3. If there is a dc:rights array with an x-default item,
-        /// Look for a double linefeed in the value.
-        /// A. If no double linefeed, compare the x-default value to the xmpDM:copyright value.
-        /// A1. If they match then leave the x-default value alone.
-        /// A2. Otherwise, append a double linefeed and
-        /// the xmpDM:copyright value to the x-default value.
-        /// B. If there is a double linefeed, compare the trailing text to the xmpDM:copyright value.
-        /// B1. If they match then leave the x-default value alone.
-        /// B2. Otherwise, replace the trailing x-default text with the xmpDM:copyright value.
-        /// 4. In all cases, delete the xmpDM:copyright property.
-        /// </pre>
+        /// <list type="number">
+        ///   <item>
+        ///     If there is no dc:rights array, or an empty array -
+        ///     Create one with dc:rights['x-default'] set from double linefeed and xmpDM:copyright.
+        ///   </item>
+        ///   <item>
+        ///     If there is a dc:rights array but it has no x-default item -
+        ///     Create an x-default item as a copy of the first item then apply rule #3.
+        ///   </item>
+        ///   <item>
+        ///     If there is a dc:rights array with an x-default item,
+        ///     Look for a double linefeed in the value.
+        ///     <list type="bullet">
+        ///       <item>If no double linefeed, compare the x-default value to the xmpDM:copyright value.
+        ///         <list type="bullet">
+        ///           <item>If they match then leave the x-default value alone.</item>
+        ///           <item>Otherwise, append a double linefeed and the xmpDM:copyright value to the x-default value.</item>
+        ///         </list>
+        ///       </item>
+        ///       <item>If there is a double linefeed, compare the trailing text to the xmpDM:copyright value.
+        ///         <list type="bullet">
+        ///           <item>If they match then leave the x-default value alone.</item>
+        ///           <item>Otherwise, replace the trailing x-default text with the xmpDM:copyright value.</item>
+        ///         </list>
+        ///       </item>
+        ///     </list>
+        ///   </item>
+        ///   <item>In all cases, delete the xmpDM:copyright property.</item>
+        /// </list>
         /// </remarks>
         /// <param name="xmp">the metadata object</param>
         /// <param name="dmCopyright">the "dm:copyright"-property</param>

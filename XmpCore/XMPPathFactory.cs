@@ -31,20 +31,17 @@ namespace XmpCore
     /// component. Suppose you have a property that is an array of integers within a struct. You can
     /// access one of the array items like this:
     /// <para />
-    /// <blockquote>
-    /// <pre>
+    /// <code>
     /// string path = XmpPathFactory.ComposeStructFieldPath(schemaNS, "Struct", fieldNS, "Array");
     /// string path += XmpPathFactory.ComposeArrayItemPath(schemaNS, "Array", index);
     /// PropertyInteger result = xmpObj.GetPropertyAsInteger(schemaNS, path);
-    /// </pre>
-    /// </blockquote> You could also use this code if you want the string form of the integer:
-    /// <blockquote>
-    /// <pre>
+    /// </code>
+    /// You could also use this code if you want the string form of the integer:
+    /// <code>
     /// String path = XMPPathFactory.composeStructFieldPath (schemaNS, &quot;Struct&quot;, fieldNS,
     /// &quot;Array&quot;);
     /// PropertyText xmpObj.getArrayItem (schemaNS, path, index);
-    /// </pre>
-    /// </blockquote>
+    /// </code>
     /// <para />
     /// <em>Note:</em> It might look confusing that the schemaNS is passed in all of the calls above.
     /// This is because the XMP toolkit keeps the top level &quot;schema&quot; namespace separate from
@@ -167,13 +164,10 @@ namespace XmpCore
         /// create an array of download alternatives. You can show the user a popup built from the values
         /// of the city fields. You can then get the corresponding URI as follows:
         /// <para />
-        /// <blockquote>
-        /// <pre>
-        /// String path = composeFieldSelector ( schemaNS, &quot;Downloads&quot;, fieldNS,
-        /// &quot;City&quot;, chosenCity );
+        /// <code>
+        /// String path = composeFieldSelector ( schemaNS, &quot;Downloads&quot;, fieldNS, &quot;City&quot;, chosenCity );
         /// XMPProperty prop = xmpObj.getStructField ( schemaNS, path, fieldNS, &quot;URI&quot; );
-        /// </pre>
-        /// </blockquote>
+        /// </code>
         /// </remarks>
         /// <param name="arrayName">
         /// The name of the array. May be a general path expression, must not be
