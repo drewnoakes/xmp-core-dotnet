@@ -25,14 +25,35 @@ namespace XmpCore.Impl
         public const int UuidLength = 32 + UuidSegmentCount;
 
         /// <summary>table of XML name start chars (&lt;= 0xFF)</summary>
-        private static bool[] _xmlNameStartChars;
+        private static readonly bool[] _xmlNameStartChars;
 
         /// <summary>table of XML name chars (&lt;= 0xFF)</summary>
-        private static bool[] _xmlNameChars;
+        private static readonly bool[] _xmlNameChars;
 
         static Utils()
         {
-            InitCharTables();
+            _xmlNameChars = new bool[0x0100];
+            _xmlNameStartChars = new bool[0x0100];
+
+            for (var ch = (char)0; ch < _xmlNameChars.Length; ch++)
+            {
+                var isNameStartChar =
+                    ch == ':' ||
+                    ('A' <= ch && ch <= 'Z') ||
+                    ch == '_' ||
+                    ('a' <= ch && ch <= 'z') ||
+                    (0xC0 <= ch && ch <= 0xD6) ||
+                    (0xD8 <= ch && ch <= 0xF6) ||
+                    (0xF8 <= ch && ch <= 0xFF);
+
+                _xmlNameStartChars[ch] = isNameStartChar;
+                _xmlNameChars[ch] =
+                    isNameStartChar ||
+                    ch == '-' ||
+                    ch == '.' ||
+                    ('0' <= ch && ch <= '9') ||
+                    ch == 0xB7;
+            }
         }
 
         /// <summary>
@@ -389,37 +410,6 @@ namespace XmpCore.Impl
                 IsNameStartChar(ch) ||
                 (ch >= 0x300 && ch <= 0x36F) ||
                 (ch >= 0x203F && ch <= 0x2040);
-        }
-
-        /// <summary>
-        /// Initializes the char tables for the chars 0x00-0xFF for later use,
-        /// according to the XML 1.1 specification
-        /// http://www.w3.org/TR/xml11
-        /// </summary>
-        private static void InitCharTables()
-        {
-            _xmlNameChars = new bool[0x0100];
-            _xmlNameStartChars = new bool[0x0100];
-
-            for (var ch = (char)0; ch < _xmlNameChars.Length; ch++)
-            {
-                var isNameStartChar =
-                    ch == ':' ||
-                    ('A' <= ch && ch <= 'Z') ||
-                    ch == '_' ||
-                    ('a' <= ch && ch <= 'z') ||
-                    (0xC0 <= ch && ch <= 0xD6) ||
-                    (0xD8 <= ch && ch <= 0xF6) ||
-                    (0xF8 <= ch && ch <= 0xFF);
-
-                _xmlNameStartChars[ch] = isNameStartChar;
-                _xmlNameChars[ch] =
-                    isNameStartChar ||
-                    ch == '-' ||
-                    ch == '.' ||
-                    ('0' <= ch && ch <= '9') ||
-                    ch == 0xB7;
-            }
         }
     }
 }
