@@ -28,7 +28,7 @@ namespace XmpCore.Impl
 
         internal const int CltMultipleGeneric = 3;
 
-        internal const int CltXdefault = 4;
+        internal const int CltXDefault = 4;
 
         internal const int CltFirstItem = 5;
 
@@ -752,7 +752,7 @@ namespace XmpCore.Impl
                 return new object[] {CltMultipleGeneric, resultNode};
 
             if (xDefault != null)
-                return new object[] {CltXdefault, xDefault};
+                return new object[] {CltXDefault, xDefault};
 
             // Everything failed, choose the first item.
             return new object[] {CltFirstItem, arrayNode.GetChild(1)};

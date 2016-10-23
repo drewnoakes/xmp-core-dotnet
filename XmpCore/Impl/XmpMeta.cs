@@ -446,7 +446,7 @@ namespace XmpCore.Impl
                     break;
                 }
 
-                case XmpNodeUtils.CltXdefault:
+                case XmpNodeUtils.CltXDefault:
                 {
                     // Create the specific language, update x-default if it was the only
                     // item.
