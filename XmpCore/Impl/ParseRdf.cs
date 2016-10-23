@@ -400,29 +400,19 @@ namespace XmpCore.Impl
                 // The called routines must verify their specific syntax!
                 // (Also don't consider an ignored attribute as 'found')
 
-                string attrLocal;
-                string attrNs;
-                string attrValue;
+                var foundAttrib = (
+                    from attribute in attributes
+                    let attrLocal = attribute.Name.LocalName
+                    let attrNs = attribute.Name.NamespaceName
+                    where "xml:" + attrLocal != XmpConstants.XmlLang && !(attrLocal == "ID" && attrNs == XmpConstants.NsRdf) && !ignoreNodes.Contains(attribute.Name.ToString())
+                    select attribute
+                    ).FirstOrDefault();
 
-                XAttribute foundAttrib = null;
-                foreach (var attribute in attributes)
-                {
-                    attrLocal = attribute.Name.LocalName;
-                    attrNs = attribute.Name.NamespaceName;
-                    attrValue = attribute.Value;
-
-                    if ("xml:" + attrLocal != XmpConstants.XmlLang && !(attrLocal == "ID" && attrNs == XmpConstants.NsRdf)
-                        && !ignoreNodes.Contains(attribute.Name.ToString()))
-                    {
-                        foundAttrib = attribute;
-                        break;
-                    }
-                }
                 if (foundAttrib != null) // meaning, contains one node other than xml:lang and rdf:ID
                 {
-                    attrLocal = foundAttrib.Name.LocalName;
-                    attrNs = foundAttrib.Name.NamespaceName;
-                    attrValue = foundAttrib.Value;
+                    var attrLocal = foundAttrib.Name.LocalName;
+                    var attrNs = foundAttrib.Name.NamespaceName;
+                    var attrValue = foundAttrib.Value;
 
                     if (attrLocal == "datatype" && attrNs == XmpConstants.NsRdf)
                     {
