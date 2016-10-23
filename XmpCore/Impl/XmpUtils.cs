@@ -245,7 +245,7 @@ namespace XmpCore.Impl
                 var foundIndex = -1;
                 for (var oldChild = 1; oldChild <= arrayNode.GetChildrenLength(); oldChild++)
                 {
-                    if (itemValue.Equals(arrayNode.GetChild(oldChild).Value))
+                    if (arrayNode.GetChild(oldChild).Value == itemValue)
                     {
                         foundIndex = oldChild;
                         break;
@@ -516,7 +516,7 @@ namespace XmpCore.Impl
                             {
                                 var sourceItem = (XmpNode)it.Next();
 
-                                if (!sourceItem.HasQualifier || !XmpConstants.XmlLang.Equals(sourceItem.GetQualifier(1).Name))
+                                if (!sourceItem.HasQualifier || sourceItem.GetQualifier(1).Name != XmpConstants.XmlLang)
                                     continue;
 
                                 var destIndex = XmpNodeUtils.LookupLanguageItem(destNode, sourceItem.GetQualifier(1).Value);
@@ -532,7 +532,7 @@ namespace XmpCore.Impl
                                 else if (destIndex == -1)
                                 {
                                     // Not replacing, keep the existing item.
-                                    if (!XmpConstants.XDefault.Equals(sourceItem.GetQualifier(1).Value) || !destNode.HasChildren)
+                                    if (sourceItem.GetQualifier(1).Value != XmpConstants.XDefault || !destNode.HasChildren)
                                     {
                                         sourceItem.CloneSubtree(destNode);
                                     }
@@ -590,11 +590,11 @@ namespace XmpCore.Impl
             if (leftForm.GetOptions() == 0)
             {
                 // Simple nodes, check the values and xml:lang qualifiers.
-                if (!leftNode.Value.Equals(rightNode.Value))
+                if (leftNode.Value != rightNode.Value)
                     return false;
                 if (leftNode.Options.HasLanguage != rightNode.Options.HasLanguage)
                     return false;
-                if (leftNode.Options.HasLanguage && !leftNode.GetQualifier(1).Value.Equals(rightNode.GetQualifier(1).Value))
+                if (leftNode.Options.HasLanguage && leftNode.GetQualifier(1).Value != rightNode.GetQualifier(1).Value)
                     return false;
             }
             else

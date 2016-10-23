@@ -105,7 +105,7 @@ namespace XmpCore.Impl.XPath
                     if (segment.Name[0] == '@')
                     {
                         segment.Name = "?" + segment.Name.Substring (1);
-                        if (!"?xml:lang".Equals(segment.Name))
+                        if (segment.Name != "?xml:lang")
                             throw new XmpException("Only xml:lang allowed with '@'", XmpErrorCode.BadXPath);
                     }
 
@@ -212,7 +212,7 @@ namespace XmpCore.Impl.XPath
 
                 if (pos.Path[pos.StepEnd] == ']')
                 {
-                    if (!"[last()".Equals(pos.Path.Substring(pos.StepBegin, pos.StepEnd - pos.StepBegin)))
+                    if (pos.Path.Substring(pos.StepBegin, pos.StepEnd - pos.StepBegin) != "[last()")
                         throw new XmpException("Invalid non-numeric array index", XmpErrorCode.BadXPath);
 
                     segment = new XmpPathSegment(null, XmpPath.ArrayLastStep);

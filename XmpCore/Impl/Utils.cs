@@ -55,10 +55,9 @@ namespace XmpCore.Impl
         public static string NormalizeLangValue(string value)
         {
             // don't normalize x-default
-            if (XmpConstants.XDefault.Equals(value))
-            {
+            if (value == XmpConstants.XDefault)
                 return value;
-            }
+
             var subTag = 1;
             var buffer = new StringBuilder();
             foreach (var t in value)
@@ -148,133 +147,34 @@ namespace XmpCore.Impl
         /// </returns>
         internal static bool IsInternalProperty(string schema, string prop)
         {
-            var isInternal = false;
-            if (XmpConstants.NsDC.Equals(schema))
+            switch (schema)
             {
-                if ("dc:format".Equals(prop) || "dc:language".Equals(prop))
-                {
-                    isInternal = true;
-                }
+                case XmpConstants.NsDC:
+                    return prop == "dc:format" || prop == "dc:language";
+                case XmpConstants.NsXmp:
+                    return prop == "xmp:BaseURL" || prop == "xmp:CreatorTool" || prop == "xmp:Format" || prop == "xmp:Locale" || prop == "xmp:MetadataDate" || "xmp:ModifyDate" == prop;
+                case XmpConstants.NsPdf:
+                    return prop == "pdf:BaseURL" || prop == "pdf:Creator" || prop == "pdf:ModDate" || prop == "pdf:PDFVersion" || prop == "pdf:Producer";
+                case XmpConstants.NsTiff:
+                    return prop != "tiff:ImageDescription" && prop != "tiff:Artist" && prop != "tiff:Copyright";
+                case XmpConstants.NsExif:
+                    return prop != "exif:UserComment";
+                case XmpConstants.NsPhotoshop:
+                    return prop == "photoshop:ICCProfile";
+                case XmpConstants.NsCameraraw:
+                    return prop == "crs:Version" || prop == "crs:RawFileName" || prop == "crs:ToneCurveName";
+                case XmpConstants.NsExifAux:
+                case XmpConstants.NsAdobestockphoto:
+                case XmpConstants.NsXmpMm:
+                case XmpConstants.TypeText:
+                case XmpConstants.TypePagedfile:
+                case XmpConstants.TypeGraphics:
+                case XmpConstants.TypeImage:
+                case XmpConstants.TypeFont:
+                    return true;
+                default:
+                    return false;
             }
-            else
-            {
-                if (XmpConstants.NsXmp.Equals(schema))
-                {
-                    if ("xmp:BaseURL".Equals(prop) || "xmp:CreatorTool".Equals(prop) || "xmp:Format".Equals(prop) || "xmp:Locale".Equals(prop) || "xmp:MetadataDate".Equals(prop) || "xmp:ModifyDate".Equals(prop))
-                    {
-                        isInternal = true;
-                    }
-                }
-                else
-                {
-                    if (XmpConstants.NsPdf.Equals(schema))
-                    {
-                        if ("pdf:BaseURL".Equals(prop) || "pdf:Creator".Equals(prop) || "pdf:ModDate".Equals(prop) || "pdf:PDFVersion".Equals(prop) || "pdf:Producer".Equals(prop))
-                        {
-                            isInternal = true;
-                        }
-                    }
-                    else
-                    {
-                        if (XmpConstants.NsTiff.Equals(schema))
-                        {
-                            isInternal = true;
-                            if ("tiff:ImageDescription".Equals(prop) || "tiff:Artist".Equals(prop) || "tiff:Copyright".Equals(prop))
-                            {
-                                isInternal = false;
-                            }
-                        }
-                        else
-                        {
-                            if (XmpConstants.NsExif.Equals(schema))
-                            {
-                                isInternal = true;
-                                if ("exif:UserComment".Equals(prop))
-                                {
-                                    isInternal = false;
-                                }
-                            }
-                            else
-                            {
-                                if (XmpConstants.NsExifAux.Equals(schema))
-                                {
-                                    isInternal = true;
-                                }
-                                else
-                                {
-                                    if (XmpConstants.NsPhotoshop.Equals(schema))
-                                    {
-                                        if ("photoshop:ICCProfile".Equals(prop))
-                                        {
-                                            isInternal = true;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        if (XmpConstants.NsCameraraw.Equals(schema))
-                                        {
-                                            if ("crs:Version".Equals(prop) || "crs:RawFileName".Equals(prop) || "crs:ToneCurveName".Equals(prop))
-                                            {
-                                                isInternal = true;
-                                            }
-                                        }
-                                        else
-                                        {
-                                            if (XmpConstants.NsAdobestockphoto.Equals(schema))
-                                            {
-                                                isInternal = true;
-                                            }
-                                            else
-                                            {
-                                                if (XmpConstants.NsXmpMm.Equals(schema))
-                                                {
-                                                    isInternal = true;
-                                                }
-                                                else
-                                                {
-                                                    if (XmpConstants.TypeText.Equals(schema))
-                                                    {
-                                                        isInternal = true;
-                                                    }
-                                                    else
-                                                    {
-                                                        if (XmpConstants.TypePagedfile.Equals(schema))
-                                                        {
-                                                            isInternal = true;
-                                                        }
-                                                        else
-                                                        {
-                                                            if (XmpConstants.TypeGraphics.Equals(schema))
-                                                            {
-                                                                isInternal = true;
-                                                            }
-                                                            else
-                                                            {
-                                                                if (XmpConstants.TypeImage.Equals(schema))
-                                                                {
-                                                                    isInternal = true;
-                                                                }
-                                                                else
-                                                                {
-                                                                    if (XmpConstants.TypeFont.Equals(schema))
-                                                                    {
-                                                                        isInternal = true;
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return isInternal;
         }
 
         /// <summary>

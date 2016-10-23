@@ -347,11 +347,10 @@ namespace XmpCore.Impl
             for (var it = arrayNode.IterateChildren(); it.HasNext(); )
             {
                 var currItem = (XmpNode)it.Next();
-                if (!currItem.HasQualifier || !XmpConstants.XmlLang.Equals(currItem.GetQualifier(1).Name))
-                {
+                if (!currItem.HasQualifier || currItem.GetQualifier(1).Name != XmpConstants.XmlLang)
                     throw new XmpException("Language qualifier must be first", XmpErrorCode.BadXPath);
-                }
-                if (XmpConstants.XDefault.Equals(currItem.GetQualifier(1).Value))
+
+                if (currItem.GetQualifier(1).Value == XmpConstants.XDefault)
                 {
                     xdItem = currItem;
                     haveXDefault = true;
@@ -370,7 +369,7 @@ namespace XmpCore.Impl
             var result = XmpNodeUtils.ChooseLocalizedText(arrayNode, genericLang, specificLang);
             var match = (int)result[0];
             var itemNode = (XmpNode)result[1];
-            var specificXDefault = XmpConstants.XDefault.Equals(specificLang);
+            var specificXDefault = specificLang == XmpConstants.XDefault;
             switch (match)
             {
                 case XmpNodeUtils.CltNoValues:
@@ -392,7 +391,7 @@ namespace XmpCore.Impl
                     {
                         // Update the specific item, update x-default if it matches the
                         // old value.
-                        if (haveXDefault && xdItem != itemNode && xdItem != null && xdItem.Value.Equals(itemNode.Value))
+                        if (haveXDefault && xdItem != itemNode && xdItem != null && xdItem.Value == itemNode.Value)
                         {
                             xdItem.Value = itemValue;
                         }
@@ -406,7 +405,7 @@ namespace XmpCore.Impl
                         for (var it1 = arrayNode.IterateChildren(); it1.HasNext(); )
                         {
                             var currItem = (XmpNode)it1.Next();
-                            if (currItem == xdItem || !currItem.Value.Equals(xdItem != null ? xdItem.Value : null))
+                            if (currItem == xdItem || currItem.Value != (xdItem != null ? xdItem.Value : null))
                             {
                                 continue;
                             }
@@ -425,7 +424,7 @@ namespace XmpCore.Impl
                 {
                     // Update the generic item, update x-default if it matches the old
                     // value.
-                    if (haveXDefault && xdItem != itemNode && xdItem != null && xdItem.Value.Equals(itemNode.Value))
+                    if (haveXDefault && xdItem != itemNode && xdItem != null && xdItem.Value == itemNode.Value)
                     {
                         xdItem.Value = itemValue;
                     }

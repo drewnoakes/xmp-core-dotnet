@@ -122,7 +122,7 @@ namespace XmpCore.Impl
         /// <exception cref="XmpException">thrown on parsing errors</exception>
         private static void Rdf_NodeElementList(XmpMeta xmp, XmpNode xmpParent, XElement rdfRdfNode)
         {
-            foreach(var child in rdfRdfNode.Nodes())
+            foreach (var child in rdfRdfNode.Nodes())
             {
                 // filter whitespaces (and all text nodes)
                 if (!IsWhitespaceNode(child))
@@ -194,12 +194,12 @@ namespace XmpCore.Impl
         {
             // Used to detect attributes that are mutually exclusive.
             var exclusiveAttrs = 0;
-            foreach(var attribute in xmlNode.Attributes())
+            foreach (var attribute in xmlNode.Attributes())
             {
                 // quick hack, ns declarations do not appear in C++
                 // ignore "ID" without namespace
                 var prefix = xmlNode.GetPrefixOfNamespace(attribute.Name.Namespace);
-                if ("xmlns".Equals(prefix) || (prefix == null && "xmlns".Equals(attribute.Name)))
+                if (prefix == "xmlns" || (prefix == null && attribute.Name == "xmlns"))
                 {
                     continue;
                 }
@@ -223,7 +223,7 @@ namespace XmpCore.Impl
                             // the XMP tree name.
                             if (!string.IsNullOrEmpty(xmpParent.Name))
                             {
-                                if (!xmpParent.Name.Equals(attribute.Value))
+                                if (attribute.Value != xmpParent.Name)
                                 {
                                     throw new XmpException("Mismatched top level rdf:about values", XmpErrorCode.BadXmp);
                                 }
@@ -261,7 +261,7 @@ namespace XmpCore.Impl
         /// <exception cref="XmpException">thrown on parsing errors</exception>
         private static void Rdf_PropertyElementList(XmpMeta xmp, XmpNode xmpParent, XElement xmlParent, bool isTopLevel)
         {
-            foreach(var currChild in xmlParent.Nodes())
+            foreach (var currChild in xmlParent.Nodes())
             {
                 if (IsWhitespaceNode(currChild))
                 {
@@ -379,10 +379,10 @@ namespace XmpCore.Impl
             // remove the namespace-definitions from the list (original Java)
             // (for C#, put them in an ignore list and don't count or process them)
             var ignoreNodes = new List<string>();
-            foreach(var attribute in attributes)
+            foreach (var attribute in attributes)
             {
                 var prefix = xmlNode.GetPrefixOfNamespace(attribute.Name.Namespace);
-                if ("xmlns".Equals(prefix) || (prefix == null && "xmlns".Equals(attribute.Name)))
+                if (prefix == "xmlns" || (prefix == null && attribute.Name == "xmlns"))
                 {
                     ignoreNodes.Add(attribute.Name.ToString());
                 }
@@ -411,36 +411,36 @@ namespace XmpCore.Impl
                     attrNs = attribute.Name.NamespaceName;
                     attrValue = attribute.Value;
 
-                    if (!(XmpConstants.XmlLang.Equals("xml:" + attrLocal)) && !("ID".Equals(attrLocal) && XmpConstants.NsRdf.Equals(attrNs))
+                    if ("xml:" + attrLocal != XmpConstants.XmlLang && !(attrLocal == "ID" && attrNs == XmpConstants.NsRdf)
                         && !ignoreNodes.Contains(attribute.Name.ToString()))
                     {
                         foundAttrib = attribute;
                         break;
                     }
                 }
-                if (foundAttrib != null)   // meaning, contains one node other than xml:lang and rdf:ID
+                if (foundAttrib != null) // meaning, contains one node other than xml:lang and rdf:ID
                 {
                     attrLocal = foundAttrib.Name.LocalName;
                     attrNs = foundAttrib.Name.NamespaceName;
                     attrValue = foundAttrib.Value;
 
-                    if ("datatype".Equals(attrLocal) && XmpConstants.NsRdf.Equals(attrNs))
+                    if (attrLocal == "datatype" && attrNs == XmpConstants.NsRdf)
                     {
                         Rdf_LiteralPropertyElement(xmp, xmpParent, xmlNode, isTopLevel);
                     }
-                    else if (!("parseType".Equals(attrLocal) && XmpConstants.NsRdf.Equals(attrNs)))
+                    else if (!(attrLocal == "parseType" && attrNs == XmpConstants.NsRdf))
                     {
                         Rdf_EmptyPropertyElement(xmp, xmpParent, xmlNode, isTopLevel);
                     }
-                    else if ("Literal".Equals(attrValue))
+                    else if (attrValue == "Literal")
                     {
                         Rdf_ParseTypeLiteralPropertyElement();
                     }
-                    else if ("Resource".Equals(attrValue))
+                    else if (attrValue == "Resource")
                     {
                         Rdf_ParseTypeResourcePropertyElement(xmp, xmpParent, xmlNode, isTopLevel);
                     }
-                    else if ("Collection".Equals(attrValue))
+                    else if (attrValue == "Collection")
                     {
                         Rdf_ParseTypeCollectionPropertyElement();
                     }
@@ -460,12 +460,11 @@ namespace XmpCore.Impl
                     else
                     {
                         var nonTextNode = xmlNode.Nodes().FirstOrDefault(t => t.NodeType != XmlNodeType.Text);
-                        if(nonTextNode == null)
+                        if (nonTextNode == null)
                             Rdf_LiteralPropertyElement(xmp, xmpParent, xmlNode, isTopLevel);
                         else
                             Rdf_ResourcePropertyElement(xmp, xmpParent, xmlNode, isTopLevel);
                     }
-
                 }
             }
         }
@@ -494,58 +493,58 @@ namespace XmpCore.Impl
         /// <exception cref="XmpException">thrown on parsing errors</exception>
         private static void Rdf_ResourcePropertyElement(XmpMeta xmp, XmpNode xmpParent, XElement xmlNode, bool isTopLevel)
         {
-            if (isTopLevel && "iX:changes".Equals(xmlNode.Name))
+            if (isTopLevel && xmlNode.Name == "iX:changes")
             {
                 // Strip old "punchcard" chaff which has on the prefix "iX:".
                 return;
             }
+
             var newCompound = AddChildNode(xmp, xmpParent, xmlNode, string.Empty, isTopLevel);
             // walk through the attributes
-            foreach(var attribute in xmlNode.Attributes())
+            foreach (var attribute in xmlNode.Attributes())
             {
                 var prefix = xmlNode.GetPrefixOfNamespace(attribute.Name.Namespace);
-                if ("xmlns".Equals(prefix) || (prefix == null && "xmlns".Equals(attribute.Name)))
-                {
+
+                if (prefix == "xmlns" || (prefix == null && attribute.Name == "xmlns"))
                     continue;
-                }
 
                 var attrLocal = attribute.Name.LocalName;
                 var attrNs = attribute.Name.NamespaceName;
-                if (XmpConstants.XmlLang.Equals("xml:" + attribute.Name.LocalName))
+                if ("xml:" + attribute.Name.LocalName == XmpConstants.XmlLang)
                 {
                     AddQualifierNode(newCompound, XmpConstants.XmlLang, attribute.Value);
                 }
                 else
                 {
-                    if ("ID".Equals(attrLocal) && XmpConstants.NsRdf.Equals(attrNs))
-                    {
+                    if (attrLocal == "ID" && attrNs == XmpConstants.NsRdf)
                         continue;
-                    }
+
                     // Ignore all rdf:ID attributes.
                     throw new XmpException("Invalid attribute for resource property element", XmpErrorCode.BadRdf);
                 }
             }
+
             // walk through the children
             var found = false;
-            foreach(var currChild in xmlNode.Nodes())
+            foreach (var currChild in xmlNode.Nodes())
             {
                 if (!IsWhitespaceNode(currChild))
                 {
                     if (currChild.NodeType == XmlNodeType.Element && !found)
                     {
                         var currChildElem = (XElement)currChild;
-                        var isRdf = XmpConstants.NsRdf.Equals(currChildElem.Name.NamespaceName);
+                        var isRdf = currChildElem.Name.NamespaceName == XmpConstants.NsRdf;
                         var childLocal = currChildElem.Name.LocalName;
-                        if (isRdf && "Bag".Equals(childLocal))
+                        if (isRdf && childLocal == "Bag")
                         {
                             newCompound.Options.IsArray = true;
                         }
-                        else if (isRdf && "Seq".Equals(childLocal))
+                        else if (isRdf && childLocal == "Seq")
                         {
                             newCompound.Options.IsArray = true;
                             newCompound.Options.IsArrayOrdered = true;
                         }
-                        else if (isRdf && "Alt".Equals(childLocal))
+                        else if (isRdf && childLocal == "Alt")
                         {
                             newCompound.Options.IsArray = true;
                             newCompound.Options.IsArrayOrdered = true;
@@ -554,7 +553,7 @@ namespace XmpCore.Impl
                         else
                         {
                             newCompound.Options.IsStruct = true;
-                            if (!isRdf && !"Description".Equals(childLocal))
+                            if (!isRdf && childLocal != "Description")
                             {
                                 var typeName = currChildElem.Name.NamespaceName;
                                 if (typeName == null)
@@ -609,28 +608,27 @@ namespace XmpCore.Impl
             foreach (var attribute in xmlNode.Attributes())
             {
                 var prefix = xmlNode.GetPrefixOfNamespace(attribute.Name.Namespace);
-                if ("xmlns".Equals(prefix) || (prefix == null && "xmlns".Equals(attribute.Name)))
-                {
+
+                if (prefix == "xmlns" || (prefix == null && attribute.Name == "xmlns"))
                     continue;
-                }
+
                 var attrNs = attribute.Name.NamespaceName;
                 var attrLocal = attribute.Name.LocalName;
-                if (XmpConstants.XmlLang.Equals("xml:" + attribute.Name.LocalName))
+                if ("xml:" + attribute.Name.LocalName == XmpConstants.XmlLang)
                 {
                     AddQualifierNode(newChild, XmpConstants.XmlLang, attribute.Value);
                 }
                 else
                 {
-                    if (XmpConstants.NsRdf.Equals(attrNs) && ("ID".Equals(attrLocal) || "datatype".Equals(attrLocal)))
-                    {
+                    if (attrNs == XmpConstants.NsRdf && (attrLocal == "ID" || attrLocal == "datatype"))
                         continue;
-                    }
+
                     // Ignore all rdf:ID and rdf:datatype attributes.
                     throw new XmpException("Invalid attribute for literal property element", XmpErrorCode.BadRdf);
                 }
             }
             var textValue = string.Empty;
-            foreach(var child in xmlNode.Nodes())
+            foreach (var child in xmlNode.Nodes())
             {
                 if (child.NodeType == XmlNodeType.Text)
                 {
@@ -686,32 +684,30 @@ namespace XmpCore.Impl
             foreach (var attribute in xmlNode.Attributes())
             {
                 var prefix = xmlNode.GetPrefixOfNamespace(attribute.Name.Namespace);
-                if ("xmlns".Equals(prefix) || (prefix == null && "xmlns".Equals(attribute.Name)))
-                {
+                if (prefix == "xmlns" || (prefix == null && attribute.Name == "xmlns"))
                     continue;
-                }
+
                 var attrLocal = attribute.Name.LocalName;
                 var attrNs = attribute.Name.NamespaceName;
-                if (XmpConstants.XmlLang.Equals("xml:" + attribute.Name.LocalName))
+                if ("xml:" + attribute.Name.LocalName == XmpConstants.XmlLang)
                 {
                     AddQualifierNode(newStruct, XmpConstants.XmlLang, attribute.Value);
                 }
                 else
                 {
-                    if (XmpConstants.NsRdf.Equals(attrNs) && ("ID".Equals(attrLocal) || "parseType".Equals(attrLocal)))
-                    {
+                    if (attrNs == XmpConstants.NsRdf && (attrLocal == "ID" || attrLocal == "parseType"))
                         continue;
-                    }
+
                     // The caller ensured the value is "Resource".
                     // Ignore all rdf:ID attributes.
                     throw new XmpException("Invalid attribute for ParseTypeResource property element", XmpErrorCode.BadRdf);
                 }
             }
+
             Rdf_PropertyElementList(xmp, newStruct, xmlNode, false);
+
             if (newStruct.HasValueChild)
-            {
                 FixupQualifiedNode(newStruct);
-            }
         }
 
         /// <summary>
@@ -807,12 +803,10 @@ namespace XmpCore.Impl
             foreach (var attribute in xmlNode.Attributes())
             {
                 var prefix = xmlNode.GetPrefixOfNamespace(attribute.Name.Namespace);
-                if ("xmlns".Equals(prefix) || (prefix == null && "xmlns".Equals(attribute.Name)))
-                {
+                if (prefix == "xmlns" || (prefix == null && attribute.Name == "xmlns"))
                     continue;
-                }
-                var attrTerm = GetRdfTermKind(attribute);
-                switch (attrTerm)
+
+                switch (GetRdfTermKind(attribute))
                 {
                     case RdfTerm.Id:
                     {
@@ -850,7 +844,7 @@ namespace XmpCore.Impl
 
                     case RdfTerm.Other:
                     {
-                        if ("value".Equals(attribute.Name.LocalName) && XmpConstants.NsRdf.Equals(attribute.Name.NamespaceName))
+                        if (attribute.Name.LocalName == "value" && attribute.Name.NamespaceName == XmpConstants.NsRdf)
                         {
                             if (hasResourceAttr)
                             {
@@ -861,7 +855,7 @@ namespace XmpCore.Impl
                         }
                         else
                         {
-                            if (!XmpConstants.XmlLang.Equals("xml:" + attribute.Name.LocalName))
+                            if ("xml:" + attribute.Name.LocalName != XmpConstants.XmlLang)
                             {
                                 hasPropertyAttrs = true;
                             }
@@ -899,16 +893,15 @@ namespace XmpCore.Impl
                     childIsStruct = true;
                 }
             }
-            foreach(var attribute in xmlNode.Attributes())
+
+            foreach (var attribute in xmlNode.Attributes())
             {
                 var prefix = xmlNode.GetPrefixOfNamespace(attribute.Name.Namespace);
-                if (attribute == valueNode || "xmlns".Equals(prefix) || (prefix == null && "xmlns".Equals(attribute.Name)))
-                {
+                if (attribute == valueNode || prefix == "xmlns" || (prefix == null && attribute.Name == "xmlns"))
                     continue;
-                }
+
                 // Skip the rdf:value or rdf:resource attribute holding the value.
-                var attrTerm = GetRdfTermKind(attribute);
-                switch (attrTerm)
+                switch (GetRdfTermKind(attribute))
                 {
                     case RdfTerm.Id:
                     case RdfTerm.NodeId:
@@ -931,7 +924,7 @@ namespace XmpCore.Impl
                         }
                         else
                         {
-                            if (XmpConstants.XmlLang.Equals("xml:" + attribute.Name.LocalName))
+                            if ("xml:" + attribute.Name.LocalName == XmpConstants.XmlLang)
                             {
                                 AddQualifierNode(childNode, XmpConstants.XmlLang, attribute.Value);
                             }
@@ -976,17 +969,20 @@ namespace XmpCore.Impl
             string childName;
             if (ns != string.Empty)
             {
-                if (XmpConstants.NsDcDeprecated.Equals(ns))
+                if (ns == XmpConstants.NsDcDeprecated)
                 {
                     // Fix a legacy DC namespace
                     ns = XmpConstants.NsDC;
                 }
+
                 var prefix = registry.GetNamespacePrefix(ns);
+
                 if (prefix == null)
                 {
                     prefix = nodeNamespacePrefix ?? DefaultPrefix;
                     prefix = registry.RegisterNamespace(ns, prefix);
                 }
+
                 childName = prefix + nodeName.LocalName;
             }
             else
@@ -1015,10 +1011,10 @@ namespace XmpCore.Impl
                 }
             }
             // Make sure that this is not a duplicate of a named node.
-            var isArrayItem = "rdf:li".Equals(childName);
-            var isValueNode = "rdf:value".Equals(childName);
+            var isArrayItem = childName == "rdf:li";
+            var isValueNode = childName == "rdf:value";
             // Create XMP node and so some checks
-            var newChild = new XmpNode(childName, value, childOptions) { IsAlias = isAlias };
+            var newChild = new XmpNode(childName, value, childOptions) {IsAlias = isAlias};
             // Add the new child to the XMP parent node, a value node first.
             if (!isValueNode)
             {
@@ -1079,7 +1075,7 @@ namespace XmpCore.Impl
         {
             Debug.Assert(xmpParent.Options.IsStruct && xmpParent.HasChildren);
             var valueNode = xmpParent.GetChild(1);
-            Debug.Assert("rdf:value".Equals(valueNode.Name));
+            Debug.Assert(valueNode.Name == "rdf:value");
             // Move the qualifiers on the value node to the parent.
             // Make sure an xml:lang qualifier stays at the front.
             // Check for duplicate names between the value node's qualifiers and the parent's children.
@@ -1116,7 +1112,7 @@ namespace XmpCore.Impl
             xmpParent.Options.MergeWith(valueNode.Options);
             xmpParent.Value = valueNode.Value;
             xmpParent.RemoveChildren();
-            for (var it = valueNode.IterateChildren(); it.HasNext(); )
+            for (var it = valueNode.IterateChildren(); it.HasNext();)
             {
                 var child = (XmpNode)it.Next();
                 xmpParent.AddChild(child);
@@ -1132,10 +1128,10 @@ namespace XmpCore.Impl
         private static bool IsWhitespaceNode(XNode node)
         {
             return node.NodeType == XmlNodeType.Text && ((XText)node).Value
-                                                                            #if PORTABLE
+#if PORTABLE
                                                                                     .ToCharArray()
                                                                             #endif
-                                                                                    .All(char.IsWhiteSpace);
+                       .All(char.IsWhiteSpace);
         }
 
         /// <summary>
@@ -1206,18 +1202,30 @@ namespace XmpCore.Impl
             {
                 switch (localName)
                 {
-                    case "li": return RdfTerm.Li;
-                    case "parseType": return RdfTerm.ParseType;
-                    case "Description": return RdfTerm.Description;
-                    case "about": return RdfTerm.About;
-                    case "resource": return RdfTerm.Resource;
-                    case "RDF": return RdfTerm.Rdf;
-                    case "ID": return RdfTerm.Id;
-                    case "nodeID": return RdfTerm.NodeId;
-                    case "datatype": return RdfTerm.Datatype;
-                    case "aboutEach": return RdfTerm.AboutEach;
-                    case "aboutEachPrefix": return RdfTerm.AboutEachPrefix;
-                    case "bagID": return RdfTerm.BagId;
+                    case "li":
+                        return RdfTerm.Li;
+                    case "parseType":
+                        return RdfTerm.ParseType;
+                    case "Description":
+                        return RdfTerm.Description;
+                    case "about":
+                        return RdfTerm.About;
+                    case "resource":
+                        return RdfTerm.Resource;
+                    case "RDF":
+                        return RdfTerm.Rdf;
+                    case "ID":
+                        return RdfTerm.Id;
+                    case "nodeID":
+                        return RdfTerm.NodeId;
+                    case "datatype":
+                        return RdfTerm.Datatype;
+                    case "aboutEach":
+                        return RdfTerm.AboutEach;
+                    case "aboutEachPrefix":
+                        return RdfTerm.AboutEachPrefix;
+                    case "bagID":
+                        return RdfTerm.BagId;
                 }
             }
 

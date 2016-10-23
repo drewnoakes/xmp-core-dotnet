@@ -443,20 +443,19 @@ namespace XmpCore.Impl
             for (var it = parentNode.IterateChildren(); it.HasNext(); )
             {
                 var node = (XmpNode)it.Next();
+
                 if (CanBeRdfAttrProp(node))
-                {
                     continue;
-                }
+
                 var emitEndTag = true;
                 var indentEndTag = true;
                 // Determine the XML element name, write the name part of the start tag. Look over the
                 // qualifiers to decide on "normal" versus "rdf:value" form. Emit the attribute
                 // qualifiers at the same time.
                 var elemName = node.Name;
-                if (XmpConstants.ArrayItemName.Equals(elemName))
-                {
+                if (elemName == XmpConstants.ArrayItemName)
                     elemName = "rdf:li";
-                }
+
                 WriteIndent(indent);
                 Write('<');
                 Write(elemName);
@@ -471,7 +470,7 @@ namespace XmpCore.Impl
                     }
                     else
                     {
-                        hasRdfResourceQual = "rdf:resource".Equals(qualifier.Name);
+                        hasRdfResourceQual = qualifier.Name == "rdf:resource";
                         Write(' ');
                         Write(qualifier.Name);
                         Write("=\"");
@@ -870,20 +869,15 @@ namespace XmpCore.Impl
         {
             var emitEndTag = true;
             var indentEndTag = true;
+
             // Determine the XML element name. Open the start tag with the name and
             // attribute qualifiers.
             var elemName = node.Name;
             if (emitAsRdfValue)
-            {
                 elemName = "rdf:value";
-            }
-            else
-            {
-                if (XmpConstants.ArrayItemName.Equals(elemName))
-                {
-                    elemName = "rdf:li";
-                }
-            }
+            else if (elemName == XmpConstants.ArrayItemName)
+                elemName = "rdf:li";
+
             WriteIndent(indent);
             Write('<');
             Write(elemName);
@@ -898,7 +892,7 @@ namespace XmpCore.Impl
                 }
                 else
                 {
-                    hasRdfResourceQual = "rdf:resource".Equals(qualifier.Name);
+                    hasRdfResourceQual = qualifier.Name == "rdf:resource";
                     if (!emitAsRdfValue)
                     {
                         Write(' ');
@@ -969,7 +963,7 @@ namespace XmpCore.Impl
                     }
                     else
                     {
-                        if (node.Value == null || string.Empty.Equals(node.Value))
+                        if (string.IsNullOrEmpty(node.Value))
                         {
                             Write("/>");
                             WriteNewline();
@@ -1163,7 +1157,7 @@ namespace XmpCore.Impl
         /// <returns>Returns true if the node serialized as RDF-Attribute</returns>
         private static bool CanBeRdfAttrProp(XmpNode node)
         {
-            return !node.HasQualifier && !node.Options.IsUri && !node.Options.IsCompositeProperty && !XmpConstants.ArrayItemName.Equals(node.Name);
+            return !node.HasQualifier && !node.Options.IsUri && !node.Options.IsCompositeProperty && node.Name != XmpConstants.ArrayItemName;
         }
 
         /// <summary>Writes indents and automatically includes the base indent from the options.</summary>

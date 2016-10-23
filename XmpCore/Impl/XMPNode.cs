@@ -541,12 +541,12 @@ namespace XmpCore.Impl
         /// <summary>
         /// Get whether this node is a language qualifier.
         /// </summary>
-        private bool IsLanguageNode => XmpConstants.XmlLang.Equals(Name);
+        private bool IsLanguageNode => Name == XmpConstants.XmlLang;
 
         /// <summary>
         /// Get whether this node is a type qualifier.
         /// </summary>
-        private bool IsTypeNode => "rdf:type".Equals(Name);
+        private bool IsTypeNode => Name == "rdf:type";
 
         /// <summary>
         /// <em>Note:</em> This method should always be called when accessing 'children' to be sure
@@ -584,7 +584,7 @@ namespace XmpCore.Impl
         /// <exception cref="XmpException">Thrown if a node with the same name is existing.</exception>
         private void AssertChildNotExisting(string childName)
         {
-            if (!XmpConstants.ArrayItemName.Equals(childName) && FindChildByName(childName) != null)
+            if (childName != XmpConstants.ArrayItemName && FindChildByName(childName) != null)
             {
                 throw new XmpException("Duplicate property or field node '" + childName + "'", XmpErrorCode.BadXmp);
             }
@@ -595,7 +595,7 @@ namespace XmpCore.Impl
         /// <exception cref="XmpException">Thrown if a node with the same name is existing.</exception>
         private void AssertQualifierNotExisting(string qualifierName)
         {
-            if (!XmpConstants.ArrayItemName.Equals(qualifierName) && FindQualifierByName(qualifierName) != null)
+            if (qualifierName != XmpConstants.ArrayItemName && FindQualifierByName(qualifierName) != null)
             {
                 throw new XmpException("Duplicate '" + qualifierName + "' qualifier", XmpErrorCode.BadXmp);
             }

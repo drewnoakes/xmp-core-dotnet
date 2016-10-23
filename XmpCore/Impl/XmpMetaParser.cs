@@ -215,6 +215,7 @@ namespace XmpCore.Impl
                 throw new XmpException("XML Parser not correctly configured", XmpErrorCode.Unknown, e);
             }
         }
+
         /// <exception cref="XmpException">Wraps parsing and I/O-exceptions into an XMPException.</exception>
         private static XDocument ParseTextReader(TextReader reader)
         {
@@ -272,7 +273,7 @@ namespace XmpCore.Impl
         {
             foreach (var root in nodes)
             {
-                if (XmlNodeType.ProcessingInstruction == root.NodeType && XmpConstants.XmpPi.Equals(((XProcessingInstruction)root).Target))
+                if (XmlNodeType.ProcessingInstruction == root.NodeType && ((XProcessingInstruction)root).Target == XmpConstants.XmpPi)
                 {
                     // Store the processing instructions content
                     result[2] = ((XProcessingInstruction)root).Data;
@@ -283,14 +284,13 @@ namespace XmpCore.Impl
                     var rootNS = rootElem.Name.NamespaceName;
                     var rootLocal = rootElem.Name.LocalName;
 
-                    if ((XmpConstants.TagXmpmeta.Equals(rootLocal) || XmpConstants.TagXapmeta.Equals(rootLocal)) &&
-                            XmpConstants.NsX.Equals(rootNS))
+                    if ((rootLocal == XmpConstants.TagXmpmeta || rootLocal == XmpConstants.TagXapmeta) && rootNS == XmpConstants.NsX)
                     {
                         // by not passing the RequireXMPMeta-option, the rdf-Node will be valid
                         return FindRootNode(rootElem.Nodes(), false, result);
                     }
 
-                    if (!xmpmetaRequired && "RDF".Equals(rootLocal) && XmpConstants.NsRdf.Equals(rootNS))
+                    if (!xmpmetaRequired && rootLocal == "RDF" && rootNS == XmpConstants.NsRdf)
                     {
                         if (result != null)
                         {

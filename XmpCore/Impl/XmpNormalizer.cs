@@ -97,17 +97,20 @@ namespace XmpCore.Impl
             // make sure the DC schema is existing, because it might be needed within the normalization
             // if not touched it will be removed by removeEmptySchemas
             XmpNodeUtils.FindSchemaNode(xmp.GetRoot(), XmpConstants.NsDC, true);
+
             // Do the special case fixes within each schema.
             for (var it = xmp.GetRoot().IterateChildren(); it.HasNext(); )
             {
                 var currSchema = (XmpNode)it.Next();
-                if (XmpConstants.NsDC.Equals(currSchema.Name))
+
+                switch (currSchema.Name)
                 {
-                    NormalizeDcArrays(currSchema);
-                }
-                else
-                {
-                    if (XmpConstants.NsExif.Equals(currSchema.Name))
+                    case XmpConstants.NsDC:
+                    {
+                        NormalizeDcArrays(currSchema);
+                        break;
+                    }
+                    case XmpConstants.NsExif:
                     {
                         // Do a special case fix for exif:GPSTimeStamp.
                         FixGpsTimeStamp(currSchema);
@@ -116,30 +119,23 @@ namespace XmpCore.Impl
                         {
                             RepairAltText(arrayNode);
                         }
+                        break;
                     }
-                    else
+                    case XmpConstants.NsDm:
                     {
-                        if (XmpConstants.NsDm.Equals(currSchema.Name))
-                        {
-                            // Do a special case migration of xmpDM:copyright to
-                            // dc:rights['x-default'].
-                            var dmCopyright = XmpNodeUtils.FindChildNode(currSchema, "xmpDM:copyright", false);
-                            if (dmCopyright != null)
-                            {
-                                MigrateAudioCopyright(xmp, dmCopyright);
-                            }
-                        }
-                        else
-                        {
-                            if (XmpConstants.NsXmpRights.Equals(currSchema.Name))
-                            {
-                                var arrayNode = XmpNodeUtils.FindChildNode(currSchema, "xmpRights:UsageTerms", false);
-                                if (arrayNode != null)
-                                {
-                                    RepairAltText(arrayNode);
-                                }
-                            }
-                        }
+                        // Do a special case migration of xmpDM:copyright to
+                        // dc:rights['x-default'].
+                        var dmCopyright = XmpNodeUtils.FindChildNode(currSchema, "xmpDM:copyright", false);
+                        if (dmCopyright != null)
+                            MigrateAudioCopyright(xmp, dmCopyright);
+                        break;
+                    }
+                    case XmpConstants.NsXmpRights:
+                    {
+                        var arrayNode = XmpNodeUtils.FindChildNode(currSchema, "xmpRights:UsageTerms", false);
+                        if (arrayNode != null)
+                            RepairAltText(arrayNode);
+                        break;
                     }
                 }
             }
@@ -433,9 +429,9 @@ namespace XmpCore.Impl
         /// <exception cref="XmpException">Forwards XMP errors</exception>
         private static void CompareAliasedSubtrees(XmpNode aliasNode, XmpNode baseNode, bool outerCall)
         {
-            if (!aliasNode.Value.Equals(baseNode.Value) || aliasNode.GetChildrenLength() != baseNode.GetChildrenLength())
+            if (baseNode.Value != aliasNode.Value || aliasNode.GetChildrenLength() != baseNode.GetChildrenLength())
                 throw new XmpException("Mismatch between alias and base nodes", XmpErrorCode.BadXmp);
-            if (!outerCall && (!aliasNode.Name.Equals(baseNode.Name) || !aliasNode.Options.Equals(baseNode.Options) || aliasNode.GetQualifierLength() != baseNode.GetQualifierLength()))
+            if (!outerCall && (baseNode.Name != aliasNode.Name || !aliasNode.Options.Equals(baseNode.Options) || aliasNode.GetQualifierLength() != baseNode.GetQualifierLength()))
                 throw new XmpException("Mismatch between alias and base nodes", XmpErrorCode.BadXmp);
 
             for (IIterator an = aliasNode.IterateChildren(), bn = baseNode.IterateChildren(); an.HasNext() && bn.HasNext(); )
@@ -524,7 +520,7 @@ namespace XmpCore.Impl
                     if (lfPos < 0)
                     {
                         // 3A. No double LF, compare whole values.
-                        if (!dmValue.Equals(defaultValue))
+                        if (defaultValue != dmValue)
                         {
                             // 3A2. Append the xmpDM:copyright to the x-default
                             // item.
@@ -534,7 +530,7 @@ namespace XmpCore.Impl
                     else
                     {
                         // 3B. Has double LF, compare the tail.
-                        if (!defaultValue.Substring (lfPos + 2).Equals(dmValue))
+                        if (dmValue != defaultValue.Substring (lfPos + 2))
                         {
                             // 3B2. Replace the x-default tail.
                             defaultNode.Value = defaultValue.Substring (0, lfPos + 2 - 0) + dmValue;
