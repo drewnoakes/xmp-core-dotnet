@@ -21,9 +21,7 @@ namespace XmpCore.Impl
     /// XML-parsing and fixes the prefix.
     /// </summary>
     /// <remarks>
-    /// This class replaces the <c>ExpatAdapter.cpp</c> and does the
-    /// XML-parsing and fixes the prefix. After the parsing several normalisations
-    /// are applied to the XMPTree.
+    /// After the parsing several normalisations are applied to the XMPTree.
     /// </remarks>
     /// <since>01.02.2006</since>
     public static class XmpMetaParser
@@ -91,7 +89,7 @@ namespace XmpCore.Impl
             options = options ?? new ParseOptions();
             return ParseXmlFromByteBuffer(new ByteBuffer(bytes), options);
         }
-        
+
         private static IXmpMeta ParseXmlDoc(XDocument document, ParseOptions options)
         {
             object[] result = new object[3];
@@ -261,7 +259,7 @@ namespace XmpCore.Impl
         /// Pick the first x:xmpmeta among multiple root candidates. If there aren't
         /// any, pick the first bare rdf:RDF if that is allowed. The returned root is
         /// the rdf:RDF child if an x:xmpmeta element was chosen. The search is
-        /// breadth first, so a higher level candiate is chosen over a lower level
+        /// breadth first, so a higher level candidate is chosen over a lower level
         /// one that was textually earlier in the serialized XML.
         /// </remarks>
         /// <param name="nodes">initially, the root of the xml document as a list</param>
@@ -275,7 +273,7 @@ namespace XmpCore.Impl
         /// The array contains:
         /// <list type="bullet">
         /// <item>[0] - the rdf:RDF-node</item>
-        /// <item>[1] - an object that is either XMP_RDF or XMP_PLAIN (the latter is decrecated)</item>
+        /// <item>[1] - an object that is either XMP_RDF or XMP_PLAIN (the latter is deprecated)</item>
         /// <item>[2] - the body text of the xpacket-instruction.</item>
         /// </list>
         /// </returns>

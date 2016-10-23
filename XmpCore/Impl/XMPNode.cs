@@ -162,7 +162,7 @@ namespace XmpCore.Impl
             _children = null;
         }
 
-        /// <returns>Returns the number of children without neccessarily creating a list.</returns>
+        /// <returns>Returns the number of children without necessarily creating a list.</returns>
         public int GetChildrenLength()
         {
             return _children != null ? _children.Count : 0;
@@ -182,7 +182,7 @@ namespace XmpCore.Impl
             return GetQualifier()[index - 1];
         }
 
-        /// <returns>Returns the number of qualifier without neccessarily creating a list.</returns>
+        /// <returns>Returns the number of qualifier without necessarily creating a list.</returns>
         public int GetQualifierLength()
         {
             return _qualifier != null ? _qualifier.Count : 0;
@@ -197,7 +197,7 @@ namespace XmpCore.Impl
             qualNode.Parent = this;
             qualNode.Options.IsQualifier = true;
             Options.HasQualifiers = true;
-            // contraints
+            // constraints
             if (qualNode.IsLanguageNode)
             {
                 // "xml:lang" is always first and the option "hasLanguage" is set
@@ -326,7 +326,7 @@ namespace XmpCore.Impl
 
             public void Remove()
             {
-                throw new NotSupportedException("remove() is not allowed due to the internal contraints");
+                throw new NotSupportedException("remove() is not allowed due to the internal constraints");
             }
 
             private readonly IIterator _it;
@@ -377,7 +377,7 @@ namespace XmpCore.Impl
             }
         }
 
-        /// <summary>Renders this node and the tree unter this node in a human readable form.</summary>
+        /// <summary>Renders this node and the tree under this node in a human readable form.</summary>
         /// <param name="recursive">Flag is qualifier and child nodes shall be rendered too</param>
         /// <returns>Returns a multiline string containing the dump.</returns>
         public string DumpNode(bool recursive)

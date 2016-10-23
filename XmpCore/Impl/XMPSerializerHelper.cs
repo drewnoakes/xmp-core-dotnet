@@ -24,7 +24,7 @@ namespace XmpCore.Impl
         /// <remarks>
         /// For each serialisation, a new XMPSerializer
         /// instance is created, either XMPSerializerRDF or XMPSerializerPlain so that its possible to
-        /// serialialize the same XMPMeta objects in two threads.
+        /// serialize the same XMPMeta objects in two threads.
         /// </remarks>
         /// <param name="xmp">a metadata implementation object</param>
         /// <param name="stream">the output stream to serialize to</param>

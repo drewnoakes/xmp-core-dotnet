@@ -277,9 +277,9 @@ namespace XmpCore.Impl
             }
         }
 
-        /// <summary>Verifies the PropertyOptions for consistancy and updates them as needed.</summary>
+        /// <summary>Verifies the PropertyOptions for consistency and updates them as needed.</summary>
         /// <remarks>
-        /// Verifies the PropertyOptions for consistancy and updates them as needed.
+        /// Verifies the PropertyOptions for consistency and updates them as needed.
         /// If options are <c>null</c> they are created with default values.
         /// </remarks>
         /// <param name="options">the <c>PropertyOptions</c></param>

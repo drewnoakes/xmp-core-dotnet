@@ -404,7 +404,7 @@ namespace XmpCore.Impl
         /// Recursively handles the "value" for a node that must be written as an RDF
         /// property element. It does not matter if it is a top level property, a
         /// field of a struct, or an item of an array. The indent is that for the
-        /// property element. The patterns bwlow ignore attribute qualifiers such as
+        /// property element. The patterns below ignore attribute qualifiers such as
         /// xml:lang, they don't affect the output form.
         /// <code>
         /// &lt;ns:UnqualifiedStructProperty-1
@@ -1166,7 +1166,7 @@ namespace XmpCore.Impl
             return !node.HasQualifier && !node.Options.IsUri && !node.Options.IsCompositeProperty && !XmpConstants.ArrayItemName.Equals(node.Name);
         }
 
-        /// <summary>Writes indents and automatically includes the baseindend from the options.</summary>
+        /// <summary>Writes indents and automatically includes the base indent from the options.</summary>
         /// <param name="times">number of indents to write</param>
         /// <exception cref="System.IO.IOException">forwards exception</exception>
         private void WriteIndent(int times)
