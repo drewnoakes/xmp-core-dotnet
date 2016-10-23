@@ -365,8 +365,7 @@ namespace XmpCore.Impl
                         {
                             var path = XmpPathParser.ExpandXPath(info.Namespace, info.PropName);
                             var actualProp = XmpNodeUtils.FindNode(xmpImpl.GetRoot(), path, false, null);
-                            if (actualProp != null)
-                                actualProp.Parent.RemoveChild(actualProp);
+                            actualProp?.Parent.RemoveChild(actualProp);
                         }
                     }
                 }

@@ -52,8 +52,7 @@ namespace XmpCore.Tests
                 log.WriteLine("Caught exception '" + e.Message  + "'");
             }
 
-            if (log != null)
-                log.Flush();
+            log?.Flush();
         }
 
         private static void DoCoreCoverage()
