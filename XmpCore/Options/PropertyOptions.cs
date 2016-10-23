@@ -150,16 +150,10 @@ namespace XmpCore.Options
         }
 
         /// <value>Returns whether the property is of composite type - an array or a struct.</value>
-        public bool IsCompositeProperty
-        {
-            get { return (GetOptions() & (ArrayFlag | StructFlag)) > 0; }
-        }
+        public bool IsCompositeProperty => (GetOptions() & (ArrayFlag | StructFlag)) > 0;
 
         /// <value>Returns whether the property is of composite type - an array or a struct.</value>
-        public bool IsSimple
-        {
-            get { return !IsCompositeProperty; }
-        }
+        public bool IsSimple => !IsCompositeProperty;
 
         /// <summary>Compares two options set for array compatibility.</summary>
         /// <param name="options">other options</param>
@@ -185,10 +179,7 @@ namespace XmpCore.Options
         }
 
         /// <value>Returns true if only array options are set.</value>
-        public bool IsOnlyArrayOptions
-        {
-            get { return (GetOptions() & ~(ArrayFlag | ArrayOrderedFlag | ArrayAlternateFlag | ArrayAltTextFlag)) == 0; }
-        }
+        public bool IsOnlyArrayOptions => (GetOptions() & ~(ArrayFlag | ArrayOrderedFlag | ArrayAlternateFlag | ArrayAltTextFlag)) == 0;
 
         protected override int GetValidOptions()
         {

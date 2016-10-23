@@ -349,10 +349,7 @@ namespace XmpCore.Impl
         }
 
         /// <value>Returns whether there are more chars to come.</value>
-        public bool HasNext
-        {
-            get { return _pos < _str.Length; }
-        }
+        public bool HasNext => _pos < _str.Length;
 
         /// <param name="index">index of char</param>
         /// <returns>Returns char at a certain index.</returns>

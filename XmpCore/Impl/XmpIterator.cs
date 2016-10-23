@@ -357,19 +357,10 @@ namespace XmpCore.Impl
                     }
                 }
 
-                public PropertyOptions Options
-                {
-                    get { return _node.Options; }
-                }
+                public PropertyOptions Options => _node.Options;
 
-                public string Language
-                {
-                    get
-                    {
-                        // the language is not reported
-                        return null;
-                    }
-                }
+                // the language is not reported
+                public string Language => null;
             }
 
             /// <returns>Returns the returnProperty.</returns>

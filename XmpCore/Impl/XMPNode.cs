@@ -270,10 +270,7 @@ namespace XmpCore.Impl
         /// <summary>
         /// Get whether the node has children.
         /// </summary>
-        public bool HasChildren
-        {
-            get { return _children != null && _children.Count > 0; }
-        }
+        public bool HasChildren => _children != null && _children.Count > 0;
 
         /// <returns>
         /// Returns an iterator for the children.
@@ -291,10 +288,7 @@ namespace XmpCore.Impl
         /// <summary>
         /// Returns whether the node has qualifier attached.
         /// </summary>
-        public bool HasQualifier
-        {
-            get { return _qualifier != null && _qualifier.Count > 0; }
-        }
+        public bool HasQualifier => _qualifier != null && _qualifier.Count > 0;
 
         /// <returns>
         /// Returns an iterator for the qualifier.
@@ -547,18 +541,12 @@ namespace XmpCore.Impl
         /// <summary>
         /// Get whether this node is a language qualifier.
         /// </summary>
-        private bool IsLanguageNode
-        {
-            get { return XmpConstants.XmlLang.Equals(Name); }
-        }
+        private bool IsLanguageNode => XmpConstants.XmlLang.Equals(Name);
 
         /// <summary>
         /// Get whether this node is a type qualifier.
         /// </summary>
-        private bool IsTypeNode
-        {
-            get { return "rdf:type".Equals(Name); }
-        }
+        private bool IsTypeNode => "rdf:type".Equals(Name);
 
         /// <summary>
         /// <em>Note:</em> This method should always be called when accessing 'children' to be sure

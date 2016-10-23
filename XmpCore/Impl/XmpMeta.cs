@@ -300,20 +300,11 @@ namespace XmpCore.Impl
                 _itemNode = itemNode;
             }
 
-            public string Value
-            {
-                get { return _itemNode.Value; }
-            }
+            public string Value => _itemNode.Value;
 
-            public PropertyOptions Options
-            {
-                get { return _itemNode.Options; }
-            }
+            public PropertyOptions Options => _itemNode.Options;
 
-            public string Language
-            {
-                get { return _itemNode.GetQualifier(1).Value; }
-            }
+            public string Language => _itemNode.GetQualifier(1).Value;
 
             public override string ToString()
             {
@@ -538,20 +529,11 @@ namespace XmpCore.Impl
                 _propNode = propNode;
             }
 
-            public string Value
-            {
-                get { return _value != null ? _value.ToString() : null; }
-            }
+            public string Value => _value != null ? _value.ToString() : null;
 
-            public PropertyOptions Options
-            {
-                get { return _propNode.Options; }
-            }
+            public PropertyOptions Options => _propNode.Options;
 
-            public string Language
-            {
-                get { return null; }
-            }
+            public string Language => null;
 
             public override string ToString()
             {

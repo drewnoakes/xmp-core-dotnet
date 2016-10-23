@@ -42,12 +42,8 @@ namespace Sharpen
         {
         }
 
-        T IEnumerator<T>.Current {
-            get { return _lastValue; }
-        }
+        T IEnumerator<T>.Current => _lastValue;
 
-        object IEnumerator.Current {
-            get { return _lastValue; }
-        }
+        object IEnumerator.Current => _lastValue;
     }
 }
