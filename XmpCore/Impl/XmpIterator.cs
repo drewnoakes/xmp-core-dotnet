@@ -117,7 +117,7 @@ namespace XmpCore.Impl
             throw new NotSupportedException("The XMPIterator does not support remove().");
         }
 
-        private IteratorOptions Options { get; set; }
+        private IteratorOptions Options { get; }
 
         /// <summary>the base namespace of the property path, will be changed during the iteration</summary>
         private string BaseNamespace { get; set; }
@@ -332,8 +332,8 @@ namespace XmpCore.Impl
                 private readonly XmpNode _node;
                 private readonly string _baseNs;
 
-                public string Path { get; private set; }
-                public string Value { get; private set; }
+                public string Path { get; }
+                public string Value { get; }
 
                 public XmpPropertyInfo450(XmpNode node, string baseNs, string path, string value)
                 {

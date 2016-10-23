@@ -346,10 +346,10 @@ namespace XmpCore.Impl
                 AliasForm = aliasOpts;
             }
 
-            public string Namespace { get; private set; }
-            public string Prefix { get; private set; }
-            public string PropName { get; private set; }
-            public AliasOptions AliasForm { get; private set; }
+            public string Namespace { get; }
+            public string Prefix { get; }
+            public string PropName { get; }
+            public AliasOptions AliasForm { get; }
 
             public override string ToString()
             {
