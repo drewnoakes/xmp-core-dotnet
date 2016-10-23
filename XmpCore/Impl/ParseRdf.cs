@@ -785,7 +785,7 @@ namespace XmpCore.Impl
             var hasValueAttr = false;
             XAttribute valueNode = null;
             // ! Can come from rdf:value or rdf:resource.
-            if (!(xmlNode.FirstNode == null))
+            if (xmlNode.FirstNode != null)
             {
                 throw new XmpException("Nested content not allowed with rdf:resource or property attributes", XmpErrorCode.BadRdf);
             }
