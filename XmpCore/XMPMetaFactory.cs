@@ -10,6 +10,7 @@
 
 using System;
 using System.IO;
+using System.Xml.Linq;
 using XmpCore.Impl;
 using XmpCore.Options;
 
@@ -66,6 +67,10 @@ namespace XmpCore
         /// <returns>Returns the <c>XMPMeta</c>-object created from the input.</returns>
         /// <exception cref="XmpException">If the file is not well-formed XML or if the parsing fails.</exception>
         public static IXmpMeta ParseFromBuffer(byte[] buffer, ParseOptions options = null) => XmpMetaParser.Parse(buffer, options);
+
+        public static IXmpMeta ParseFromXDocument(XDocument root, ParseOptions options = null) => XmpMetaParser.Parse(root, options);
+
+        public static XDocument ExtractXDocumentFromBuffer(byte[] buffer, ParseOptions options = null) => XmpMetaParser.Extract(buffer, options);
 
         /// <summary>Serializes an <c>XMPMeta</c>-object as RDF into an <c>OutputStream</c>.</summary>
         /// <param name="xmp">a metadata object</param>
