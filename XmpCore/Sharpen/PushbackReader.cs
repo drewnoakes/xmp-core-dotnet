@@ -70,7 +70,7 @@ namespace Sharpen
                         len = base.Read(cbuf, off, len);
                         if (len == -1)
                         {
-                            return (avail == 0) ? -1 : avail;
+                            return avail == 0 ? -1 : avail;
                         }
                         return avail + len;
                     }

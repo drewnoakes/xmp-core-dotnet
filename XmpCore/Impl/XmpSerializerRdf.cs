@@ -139,11 +139,11 @@ namespace XmpCore.Impl
             {
                 _padding -= newlineLen;
                 // Write this newline last.
-                while (_padding >= (100 + newlineLen))
+                while (_padding >= 100 + newlineLen)
                 {
                     WriteChars(100, ' ');
                     WriteNewline();
-                    _padding -= (100 + newlineLen);
+                    _padding -= 100 + newlineLen;
                 }
                 WriteChars(_padding, ' ');
                 WriteNewline();
@@ -489,8 +489,8 @@ namespace XmpCore.Impl
                     if (!node.Options.IsCompositeProperty)
                     {
                         var result = SerializeCompactRdfSimpleProp(node);
-                        emitEndTag = ((bool)result[0]);
-                        indentEndTag = ((bool)result[1]);
+                        emitEndTag = (bool)result[0];
+                        indentEndTag = (bool)result[1];
                     }
                     else
                     {

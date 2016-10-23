@@ -240,7 +240,7 @@ namespace XmpCore.Impl
                 }
                 // create sub iterator for every child,
                 // if its the first child visited or the former child is finished
-                if ((!_subIterator.HasNext()) && iterator.HasNext())
+                if (!_subIterator.HasNext() && iterator.HasNext())
                 {
                     var child = (XmpNode)iterator.Next();
                     _index++;

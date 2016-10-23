@@ -253,7 +253,7 @@ namespace XmpCore.Impl
         public static DateTimeOffset UnixTimeToDateTimeOffset(long unixTime)
         {
             return new DateTimeOffset(
-                _unixEpoch.Ticks + (unixTime*10000),
+                _unixEpoch.Ticks + unixTime*10000,
                 TimeSpan.Zero);
         }
 

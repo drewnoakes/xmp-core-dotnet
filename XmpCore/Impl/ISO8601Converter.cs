@@ -154,7 +154,7 @@ namespace XmpCore.Impl
                     input.Skip();
                     var digits = input.Pos();
                     value = input.GatherInt("Invalid fractional seconds in date string", 999999999);
-                    if (input.HasNext && (input.Ch() != 'Z' && input.Ch() != '+' && input.Ch() != '-'))
+                    if (input.HasNext && input.Ch() != 'Z' && input.Ch() != '+' && input.Ch() != '-')
                     {
                         throw new XmpException("Invalid date string, after fractional second", XmpErrorCode.BadValue);
                     }
@@ -227,7 +227,7 @@ namespace XmpCore.Impl
                 }
             }
             // create a corresponding TZ and set it time zone
-            var offset = (TimeSpan.FromHours(tzHour) + TimeSpan.FromMinutes(tzMinute));
+            var offset = TimeSpan.FromHours(tzHour) + TimeSpan.FromMinutes(tzMinute);
             if (tzSign < 0)
                 offset = -offset;
 
@@ -388,7 +388,7 @@ namespace XmpCore.Impl
             var ch = Ch(_pos);
             while ('0' <= ch && ch <= '9')
             {
-                value = (value * 10) + (ch - '0');
+                value = value * 10 + (ch - '0');
                 success = true;
                 _pos++;
                 ch = Ch(_pos);

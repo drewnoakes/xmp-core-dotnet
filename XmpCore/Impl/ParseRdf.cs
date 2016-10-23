@@ -1146,7 +1146,7 @@ namespace XmpCore.Impl
             {
                 return false;
             }
-            return (!IsCoreSyntaxTerm(term));
+            return !IsCoreSyntaxTerm(term);
         }
 
         /// <summary>
@@ -1193,7 +1193,7 @@ namespace XmpCore.Impl
         {
             var localName = name.LocalName;
             var ns = name.NamespaceName;
-            var parentNamespaceName = (parentName != null ? parentName.NamespaceName : string.Empty);
+            var parentNamespaceName = parentName != null ? parentName.NamespaceName : string.Empty;
 
             if (ns == string.Empty && (localName == "about" || localName == "ID") && (nodeType == XmlNodeType.Attribute) && parentNamespaceName == XmpConstants.NsRdf)
                 ns = XmpConstants.NsRdf;

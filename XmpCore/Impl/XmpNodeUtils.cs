@@ -330,7 +330,7 @@ namespace XmpCore.Impl
             }
             else if (value is bool)
             {
-                strValue = XmpCore.XmpUtils.ConvertFromBoolean(((bool)value));
+                strValue = XmpCore.XmpUtils.ConvertFromBoolean((bool)value);
             }
             else if (value is int)
             {

@@ -166,7 +166,7 @@ namespace XmpCore.Impl
                         if (charKind != UnicodeKind.Space)
                             break;
 
-                        if ((itemEnd + 1) < endPos)
+                        if (itemEnd + 1 < endPos)
                         {
                             ch = catedStr[itemEnd + 1];
                             var nextKind = ClassifyCharacter(ch);
@@ -209,7 +209,7 @@ namespace XmpCore.Impl
                             // (non-closing) quotes,
                             // or end of input.
                             char nextChar;
-                            if ((itemEnd + 1) < endPos)
+                            if (itemEnd + 1 < endPos)
                                 nextChar = catedStr[itemEnd + 1];
                             else
                                 nextChar = (char)0x3B;
@@ -814,7 +814,7 @@ namespace XmpCore.Impl
                 else
                 {
                     prevSpace = false;
-                    if ((charKind == UnicodeKind.Semicolon || charKind == UnicodeKind.Control) || (charKind == UnicodeKind.Comma && !allowCommas))
+                    if (charKind == UnicodeKind.Semicolon || charKind == UnicodeKind.Control || (charKind == UnicodeKind.Comma && !allowCommas))
                         break;
                 }
             }
@@ -866,7 +866,7 @@ namespace XmpCore.Impl
         /// <returns>Returns true if the character is a closing quote.</returns>
         private static bool IsClosingQuote(char ch, char openQuote, char closeQuote)
         {
-            return ch == closeQuote || (openQuote == 0x301D && ch == 0x301E || ch == 0x301F);
+            return ch == closeQuote || openQuote == 0x301D && ch == 0x301E || ch == 0x301F;
         }
 
         /// <summary>

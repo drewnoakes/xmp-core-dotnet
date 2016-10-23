@@ -65,7 +65,7 @@ namespace XmpCore.Options
         /// <returns>Returns true, if this object contain at least one of the given options.</returns>
         public bool ContainsOneOf(int optionBits)
         {
-            return ((GetOptions()) & optionBits) != 0;
+            return (GetOptions() & optionBits) != 0;
         }
 
         /// <param name="optionBit">the binary bit or bits that are requested</param>

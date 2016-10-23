@@ -512,7 +512,7 @@ namespace XmpCore.Impl
             }
 
             // render options if at least one is set
-            if (Options.ContainsOneOf(unchecked((int)(0xffffffff))))
+            if (Options.ContainsOneOf(unchecked((int)0xffffffff)))
             {
                 result.Append("\t(");
                 result.Append(Options);

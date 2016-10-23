@@ -144,7 +144,7 @@ namespace Sharpen
                     return;
 
                 case CalendarEnum.Month:
-                    _mCalendarDate = _mCalendarDate.AddMonths((value + 1) - _mCalendarDate.Month);
+                    _mCalendarDate = _mCalendarDate.AddMonths(value + 1 - _mCalendarDate.Month);
                     return;
 
                 case CalendarEnum.MonthOneBased:
