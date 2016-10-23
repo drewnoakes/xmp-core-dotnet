@@ -140,7 +140,7 @@ namespace XmpCore.Options
         /// <returns>Returns the options as hex bitmask.</returns>
         public override string ToString()
         {
-            return string.Format("0x{0:X}", _options);
+            return $"0x{_options:X}";
         }
 
         /// <summary>To be implemented by inheritants.</summary>
@@ -179,7 +179,7 @@ namespace XmpCore.Options
             var invalidOptions = options & ~GetValidOptions();
 
             if (invalidOptions != 0)
-                throw new XmpException(string.Format("The option bit(s) 0x{0:X} are invalid!", invalidOptions), XmpErrorCode.BadOptions);
+                throw new XmpException($"The option bit(s) 0x{invalidOptions:X} are invalid!", XmpErrorCode.BadOptions);
 
             AssertConsistency(options);
         }
