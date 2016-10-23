@@ -82,7 +82,7 @@ namespace XmpCore.Impl
                     default:
                     {
                         // convert second subtag to uppercase, all other to lowercase
-                        buffer.Append(subTag != 2 ? Char.ToLower(t) : Char.ToUpper(t));
+                        buffer.Append(subTag != 2 ? char.ToLower(t) : char.ToUpper(t));
                         break;
                     }
                 }
