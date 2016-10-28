@@ -181,10 +181,10 @@ namespace XmpCore
         /// <summary>The x-default string for localized properties</summary>
         public const string XDefault = "x-default";
 
-        /// <summary>xml:lang qualfifier</summary>
+        /// <summary>xml:lang qualifier</summary>
         public const string XmlLang = "xml:lang";
 
-        /// <summary>rdf:type qualfifier</summary>
+        /// <summary>rdf:type qualifier</summary>
         public const string RdfType = "rdf:type";
 
         /// <summary>Processing Instruction (PI) for xmp packet</summary>
