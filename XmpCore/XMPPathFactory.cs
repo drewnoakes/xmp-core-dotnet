@@ -19,7 +19,7 @@ namespace XmpCore
     /// an object. These are all functions that layer cleanly on top of the core XMP toolkit.
     /// <para />
     /// These functions provide support for composing path expressions to deeply nested properties. The
-    /// functions <c>XMPMeta</c> such as <c>getProperty()</c>,
+    /// functions <c>XMPMeta</c> such as <c>GetProperty()</c>,
     /// <c>getArrayItem()</c> and <c>getStructField()</c> provide easy access to top
     /// level simple properties, items in top level arrays, and fields of top level structs. They do not
     /// provide convenient access to more complex things like fields several levels deep in a complex
