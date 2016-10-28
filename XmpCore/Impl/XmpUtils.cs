@@ -478,7 +478,7 @@ namespace XmpCore.Impl
                     if (replaceOldValues)
                     {
                         // The destination exists and should be replaced.
-                        destXmp.SetNode(destNode, sourceNode.Value, sourceNode.Options, true);
+                        XmpMeta.SetNode(destNode, sourceNode.Value, sourceNode.Options, true);
                         destParent.RemoveChild(destNode);
                         destNode = (XmpNode)sourceNode.Clone();
                         destParent.AddChild(destNode);

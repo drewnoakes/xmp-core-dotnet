@@ -909,30 +909,27 @@ namespace XmpCore.Impl
         /// <param name="itemOptions">the options for the new item</param>
         /// <param name="insert">insert oder overwrite at index position?</param>
         /// <exception cref="XmpException"/>
-        private void DoSetArrayItem(XmpNode arrayNode, int itemIndex, string itemValue, PropertyOptions itemOptions, bool insert)
+        private static void DoSetArrayItem(XmpNode arrayNode, int itemIndex, string itemValue, PropertyOptions itemOptions, bool insert)
         {
             var itemNode = new XmpNode(XmpConstants.ArrayItemName, null);
+
             itemOptions = XmpNodeUtils.VerifySetOptions(itemOptions, itemValue);
+
             // in insert mode the index after the last is allowed,
             // even ARRAY_LAST_ITEM points to the index *after* the last.
             var maxIndex = insert ? arrayNode.GetChildrenLength() + 1 : arrayNode.GetChildrenLength();
+
             if (itemIndex == XmpConstants.ArrayLastItem)
-            {
                 itemIndex = maxIndex;
-            }
-            if (1 <= itemIndex && itemIndex <= maxIndex)
-            {
-                if (!insert)
-                {
-                    arrayNode.RemoveChild(itemIndex);
-                }
-                arrayNode.AddChild(itemIndex, itemNode);
-                SetNode(itemNode, itemValue, itemOptions, false);
-            }
-            else
-            {
+
+            if (1 > itemIndex || itemIndex > maxIndex)
                 throw new XmpException("Array index out of bounds", XmpErrorCode.BadIndex);
-            }
+
+            if (!insert)
+                arrayNode.RemoveChild(itemIndex);
+
+            arrayNode.AddChild(itemIndex, itemNode);
+            SetNode(itemNode, itemValue, itemOptions, false);
         }
 
         /// <summary>
@@ -944,14 +941,14 @@ namespace XmpCore.Impl
         /// <param name="newOptions">options for the new node, must not be <c>null</c>.</param>
         /// <param name="deleteExisting">flag if the existing value is to be overwritten</param>
         /// <exception cref="XmpException">thrown if options and value do not correspond</exception>
-        internal void SetNode(XmpNode node, object value, PropertyOptions newOptions, bool deleteExisting)
+        internal static void SetNode(XmpNode node, object value, PropertyOptions newOptions, bool deleteExisting)
         {
             if (deleteExisting)
-            {
                 node.Clear();
-            }
+
             // its checked by setOptions(), if the merged result is a valid options set
             node.Options.MergeWith(newOptions);
+
             if (!node.Options.IsCompositeProperty)
             {
                 // This is setting the value of a leaf node.
@@ -960,9 +957,8 @@ namespace XmpCore.Impl
             else
             {
                 if (value != null && value.ToString().Length > 0)
-                {
                     throw new XmpException("Composite nodes can't have values", XmpErrorCode.BadXPath);
-                }
+
                 node.RemoveChildren();
             }
         }
