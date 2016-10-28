@@ -483,7 +483,7 @@ namespace XmpCore.Impl
         /// <exception cref="XmpException">thrown on parsing errors</exception>
         private static void Rdf_ResourcePropertyElement(XmpMeta xmp, XmpNode xmpParent, XElement xmlNode, bool isTopLevel)
         {
-            if (isTopLevel && xmlNode.Name == "iX:changes")
+            if (isTopLevel && xmlNode.Name == XName.Get("changes", "iX"))
             {
                 // Strip old "punchcard" chaff which has on the prefix "iX:".
                 return;
