@@ -353,7 +353,7 @@ namespace XmpCore
 
         /// <summary>Decode from Base64 encoded string to raw data.</summary>
         /// <param name="base64String">a base64 encoded string</param>
-        /// <returns>Returns a byte array containg the decoded string.</returns>
+        /// <returns>Returns a byte array containing the decoded string.</returns>
         /// <exception cref="XmpException">Thrown if the given string is not property base64 encoded</exception>
         public static byte[] DecodeBase64(string base64String)
         {
