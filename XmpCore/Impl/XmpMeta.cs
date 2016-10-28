@@ -405,10 +405,9 @@ namespace XmpCore.Impl
                         for (var it1 = arrayNode.IterateChildren(); it1.HasNext(); )
                         {
                             var currItem = (XmpNode)it1.Next();
-                            if (currItem == xdItem || currItem.Value != (xdItem != null ? xdItem.Value : null))
-                            {
+                            if (currItem == xdItem || currItem.Value != xdItem?.Value)
                                 continue;
-                            }
+
                             currItem.Value = itemValue;
                         }
                         // And finally do the x-default item.
