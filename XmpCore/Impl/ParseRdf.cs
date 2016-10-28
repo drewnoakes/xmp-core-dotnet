@@ -713,10 +713,10 @@ namespace XmpCore.Impl
         /// attributes == set (
         /// idAttr?, ( resourceAttr | nodeIdAttr )?, propertyAttr* ) )
         /// end-element()
-        /// <ns:Prop1/>  <!-- a simple property with an empty value -->
-        /// <ns:Prop2 rdf:resource="http: *www.adobe.com/"/> <!-- a URI value -->
-        /// <ns:Prop3 rdf:value="..." ns:Qual="..."/> <!-- a simple qualified property -->
-        /// <ns:Prop4 ns:Field1="..." ns:Field2="..."/> <!-- a struct with simple fields -->
+        /// &lt;ns:Prop1/&gt;  &lt;!-- a simple property with an empty value --&gt;
+        /// &lt;ns:Prop2 rdf:resource="http: *www.adobe.com/"/&gt; &lt;!-- a URI value --&gt;
+        /// &lt;ns:Prop3 rdf:value="..." ns:Qual="..."/&gt; &lt;!-- a simple qualified property --&gt;
+        /// &lt;ns:Prop4 ns:Field1="..." ns:Field2="..."/&gt; &lt;!-- a struct with simple fields --&gt;
         /// An emptyPropertyElt is an element with no contained content, just a possibly empty set of
         /// attributes.
         /// </summary>
@@ -726,10 +726,10 @@ namespace XmpCore.Impl
         /// attributes == set (
         /// idAttr?, ( resourceAttr | nodeIdAttr )?, propertyAttr* ) )
         /// end-element()
-        /// <ns:Prop1/>  <!-- a simple property with an empty value -->
-        /// <ns:Prop2 rdf:resource="http: *www.adobe.com/"/> <!-- a URI value -->
-        /// <ns:Prop3 rdf:value="..." ns:Qual="..."/> <!-- a simple qualified property -->
-        /// <ns:Prop4 ns:Field1="..." ns:Field2="..."/> <!-- a struct with simple fields -->
+        /// &lt;ns:Prop1/&gt;  &lt;!-- a simple property with an empty value --&gt;
+        /// &lt;ns:Prop2 rdf:resource="http: *www.adobe.com/"/&gt; &lt;!-- a URI value --&gt;
+        /// &lt;ns:Prop3 rdf:value="..." ns:Qual="..."/&gt; &lt;!-- a simple qualified property --&gt;
+        /// &lt;ns:Prop4 ns:Field1="..." ns:Field2="..."/&gt; &lt;!-- a struct with simple fields --&gt;
         /// An emptyPropertyElt is an element with no contained content, just a possibly empty set of
         /// attributes. An emptyPropertyElt can represent three special cases of simple XMP properties: a
         /// simple property with an empty value (ns:Prop1), a simple property whose value is a URI

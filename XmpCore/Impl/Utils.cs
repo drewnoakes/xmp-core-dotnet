@@ -110,10 +110,9 @@ namespace XmpCore.Impl
         }
 
         /// <summary>
-        /// Split the name and value parts for field and qualifier selectors:
+        /// Split the name and value parts for field and qualifier selectors.
         /// </summary>
         /// <remarks>
-        /// Split the name and value parts for field and qualifier selectors:
         /// <list type="bullet">
         /// <item>[qualName="value"] - An element in an array of structs, chosen by a field value.</item>
         /// <item>[?qualName="value"] - An element in an array, chosen by a qualifier value.</item>
@@ -123,7 +122,9 @@ namespace XmpCore.Impl
         /// empty. <em>Note:</em> It is assumed that the expression is formal
         /// correct
         /// </remarks>
-        /// <param name="selector">the selector</param>
+        /// <param name="selector">The selector</param>
+        /// <param name="name">The name string</param>
+        /// <param name="value">The value string</param>
         internal static void SplitNameAndValue(string selector, out string name, out string value)
         {
             // get the name
