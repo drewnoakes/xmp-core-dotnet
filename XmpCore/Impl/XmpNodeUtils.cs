@@ -206,14 +206,11 @@ namespace XmpCore.Impl
                         {
                             // "CheckImplicitStruct" in C++
                             if (i < xpath.Size() - 1 && xpath.GetSegment(i).Kind == XmpPath.StructFieldStep && !currNode.Options.IsCompositeProperty)
-                            {
                                 currNode.Options.IsStruct = true;
-                            }
                         }
+
                         if (rootImplicitNode == null)
-                        {
                             rootImplicitNode = currNode;
-                        }
                     }
                 }
             }
@@ -222,17 +219,18 @@ namespace XmpCore.Impl
                 // Save the top most implicit node.
                 // if new notes have been created prior to the error, delete them
                 if (rootImplicitNode != null)
-                {
                     DeleteNode(rootImplicitNode);
-                }
+
                 throw;
             }
+
             if (rootImplicitNode != null)
             {
                 // set options only if a node has been successful created
                 currNode.Options.MergeWith(leafOptions);
                 currNode.Options = currNode.Options;
             }
+
             return currNode;
         }
 
@@ -255,11 +253,10 @@ namespace XmpCore.Impl
                 // root is NO qualifier
                 parent.RemoveChild(node);
             }
+
             // delete empty Schema nodes
             if (!parent.HasChildren && parent.Options.IsSchemaNode)
-            {
                 parent.Parent.RemoveChild(parent);
-            }
         }
 
         /// <summary>This is setting the value of a leaf node.</summary>
@@ -268,14 +265,10 @@ namespace XmpCore.Impl
         internal static void SetNodeValue(XmpNode node, object value)
         {
             var strValue = SerializeNodeValue(value);
-            if (!(node.Options.IsQualifier && node.Name == XmpConstants.XmlLang))
-            {
-                node.Value = strValue;
-            }
-            else
-            {
-                node.Value = Utils.NormalizeLangValue(strValue);
-            }
+
+            node.Value = node.Options.IsQualifier && node.Name == XmpConstants.XmlLang
+                ? Utils.NormalizeLangValue(strValue)
+                : strValue;
         }
 
         /// <summary>Verifies the PropertyOptions for consistency and updates them as needed.</summary>
@@ -295,75 +288,65 @@ namespace XmpCore.Impl
                 // set default options
                 options = new PropertyOptions();
             }
+
             if (options.IsArrayAltText)
-            {
                 options.IsArrayAlternate = true;
-            }
+
             if (options.IsArrayAlternate)
-            {
                 options.IsArrayOrdered = true;
-            }
+
             if (options.IsArrayOrdered)
-            {
                 options.IsArray = true;
-            }
+
             if (options.IsCompositeProperty && itemValue != null && itemValue.ToString().Length > 0)
-            {
                 throw new XmpException("Structs and arrays can't have values", XmpErrorCode.BadOptions);
-            }
+
             options.AssertConsistency(options.GetOptions());
+
             return options;
         }
 
         /// <summary>
-        /// Converts the node value to String, apply special conversions for defined
+        /// Converts the node value to string, apply special conversions for defined
         /// types in XMP.
         /// </summary>
         /// <param name="value">the node value to set</param>
         /// <returns>Returns the String representation of the node value.</returns>
         private static string SerializeNodeValue(object value)
         {
-            string strValue;
             if (value == null)
+                return null;
+
+            if (value is bool)
+                return XmpCore.XmpUtils.ConvertFromBoolean((bool)value);
+
+            if (value is int)
+                return XmpCore.XmpUtils.ConvertFromInteger((int)value);
+
+            if (value is long)
+                return XmpCore.XmpUtils.ConvertFromLong((long)value);
+
+            if (value is double)
+                return XmpCore.XmpUtils.ConvertFromDouble((double)value);
+
+            string strValue;
+            var dateTime = value as IXmpDateTime;
+            if (dateTime != null)
             {
-                strValue = null;
-            }
-            else if (value is bool)
-            {
-                strValue = XmpCore.XmpUtils.ConvertFromBoolean((bool)value);
-            }
-            else if (value is int)
-            {
-                strValue = XmpCore.XmpUtils.ConvertFromInteger((int)value);
-            }
-            else if (value is long)
-            {
-                strValue = XmpCore.XmpUtils.ConvertFromLong((long)value);
-            }
-            else if (value is double)
-            {
-                strValue = XmpCore.XmpUtils.ConvertFromDouble((double)value);
+                strValue = XmpCore.XmpUtils.ConvertFromDate(dateTime);
             }
             else
             {
-                var dateTime = value as IXmpDateTime;
-                if (dateTime != null)
+                var calendar = value as GregorianCalendar;
+                if (calendar != null)
                 {
-                    strValue = XmpCore.XmpUtils.ConvertFromDate(dateTime);
+                    var dt = XmpDateTimeFactory.CreateFromCalendar(calendar);
+                    strValue = XmpCore.XmpUtils.ConvertFromDate(dt);
                 }
                 else
                 {
-                    var calendar = value as GregorianCalendar;
-                    if (calendar != null)
-                    {
-                        var dt = XmpDateTimeFactory.CreateFromCalendar(calendar);
-                        strValue = XmpCore.XmpUtils.ConvertFromDate(dt);
-                    }
-                    else
-                    {
-                        var sbytes = value as byte[];
-                        strValue = sbytes != null ? XmpCore.XmpUtils.EncodeBase64(sbytes) : value.ToString();
-                    }
+                    var sbytes = value as byte[];
+                    strValue = sbytes != null ? XmpCore.XmpUtils.EncodeBase64(sbytes) : value.ToString();
                 }
             }
 
@@ -507,27 +490,27 @@ namespace XmpCore.Impl
         private static int LookupFieldSelector(XmpNode arrayNode, string fieldName, string fieldValue)
         {
             var result = -1;
+
             for (var index = 1; index <= arrayNode.GetChildrenLength() && result < 0; index++)
             {
                 var currItem = arrayNode.GetChild(index);
+
                 if (!currItem.Options.IsStruct)
-                {
                     throw new XmpException("Field selector must be used on array of struct", XmpErrorCode.BadXPath);
-                }
+
                 for (var f = 1; f <= currItem.GetChildrenLength(); f++)
                 {
                     var currField = currItem.GetChild(f);
-                    if (currField.Name != fieldName)
-                    {
+
+                    if (currField.Name != fieldName ||
+                        currField.Value != fieldValue)
                         continue;
-                    }
-                    if (currField.Value == fieldValue)
-                    {
-                        result = index;
-                        break;
-                    }
+
+                    result = index;
+                    break;
                 }
             }
+
             return result;
         }
 
@@ -555,7 +538,9 @@ namespace XmpCore.Impl
             if (qualName == XmpConstants.XmlLang)
             {
                 qualValue = Utils.NormalizeLangValue(qualValue);
+
                 var index = LookupLanguageItem(arrayNode, qualValue);
+
                 if (index < 0 && (aliasForm & AliasOptions.PropArrayAltText) > 0)
                 {
                     var langNode = new XmpNode(XmpConstants.ArrayItemName, null);
@@ -566,18 +551,21 @@ namespace XmpCore.Impl
                 }
                 return index;
             }
+
             for (var index = 1; index < arrayNode.GetChildrenLength(); index++)
             {
                 var currItem = arrayNode.GetChild(index);
+
                 for (var it = currItem.IterateQualifier(); it.HasNext();)
                 {
                     var qualifier = (XmpNode)it.Next();
-                    if (qualifier.Name == qualName && qualifier.Value == qualValue)
-                    {
+
+                    if (qualifier.Name == qualName &&
+                        qualifier.Value == qualValue)
                         return index;
-                    }
                 }
             }
+
             return -1;
         }
 
@@ -593,32 +581,32 @@ namespace XmpCore.Impl
         internal static void NormalizeLangArray(XmpNode arrayNode)
         {
             if (!arrayNode.Options.IsArrayAltText)
-            {
                 return;
-            }
+
             // check if node with x-default qual is first place
             for (var i = 2; i <= arrayNode.GetChildrenLength(); i++)
             {
                 var child = arrayNode.GetChild(i);
-                if (child.HasQualifier && child.GetQualifier(1).Value == XmpConstants.XDefault)
+
+                if (!child.HasQualifier || child.GetQualifier(1).Value != XmpConstants.XDefault)
+                    continue;
+
+                // move node to first place
+                try
                 {
-                    // move node to first place
-                    try
-                    {
-                        arrayNode.RemoveChild(i);
-                        arrayNode.AddChild(1, child);
-                    }
-                    catch (XmpException)
-                    {
-                        // cannot occur, because same child is removed before
-                        Debug.Assert(false);
-                    }
-                    if (i == 2)
-                    {
-                        arrayNode.GetChild(2).Value = child.Value;
-                    }
-                    break;
+                    arrayNode.RemoveChild(i);
+                    arrayNode.AddChild(1, child);
                 }
+                catch (XmpException)
+                {
+                    // cannot occur, because same child is removed before
+                    Debug.Assert(false);
+                }
+
+                if (i == 2)
+                    arrayNode.GetChild(2).Value = child.Value;
+
+                break;
             }
         }
 
@@ -630,23 +618,25 @@ namespace XmpCore.Impl
         /// <param name="arrayNode">the array node to check if its an alt-text array</param>
         internal static void DetectAltText(XmpNode arrayNode)
         {
-            if (arrayNode.Options.IsArrayAlternate && arrayNode.HasChildren)
+            if (!arrayNode.Options.IsArrayAlternate || !arrayNode.HasChildren)
+                return;
+
+            var isAltText = false;
+
+            for (var it = arrayNode.IterateChildren(); it.HasNext();)
             {
-                var isAltText = false;
-                for (var it = arrayNode.IterateChildren(); it.HasNext();)
+                var child = (XmpNode)it.Next();
+                if (child.Options.HasLanguage)
                 {
-                    var child = (XmpNode)it.Next();
-                    if (child.Options.HasLanguage)
-                    {
-                        isAltText = true;
-                        break;
-                    }
+                    isAltText = true;
+                    break;
                 }
-                if (isAltText)
-                {
-                    arrayNode.Options.IsArrayAltText = true;
-                    NormalizeLangArray(arrayNode);
-                }
+            }
+
+            if (isAltText)
+            {
+                arrayNode.Options.IsArrayAltText = true;
+                NormalizeLangArray(arrayNode);
             }
         }
 
@@ -659,15 +649,13 @@ namespace XmpCore.Impl
         {
             var newItem = new XmpNode(XmpConstants.ArrayItemName, itemValue, null);
             var langQual = new XmpNode(XmpConstants.XmlLang, itemLang, null);
+
             newItem.AddQualifier(langQual);
+
             if (langQual.Value != XmpConstants.XDefault)
-            {
                 arrayNode.AddChild(newItem);
-            }
             else
-            {
                 arrayNode.AddChild(1, newItem);
-            }
         }
 
         /// <summary>
@@ -693,16 +681,15 @@ namespace XmpCore.Impl
             // See if the array has the right form. Allow empty alt arrays,
             // that is what parsing returns.
             if (!arrayNode.Options.IsArrayAltText)
-            {
                 throw new XmpException("Localized text array is not alt-text", XmpErrorCode.BadXPath);
-            }
+
             if (!arrayNode.HasChildren)
-            {
                 return new object[] {CltNoValues, null};
-            }
+
             var foundGenericMatches = 0;
             XmpNode resultNode = null;
             XmpNode xDefault = null;
+
             // Look for the first partial match with the generic language.
             for (var it = arrayNode.IterateChildren(); it.HasNext();)
             {
@@ -724,9 +711,8 @@ namespace XmpCore.Impl
                 if (genericLang != null && currLang.StartsWith(genericLang))
                 {
                     if (resultNode == null)
-                    {
                         resultNode = currItem;
-                    }
+
                     // ! Don't return/break, need to look for other matches.
                     foundGenericMatches++;
                 }
@@ -735,6 +721,7 @@ namespace XmpCore.Impl
                     xDefault = currItem;
                 }
             }
+
             // evaluate loop
             if (foundGenericMatches == 1)
                 return new object[] {CltSingleGeneric, resultNode};
@@ -757,21 +744,19 @@ namespace XmpCore.Impl
         internal static int LookupLanguageItem(XmpNode arrayNode, string language)
         {
             if (!arrayNode.Options.IsArray)
-            {
                 throw new XmpException("Language item must be used on array", XmpErrorCode.BadXPath);
-            }
+
             for (var index = 1; index <= arrayNode.GetChildrenLength(); index++)
             {
                 var child = arrayNode.GetChild(index);
+
                 if (!child.HasQualifier || child.GetQualifier(1).Name != XmpConstants.XmlLang)
-                {
                     continue;
-                }
+
                 if (child.GetQualifier(1).Value == language)
-                {
                     return index;
-                }
             }
+
             return -1;
         }
     }

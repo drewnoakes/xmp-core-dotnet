@@ -92,13 +92,11 @@ namespace XmpCore.Impl
                         subTag++;
                         break;
                     }
-
                     case ' ':
                     {
                         // remove spaces
                         break;
                     }
-
                     default:
                     {
                         // convert second subtag to uppercase, all other to lowercase
@@ -107,6 +105,7 @@ namespace XmpCore.Impl
                     }
                 }
             }
+
             return buffer.ToString();
         }
 
@@ -220,6 +219,7 @@ namespace XmpCore.Impl
                     result = result && (delimPos == 8 || delimPos == 13 || delimPos == 18 || delimPos == 23);
                 }
             }
+
             return result && UuidSegmentCount == delimCnt && UuidLength == delimPos;
         }
 
@@ -235,16 +235,14 @@ namespace XmpCore.Impl
         public static bool IsXmlName(string name)
         {
             if (name.Length > 0 && !IsNameStartChar(name[0]))
-            {
                 return false;
-            }
+
             for (var i = 1; i < name.Length; i++)
             {
                 if (!IsNameChar(name[i]))
-                {
                     return false;
-                }
             }
+
             return true;
         }
 
@@ -262,16 +260,14 @@ namespace XmpCore.Impl
         public static bool IsXmlNameNs(string name)
         {
             if (name.Length > 0 && (!IsNameStartChar(name[0]) || name[0] == ':'))
-            {
                 return false;
-            }
+
             for (var i = 1; i < name.Length; i++)
             {
                 if (!IsNameChar(name[i]) || name[i] == ':')
-                {
                     return false;
-                }
             }
+
             return true;
         }
 
@@ -303,11 +299,13 @@ namespace XmpCore.Impl
                                     .ToCharArray()
                         #endif
                                     .Any(c => c == '<' || c == '>' || c == '&' || (escapeWhitespaces && (c == '\t' || c == '\n' || c == '\r')) || (forAttribute && c == '"'));
+
             if (!needsEscaping)
             {
                 // fast path
                 return value;
             }
+
             // slow path with escaping
             var buffer = new StringBuilder(value.Length * 4 / 3);
             foreach (var c in value)
@@ -323,25 +321,21 @@ namespace XmpCore.Impl
                             buffer.Append("&lt;");
                             continue;
                         }
-
                         case '>':
                         {
                             buffer.Append("&gt;");
                             continue;
                         }
-
                         case '&':
                         {
                             buffer.Append("&amp;");
                             continue;
                         }
-
                         case '"':
                         {
                             buffer.Append(forAttribute ? "&quot;" : "\"");
                             continue;
                         }
-
                         default:
                         {
                             buffer.Append(c);
@@ -349,10 +343,12 @@ namespace XmpCore.Impl
                         }
                     }
                 }
+
                 // write control chars escaped,
                 // if there are others than tab, LF and CR the xml will become invalid.
                 buffer.AppendFormat("&#x{0:X};", (int)c);
             }
+
             return buffer.ToString();
         }
 
@@ -362,13 +358,13 @@ namespace XmpCore.Impl
         internal static string RemoveControlChars(string value)
         {
             var buffer = new StringBuilder(value);
+
             for (var i = 0; i < buffer.Length; i++)
             {
                 if (IsControlChar(buffer[i]))
-                {
                     buffer[i] = ' ';
-                }
             }
+
             return buffer.ToString();
         }
 
