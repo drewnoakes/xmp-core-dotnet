@@ -9,6 +9,7 @@
 
 
 using System;
+using System.Globalization;
 using XmpCore.Impl;
 using XmpCore.Options;
 
@@ -205,16 +206,15 @@ namespace XmpCore
             if (string.IsNullOrEmpty(value))
                 throw new XmpException("Empty convert-string", XmpErrorCode.BadValue);
 
-            value = value.ToLower();
-            try
-            {
-                // First try interpretation as Integer (anything not 0 is true)
-                return Convert.ToInt32(value) != 0;
-            }
-            catch (FormatException)
-            {
-                return value == "true" || value == "t" || value == "on" || value == "yes";
-            }
+            // First try interpretation as Integer (anything not 0 is true)
+            int i;
+            if (int.TryParse(value, out i))
+                return i != 0;
+
+            return string.Equals(value, "true", StringComparison.OrdinalIgnoreCase) ||
+                   string.Equals(value, "t", StringComparison.OrdinalIgnoreCase) ||
+                   string.Equals(value, "on", StringComparison.OrdinalIgnoreCase) ||
+                   string.Equals(value, "yes", StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>Convert from boolean to string.</summary>
@@ -241,16 +241,13 @@ namespace XmpCore
             if (string.IsNullOrEmpty(rawValue))
                 throw new XmpException("Empty convert-string", XmpErrorCode.BadValue);
 
-            try
-            {
-                return rawValue.StartsWith("0x")
-                    ? Convert.ToInt32(rawValue.Substring(2), 16)
-                    : Convert.ToInt32(rawValue);
-            }
-            catch (FormatException)
-            {
+            int i;
+            if (!(rawValue.StartsWith("0x")
+                ? int.TryParse(rawValue.Substring(2), NumberStyles.HexNumber, null, out i)
+                : int.TryParse(rawValue, out i)))
                 throw new XmpException("Invalid integer string", XmpErrorCode.BadValue);
-            }
+
+            return i;
         }
 
         /// <summary>Convert from int to string.</summary>
@@ -273,16 +270,13 @@ namespace XmpCore
             if (string.IsNullOrEmpty(rawValue))
                 throw new XmpException("Empty convert-string", XmpErrorCode.BadValue);
 
-            try
-            {
-                if (rawValue.StartsWith("0x"))
-                    return Convert.ToInt64(rawValue.Substring(2), 16);
-                return Convert.ToInt64(rawValue);
-            }
-            catch (FormatException)
-            {
+            long l;
+            if (!(rawValue.StartsWith("0x")
+                ? long.TryParse(rawValue.Substring(2), NumberStyles.HexNumber, null, out l)
+                : long.TryParse(rawValue, out l)))
                 throw new XmpException("Invalid long string", XmpErrorCode.BadValue);
-            }
+
+            return l;
         }
 
         /// <summary>Convert from long to string.</summary>

@@ -477,17 +477,8 @@ namespace XmpCore.Impl
         private static int FindIndexedItem(XmpNode arrayNode, string segment, bool createNodes)
         {
             int index;
-            try
-            {
-                segment = segment.Substring(1, segment.Length - 1 - 1);
-                index = Convert.ToInt32(segment);
-                if (index < 1)
-                    throw new XmpException("Array index must be larger than zero", XmpErrorCode.BadXPath);
-            }
-            catch (FormatException)
-            {
+            if (!int.TryParse(segment.Substring(1, segment.Length - 1 - 1), out index))
                 throw new XmpException("Array index not digits.", XmpErrorCode.BadXPath);
-            }
 
             if (createNodes && index == arrayNode.GetChildrenLength() + 1)
             {
