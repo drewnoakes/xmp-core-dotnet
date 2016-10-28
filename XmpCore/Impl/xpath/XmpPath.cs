@@ -13,33 +13,35 @@ using System.Text;
 
 namespace XmpCore.Impl.XPath
 {
-    /// <summary>Represents an XMP XMPPath with segment accessor methods.</summary>
-    /// <since>28.02.2006</since>
-    public sealed class XmpPath
+    public enum XmpPathStepType
     {
-        /// <summary>Marks a struct field step , also for top level nodes (schema "fields").</summary>
-        public const int StructFieldStep = 0x01;
+        /// <summary>Marks a struct field step, also for top level nodes (schema "fields").</summary>
+        StructFieldStep = 0x01,
 
         /// <summary>Marks a qualifier step.</summary>
         /// <remarks>
         /// Marks a qualifier step.
         /// Note: Order is significant to separate struct/qual from array kinds!
         /// </remarks>
-        public const int QualifierStep = 0x02;
+        QualifierStep = 0x02,
 
         /// <summary>Marks an array index step</summary>
-        public const int ArrayIndexStep = 0x03;
+        ArrayIndexStep = 0x03,
 
-        public const int ArrayLastStep = 0x04;
+        ArrayLastStep = 0x04,
 
-        public const int QualSelectorStep = 0x05;
+        QualSelectorStep = 0x05,
 
-        public const int FieldSelectorStep = 0x06;
+        FieldSelectorStep = 0x06,
 
-        public const int SchemaNode = unchecked((int)0x80000000);
+        SchemaNode = unchecked((int)0x80000000)
+    }
 
+    /// <summary>Represents an XMP XMPPath with segment accessor methods.</summary>
+    /// <since>28.02.2006</since>
+    public sealed class XmpPath
+    {
         public const int StepSchema = 0;
-
         public const int StepRootProp = 1;
 
         /// <summary>stores the segments of an XMPPath</summary>
@@ -78,7 +80,7 @@ namespace XmpCore.Impl.XPath
                 if (index < Size() - 1)
                 {
                     var kind = GetSegment(index + 1).Kind;
-                    if (kind == StructFieldStep || kind == QualifierStep)
+                    if (kind == XmpPathStepType.StructFieldStep || kind == XmpPathStepType.QualifierStep)
                     {
                         // all but last and array indices
                         result.Append('/');

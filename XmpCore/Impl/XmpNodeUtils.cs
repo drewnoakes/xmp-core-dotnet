@@ -8,7 +8,6 @@
 // =================================================================================================
 
 
-using System;
 using System.Diagnostics;
 using Sharpen;
 using XmpCore.Impl.XPath;
@@ -205,7 +204,7 @@ namespace XmpCore.Impl
                         else
                         {
                             // "CheckImplicitStruct" in C++
-                            if (i < xpath.Size() - 1 && xpath.GetSegment(i).Kind == XmpPath.StructFieldStep && !currNode.Options.IsCompositeProperty)
+                            if (i < xpath.Size() - 1 && xpath.GetSegment(i).Kind == XmpPathStepType.StructFieldStep && !currNode.Options.IsCompositeProperty)
                                 currNode.Options.IsStruct = true;
                         }
 
@@ -377,11 +376,11 @@ namespace XmpCore.Impl
         {
             XmpNode nextNode = null;
             var stepKind = nextStep.Kind;
-            if (stepKind == XmpPath.StructFieldStep)
+            if (stepKind == XmpPathStepType.StructFieldStep)
             {
                 nextNode = FindChildNode(parentNode, nextStep.Name, createNodes);
             }
-            else if (stepKind == XmpPath.QualifierStep)
+            else if (stepKind == XmpPathStepType.QualifierStep)
             {
                 nextNode = FindQualifierNode(parentNode, nextStep.Name.Substring(1), createNodes);
             }
@@ -392,22 +391,22 @@ namespace XmpCore.Impl
                     throw new XmpException("Indexing applied to non-array", XmpErrorCode.BadXPath);
 
                 int index;
-                if (stepKind == XmpPath.ArrayIndexStep)
+                if (stepKind == XmpPathStepType.ArrayIndexStep)
                 {
                     index = FindIndexedItem(parentNode, nextStep.Name, createNodes);
                 }
-                else if (stepKind == XmpPath.ArrayLastStep)
+                else if (stepKind == XmpPathStepType.ArrayLastStep)
                 {
                     index = parentNode.GetChildrenLength();
                 }
-                else if (stepKind == XmpPath.FieldSelectorStep)
+                else if (stepKind == XmpPathStepType.FieldSelectorStep)
                 {
                     string fieldName;
                     string fieldValue;
                     Utils.SplitNameAndValue(nextStep.Name, out fieldName, out fieldValue);
                     index = LookupFieldSelector(parentNode, fieldName, fieldValue);
                 }
-                else if (stepKind == XmpPath.QualSelectorStep)
+                else if (stepKind == XmpPathStepType.QualSelectorStep)
                 {
                     string qualName;
                     string qualValue;

@@ -100,7 +100,7 @@ namespace XmpCore.Impl.XPath
                     ? ParseStructSegment(pos)
                     : ParseIndexSegment(pos);
 
-                if (segment.Kind == XmpPath.StructFieldStep)
+                if (segment.Kind == XmpPathStepType.StructFieldStep)
                 {
                     if (segment.Name[0] == '@')
                     {
@@ -112,12 +112,12 @@ namespace XmpCore.Impl.XPath
                     if (segment.Name[0] == '?')
                     {
                         pos.NameStart++;
-                        segment.Kind = XmpPath.QualifierStep;
+                        segment.Kind = XmpPathStepType.QualifierStep;
                     }
 
                     VerifyQualName(pos.Path.Substring (pos.NameStart, pos.NameEnd - pos.NameStart));
                 }
-                else if (segment.Kind == XmpPath.FieldSelectorStep)
+                else if (segment.Kind == XmpPathStepType.FieldSelectorStep)
                 {
                     if (segment.Name[1] == '@')
                     {
@@ -130,7 +130,7 @@ namespace XmpCore.Impl.XPath
                     if (segment.Name[1] == '?')
                     {
                         pos.NameStart++;
-                        segment.Kind = XmpPath.QualSelectorStep;
+                        segment.Kind = XmpPathStepType.QualSelectorStep;
                         VerifyQualName(pos.Path.Substring (pos.NameStart, pos.NameEnd - pos.NameStart));
                     }
                 }
@@ -180,7 +180,7 @@ namespace XmpCore.Impl.XPath
                 throw new XmpException("Empty XMPPath segment", XmpErrorCode.BadXPath);
 
             // ! Touch up later, also changing '@' to '?'.
-            return new XmpPathSegment(pos.Path.Substring (pos.StepBegin, pos.StepEnd - pos.StepBegin), XmpPath.StructFieldStep);
+            return new XmpPathSegment(pos.Path.Substring (pos.StepBegin, pos.StepEnd - pos.StepBegin), XmpPathStepType.StructFieldStep);
         }
 
         /// <summary>Parses an array index segment.</summary>
@@ -199,7 +199,7 @@ namespace XmpCore.Impl.XPath
                 while (pos.StepEnd < pos.Path.Length && '0' <= pos.Path[pos.StepEnd] && pos.Path[pos.StepEnd] <= '9')
                     pos.StepEnd++;
 
-                segment = new XmpPathSegment(null, XmpPath.ArrayIndexStep);
+                segment = new XmpPathSegment(null, XmpPathStepType.ArrayIndexStep);
             }
             else
             {
@@ -215,7 +215,7 @@ namespace XmpCore.Impl.XPath
                     if (pos.Path.Substring(pos.StepBegin, pos.StepEnd - pos.StepBegin) != "[last()")
                         throw new XmpException("Invalid non-numeric array index", XmpErrorCode.BadXPath);
 
-                    segment = new XmpPathSegment(null, XmpPath.ArrayLastStep);
+                    segment = new XmpPathSegment(null, XmpPathStepType.ArrayLastStep);
                 }
                 else
                 {
@@ -251,7 +251,7 @@ namespace XmpCore.Impl.XPath
 
                     // Absorb the trailing quote.
                     // ! Touch up later, also changing '@' to '?'.
-                    segment = new XmpPathSegment(null, XmpPath.FieldSelectorStep);
+                    segment = new XmpPathSegment(null, XmpPathStepType.FieldSelectorStep);
                 }
             }
 
@@ -286,15 +286,15 @@ namespace XmpCore.Impl.XPath
             if (aliasInfo == null)
             {
                 // add schema xpath step
-                expandedXPath.Add(new XmpPathSegment(schemaNs, XmpPath.SchemaNode));
-                var rootStep = new XmpPathSegment(rootProp, XmpPath.StructFieldStep);
+                expandedXPath.Add(new XmpPathSegment(schemaNs, XmpPathStepType.SchemaNode));
+                var rootStep = new XmpPathSegment(rootProp, XmpPathStepType.StructFieldStep);
                 expandedXPath.Add(rootStep);
                 return;
             }
 
             // add schema xpath step and base step of alias
-            expandedXPath.Add(new XmpPathSegment(aliasInfo.Namespace, XmpPath.SchemaNode));
-            expandedXPath.Add(new XmpPathSegment(VerifyXPathRoot(aliasInfo.Namespace, aliasInfo.PropName), XmpPath.StructFieldStep)
+            expandedXPath.Add(new XmpPathSegment(aliasInfo.Namespace, XmpPathStepType.SchemaNode));
+            expandedXPath.Add(new XmpPathSegment(VerifyXPathRoot(aliasInfo.Namespace, aliasInfo.PropName), XmpPathStepType.StructFieldStep)
             {
                 IsAlias = true,
                 AliasForm = aliasInfo.AliasForm.GetOptions()
@@ -302,7 +302,7 @@ namespace XmpCore.Impl.XPath
 
             if (aliasInfo.AliasForm.IsArrayAltText)
             {
-                expandedXPath.Add(new XmpPathSegment("[?xml:lang='x-default']", XmpPath.QualSelectorStep)
+                expandedXPath.Add(new XmpPathSegment("[?xml:lang='x-default']", XmpPathStepType.QualSelectorStep)
                 {
                     IsAlias = true,
                     AliasForm = aliasInfo.AliasForm.GetOptions()
@@ -310,7 +310,7 @@ namespace XmpCore.Impl.XPath
             }
             else if (aliasInfo.AliasForm.IsArray)
             {
-                expandedXPath.Add(new XmpPathSegment("[1]", XmpPath.ArrayIndexStep)
+                expandedXPath.Add(new XmpPathSegment("[1]", XmpPathStepType.ArrayIndexStep)
                 {
                     IsAlias = true,
                     AliasForm = aliasInfo.AliasForm.GetOptions()

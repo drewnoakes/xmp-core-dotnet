@@ -23,14 +23,14 @@ namespace XmpCore.Impl.XPath
         /// <summary>Constructor with initial values.</summary>
         /// <param name="name">the name of the segment</param>
         /// <param name="kind">the kind of the segment</param>
-        public XmpPathSegment(string name, int kind)
+        public XmpPathSegment(string name, XmpPathStepType kind)
         {
             Name = name;
             Kind = kind;
         }
 
         /// <value>Get and set the kind of the path segment.</value>
-        public int Kind { get; set; }
+        public XmpPathStepType Kind { get; set; }
 
         /// <value>Get and set the name of the path segment.</value>
         public string Name { get; set; }
@@ -45,13 +45,13 @@ namespace XmpCore.Impl.XPath
         {
             switch (Kind)
             {
-                case XmpPath.StructFieldStep:
-                case XmpPath.ArrayIndexStep:
-                case XmpPath.QualifierStep:
-                case XmpPath.ArrayLastStep:
+                case XmpPathStepType.StructFieldStep:
+                case XmpPathStepType.ArrayIndexStep:
+                case XmpPathStepType.QualifierStep:
+                case XmpPathStepType.ArrayLastStep:
                     return Name;
-                case XmpPath.QualSelectorStep:
-                case XmpPath.FieldSelectorStep:
+                case XmpPathStepType.QualSelectorStep:
+                case XmpPathStepType.FieldSelectorStep:
                     return Name;
                 default:
                     // no defined step
