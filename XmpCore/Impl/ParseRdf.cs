@@ -99,7 +99,7 @@ namespace XmpCore.Impl
         /// <param name="xmp">the xmp metadata object that is generated</param>
         /// <param name="rdfRdfNode">the top-level xml node</param>
         /// <exception cref="XmpException">thrown on parsing errors</exception>
-        internal static void Rdf_RDF(XmpMeta xmp, XElement rdfRdfNode)
+        private static void Rdf_RDF(XmpMeta xmp, XElement rdfRdfNode)
         {
             if (!rdfRdfNode.Attributes().Any())
                 throw new XmpException("Invalid attributes of rdf:RDF element", XmpErrorCode.BadRdf);

@@ -52,7 +52,7 @@ namespace XmpCore.Impl
         private const string RdfEmptyStruct = "<rdf:Description/>";
 
         /// <summary>a set of all rdf attribute qualifier</summary>
-        internal static readonly ICollection<object> RdfAttrQualifier = new HashSet<object>(new[] { XmpConstants.XmlLang, "rdf:resource", "rdf:ID", "rdf:bagID", "rdf:nodeID" });
+        private static readonly ICollection<object> RdfAttrQualifier = new HashSet<object>(new[] { XmpConstants.XmlLang, "rdf:resource", "rdf:ID", "rdf:bagID", "rdf:nodeID" });
 
         /// <summary>the metadata object to be serialized.</summary>
         private XmpMeta _xmp;

@@ -321,7 +321,7 @@ namespace XmpCore.Impl
         /// </summary>
         /// <param name="value">the node value to set</param>
         /// <returns>Returns the String representation of the node value.</returns>
-        internal static string SerializeNodeValue(object value)
+        private static string SerializeNodeValue(object value)
         {
             string strValue;
             if (value == null)
