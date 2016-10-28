@@ -265,7 +265,7 @@ namespace XmpCore
         /// </param>
         /// <param name="itemIndex">
         /// The index to insert the new item. Arrays in XMP are indexed from 1. Use
-        /// <c>XMPConst.ARRAY_LAST_ITEM</c> to append items.
+        /// <see cref="XmpConstants.ArrayLastItem"/> to append items.
         /// </param>
         /// <param name="itemValue">
         /// the new value of the array item. Has the same usage as
@@ -409,7 +409,7 @@ namespace XmpCore
         /// </param>
         /// <param name="itemIndex">
         /// The index of the desired item. Arrays in XMP are indexed from 1. The
-        /// constant <c>XMPConst.ARRAY_LAST_ITEM</c> always refers to the last
+        /// constant <see cref="XmpConstants.ArrayLastItem"/> always refers to the last
         /// existing array item.
         /// </param>
         void DeleteArrayItem(string schemaNs, string arrayName, int itemIndex);
@@ -460,7 +460,7 @@ namespace XmpCore
         /// </param>
         /// <param name="itemIndex">
         /// The index of the desired item. Arrays in XMP are indexed from 1. The
-        /// constant <c>XMPConst.ARRAY_LAST_ITEM</c> always refers to the last
+        /// constant <see cref="XmpConstants.ArrayLastItem"/> always refers to the last
         /// existing array item.
         /// </param>
         /// <returns>Returns <c>true</c> if the array exists, <c>false</c> otherwise.</returns>
