@@ -26,12 +26,7 @@ namespace Sharpen
         protected Calendar(TimeZoneInfo value)
         {
             _mTz = value;
-            _mCalendarDate =
-#if !PORTABLE
-                TimeZoneInfo.ConvertTime(DateTime.Now, DefaultTimeZone, _mTz);
-#else
-                TimeZoneInfo.ConvertTime(DateTime.Now, _mTz);
-#endif
+            _mCalendarDate = TimeZoneInfo.ConvertTime(DateTime.Now, _mTz);
         }
 
         protected Calendar()
@@ -75,11 +70,7 @@ namespace Sharpen
 
         public DateTime GetTime()
         {
-#if !PORTABLE
-            return TimeZoneInfo.ConvertTime(_mCalendarDate, _mTz, DefaultTimeZone);
-#else
             return TimeZoneInfo.ConvertTime(_mCalendarDate, DefaultTimeZone);
-#endif
         }
 
         public void SetTime(DateTime date)

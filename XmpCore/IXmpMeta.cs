@@ -21,13 +21,9 @@ namespace XmpCore
     /// </remarks>
     /// <since>20.01.2006</since>
     public interface IXmpMeta
-#if !PORTABLE
-        : ICloneable
-#endif
     {
-#if PORTABLE
-        object Clone();
-#endif
+        IXmpMeta Clone();
+
         /// <summary>
         /// The property value getter-methods all take a property specification: the first two parameters
         /// are always the top level namespace URI (the &quot;schema&quot; namespace) and the basic name

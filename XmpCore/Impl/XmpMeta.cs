@@ -862,7 +862,7 @@ namespace XmpCore.Impl
         }
 
         /// <summary>Performs a deep clone of the XMPMeta-object</summary>
-        public object Clone()
+        public IXmpMeta Clone()
         {
             var clonedTree = (XmpNode)_tree.Clone();
             return new XmpMeta(clonedTree);

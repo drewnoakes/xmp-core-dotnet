@@ -1,10 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmpCore", "XmpCore\XmpCore.csproj", "{5A1F2AFF-7219-4543-97C4-364D4502C3C5}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{06DA73A6-87C5-4772-9A59-534F10530ED6}"
 	ProjectSection(SolutionItems) = preProject
 		.gitattributes = .gitattributes
@@ -12,11 +10,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmpCore.Tests", "XmpCore.Tests\XmpCore.Tests.csproj", "{2A95AF33-EA9E-4F40-85C4-A0E582F884A2}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "XmpCore", "XmpCore\XmpCore.xproj", "{205F08AB-1CBD-4FCA-96BD-5DE5C24BDF7E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmpCore.Portable", "XmpCore\XmpCore.Portable.csproj", "{55CB0869-98DC-4F37-987C-304734541A1C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmpCore.Portable.Tests", "XmpCore.Tests\XmpCore.Portable.Tests.csproj", "{D8676350-A146-4816-8165-0988C37F8A8E}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "XmpCore.Tests", "XmpCore.Tests\XmpCore.Tests.xproj", "{B886F96C-DEB6-49CD-91F9-D55A91C99725}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,22 +20,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{5A1F2AFF-7219-4543-97C4-364D4502C3C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5A1F2AFF-7219-4543-97C4-364D4502C3C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5A1F2AFF-7219-4543-97C4-364D4502C3C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5A1F2AFF-7219-4543-97C4-364D4502C3C5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2A95AF33-EA9E-4F40-85C4-A0E582F884A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2A95AF33-EA9E-4F40-85C4-A0E582F884A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2A95AF33-EA9E-4F40-85C4-A0E582F884A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2A95AF33-EA9E-4F40-85C4-A0E582F884A2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{55CB0869-98DC-4F37-987C-304734541A1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{55CB0869-98DC-4F37-987C-304734541A1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{55CB0869-98DC-4F37-987C-304734541A1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{55CB0869-98DC-4F37-987C-304734541A1C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D8676350-A146-4816-8165-0988C37F8A8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D8676350-A146-4816-8165-0988C37F8A8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D8676350-A146-4816-8165-0988C37F8A8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D8676350-A146-4816-8165-0988C37F8A8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{205F08AB-1CBD-4FCA-96BD-5DE5C24BDF7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{205F08AB-1CBD-4FCA-96BD-5DE5C24BDF7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{205F08AB-1CBD-4FCA-96BD-5DE5C24BDF7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{205F08AB-1CBD-4FCA-96BD-5DE5C24BDF7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B886F96C-DEB6-49CD-91F9-D55A91C99725}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B886F96C-DEB6-49CD-91F9-D55A91C99725}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B886F96C-DEB6-49CD-91F9-D55A91C99725}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B886F96C-DEB6-49CD-91F9-D55A91C99725}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

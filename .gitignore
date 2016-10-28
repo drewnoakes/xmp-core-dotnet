@@ -6,3 +6,5 @@ obj
 /packages/*
 *.swp
 *.nupkg
+*.lock.json
+

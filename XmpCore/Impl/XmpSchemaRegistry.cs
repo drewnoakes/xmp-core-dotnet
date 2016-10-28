@@ -33,13 +33,7 @@ namespace XmpCore.Impl
         private readonly Dictionary<string, IXmpAliasInfo> _aliasMap = new Dictionary<string, IXmpAliasInfo>();
 
         /// <summary>The pattern that must not be contained in simple properties</summary>
-        private const RegexOptions _defaultRegexOptions =
-#if PORTABLE
-                                        RegexOptions.None;
-#else
-                                        RegexOptions.Compiled;
-#endif
-        private readonly Regex _p = new Regex("[/*?\\[\\]]", _defaultRegexOptions);
+        private readonly Regex _p = new Regex("[/*?\\[\\]]");
 
         private readonly object _lock = new object();
 

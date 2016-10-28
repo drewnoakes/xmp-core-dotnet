@@ -60,11 +60,7 @@ namespace XmpCore.Impl
             Serialize(xmp, output, options);
             try
             {
-#if PORTABLE
                 return options.GetEncoding().GetString(output.ToArray(), 0, (int)output.Length);
-#else
-                return options.GetEncoding().GetString(output.GetBuffer(), 0, (int)output.Length);
-#endif
             }
             catch
             {

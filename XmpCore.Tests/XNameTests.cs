@@ -13,7 +13,7 @@ namespace XmpCore.Tests
 
             Assert.True(s == n);
             Assert.True(n == s);
-            Assert.True(s.Equals(n));
+            Assert.False(s.Equals(n));
             Assert.False(n.Equals(s));
         }
     }

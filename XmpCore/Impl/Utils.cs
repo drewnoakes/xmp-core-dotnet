@@ -294,11 +294,8 @@ namespace XmpCore.Impl
         public static string EscapeXml(string value, bool forAttribute, bool escapeWhitespaces)
         {
             // quick check if character are contained that need special treatment
-            var needsEscaping = value
-                        #if PORTABLE
-                                    .ToCharArray()
-                        #endif
-                                    .Any(c => c == '<' || c == '>' || c == '&' || (escapeWhitespaces && (c == '\t' || c == '\n' || c == '\r')) || (forAttribute && c == '"'));
+            var needsEscaping = value.ToCharArray()
+                .Any(c => c == '<' || c == '>' || c == '&' || (escapeWhitespaces && (c == '\t' || c == '\n' || c == '\r')) || (forAttribute && c == '"'));
 
             if (!needsEscaping)
             {

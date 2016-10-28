@@ -1,0 +1,36 @@
+{
+  "description": ".NET library for working with the Extensible Metadata Platform (XMP)",
+  "id":  "XmpCore",
+  "title": "XmpCore",
+  "version": "2.0.0-*",
+  "authors": [ "Drew Noakes" ],
+  "copyright": "Copyright 2015-2016",
+  "packOptions": {
+    "tags": [ "XMP", "Metadata", "Exif", "IPTC", "ICC" ],
+    "iconUrl": "https://raw.githubusercontent.com/drewnoakes/xmp-core-dotnet/master/docs/logo-512px.png",
+    "licenseUrl": "http://www.adobe.com/devnet/xmp/library/eula-xmp-library-java.html",
+    "requireLicenseAcceptance": false,
+    "owners": [ "Drew Noakes" ],
+    "summary": "A port of Adobe's Extensible Metadata Platform (XMP) SDK to .NET. The API should be familiar to users of Adobe's XMPCore 5.1.2, though it has been modified in places to better suit .NET development.",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/drewnoakes/xmp-core-dotnet.git"
+    }
+  },
+  "buildOptions": {
+    "debugType": "portable",
+    "xmlDoc": true,
+    "optimize": true,
+    "nowarn": [ 1591 ]
+  },
+  "dependencies": {
+    "JetBrains.Annotations": "10.2.1"
+  },
+  "frameworks": {
+    "netstandard1.0": {
+      "dependencies": {
+        "NETStandard.Library": "1.6.0"
+      }
+    }
+  }
+}
