@@ -57,6 +57,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ParseTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XmpUtilsTests.cs" />
     <Compile Include="XNameTests.cs" />
