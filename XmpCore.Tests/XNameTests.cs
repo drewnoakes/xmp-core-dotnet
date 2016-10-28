@@ -1,7 +1,7 @@
 ﻿using System.Xml.Linq;
 using Xunit;
 
-namespace XmpCore.Tests.Properties
+namespace XmpCore.Tests
 {
     public class XNameTests
     {
