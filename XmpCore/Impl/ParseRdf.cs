@@ -375,7 +375,7 @@ namespace XmpCore.Impl
                     ignoreNodes.Add(attribute.Name.ToString());
             }
 
-            if (attributes.Count() - ignoreNodes.Count > 3)
+            if (attributes.Count - ignoreNodes.Count > 3)
             {
                 // Only an emptyPropertyElt can have more than 3 attributes.
                 Rdf_EmptyPropertyElement(xmp, xmpParent, xmlNode, isTopLevel);
