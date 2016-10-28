@@ -347,7 +347,7 @@ namespace XmpCore.Impl
         /// but by their attributes for the most part. The exceptions are resourcePropertyElt and
         /// literalPropertyElt. They are distinguished by their XML element content.
         /// NOTE: The RDF syntax does not explicitly include the xml:lang attribute although it can
-        /// appear in many of these. We have to allow for it in the attibute counts below.
+        /// appear in many of these. We have to allow for it in the attribute counts below.
         /// </remarks>
         /// <param name="xmp">the xmp metadata object that is generated</param>
         /// <param name="xmpParent">the parent xmp node</param>
