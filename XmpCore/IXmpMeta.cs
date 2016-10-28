@@ -697,7 +697,6 @@ namespace XmpCore
         /// <param name="propName">The name of the property</param>
         /// <param name="propValue">the literal property value as <c>boolean</c></param>
         /// <exception cref="XmpException">Wraps all exceptions</exception>
-        /// <exception cref="XmpException"/>
         void SetPropertyBoolean(string schemaNs, string propName, bool propValue);
 
         /// <summary>Convenience method to set a property to a literal <c>int</c> value.</summary>
@@ -728,7 +727,6 @@ namespace XmpCore
         /// <param name="propName">The name of the property</param>
         /// <param name="propValue">the literal property value as <c>long</c></param>
         /// <exception cref="XmpException">Wraps all exceptions</exception>
-        /// <exception cref="XmpException"/>
         void SetPropertyLong(string schemaNs, string propName, long propValue);
 
         /// <summary>Convenience method to set a property to a literal <c>double</c> value.</summary>
@@ -831,7 +829,6 @@ namespace XmpCore
         /// </remarks>
         /// <param name="options">optional parsing options.</param>
         /// <exception cref="XmpException">Wraps all errors and exceptions that may occur.</exception>
-        /// <exception cref="XmpException"/>
         void Normalize(ParseOptions options);
 
         /// <summary>Renders this node and the tree under this node in a human readable form.</summary>

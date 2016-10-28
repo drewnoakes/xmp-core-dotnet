@@ -41,7 +41,6 @@ namespace XmpCore
         /// <param name="allowCommas">Option flag to control the catenation.</param>
         /// <returns>Returns the string containing the catenated array items.</returns>
         /// <exception cref="XmpException">Forwards the Exceptions from the metadata processing</exception>
-        /// <exception cref="XmpException"/>
         public static string CatenateArrayItems(IXmpMeta xmp, string schemaNs, string arrayName, string separator, string quotes, bool allowCommas)
         {
             return Impl.XmpUtils.CatenateArrayItems(xmp, schemaNs, arrayName, separator, quotes, allowCommas);
@@ -62,7 +61,6 @@ namespace XmpCore
         /// <param name="arrayOptions">Option flags to control the separation.</param>
         /// <param name="preserveCommas">Flag if commas shall be preserved</param>
         /// <exception cref="XmpException">Forwards the Exceptions from the metadata processing</exception>
-        /// <exception cref="XmpException"/>
         public static void SeparateArrayItems(IXmpMeta xmp, string schemaNs, string arrayName, string catedStr, PropertyOptions arrayOptions, bool preserveCommas)
         {
             Impl.XmpUtils.SeparateArrayItems(xmp, schemaNs, arrayName, catedStr, arrayOptions, preserveCommas);
@@ -108,7 +106,6 @@ namespace XmpCore
         /// <em>Note:</em> Currently not supported.
         /// </param>
         /// <exception cref="XmpException">Forwards the Exceptions from the metadata processing</exception>
-        /// <exception cref="XmpException"/>
         public static void RemoveProperties(IXmpMeta xmp, string schemaNs, string propName, bool doAllProperties, bool includeAliases)
         {
             Impl.XmpUtils.RemoveProperties(xmp, schemaNs, propName, doAllProperties, includeAliases);
@@ -184,7 +181,6 @@ namespace XmpCore
         /// <param name="replaceOldValues">Replace the values of existing properties.</param>
         /// <param name="deleteEmptyValues">Delete destination values if source property is empty.</param>
         /// <exception cref="XmpException">Forwards the Exceptions from the metadata processing</exception>
-        /// <exception cref="XmpException"/>
         public static void AppendProperties(IXmpMeta source, IXmpMeta dest, bool doAllProperties, bool replaceOldValues, bool deleteEmptyValues = false)
         {
             Impl.XmpUtils.AppendProperties(source, dest, doAllProperties, replaceOldValues, deleteEmptyValues);
@@ -204,7 +200,6 @@ namespace XmpCore
         /// </list>
         /// </returns>
         /// <exception cref="XmpException">If an empty string is passed.</exception>
-        /// <exception cref="XmpException"/>
         public static bool ConvertToBoolean(string value)
         {
             if (string.IsNullOrEmpty(value))
@@ -241,7 +236,6 @@ namespace XmpCore
         /// If the <c>rawValue</c> is <c>null</c> or empty or the
         /// conversion fails.
         /// </exception>
-        /// <exception cref="XmpException"/>
         public static int ConvertToInteger(string rawValue)
         {
             if (string.IsNullOrEmpty(rawValue))
@@ -274,7 +268,6 @@ namespace XmpCore
         /// If the <c>rawValue</c> is <c>null</c> or empty or the
         /// conversion fails.
         /// </exception>
-        /// <exception cref="XmpException"/>
         public static long ConvertToLong(string rawValue)
         {
             if (string.IsNullOrEmpty(rawValue))
@@ -307,7 +300,6 @@ namespace XmpCore
         /// If the <c>rawValue</c> is <c>null</c> or empty or the
         /// conversion fails.
         /// </exception>
-        /// <exception cref="XmpException"/>
         public static double ConvertToDouble(string rawValue)
         {
             if (string.IsNullOrEmpty(rawValue))
@@ -335,7 +327,6 @@ namespace XmpCore
         /// If the <c>rawValue</c> is <c>null</c> or empty or the
         /// conversion fails.
         /// </exception>
-        /// <exception cref="XmpException"/>
         public static IXmpDateTime ConvertToDate(string rawValue)
         {
             if (string.IsNullOrEmpty(rawValue))
@@ -364,7 +355,6 @@ namespace XmpCore
         /// <param name="base64String">a base64 encoded string</param>
         /// <returns>Returns a byte array containg the decoded string.</returns>
         /// <exception cref="XmpException">Thrown if the given string is not property base64 encoded</exception>
-        /// <exception cref="XmpException"/>
         public static byte[] DecodeBase64(string base64String)
         {
             try

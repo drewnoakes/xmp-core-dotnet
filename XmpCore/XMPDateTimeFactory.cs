@@ -76,7 +76,6 @@ namespace XmpCore
         /// <param name="strValue">The ISO 8601 string representation of the date/time.</param>
         /// <returns>An <see cref="XmpDateTime"/>-object.</returns>
         /// <exception cref="XmpException">When the ISO 8601 string is non-conform</exception>
-        /// <exception cref="XmpException"/>
         public static IXmpDateTime CreateFromIso8601(string strValue) => new XmpDateTime(strValue);
 
         /// <summary>Obtain the current date and time.</summary>
