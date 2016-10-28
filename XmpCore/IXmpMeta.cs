@@ -71,7 +71,7 @@ namespace XmpCore
         /// The index is passed as an integer, you need not
         /// worry about the path string syntax for array items, convert a loop index to a string, etc.
         /// </remarks>
-        /// <param name="schemaNs">The namespace URI for the array. Has the same usage as in getProperty.</param>
+        /// <param name="schemaNs">The namespace URI for the array. Has the same usage as in <c>GetProperty()</c>.</param>
         /// <param name="arrayName">
         /// The name of the array. May be a general path expression, must not be
         /// <c>null</c> or the empty string. Has the same namespace prefix usage as
@@ -89,7 +89,7 @@ namespace XmpCore
         IXmpProperty GetArrayItem(string schemaNs, string arrayName, int itemIndex);
 
         /// <summary>Returns the number of items in the array.</summary>
-        /// <param name="schemaNs">The namespace URI for the array. Has the same usage as in getProperty.</param>
+        /// <param name="schemaNs">The namespace URI for the array. Has the same usage as in <c>GetProperty()</c>.</param>
         /// <param name="arrayName">
         /// The name of the array. May be a general path expression, must not be
         /// <c>null</c> or the empty string. Has the same namespace prefix usage as
@@ -108,7 +108,7 @@ namespace XmpCore
         /// never guaranteed. The URI is the formal name, the prefix is just a local shorthand in a given
         /// sequence of XML text.
         /// </remarks>
-        /// <param name="schemaNs">The namespace URI for the struct. Has the same usage as in getProperty.</param>
+        /// <param name="schemaNs">The namespace URI for the struct. Has the same usage as in <c>GetProperty()</c>.</param>
         /// <param name="structName">
         /// The name of the struct. May be a general path expression, must not be
         /// <c>null</c> or the empty string. Has the same namespace prefix usage as
@@ -144,7 +144,7 @@ namespace XmpCore
         /// <para />
         /// <em>Note:</em> Qualifiers are only supported for simple leaf properties at this time.
         /// </remarks>
-        /// <param name="schemaNs">The namespace URI for the struct. Has the same usage as in getProperty.</param>
+        /// <param name="schemaNs">The namespace URI for the struct. Has the same usage as in <c>GetProperty()</c>.</param>
         /// <param name="propName">
         /// The name of the property to which the qualifier is attached. May be a general
         /// path expression, must not be <c>null</c> or the empty string. Has the same
@@ -191,7 +191,7 @@ namespace XmpCore
         /// This is the simplest property setter, mainly for top level simple properties or after using
         /// the path composition functions in <see cref="XmpPathFactory"/>.
         /// </remarks>
-        /// <param name="schemaNs">The namespace URI for the property. Has the same usage as in getProperty.</param>
+        /// <param name="schemaNs">The namespace URI for the property. Has the same usage as in <c>GetProperty()</c>.</param>
         /// <param name="propName">
         /// The name of the property.
         /// Has the same usage as in <c>GetProperty()</c>.
@@ -221,11 +221,11 @@ namespace XmpCore
         /// passed must already exist. In normal usage the selected array item is modified. A new item is
         /// automatically appended if the index is the array size plus 1.
         /// </remarks>
-        /// <param name="schemaNs">The namespace URI for the array. Has the same usage as in getProperty.</param>
+        /// <param name="schemaNs">The namespace URI for the array. Has the same usage as in <c>GetProperty()</c>.</param>
         /// <param name="arrayName">
         /// The name of the array. May be a general path expression, must not be
         /// <c>null</c> or the empty string. Has the same namespace prefix usage as
-        /// propName in getProperty.
+        /// propName in <c>GetProperty()</c>.
         /// </param>
         /// <param name="itemIndex">
         /// The index of the desired item. Arrays in XMP are indexed from 1. To address
@@ -257,11 +257,11 @@ namespace XmpCore
         /// string, etc. The array passed must already exist. In normal usage the selected array item is
         /// modified. A new item is automatically appended if the index is the array size plus 1.
         /// </remarks>
-        /// <param name="schemaNs">The namespace URI for the array. Has the same usage as in getProperty.</param>
+        /// <param name="schemaNs">The namespace URI for the array. Has the same usage as in <c>GetProperty()</c>.</param>
         /// <param name="arrayName">
         /// The name of the array. May be a general path expression, must not be
         /// <c>null</c> or the empty string. Has the same namespace prefix usage as
-        /// propName in getProperty.
+        /// propName in <c>GetProperty()</c>.
         /// </param>
         /// <param name="itemIndex">
         /// The index to insert the new item. Arrays in XMP are indexed from 1. Use
@@ -290,10 +290,10 @@ namespace XmpCore
         /// use as setArrayItem(). The arrayOptions parameter is used to specify what kind of array. If
         /// the array exists, it must have the specified form.
         /// </remarks>
-        /// <param name="schemaNs">The namespace URI for the array. Has the same usage as in getProperty.</param>
+        /// <param name="schemaNs">The namespace URI for the array. Has the same usage as in <c>GetProperty()</c>.</param>
         /// <param name="arrayName">
         /// The name of the array. May be a general path expression, must not be null or
-        /// the empty string. Has the same namespace prefix usage as propPath in getProperty.
+        /// the empty string. Has the same namespace prefix usage as propPath in <c>GetProperty()</c>.
         /// </param>
         /// <param name="arrayOptions">
         /// Option flags describing the array form. The only valid options are
@@ -307,7 +307,7 @@ namespace XmpCore
         /// already existing, otherwise you can set them to <c>null</c> or use
         /// <see cref="AppendArrayItem(string, string, string)"/>.
         /// </param>
-        /// <param name="itemValue">the value of the array item. Has the same usage as propValue in getProperty.</param>
+        /// <param name="itemValue">the value of the array item. Has the same usage as propValue in <c>GetProperty()</c>.</param>
         /// <param name="itemOptions">Option flags describing the item to append (<see cref="PropertyOptions"/>)</param>
         /// <exception cref="XmpException">Wraps all errors and exceptions that may occur.</exception>
         void AppendArrayItem(string schemaNs, string arrayName, PropertyOptions arrayOptions, string itemValue, PropertyOptions itemOptions);
@@ -327,10 +327,10 @@ namespace XmpCore
         /// the namespace prefix, which is unreliable because the prefix is never guaranteed. The URI is
         /// the formal name, the prefix is just a local shorthand in a given sequence of XML text.
         /// </remarks>
-        /// <param name="schemaNs">The namespace URI for the struct. Has the same usage as in getProperty.</param>
+        /// <param name="schemaNs">The namespace URI for the struct. Has the same usage as in <c>GetProperty()</c>.</param>
         /// <param name="structName">
         /// The name of the struct. May be a general path expression, must not be null
-        /// or the empty string. Has the same namespace prefix usage as propName in getProperty.
+        /// or the empty string. Has the same namespace prefix usage as propName in <c>GetProperty()</c>.
         /// </param>
         /// <param name="fieldNs">
         /// The namespace URI for the field. Has the same URI and prefix usage as the
@@ -342,7 +342,7 @@ namespace XmpCore
         /// </param>
         /// <param name="fieldValue">
         /// the value of thefield, if the field has a value.
-        /// Has the same usage as propValue in getProperty.
+        /// Has the same usage as propValue in <c>GetProperty()</c>.
         /// </param>
         /// <param name="options">Option flags describing the field. See the earlier description.</param>
         /// <exception cref="XmpException">Wraps all errors and exceptions that may occur.</exception>
@@ -367,8 +367,8 @@ namespace XmpCore
         /// just a local shorthand in a given sequence of XML text. The property the qualifier
         /// will be attached has to exist.
         /// </remarks>
-        /// <param name="schemaNs">The namespace URI for the struct. Has the same usage as in getProperty.</param>
-        /// <param name="propName">The name of the property to which the qualifier is attached. Has the same usage as in getProperty.</param>
+        /// <param name="schemaNs">The namespace URI for the struct. Has the same usage as in <c>GetProperty()</c>.</param>
+        /// <param name="propName">The name of the property to which the qualifier is attached. Has the same usage as in <c>GetProperty()</c>.</param>
         /// <param name="qualNs">The namespace URI for the qualifier. Has the same URI and prefix usage as the schemaNS parameter.</param>
         /// <param name="qualName">
         /// The name of the qualifier. Must be a single XML name, must not be
@@ -378,7 +378,7 @@ namespace XmpCore
         /// <param name="qualValue">
         /// A pointer to the <c>null</c> terminated UTF-8 string that is the
         /// value of the qualifier, if the qualifier has a value. Has the same usage as propValue
-        /// in getProperty.
+        /// in <c>GetProperty()</c>.
         /// </param>
         /// <param name="options">Option flags describing the qualifier. See the earlier description.</param>
         /// <exception cref="XmpException">Wraps all errors and exceptions that may occur.</exception>
@@ -396,12 +396,12 @@ namespace XmpCore
         /// <summary>Deletes the given XMP subtree rooted at the given property.</summary>
         /// <remarks>It is not an error if the property does not exist.</remarks>
         /// <param name="schemaNs">The namespace URI for the property. Has the same usage as in <c>GetProperty()</c>.</param>
-        /// <param name="propName">The name of the property. Has the same usage as in getProperty.</param>
+        /// <param name="propName">The name of the property. Has the same usage as in <c>GetProperty()</c>.</param>
         void DeleteProperty(string schemaNs, string propName);
 
         /// <summary>Deletes the given XMP subtree rooted at the given array item.</summary>
         /// <remarks>It is not an error if the array item does not exist.</remarks>
-        /// <param name="schemaNs">The namespace URI for the array. Has the same usage as in getProperty.</param>
+        /// <param name="schemaNs">The namespace URI for the array. Has the same usage as in <c>GetProperty()</c>.</param>
         /// <param name="arrayName">
         /// The name of the array. May be a general path expression, must not be
         /// <c>null</c> or the empty string. Has the same namespace prefix usage as
@@ -420,7 +420,7 @@ namespace XmpCore
         /// <param name="structName">
         /// The name of the struct. May be a general path expression, must not be
         /// <c>null</c> or the empty string. Has the same namespace prefix usage as
-        /// propName in getProperty.
+        /// propName in <c>GetProperty()</c>.
         /// </param>
         /// <param name="fieldNs">The namespace URI for the field. Has the same URI and prefix usage as the schemaNS parameter.</param>
         /// <param name="fieldName">
@@ -436,7 +436,7 @@ namespace XmpCore
         /// qualifier does not exist.
         /// </remarks>
         /// <param name="schemaNs">The namespace URI for the struct. Has the same usage as in <c>GetProperty()</c>.</param>
-        /// <param name="propName">The name of the property to which the qualifier is attached. Has the same usage as in getProperty.</param>
+        /// <param name="propName">The name of the property to which the qualifier is attached. Has the same usage as in <c>GetProperty()</c>.</param>
         /// <param name="qualNs">The namespace URI for the qualifier. Has the same URI and prefix usage as the schemaNS parameter.</param>
         /// <param name="qualName">
         /// The name of the qualifier. Must be a single XML name, must not be
