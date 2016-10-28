@@ -289,33 +289,32 @@ namespace XmpCore.Impl.XPath
                 expandedXPath.Add(new XmpPathSegment(schemaNs, XmpPath.SchemaNode));
                 var rootStep = new XmpPathSegment(rootProp, XmpPath.StructFieldStep);
                 expandedXPath.Add(rootStep);
+                return;
             }
-            else
+
+            // add schema xpath step and base step of alias
+            expandedXPath.Add(new XmpPathSegment(aliasInfo.Namespace, XmpPath.SchemaNode));
+            expandedXPath.Add(new XmpPathSegment(VerifyXPathRoot(aliasInfo.Namespace, aliasInfo.PropName), XmpPath.StructFieldStep)
             {
-                // add schema xpath step and base step of alias
-                expandedXPath.Add(new XmpPathSegment(aliasInfo.Namespace, XmpPath.SchemaNode));
-                expandedXPath.Add(new XmpPathSegment(VerifyXPathRoot(aliasInfo.Namespace, aliasInfo.PropName), XmpPath.StructFieldStep)
+                IsAlias = true,
+                AliasForm = aliasInfo.AliasForm.GetOptions()
+            });
+
+            if (aliasInfo.AliasForm.IsArrayAltText)
+            {
+                expandedXPath.Add(new XmpPathSegment("[?xml:lang='x-default']", XmpPath.QualSelectorStep)
                 {
                     IsAlias = true,
                     AliasForm = aliasInfo.AliasForm.GetOptions()
                 });
-
-                if (aliasInfo.AliasForm.IsArrayAltText)
+            }
+            else if (aliasInfo.AliasForm.IsArray)
+            {
+                expandedXPath.Add(new XmpPathSegment("[1]", XmpPath.ArrayIndexStep)
                 {
-                    expandedXPath.Add(new XmpPathSegment("[?xml:lang='x-default']", XmpPath.QualSelectorStep)
-                    {
-                        IsAlias = true,
-                        AliasForm = aliasInfo.AliasForm.GetOptions()
-                    });
-                }
-                else if (aliasInfo.AliasForm.IsArray)
-                {
-                    expandedXPath.Add(new XmpPathSegment("[1]", XmpPath.ArrayIndexStep)
-                    {
-                        IsAlias = true,
-                        AliasForm = aliasInfo.AliasForm.GetOptions()
-                    });
-                }
+                    IsAlias = true,
+                    AliasForm = aliasInfo.AliasForm.GetOptions()
+                });
             }
         }
 
@@ -334,15 +333,13 @@ namespace XmpCore.Impl.XPath
 
             var prefix = qualName.Substring(0, colonPos - 0);
 
-            if (Utils.IsXmlNameNs(prefix))
-            {
-                var regUri = XmpMetaFactory.SchemaRegistry.GetNamespaceUri(prefix);
-                if (regUri != null)
-                    return;
-                throw new XmpException("Unknown namespace prefix for qualified name", XmpErrorCode.BadXPath);
-            }
+            if (!Utils.IsXmlNameNs(prefix))
+                throw new XmpException("Ill-formed qualified name", XmpErrorCode.BadXPath);
 
-            throw new XmpException("Ill-formed qualified name", XmpErrorCode.BadXPath);
+            var regUri = XmpMetaFactory.SchemaRegistry.GetNamespaceUri(prefix);
+
+            if (regUri == null)
+                throw new XmpException("Unknown namespace prefix for qualified name", XmpErrorCode.BadXPath);
         }
 
         /// <summary>Verify if an XML name is conformant.</summary>
