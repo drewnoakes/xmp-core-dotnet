@@ -797,8 +797,7 @@ namespace XmpCore.Impl
                             throw new XmpException("Empty property element can't have both rdf:value and rdf:resource", XmpErrorCode.BadXmp);
 
                         hasResourceAttr = true;
-                        if (!hasValueAttr)
-                            valueNode = attribute;
+                        valueNode = attribute;
                         break;
                     }
                     case RdfTerm.NodeId:
