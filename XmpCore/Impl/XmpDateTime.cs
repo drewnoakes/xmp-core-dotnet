@@ -31,7 +31,7 @@ namespace XmpCore.Impl
         /// <summary>Use NO time zone as default</summary>
         private TimeZoneInfo _timeZone;
 
-        /// <summary>The nano seconds take micro and nano seconds, while the milli seconds are in the calendar.</summary>
+        /// <summary>The nanoseconds take micro and nano seconds, while the milliseconds are in the calendar.</summary>
         private int _nanoseconds;
 
         /// <summary>

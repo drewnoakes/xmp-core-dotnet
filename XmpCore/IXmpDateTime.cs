@@ -14,7 +14,7 @@ using Sharpen;
 namespace XmpCore
 {
     /// <summary>
-    /// The <c>XMPDateTime</c>-class represents a point in time up to a resolution of nano seconds.
+    /// The <c>XMPDateTime</c>-class represents a point in time up to a resolution of nanoseconds.
     /// </summary>
     /// <remarks>
     /// Dates and time in the serialized XMP are ISO 8601 strings. There are utility functions
@@ -26,8 +26,8 @@ namespace XmpCore
     /// <item>minute - The minute in the range 0..59.</item>
     /// <item>hour - The time zone hour in the range 0..23.</item>
     /// <item>minute - The time zone minute in the range 0..59.</item>
-    /// <item>nanosecond - The nano seconds within a second. <em>Note:</em> if the XMPDateTime is
-    /// converted into a calendar, the resolution is reduced to milli seconds.</item>
+    /// <item>nanosecond - The nanoseconds within a second. <em>Note:</em> if the XMPDateTime is
+    /// converted into a calendar, the resolution is reduced to milliseconds.</item>
     /// <item>timeZone - a <c>TimeZone</c>-object.</item>
     /// </list>
     /// DateTime values are occasionally used in cases with only a date or only a time component. A date
@@ -76,7 +76,7 @@ namespace XmpCore
         bool HasTimeZone { get; }
 
         /// <summary>
-        /// Returns a <c>Calendar</c> (only with milli second precision).
+        /// Returns a <c>Calendar</c> (only with millisecond precision).
         /// </summary>
         /// <remarks>
         /// Dates before Oct 15th 1585 (which normally fall into validity of
