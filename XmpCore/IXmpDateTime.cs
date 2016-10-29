@@ -75,11 +75,13 @@ namespace XmpCore
         /// <value>Returns true if the XMPDateTime object has a defined timezone.</value>
         bool HasTimeZone { get; }
 
-        /// <value>
-        /// Returns a <c>Calendar</c> (only with milli second precision). <br />
-        /// <em>Note:</em> the dates before Oct 15th 1585 (which normally fall into validity of
+        /// <summary>
+        /// Returns a <c>Calendar</c> (only with milli second precision).
+        /// </summary>
+        /// <remarks>
+        /// Dates before Oct 15th 1585 (which normally fall into validity of
         /// the Julian calendar) are also rendered internally as Gregorian dates.
-        /// </value>
+        /// </remarks>
         Calendar Calendar { get; }
 
         /// <returns>Returns the ISO 8601 string representation of the date and time.</returns>

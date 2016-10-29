@@ -10,6 +10,7 @@
 
 using System.Linq;
 using System.Text;
+using JetBrains.Annotations;
 
 namespace XmpCore.Impl
 {
@@ -60,14 +61,11 @@ namespace XmpCore.Impl
         /// insensitive as required by RFC 3066 (which supersedes RFC 1766).
         /// </summary>
         /// <remarks>
-        /// Normalize an xml:lang value so that comparisons are effectively case
-        /// insensitive as required by RFC 3066 (which supersedes RFC 1766). The
-        /// normalization rules:
+        /// The normalization rules:
         /// <list type="bullet">
-        /// <item> The primary subtag is lower case, the suggested practice of ISO 639.</item>
-        /// <item> All 2 letter secondary subtags are upper case, the suggested
-        /// practice of ISO 3166.</item>
-        /// <item> All other subtags are lower case.</item>
+        ///   <item>The primary subtag is lower case, the suggested practice of ISO 639.</item>
+        ///   <item>All 2 letter secondary subtags are upper case, the suggested practice of ISO 3166.</item>
+        ///   <item>All other subtags are lower case.</item>
         /// </list>
         /// </remarks>
         /// <param name="value">raw value</param>
@@ -114,13 +112,14 @@ namespace XmpCore.Impl
         /// </summary>
         /// <remarks>
         /// <list type="bullet">
-        /// <item>[qualName="value"] - An element in an array of structs, chosen by a field value.</item>
-        /// <item>[?qualName="value"] - An element in an array, chosen by a qualifier value.</item>
+        ///   <item><c>[qualName="value"]</c> - An element in an array of structs, chosen by a field value.</item>
+        ///   <item><c>[?qualName="value"]</c> - An element in an array, chosen by a qualifier value.</item>
         /// </list>
-        /// The value portion is a string quoted by ''' or '"'. The value may contain
+        /// The value portion is a string quoted by <c>'</c> or <c>"</c>. The value may contain
         /// any character including a doubled quoting character. The value may be
-        /// empty. <em>Note:</em> It is assumed that the expression is formal
-        /// correct
+        /// empty.
+        /// <para />
+        /// <em>Note:</em> It is assumed that the expression is formal correct.
         /// </remarks>
         /// <param name="selector">The selector</param>
         /// <param name="name">The name string</param>
@@ -197,9 +196,8 @@ namespace XmpCore.Impl
         /// <summary>
         /// Check some requirements for an UUID:
         /// <list type="bullet">
-        /// <item>Length of the UUID is 32</item>
-        /// <item>The Delimiter count is 4 and all the 4 delimiter are on their right
-        /// position (8,13,18,23)</item>
+        ///   <item>Length of the UUID is 32</item>
+        ///   <item>The Delimiter count is 4 and all the 4 delimiter are on their right position (8,13,18,23)</item>
         /// </list>
         /// </summary>
         /// <param name="uuid">uuid to test</param>
@@ -224,15 +222,18 @@ namespace XmpCore.Impl
             return result && UuidSegmentCount == delimCnt && UuidLength == delimPos;
         }
 
-        /// <summary>Simple check for valid XMLNames.</summary>
+        /// <summary>Simple check for valid XML names.</summary>
         /// <remarks>
-        /// Simple check for valid XMLNames. Within ASCII range<br />
-        /// ":" | [A-Z] | "_" | [a-z] | [#xC0-#xD6] | [#xD8-#xF6]<br />
+        /// Within ASCII range
+        /// <para />
+        /// ":" | [A-Z] | "_" | [a-z] | [#xC0-#xD6] | [#xD8-#xF6]
+        /// <para />
         /// are accepted, above all characters (which is not entirely
         /// correct according to the XML Spec.
         /// </remarks>
         /// <param name="name">an XML Name</param>
         /// <returns>Return <c>true</c> if the name is correct.</returns>
+        [Pure]
         public static bool IsXmlName(string name)
         {
             if (name.Length > 0 && !IsNameStartChar(name[0]))
@@ -252,8 +253,6 @@ namespace XmpCore.Impl
         /// defined in the XML Namespaces proposed recommendation.
         /// </summary>
         /// <remarks>
-        /// Checks if the value is a legal "unqualified" XML name, as
-        /// defined in the XML Namespaces proposed recommendation.
         /// These are XML names, except that they must not contain a colon.
         /// </remarks>
         /// <param name="name">the value to check</param>
@@ -281,10 +280,11 @@ namespace XmpCore.Impl
 
         /// <summary>Serializes the node value in XML encoding.</summary>
         /// <remarks>
-        /// Serializes the node value in XML encoding. Its used for tag bodies and
-        /// attributes.<br />
+        /// Its used for tag bodies and attributes.
+        /// <para />
         /// <em>Note:</em> The attribute is always limited by quotes,
-        /// thats why <c>&amp;apos;</c> is never serialized.<br />
+        /// thats why <c>&amp;apos;</c> is never serialized.
+        /// <para />
         /// <em>Note:</em> Control chars are written unescaped, but if the user uses others than tab, LF
         /// and CR the resulting XML will become invalid.
         /// </remarks>

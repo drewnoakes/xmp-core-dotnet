@@ -32,12 +32,7 @@ namespace XmpCore
 
         /// <summary>Creates an <see cref="XmpDateTime"/>-object from initial values.</summary>
         /// <param name="year">years</param>
-        /// <param name="month">
-        /// months from 1 to 12<br />
-        /// <em>Note:</em> Remember that the month in
-        /// <see cref="Sharpen.Calendar"/>
-        /// is defined from 0 to 11.
-        /// </param>
+        /// <param name="month">months from 1 to 12 (Remember that the month in <see cref="Sharpen.Calendar"/> is defined from 0 to 11)</param>
         /// <param name="day">days</param>
         /// <returns>Returns an <see cref="XmpDateTime"/>-object.</returns>
         public static IXmpDateTime Create(int year, int month, int day) => new XmpDateTime
@@ -49,12 +44,7 @@ namespace XmpCore
 
         /// <summary>Creates an <see cref="XmpDateTime"/>-object from initial values.</summary>
         /// <param name="year">years</param>
-        /// <param name="month">
-        /// months from 1 to 12<br />
-        /// <em>Note:</em> Remember that the month in
-        /// <see cref="Sharpen.Calendar"/>
-        /// is defined from 0 to 11.
-        /// </param>
+        /// <param name="month">months from 1 to 12 (Remember that the month in <see cref="Sharpen.Calendar"/> is defined from 0 to 11)</param>
         /// <param name="day">days</param>
         /// <param name="hour">hours</param>
         /// <param name="minute">minutes</param>

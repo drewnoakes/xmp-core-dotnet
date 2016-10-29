@@ -162,14 +162,12 @@ namespace XmpCore.Impl
         }
 
         /// <summary>
-        /// Undo the denormalization performed by the XMP used in Acrobat 5.<br />
-        /// If a Dublin Core array had only one item, it was serialized as a simple
-        /// property.
+        /// Undo the denormalization performed by the XMP used in Acrobat 5.
         /// </summary>
         /// <remarks>
-        /// Undo the denormalization performed by the XMP used in Acrobat 5.<br />
         /// If a Dublin Core array had only one item, it was serialized as a simple
-        /// property. <br />
+        /// property.
+        /// <para />
         /// The <c>xml:lang</c> attribute was dropped from an
         /// <c>alt-text</c> item if the language was <c>x-default</c>.
         /// </remarks>
@@ -229,6 +227,7 @@ namespace XmpCore.Impl
                 // Already OK or not even an array.
                 return;
             }
+
             // fix options
             arrayNode.Options.IsArrayOrdered = true;
             arrayNode.Options.IsArrayAlternate = true;

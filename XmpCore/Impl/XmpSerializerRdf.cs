@@ -681,14 +681,9 @@ namespace XmpCore.Impl
         }
 
         /// <summary>
-        /// Serializes one schema with all contained properties in pretty-printed
-        /// manner.<br />
-        /// Each schema's properties are written to a single
-        /// rdf:Description element.
+        /// Serializes one schema with all contained properties in pretty-printed manner.
         /// </summary>
         /// <remarks>
-        /// Serializes one schema with all contained properties in pretty-printed
-        /// manner.<br />
         /// Each schema's properties are written to a single
         /// rdf:Description element. All of the necessary namespaces are declared in
         /// the rdf:Description element. The baseIndent is the base level for the

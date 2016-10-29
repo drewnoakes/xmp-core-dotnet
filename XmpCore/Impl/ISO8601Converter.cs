@@ -46,7 +46,8 @@ namespace XmpCore.Impl
         /// as "%.4d".
         /// <para />
         /// <em>Note:</em> Tolerate missing TZD, assume is UTC. Photoshop 8 writes
-        /// dates like this for exif:GPSTimeStamp.<br />
+        /// dates like this for exif:GPSTimeStamp.
+        /// <para />
         /// <em>Note:</em> DOES NOT APPLY ANYMORE.
         /// Tolerate missing date portion, in case someone foolishly
         /// writes a time-only value that way.

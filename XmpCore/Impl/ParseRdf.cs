@@ -108,10 +108,13 @@ namespace XmpCore.Impl
         }
 
         /// <summary>
-        /// 7.2.10 nodeElementList<br />
+        /// 7.2.10 nodeElementList
+        /// <para />
         /// ws* ( nodeElement ws* )
-        /// Note: this method is only called from the rdf:RDF-node (top level)
         /// </summary>
+        /// <remarks>
+        /// This method is only called from the rdf:RDF-node (top level).
+        /// </remarks>
         /// <param name="xmp">the xmp metadata object that is generated</param>
         /// <param name="xmpParent">the parent xmp node</param>
         /// <param name="rdfRdfNode">the top-level xml node</param>
@@ -1097,7 +1100,8 @@ namespace XmpCore.Impl
         private static bool IsPropertyElementName(RdfTerm term) => term != RdfTerm.Description && !IsOldTerm(term) && !IsCoreSyntaxTerm(term);
 
         /// <summary>
-        /// 7.2.4 oldTerms<br />
+        /// 7.2.4 oldTerms
+        /// <para />
         /// rdf:aboutEach | rdf:aboutEachPrefix | rdf:bagID
         /// </summary>
         /// <param name="term">the term id</param>
@@ -1105,7 +1109,8 @@ namespace XmpCore.Impl
         private static bool IsOldTerm(RdfTerm term) => RdfTerm.FirstOld <= term && term <= RdfTerm.LastOld;
 
         /// <summary>
-        /// 7.2.2 coreSyntaxTerms<br />
+        /// 7.2.2 coreSyntaxTerms
+        /// <para />
         /// rdf:RDF | rdf:ID | rdf:about | rdf:parseType | rdf:resource | rdf:nodeID |
         /// rdf:datatype
         /// </summary>
@@ -1114,10 +1119,7 @@ namespace XmpCore.Impl
         private static bool IsCoreSyntaxTerm(RdfTerm term) => RdfTerm.FirstCore <= term && term <= RdfTerm.LastCore;
 
         /// <summary>Determines the ID for a certain RDF Term.</summary>
-        /// <remarks>
-        /// Determines the ID for a certain RDF Term.
-        /// Arranged to hopefully minimize the parse time for large XMP.
-        /// </remarks>
+        /// <remarks>Arranged to hopefully minimize the parse time for large XMP.</remarks>
         /// <param name="node">an XML node</param>
         /// <returns>Returns the term ID.</returns>
         private static RdfTerm GetRdfTermKind(XElement node) => GetRdfTermKind(node.Name, node.NodeType);

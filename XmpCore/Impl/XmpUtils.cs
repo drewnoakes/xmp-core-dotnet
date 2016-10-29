@@ -870,52 +870,64 @@ namespace XmpCore.Impl
         }
 
         /// <summary>
-        /// U+0022 ASCII space<br />
-        /// U+3000, ideographic space<br />
-        /// U+303F, ideographic half fill space<br />
-        /// U+2000..U+200B, en quad through zero width space
+        /// <list type="bullet">
+        ///   <item>U+0022 ASCII space</item>
+        ///   <item>U+3000, ideographic space</item>
+        ///   <item>U+303F, ideographic half fill space</item>
+        ///   <item>U+2000..U+200B, en quad through zero width space</item>
+        /// </list>
         /// </summary>
         private const string Spaces = "\u0020\u3000\u303F";
 
         /// <summary>
-        /// U+002C, ASCII comma<br />
-        /// U+FF0C, full width comma<br />
-        /// U+FF64, half width ideographic comma<br />
-        /// U+FE50, small comma<br />
-        /// U+FE51, small ideographic comma<br />
-        /// U+3001, ideographic comma<br />
-        /// U+060C, Arabic comma<br />
-        /// U+055D, Armenian comma
+        /// <list type="bullet">
+        ///   <item>U+002C, ASCII comma</item>
+        ///   <item>U+FF0C, full width comma</item>
+        ///   <item>U+FF64, half width ideographic comma</item>
+        ///   <item>U+FE50, small comma</item>
+        ///   <item>U+FE51, small ideographic comma</item>
+        ///   <item>U+3001, ideographic comma</item>
+        ///   <item>U+060C, Arabic comma</item>
+        ///   <item>U+055D, Armenian comma</item>
+        /// </list>
         /// </summary>
         private const string Commas = "\u002C\uFF0C\uFF64\uFE50\uFE51\u3001\u060C\u055D";
 
         /// <summary>
-        /// U+003B, ASCII semicolon<br />
-        /// U+FF1B, full width semicolon<br />
-        /// U+FE54, small semicolon<br />
-        /// U+061B, Arabic semicolon<br />
-        /// U+037E, Greek "semicolon" (really a question mark)
+        /// <list type="bullet">
+        ///   <item>U+003B, ASCII semicolon</item>
+        ///   <item>U+FF1B, full width semicolon</item>
+        ///   <item>U+FE54, small semicolon</item>
+        ///   <item>U+061B, Arabic semicolon</item>
+        ///   <item>U+037E, Greek "semicolon" (really a question mark)</item>
+        /// </list>
         /// </summary>
         private const string Semicola = "\u003B\uFF1B\uFE54\u061B\u037E";
 
         /// <summary>
-        /// U+0022 ASCII quote<br />
+        /// <list type="bullet">
+        ///   <item>U+0022 ASCII quote</item>
+        ///   <item>U+00AB and U+00BB, guillemet quotes</item>
+        ///   <item>U+3008..U+300F, various quotes</item>
+        ///   <item>U+301D..U+301F, double prime quotes</item>
+        ///   <item>U+2015, dash quote</item>
+        ///   <item>U+2018..U+201F, various quotes</item>
+        ///   <item>U+2039 and U+203A, guillemet quotes</item>
+        /// </list>
+        /// </summary>
+        /// <remarks>
         /// The square brackets are not interpreted as quotes anymore (bug #2674672)
         /// (ASCII '[' (0x5B) and ']' (0x5D) are used as quotes in Chinese and
         /// Korean.)<br />
-        /// U+00AB and U+00BB, guillemet quotes<br />
-        /// U+3008..U+300F, various quotes.<br />
-        /// U+301D..U+301F, double prime quotes.<br />
-        /// U+2015, dash quote.<br />
-        /// U+2018..U+201F, various quotes.<br />
-        /// U+2039 and U+203A, guillemet quotes.
-        /// </summary>
+        /// </remarks>
         private const string Quotes = "\"\u00AB\u00BB\u301D\u301E\u301F\u2015\u2039\u203A";
 
         /// <summary>
-        /// U+0000..U+001F ASCII controls<br />
-        /// U+2028, line separator.<br />
-        /// U+2029, paragraph separator.
+        /// <list type="bullet">
+        ///   <item>U+0000..U+001F ASCII controls</item>
+        ///   <item>U+2028, line separator</item>
+        ///   <item>U+2029, paragraph separator</item>
+        /// </list>
         /// </summary>
         private const string Controls = "\u2028\u2029";
         // "\"\u005B\u005D\u00AB\u00BB\u301D\u301E\u301F\u2015\u2039\u203A";
