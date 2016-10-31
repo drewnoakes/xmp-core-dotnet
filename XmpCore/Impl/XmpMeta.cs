@@ -289,30 +289,9 @@ namespace XmpCore.Impl
             var itemNode = (XmpNode)result[1];
             if (match != XmpNodeUtils.CltNoValues)
             {
-                return new XmpProperty407(itemNode);
+                return new XmpProperty(itemNode);
             }
             return null;
-        }
-
-        private sealed class XmpProperty407 : IXmpProperty
-        {
-            public XmpProperty407(XmpNode itemNode)
-            {
-                _itemNode = itemNode;
-            }
-
-            public string Value => _itemNode.Value;
-
-            public PropertyOptions Options => _itemNode.Options;
-
-            public string Language => _itemNode.GetQualifier(1).Value;
-
-            public override string ToString()
-            {
-                return _itemNode.Value;
-            }
-
-            private readonly XmpNode _itemNode;
         }
 
         /// <exception cref="XmpException"/>
@@ -515,33 +494,55 @@ namespace XmpCore.Impl
                     throw new XmpException("Property must be simple when a value type is requested", XmpErrorCode.BadXPath);
                 }
                 var value = EvaluateNodeValue(valueType, propNode);
-                return new XmpProperty682(value, propNode);
+                return new XmpProperty(value, propNode);
             }
             return null;
         }
 
-        private sealed class XmpProperty682 : IXmpProperty
+        /// <remarks>
+        /// Combines the two ported classes XmpProperty407 and XmpProperty682
+        /// "407" and "682" were the line numbers in XMPMetaImpl.java of the Adobe Java 5.1.2 source file
+        /// These classes were anonymous, and that is unnecessary here
+        /// </remarks>
+        private sealed class XmpProperty : IXmpProperty
         {
-            public XmpProperty682(object value, XmpNode propNode)
+            private enum XmpPropertyType
             {
-                _value = value;
-                _propNode = propNode;
+                item = 0,
+                prop = 1
             }
 
-            public string Value => _value?.ToString();
+            private readonly XmpPropertyType _proptype;
 
-            public PropertyOptions Options => _propNode.Options;
+            public XmpProperty(XmpNode itemNode)
+            {
+                _node = itemNode;
 
-            public string Language => null;
+                _proptype = XmpPropertyType.item;
+            }
+
+            public XmpProperty(object value, XmpNode propNode)
+            {
+                _value = value;
+                _node = propNode;
+
+                _proptype = XmpPropertyType.prop;
+            }
+
+            public string Value => _proptype == XmpPropertyType.item ? _node.Value : _value?.ToString();
+
+            public PropertyOptions Options => _node.Options;
+
+            public string Language => _proptype == XmpPropertyType.item ? _node.GetQualifier(1).Value : null;
 
             public override string ToString()
             {
-                return _value.ToString();
+                return _proptype == XmpPropertyType.item ? _node.Value : _value.ToString();
             }
 
             private readonly object _value;
 
-            private readonly XmpNode _propNode;
+            private readonly XmpNode _node;
         }
 
         /// <summary>Returns a property, but the result value can be requested.</summary>

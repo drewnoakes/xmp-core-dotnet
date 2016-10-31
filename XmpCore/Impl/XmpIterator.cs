@@ -319,10 +319,15 @@ namespace XmpCore.Impl
             protected static IXmpPropertyInfo CreatePropertyInfo(XmpNode node, string baseNs, string path)
             {
                 var value = node.Options.IsSchemaNode ? null : node.Value;
-                return new XmpPropertyInfo450(node, baseNs, path, value);
+                return new XmpPropertyInfo(node, baseNs, path, value);
             }
 
-            private sealed class XmpPropertyInfo450 : IXmpPropertyInfo
+            /// <remarks>
+            /// Originally called "XmpPropertyInfo450"
+            /// "450" was the line number in XMPIteratorImpl.java of the Adobe Java 5.1.2 source file
+            /// This class was anonymous, but that is unnecessary here
+            /// </remarks>
+            private sealed class XmpPropertyInfo : IXmpPropertyInfo
             {
                 private readonly XmpNode _node;
                 private readonly string _baseNs;
@@ -330,7 +335,7 @@ namespace XmpCore.Impl
                 public string Path { get; }
                 public string Value { get; }
 
-                public XmpPropertyInfo450(XmpNode node, string baseNs, string path, string value)
+                public XmpPropertyInfo(XmpNode node, string baseNs, string path, string value)
                 {
                     _node = node;
                     _baseNs = baseNs;
