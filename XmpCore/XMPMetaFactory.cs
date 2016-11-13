@@ -68,6 +68,8 @@ namespace XmpCore
         /// <exception cref="XmpException">If the file is not well-formed XML or if the parsing fails.</exception>
         public static IXmpMeta ParseFromBuffer(byte[] buffer, ParseOptions options = null) => XmpMetaParser.Parse(buffer, options);
 
+        public static IXmpMeta ParseFromBuffer(byte[] buffer, int offset, int length, ParseOptions options = null) => XmpMetaParser.Parse(new ByteBuffer(buffer, offset, length), options);
+
         public static IXmpMeta ParseFromXDocument(XDocument root, ParseOptions options = null) => XmpMetaParser.Parse(root, options);
 
         public static XDocument ExtractXDocumentFromBuffer(byte[] buffer, ParseOptions options = null) => XmpMetaParser.Extract(buffer, options);

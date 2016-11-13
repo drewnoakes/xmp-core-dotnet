@@ -57,6 +57,18 @@ namespace XmpCore.Impl
         /// Parses an XMP metadata object from a stream, including de-aliasing and normalisation.
         /// </summary>
         /// <exception cref="XmpException">Thrown if parsing or normalisation fails.</exception>
+        public static IXmpMeta Parse(ByteBuffer byteBuffer, ParseOptions options = null)
+        {
+            ParameterAsserts.AssertNotNull(byteBuffer);
+            options = options ?? new ParseOptions();
+            var doc = ParseXmlFromByteBuffer(byteBuffer, options);
+            return ParseXmlDoc(doc, options);
+        }
+
+        /// <summary>
+        /// Parses an XMP metadata object from a stream, including de-aliasing and normalisation.
+        /// </summary>
+        /// <exception cref="XmpException">Thrown if parsing or normalisation fails.</exception>
         public static IXmpMeta Parse(string xmlStr, ParseOptions options = null)
         {
             ParameterAsserts.AssertNotNullOrEmpty(xmlStr);
