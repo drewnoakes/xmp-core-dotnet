@@ -80,17 +80,27 @@ namespace XmpCore.Impl
             }
         }
 
-        /// <summary>Asserts that any string parameter is set.</summary>
-        /// <param name="param">any string parameter</param>
-        /// <exception cref="XmpException">Thrown if the parameter is null or has length 0.</exception>
+        /// <summary>Asserts that a parameter is not null.</summary>
+        /// <param name="param">the parameter's value</param>
+        /// <exception cref="XmpException">Thrown if the parameter is null.</exception>
         public static void AssertNotNull(object param)
         {
             if (param == null)
             {
                 throw new XmpException("Parameter must not be null", XmpErrorCode.BadParam);
             }
-            var s = param as string;
-            if (s != null && s.Length == 0)
+        }
+
+        /// <summary>Asserts that any string parameter is not null or empty.</summary>
+        /// <param name="param">a string parameter's value</param>
+        /// <exception cref="XmpException">Thrown if the parameter is null or has length 0.</exception>
+        public static void AssertNotNullOrEmpty(string param)
+        {
+            if (param == null)
+            {
+                throw new XmpException("Parameter must not be null", XmpErrorCode.BadParam);
+            }
+            if (param.Length == 0)
             {
                 throw new XmpException("Parameter must not be an empty string", XmpErrorCode.BadParam);
             }

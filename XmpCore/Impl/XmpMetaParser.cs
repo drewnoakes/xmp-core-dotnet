@@ -59,7 +59,7 @@ namespace XmpCore.Impl
         /// <exception cref="XmpException">Thrown if parsing or normalisation fails.</exception>
         public static IXmpMeta Parse(string xmlStr, ParseOptions options = null)
         {
-            ParameterAsserts.AssertNotNull(xmlStr);
+            ParameterAsserts.AssertNotNullOrEmpty(xmlStr);
             options = options ?? new ParseOptions();
             var doc = ParseXmlString(xmlStr, options);
             return ParseXmlDoc(doc, options);
