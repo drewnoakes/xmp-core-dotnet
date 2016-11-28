@@ -7,7 +7,6 @@
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
 
-using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using Sharpen;
