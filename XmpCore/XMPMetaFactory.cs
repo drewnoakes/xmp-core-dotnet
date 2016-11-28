@@ -23,7 +23,7 @@ namespace XmpCore
         /// <value>Returns the singleton instance of the <see cref="XmpSchemaRegistry"/>.</value>
         public static IXmpSchemaRegistry SchemaRegistry { get; private set; } = new XmpSchemaRegistry();
 
-        /// <returns>Returns an empty <c>XMPMeta</c>-object.</returns>
+        /// <returns>Returns an empty <see cref="IXmpMeta"/> instance.</returns>
         public static IXmpMeta Create() => new XmpMeta();
 
         /// <summary>
