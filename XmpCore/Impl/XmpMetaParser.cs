@@ -131,7 +131,7 @@ namespace XmpCore.Impl
         private static XDocument ParseXmlFromInputStream(Stream stream, ParseOptions options)
         {
             if (!options.AcceptLatin1 && !options.FixControlChars)
-                return ParseStream(stream);
+                return ParseStream(stream, options);
 
             try
             {
@@ -156,7 +156,7 @@ namespace XmpCore.Impl
         {
             try
             {
-                return ParseStream(buffer.GetByteStream());
+                return ParseStream(buffer.GetByteStream(), options);
             }
             catch (XmpException e)
             {
@@ -169,7 +169,7 @@ namespace XmpCore.Impl
                     {
                         try
                         {
-                            return ParseTextReader(new FixAsciiControlsReader(new StreamReader(buffer.GetByteStream(), buffer.GetEncoding())));
+                            return ParseTextReader(new FixAsciiControlsReader(new StreamReader(buffer.GetByteStream(), buffer.GetEncoding())), options);
                         }
                         catch
                         {
@@ -178,7 +178,7 @@ namespace XmpCore.Impl
                         }
                     }
 
-                    return ParseStream(buffer.GetByteStream());
+                    return ParseStream(buffer.GetByteStream(), options);
                 }
 
                 throw;
@@ -196,23 +196,55 @@ namespace XmpCore.Impl
         {
             try
             {
-                return ParseStream(new MemoryStream(Encoding.UTF8.GetBytes(input)));
+                using (var sr = new StringReader(input))
+                    return ParseTextReader(sr, options);
             }
             catch (XmpException e)
             {
                 if (e.ErrorCode == XmpErrorCode.BadXml && options.FixControlChars)
-                    return ParseTextReader(new FixAsciiControlsReader(new StreamReader(new MemoryStream(Encoding.UTF8.GetBytes(input)))));
+                    return ParseTextReader(new FixAsciiControlsReader(new StreamReader(new MemoryStream(Encoding.UTF8.GetBytes(input)))), options);
                 throw;
             }
         }
 
         /// <exception cref="XmpException">Wraps parsing and I/O-exceptions into an XMPException.</exception>
-        private static XDocument ParseStream(Stream stream)
+        private static XDocument ParseStream(Stream stream, ParseOptions options)
         {
             try
             {
-                using (var sr = new StreamReader(stream))
-                    return XDocument.Parse(sr.ReadToEnd());
+                // The settings simulate a non-validating processor with the external
+                // entity resolution disabled. The processing of the internal subset is
+                // enabled by default. In order to prevent DoS attacks, the expanded
+                // size of the internal subset is limited to 10 million characters.
+
+                var rdrSettings = new XmlReaderSettings();
+                if (options.DisallowDoctype)
+                {
+#if NET35
+                    // the older properties for disabling DTD processing
+                    rdrSettings.XmlResolver = null;
+                    rdrSettings.ProhibitDtd = true;
+#else
+                    rdrSettings.DtdProcessing = DtdProcessing.Prohibit;
+#endif
+                }
+                else
+                {
+#if NET35
+                    // the older property for enabling DTD processing
+                    rdrSettings.ProhibitDtd = false;
+#else
+                    // DtdProcessing.Parse; Parse is not defined in the public contract
+                    rdrSettings.DtdProcessing = (DtdProcessing)2;
+#endif
+                }
+
+                rdrSettings.MaxCharactersFromEntities = (long)1e7;
+
+                using (var rdr = XmlReader.Create(new StreamReader(stream), rdrSettings))
+                {
+                    return XDocument.Load(rdr);
+                }
             }
             catch (XmlException e)
             {
@@ -229,11 +261,43 @@ namespace XmpCore.Impl
         }
 
         /// <exception cref="XmpException">Wraps parsing and I/O-exceptions into an XMPException.</exception>
-        private static XDocument ParseTextReader(TextReader reader)
+        private static XDocument ParseTextReader(TextReader reader, ParseOptions options)
         {
             try
             {
-                return XDocument.Parse(reader.ReadToEnd());
+                // The settings simulate a non-validating processor with the external
+                // entity resolution disabled. The processing of the internal subset is
+                // enabled by default. In order to prevent DoS attacks, the expanded
+                // size of the internal subset is limited to 10 million characters.
+
+                var rdrSettings = new XmlReaderSettings();
+                if (options.DisallowDoctype)
+                {
+#if NET35
+                    // the older properties for disabling DTD processing
+                    rdrSettings.XmlResolver = null;
+                    rdrSettings.ProhibitDtd = true;
+#else
+                    rdrSettings.DtdProcessing = DtdProcessing.Prohibit;
+#endif
+                }
+                else
+                {
+#if NET35
+                    // the older property for enabling DTD processing
+                    rdrSettings.ProhibitDtd = false;
+#else
+                    // DtdProcessing.Parse; Parse is not defined in the public contract
+                    rdrSettings.DtdProcessing = (DtdProcessing)2;
+#endif
+                }
+
+                rdrSettings.MaxCharactersFromEntities = (long)1e7;
+
+                using (var rdr = XmlReader.Create(reader, rdrSettings))
+                {
+                    return XDocument.Load(rdr);
+                }
             }
             catch (XmlException e)
             {

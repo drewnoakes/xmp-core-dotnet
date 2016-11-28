@@ -30,10 +30,13 @@ namespace XmpCore.Options
         /// <summary>Do not carry run the XMPNormalizer on a packet, leave it as it is.</summary>
         private const int OmitNormalizationFlag = 0x0020;
 
+        /// <summary>Disallow DOCTYPE declarations to prevent entity expansion attacks.</summary>
+        public const int DisallowDoctypeFlag = 0x0040;
+
         /// <summary>Sets the options to the default values.</summary>
         public ParseOptions()
         {
-            SetOption(FixControlCharsFlag | AcceptLatin1Flag, true);
+            SetOption(FixControlCharsFlag | AcceptLatin1Flag | DisallowDoctypeFlag, true);
         }
 
         public bool RequireXmpMeta
@@ -62,8 +65,14 @@ namespace XmpCore.Options
 
         public bool OmitNormalization
         {
-            set { SetOption(OmitNormalizationFlag, value); }
             get { return GetOption(OmitNormalizationFlag); }
+            set { SetOption(OmitNormalizationFlag, value); }
+        }
+
+        public bool DisallowDoctype
+        {
+            get { return GetOption(DisallowDoctypeFlag); }
+            set { SetOption(DisallowDoctypeFlag, value); }
         }
 
         protected override string DefineOptionName(int option)
@@ -80,6 +89,8 @@ namespace XmpCore.Options
                     return "ACCEPT_LATIN_1";
                 case OmitNormalizationFlag:
                     return "OMIT_NORMALIZATION";
+                case DisallowDoctypeFlag:
+                    return "DISALLOW_DOCTYPE";
                 default:
                     return null;
             }
@@ -87,7 +98,7 @@ namespace XmpCore.Options
 
         protected override int GetValidOptions()
         {
-            return RequireXmpMetaFlag | StrictAliasingFlag | FixControlCharsFlag | AcceptLatin1Flag | OmitNormalizationFlag;
+            return RequireXmpMetaFlag | StrictAliasingFlag | FixControlCharsFlag | AcceptLatin1Flag | OmitNormalizationFlag | DisallowDoctypeFlag;
         }
     }
 }
