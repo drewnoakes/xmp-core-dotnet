@@ -9,6 +9,7 @@
 
 using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using Sharpen;
 using XmpCore.Options;
 
@@ -60,6 +61,7 @@ namespace XmpCore
         /// <c>null</c> if the property does not exist.
         /// </returns>
         /// <exception cref="XmpException">Wraps all errors and exceptions that may occur.</exception>
+        [CanBeNull]
         IXmpProperty GetProperty(string schemaNs, string propName);
 
         /// <summary>Provides access to items within an array.</summary>
