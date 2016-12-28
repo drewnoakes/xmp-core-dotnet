@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using XmpCore.Options;
@@ -105,6 +106,16 @@ namespace XmpCore.Impl
 
         private static IXmpMeta ParseXmlDoc(XDocument document, ParseOptions options)
         {
+            // sort node Attributes to match Java
+            // (keep namespace declarations in the order they are, and then prefixed names after in prefix:localname order)
+            foreach(var node in document.Descendants().Where(d => d.Attributes().Count() > 1))
+            {
+                var declarations = node.Attributes().Where(n => n.IsNamespaceDeclaration);
+                var orderedattribs = declarations.Concat(node.Attributes().Where(n => !n.IsNamespaceDeclaration).OrderBy(s => (node.GetPrefixOfNamespace(s.Name.Namespace) ?? "") + ":" + s.Name.LocalName));
+
+                node.ReplaceAttributes(orderedattribs);
+            }
+
             var result = FindRootNode(document.Nodes(), options.RequireXmpMeta, new object[3]);
 
             if (result == null || result[1] != XmpRdf)
