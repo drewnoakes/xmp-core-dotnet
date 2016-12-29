@@ -24,7 +24,10 @@
     "nowarn": [ 1591 ]
   },
   "dependencies": {
-    "JetBrains.Annotations": "10.2.1"
+    "JetBrains.Annotations": {
+      "version": "10.2.1",
+      "type": "build"
+    }
   },
   "frameworks": {
     "netstandard1.0": {
