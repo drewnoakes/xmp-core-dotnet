@@ -106,13 +106,13 @@ namespace XmpCore.Impl
 
         private static IXmpMeta ParseXmlDoc(XDocument document, ParseOptions options)
         {
-            // sort node Attributes to match Java
-            // (keep namespace declarations in the order they are, and then prefixed names after in prefix:localname order)
+            // sort node Attributes to match Java DocumentBuilder (attribute order isn't supposed to matter but DocumentBuilder does some sorting)
+            // namespace declarations come first, and then all are sorted in prefix:localname order
             foreach(var node in document.Descendants().Where(d => d.Attributes().Count() > 1))
             {
-                var declarations = node.Attributes().Where(n => n.IsNamespaceDeclaration);
-                var orderedattribs = declarations.Concat(node.Attributes().Where(n => !n.IsNamespaceDeclaration).OrderBy(s => (node.GetPrefixOfNamespace(s.Name.Namespace) ?? "") + ":" + s.Name.LocalName));
-
+                var orderedattribs = node.Attributes()
+                                        .OrderBy(n => !n.IsNamespaceDeclaration)
+                                        .ThenBy(s => (node.GetPrefixOfNamespace(s.Name.Namespace) ?? "") + ":" + s.Name.LocalName);
                 node.ReplaceAttributes(orderedattribs);
             }
 
