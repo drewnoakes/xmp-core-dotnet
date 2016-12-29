@@ -198,7 +198,7 @@ namespace XmpCore
         /// Arrays and non-leaf levels of structs do not have values.
         /// Must be <c>null</c> if the value is not relevant.<br/>
         /// The value is automatically detected: Boolean, Integer, Long, Double, <see cref="IXmpDateTime"/> and
-        /// byte[] are handled, on all other <see cref="ToString"/> is called.
+        /// byte[] are handled, on all other <see cref="System.Object.ToString"/> is called.
         /// </param>
         /// <param name="options">Option flags describing the property. See the earlier description.</param>
         /// <exception cref="XmpException">Wraps all errors and exceptions that may occur.</exception>
@@ -618,7 +618,7 @@ namespace XmpCore
         void SetLocalizedText(string schemaNs, string altTextName, string genericLang, string specificLang, string itemValue);
 
         /// <summary>
-        /// These are very similar to <see cref="GetProperty"/> and <see cref="SetProperty"/> above,
+        /// These are very similar to <see cref="GetProperty"/> and <see cref="SetProperty(string,string,object)"/> above,
         /// but the value is returned or provided in a literal form instead of as a UTF-8 string.
         /// </summary>
         /// <remarks>
