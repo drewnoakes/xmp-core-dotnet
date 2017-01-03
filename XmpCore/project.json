@@ -4,7 +4,7 @@
   "title": "XmpCore",
   "version": "2.0.0-*",
   "authors": [ "Drew Noakes" ],
-  "copyright": "Copyright 2015-2016",
+  "copyright": "Copyright 2015-2017",
   "packOptions": {
     "tags": [ "XMP", "Metadata", "Exif", "IPTC", "ICC" ],
     "iconUrl": "https://raw.githubusercontent.com/drewnoakes/xmp-core-dotnet/master/docs/logo-512px.png",
