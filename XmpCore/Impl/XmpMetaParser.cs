@@ -112,8 +112,8 @@ namespace XmpCore.Impl
             {
                 var orderedattribs = node.Attributes()
                                         .OrderBy(n => !n.IsNamespaceDeclaration)
-                                        .ThenBy(s => node.GetPrefixOfNamespace(s.Name.Namespace))
-                                        .ThenBy(s => s.Name.LocalName);
+                                        .ThenBy(t => node.GetPrefixOfNamespace(t.Name.Namespace), StringComparer.Ordinal)
+                                        .ThenBy(s => s.Name.LocalName, StringComparer.Ordinal);
                 node.ReplaceAttributes(orderedattribs);
             }
 
