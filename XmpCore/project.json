@@ -2,7 +2,7 @@
   "description": ".NET library for working with the Extensible Metadata Platform (XMP)",
   "id":  "XmpCore",
   "title": "XmpCore",
-  "version": "2.0.0-*",
+  "version": "2.0.1-*",
   "authors": [ "Drew Noakes" ],
   "copyright": "Copyright 2015-2017",
   "packOptions": {
