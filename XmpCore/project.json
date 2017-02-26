@@ -21,7 +21,8 @@
     "debugType": "portable",
     "xmlDoc": true,
     "optimize": true,
-    "nowarn": [ 1591 ]
+    "nowarn": [ 1591 ],
+    "keyFile": "XmpCore.snk"
   },
   "dependencies": {
     "JetBrains.Annotations": {
