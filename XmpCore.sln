@@ -14,6 +14,8 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "XmpCore", "XmpCore\XmpCore.
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "XmpCore.Tests", "XmpCore.Tests\XmpCore.Tests.xproj", "{B886F96C-DEB6-49CD-91F9-D55A91C99725}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "XmpCore-Signed", "XmpCore-Signed\XmpCore-Signed.xproj", "{D9D571B9-3722-4C59-9FC7-28DA69CFC480}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,6 +30,10 @@ Global
 		{B886F96C-DEB6-49CD-91F9-D55A91C99725}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B886F96C-DEB6-49CD-91F9-D55A91C99725}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B886F96C-DEB6-49CD-91F9-D55A91C99725}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9D571B9-3722-4C59-9FC7-28DA69CFC480}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9D571B9-3722-4C59-9FC7-28DA69CFC480}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9D571B9-3722-4C59-9FC7-28DA69CFC480}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9D571B9-3722-4C59-9FC7-28DA69CFC480}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

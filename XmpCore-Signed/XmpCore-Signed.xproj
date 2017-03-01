@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0.25420" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0.25420</VisualStudioVersion>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.Props" Condition="'$(VSToolsPath)' != ''" />
   <PropertyGroup Label="Globals">
-    <ProjectGuid>b886f96c-deb6-49cd-91f9-d55a91c99725</ProjectGuid>
-    <RootNamespace>XmpCore.Tests</RootNamespace>
+    <ProjectGuid>d9d571b9-3722-4c59-9fc7-28da69cfc480</ProjectGuid>
+    <RootNamespace>XmpCore</RootNamespace>
     <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">.\obj</BaseIntermediateOutputPath>
     <OutputPath Condition="'$(OutputPath)'=='' ">.\bin\</OutputPath>
   </PropertyGroup>
@@ -15,7 +15,12 @@
     <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
+    <DnxInvisibleContent Include="XmpCore.1.2.0.nupkg" />
+    <DnxInvisibleContent Include="XmpCore.1.2.1.nupkg" />
+    <DnxInvisibleContent Include="XmpCore.1.2.2.nupkg" />
+    <DnxInvisibleContent Include="XmpCore.1.2.3.nupkg" />
+    <DnxInvisibleContent Include="XmpCore.csproj.DotSettings" />
+    <DnxInvisibleContent Include="XmpCore.Portable.csproj.DotSettings" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.targets" Condition="'$(VSToolsPath)' != ''" />
 </Project>
