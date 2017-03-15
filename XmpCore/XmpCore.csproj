@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>.NET library for working with the Extensible Metadata Platform (XMP)</Description>
+    <Copyright>Copyright 2015-2017</Copyright>
+    <AssemblyTitle>XmpCore</AssemblyTitle>
+    <VersionPrefix>2.0.1</VersionPrefix>
+    <Authors>Drew Noakes</Authors>
+    <TargetFrameworks>netstandard1.0;net35</TargetFrameworks>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+    <DebugType>portable</DebugType>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <AssemblyName>XmpCore</AssemblyName>
+    <PackageId>XmpCore</PackageId>
+    <PackageTags>XMP;Metadata;Exif;IPTC;ICC</PackageTags>
+    <PackageIconUrl>https://raw.githubusercontent.com/drewnoakes/xmp-core-dotnet/master/docs/logo-512px.png</PackageIconUrl>
+    <PackageLicenseUrl>http://www.adobe.com/devnet/xmp/library/eula-xmp-library-java.html</PackageLicenseUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/drewnoakes/xmp-core-dotnet.git</RepositoryUrl>
+    <NetStandardImplicitPackageVersion Condition=" '$(TargetFramework)' == 'netstandard1.0' ">1.6.0</NetStandardImplicitPackageVersion>
+    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
+    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="JetBrains.Annotations" Version="10.2.1" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net35' ">
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System" />
+  </ItemGroup>
+
+</Project>
