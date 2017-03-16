@@ -401,16 +401,12 @@ namespace XmpCore.Impl
                 }
                 else if (stepKind == XmpPathStepType.FieldSelectorStep)
                 {
-                    string fieldName;
-                    string fieldValue;
-                    Utils.SplitNameAndValue(nextStep.Name, out fieldName, out fieldValue);
+                    Utils.SplitNameAndValue(nextStep.Name, out string fieldName, out string fieldValue);
                     index = LookupFieldSelector(parentNode, fieldName, fieldValue);
                 }
                 else if (stepKind == XmpPathStepType.QualSelectorStep)
                 {
-                    string qualName;
-                    string qualValue;
-                    Utils.SplitNameAndValue(nextStep.Name, out qualName, out qualValue);
+                    Utils.SplitNameAndValue(nextStep.Name, out string qualName, out string qualValue);
                     index = LookupQualSelector(parentNode, qualName, qualValue, nextStep.AliasForm);
                 }
                 else
@@ -458,8 +454,7 @@ namespace XmpCore.Impl
         /// <exception cref="XmpException">Throws Exceptions</exception>
         private static int FindIndexedItem(XmpNode arrayNode, string segment, bool createNodes)
         {
-            int index;
-            if (!int.TryParse(segment.Substring(1, segment.Length - 1 - 1), out index))
+            if (!int.TryParse(segment.Substring(1, segment.Length - 1 - 1), out int index))
                 throw new XmpException("Array index not digits.", XmpErrorCode.BadXPath);
 
             if (createNodes && index == arrayNode.GetChildrenLength() + 1)

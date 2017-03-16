@@ -69,8 +69,7 @@ namespace XmpCore.Impl
                 if (!Utils.IsXmlNameNs(suggestedPrefix.Substring(0, suggestedPrefix.Length - 1 - 0)))
                     throw new XmpException("The prefix is a bad XML name", XmpErrorCode.BadXml);
 
-                string registeredPrefix;
-                if (_namespaceToPrefixMap.TryGetValue(namespaceUri, out registeredPrefix))
+                if (_namespaceToPrefixMap.TryGetValue(namespaceUri, out string registeredPrefix))
                 {
                     // Return the actual prefix
                     return registeredPrefix;
@@ -111,8 +110,7 @@ namespace XmpCore.Impl
         {
             lock (_lock)
             {
-                string value;
-                return _namespaceToPrefixMap.TryGetValue(namespaceUri, out value) ? value : null;
+                return _namespaceToPrefixMap.TryGetValue(namespaceUri, out string value) ? value : null;
             }
         }
 
@@ -122,8 +120,7 @@ namespace XmpCore.Impl
             {
                 if (namespacePrefix != null && !namespacePrefix.EndsWith(":"))
                     namespacePrefix += ":";
-                string value;
-                return _prefixToNamespaceMap.TryGetValue(namespacePrefix, out value) ? value : null;
+                return _prefixToNamespaceMap.TryGetValue(namespacePrefix, out string value) ? value : null;
             }
         }
 
@@ -237,8 +234,7 @@ namespace XmpCore.Impl
                 var aliasPrefix = GetNamespacePrefix(aliasNs);
                 if (aliasPrefix == null)
                     return null;
-                IXmpAliasInfo info;
-                return _aliasMap.TryGetValue(aliasPrefix + aliasProp, out info) ? info : null;
+                return _aliasMap.TryGetValue(aliasPrefix + aliasProp, out IXmpAliasInfo info) ? info : null;
             }
         }
 
@@ -246,8 +242,7 @@ namespace XmpCore.Impl
         {
             lock (_lock)
             {
-                IXmpAliasInfo info;
-                return _aliasMap.TryGetValue(qname, out info) ? info : null;
+                return _aliasMap.TryGetValue(qname, out IXmpAliasInfo info) ? info : null;
             }
         }
 

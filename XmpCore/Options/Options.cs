@@ -196,8 +196,7 @@ namespace XmpCore.Options
         {
             var optionsNames = ProcureOptionNames();
 
-            string result;
-            optionsNames.TryGetValue(option, out result);
+            optionsNames.TryGetValue(option, out string result);
 
             if (result == null)
             {
