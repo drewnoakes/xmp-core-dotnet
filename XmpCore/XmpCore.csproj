@@ -22,12 +22,12 @@
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Signed)' == 'True' ">
-    <AssemblyTitle>XmpCore-Signed</AssemblyTitle>
-    <AssemblyName>XmpCore-Signed</AssemblyName>
+    <AssemblyTitle>XmpCore.StrongName</AssemblyTitle>
+    <AssemblyName>XmpCore.StrongName</AssemblyName>
     <AssemblyOriginatorKeyFile>../XmpCore.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>true</SignAssembly>
     <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
-    <PackageId>XmpCore-Signed</PackageId>
+    <PackageId>XmpCore.StrongName</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
