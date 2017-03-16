@@ -18,7 +18,7 @@ The API should be familiar to users of Adobe's XMPCore, though it has been modif
     <PackageId>XmpCore</PackageId>
     <PackageTags>XMP;Metadata;Exif;IPTC;ICC</PackageTags>
     <PackageIconUrl>https://raw.githubusercontent.com/drewnoakes/xmp-core-dotnet/master/docs/logo-512px.png</PackageIconUrl>
-    <PackageLicenseUrl>http://www.adobe.com/devnet/xmp/library/eula-xmp-library-java.html</PackageLicenseUrl>
+    <PackageLicenseUrl>https://www.adobe.com/devnet/xmp/library/eula-xmp-library-java.html</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/drewnoakes/xmp-core-dotnet.git</RepositoryUrl>
     <NetStandardImplicitPackageVersion Condition=" '$(TargetFramework)' == 'netstandard1.0' ">1.6.0</NetStandardImplicitPackageVersion>
