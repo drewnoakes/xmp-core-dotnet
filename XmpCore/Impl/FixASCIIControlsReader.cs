@@ -62,28 +62,23 @@ namespace XmpCore.Impl
                 if (available)
                 {
                     var c = ProcessChar(readAheadBuffer[readAhead]);
-                    if (_state == StateStart)
+                    switch (_state)
                     {
-                        // replace control chars with space
-                        if (Utils.IsControlChar(c))
-                        {
-                            c = ' ';
-                        }
-                        cbuf[pos++] = c;
-                        readAhead = 0;
-                        read++;
-                    }
-                    else
-                    {
-                        if (_state == StateError)
-                        {
+                        case StateStart:
+                            // replace control chars with space
+                            if (Utils.IsControlChar(c))
+                                c = ' ';
+                            cbuf[pos++] = c;
+                            readAhead = 0;
+                            read++;
+                            break;
+                        case StateError:
                             Unread(readAheadBuffer, 0, readAhead + 1);
                             readAhead = 0;
-                        }
-                        else
-                        {
+                            break;
+                        default:
                             readAhead++;
-                        }
+                            break;
                     }
                 }
                 else

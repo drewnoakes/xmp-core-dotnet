@@ -171,13 +171,11 @@ namespace XmpCore.Impl
                     binValue.Nanosecond = value;
                 }
             }
-            else
+            else if (input.Ch() != 'Z' && input.Ch() != '+' && input.Ch() != '-')
             {
-                if (input.Ch() != 'Z' && input.Ch() != '+' && input.Ch() != '-')
-                {
-                    throw new XmpException("Invalid date string, after time", XmpErrorCode.BadValue);
-                }
+                throw new XmpException("Invalid date string, after time", XmpErrorCode.BadValue);
             }
+
             var tzSign = 0;
             var tzHour = 0;
             var tzMinute = 0;
@@ -190,43 +188,37 @@ namespace XmpCore.Impl
             {
                 input.Skip();
             }
-            else
+            else if (input.HasNext)
             {
+                switch (input.Ch())
+                {
+                    case '+':
+                        tzSign = 1;
+                        break;
+                    case '-':
+                        tzSign = -1;
+                        break;
+                    default:
+                        throw new XmpException("Time zone must begin with 'Z', '+', or '-'", XmpErrorCode.BadValue);
+                }
+                input.Skip();
+                // Extract the time zone hour.
+                tzHour = input.GatherInt("Invalid time zone hour in date string", 23);
                 if (input.HasNext)
                 {
-                    if (input.Ch() == '+')
+                    if (input.Ch() == ':')
                     {
-                        tzSign = 1;
+                        input.Skip();
+                        // Extract the time zone minute.
+                        tzMinute = input.GatherInt("Invalid time zone minute in date string", 59);
                     }
                     else
                     {
-                        if (input.Ch() == '-')
-                        {
-                            tzSign = -1;
-                        }
-                        else
-                        {
-                            throw new XmpException("Time zone must begin with 'Z', '+', or '-'", XmpErrorCode.BadValue);
-                        }
-                    }
-                    input.Skip();
-                    // Extract the time zone hour.
-                    tzHour = input.GatherInt("Invalid time zone hour in date string", 23);
-                    if (input.HasNext)
-                    {
-                        if (input.Ch() == ':')
-                        {
-                            input.Skip();
-                            // Extract the time zone minute.
-                            tzMinute = input.GatherInt("Invalid time zone minute in date string", 59);
-                        }
-                        else
-                        {
-                            throw new XmpException("Invalid date string, after time zone hour", XmpErrorCode.BadValue);
-                        }
+                        throw new XmpException("Invalid date string, after time zone hour", XmpErrorCode.BadValue);
                     }
                 }
             }
+
             // create a corresponding TZ and set it time zone
             var offset = TimeSpan.FromHours(tzHour) + TimeSpan.FromMinutes(tzMinute);
             if (tzSign < 0)

@@ -100,39 +100,41 @@ namespace XmpCore.Impl.XPath
                     ? ParseStructSegment(pos)
                     : ParseIndexSegment(pos);
 
-                if (segment.Kind == XmpPathStepType.StructFieldStep)
+                switch (segment.Kind)
                 {
-                    if (segment.Name[0] == '@')
-                    {
-                        segment.Name = "?" + segment.Name.Substring (1);
-                        if (segment.Name != "?xml:lang")
-                            throw new XmpException("Only xml:lang allowed with '@'", XmpErrorCode.BadXPath);
-                    }
+                    case XmpPathStepType.StructFieldStep:
+                        if (segment.Name[0] == '@')
+                        {
+                            segment.Name = "?" + segment.Name.Substring (1);
+                            if (segment.Name != "?xml:lang")
+                                throw new XmpException("Only xml:lang allowed with '@'", XmpErrorCode.BadXPath);
+                        }
 
-                    if (segment.Name[0] == '?')
-                    {
-                        pos.NameStart++;
-                        segment.Kind = XmpPathStepType.QualifierStep;
-                    }
+                        if (segment.Name[0] == '?')
+                        {
+                            pos.NameStart++;
+                            segment.Kind = XmpPathStepType.QualifierStep;
+                        }
 
-                    VerifyQualName(pos.Path.Substring (pos.NameStart, pos.NameEnd - pos.NameStart));
-                }
-                else if (segment.Kind == XmpPathStepType.FieldSelectorStep)
-                {
-                    if (segment.Name[1] == '@')
-                    {
-                        segment.Name = "[?" + segment.Name.Substring (2);
-
-                        if (!segment.Name.StartsWith("[?xml:lang="))
-                            throw new XmpException("Only xml:lang allowed with '@'", XmpErrorCode.BadXPath);
-                    }
-
-                    if (segment.Name[1] == '?')
-                    {
-                        pos.NameStart++;
-                        segment.Kind = XmpPathStepType.QualSelectorStep;
                         VerifyQualName(pos.Path.Substring (pos.NameStart, pos.NameEnd - pos.NameStart));
-                    }
+                        break;
+
+                    case XmpPathStepType.FieldSelectorStep:
+                        if (segment.Name[1] == '@')
+                        {
+                            segment.Name = "[?" + segment.Name.Substring (2);
+
+                            if (!segment.Name.StartsWith("[?xml:lang="))
+                                throw new XmpException("Only xml:lang allowed with '@'", XmpErrorCode.BadXPath);
+                        }
+
+                        if (segment.Name[1] == '?')
+                        {
+                            pos.NameStart++;
+                            segment.Kind = XmpPathStepType.QualSelectorStep;
+                            VerifyQualName(pos.Path.Substring (pos.NameStart, pos.NameEnd - pos.NameStart));
+                        }
+                        break;
                 }
 
                 expandedXPath.Add(segment);

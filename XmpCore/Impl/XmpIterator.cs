@@ -187,26 +187,27 @@ namespace XmpCore.Impl
                     // hasNext has been called before
                     return true;
                 }
+
                 // find next node
-                if (_state == IterateNode)
+                switch (_state)
                 {
-                    return ReportNode();
+                    case IterateNode:
+                        return ReportNode();
+                    case IterateChildren:
+                        if (_childrenIterator == null)
+                        {
+                            _childrenIterator = _visitedNode.IterateChildren();
+                        }
+                        var hasNext = IterateChildrenMethod(_childrenIterator);
+                        if (!hasNext && _visitedNode.HasQualifier && !_enclosing.Options.IsOmitQualifiers)
+                        {
+                            _state = IterateQualifier;
+                            _childrenIterator = null;
+                            hasNext = HasNext();
+                        }
+                        return hasNext;
                 }
-                if (_state == IterateChildren)
-                {
-                    if (_childrenIterator == null)
-                    {
-                        _childrenIterator = _visitedNode.IterateChildren();
-                    }
-                    var hasNext = IterateChildrenMethod(_childrenIterator);
-                    if (!hasNext && _visitedNode.HasQualifier && !_enclosing.Options.IsOmitQualifiers)
-                    {
-                        _state = IterateQualifier;
-                        _childrenIterator = null;
-                        hasNext = HasNext();
-                    }
-                    return hasNext;
-                }
+
                 if (_childrenIterator == null)
                 {
                     _childrenIterator = _visitedNode.IterateQualifier();

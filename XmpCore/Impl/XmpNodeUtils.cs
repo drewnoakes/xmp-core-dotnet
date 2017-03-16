@@ -376,46 +376,43 @@ namespace XmpCore.Impl
         {
             XmpNode nextNode = null;
             var stepKind = nextStep.Kind;
-            if (stepKind == XmpPathStepType.StructFieldStep)
+            switch (stepKind)
             {
-                nextNode = FindChildNode(parentNode, nextStep.Name, createNodes);
-            }
-            else if (stepKind == XmpPathStepType.QualifierStep)
-            {
-                nextNode = FindQualifierNode(parentNode, nextStep.Name.Substring(1), createNodes);
-            }
-            else
-            {
-                // This is an array indexing step. First get the index, then get the node.
-                if (!parentNode.Options.IsArray)
-                    throw new XmpException("Indexing applied to non-array", XmpErrorCode.BadXPath);
+                case XmpPathStepType.StructFieldStep:
+                    nextNode = FindChildNode(parentNode, nextStep.Name, createNodes);
+                    break;
+                case XmpPathStepType.QualifierStep:
+                    nextNode = FindQualifierNode(parentNode, nextStep.Name.Substring(1), createNodes);
+                    break;
+                default:
+                    // This is an array indexing step. First get the index, then get the node.
+                    if (!parentNode.Options.IsArray)
+                        throw new XmpException("Indexing applied to non-array", XmpErrorCode.BadXPath);
 
-                int index;
-                if (stepKind == XmpPathStepType.ArrayIndexStep)
-                {
-                    index = FindIndexedItem(parentNode, nextStep.Name, createNodes);
-                }
-                else if (stepKind == XmpPathStepType.ArrayLastStep)
-                {
-                    index = parentNode.GetChildrenLength();
-                }
-                else if (stepKind == XmpPathStepType.FieldSelectorStep)
-                {
-                    Utils.SplitNameAndValue(nextStep.Name, out string fieldName, out string fieldValue);
-                    index = LookupFieldSelector(parentNode, fieldName, fieldValue);
-                }
-                else if (stepKind == XmpPathStepType.QualSelectorStep)
-                {
-                    Utils.SplitNameAndValue(nextStep.Name, out string qualName, out string qualValue);
-                    index = LookupQualSelector(parentNode, qualName, qualValue, nextStep.AliasForm);
-                }
-                else
-                {
-                    throw new XmpException("Unknown array indexing step in FollowXPathStep", XmpErrorCode.InternalFailure);
-                }
+                    int index;
+                    switch (stepKind)
+                    {
+                        case XmpPathStepType.ArrayIndexStep:
+                            index = FindIndexedItem(parentNode, nextStep.Name, createNodes);
+                            break;
+                        case XmpPathStepType.ArrayLastStep:
+                            index = parentNode.GetChildrenLength();
+                            break;
+                        case XmpPathStepType.FieldSelectorStep:
+                            Utils.SplitNameAndValue(nextStep.Name, out string fieldName, out string fieldValue);
+                            index = LookupFieldSelector(parentNode, fieldName, fieldValue);
+                            break;
+                        case XmpPathStepType.QualSelectorStep:
+                            Utils.SplitNameAndValue(nextStep.Name, out string qualName, out string qualValue);
+                            index = LookupQualSelector(parentNode, qualName, qualValue, nextStep.AliasForm);
+                            break;
+                        default:
+                            throw new XmpException("Unknown array indexing step in FollowXPathStep", XmpErrorCode.InternalFailure);
+                    }
 
-                if (1 <= index && index <= parentNode.GetChildrenLength())
-                    nextNode = parentNode.GetChild(index);
+                    if (1 <= index && index <= parentNode.GetChildrenLength())
+                        nextNode = parentNode.GetChild(index);
+                    break;
             }
 
             return nextNode;

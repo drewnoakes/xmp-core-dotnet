@@ -174,83 +174,61 @@ namespace XmpCore.Impl
                     // only one byte length must be UTF-8
                     _encoding = Encoding.UTF8;
                 }
-                else
+                else if (_buffer[0] == 0)
                 {
-                    if (_buffer[0] == 0)
+                    // These cases are:
+                    //   00 nn -- -- - Big endian UTF-16
+                    //   00 00 00 nn - Big endian UTF-32
+                    //   00 00 FE FF - Big endian UTF 32
+                    if (_length < 4 || _buffer[1] != 0)
                     {
-                        // These cases are:
-                        //   00 nn -- -- - Big endian UTF-16
-                        //   00 00 00 nn - Big endian UTF-32
-                        //   00 00 FE FF - Big endian UTF 32
-                        if (_length < 4 || _buffer[1] != 0)
-                        {
-                            _encoding = Encoding.BigEndianUnicode;
-                        }
-                        else
-                        {
-                            if ((_buffer[2] & 0xFF) == 0xFE && (_buffer[3] & 0xFF) == 0xFF)
-                                throw new NotSupportedException("UTF-32BE is not a supported encoding.");
-                            throw new NotSupportedException("UTF-32 is not a supported encoding.");
-                        }
+                        _encoding = Encoding.BigEndianUnicode;
                     }
                     else
                     {
-                        if ((_buffer[0] & 0xFF) < 0x80)
-                        {
-                            // These cases are:
-                            //   nn mm -- -- - UTF-8, includes EF BB BF case
-                            //   nn 00 -- -- - Little endian UTF-16
-                            if (_buffer[1] != 0)
-                            {
-                                _encoding = Encoding.UTF8;
-                            }
+                        if ((_buffer[2] & 0xFF) == 0xFE && (_buffer[3] & 0xFF) == 0xFF)
+                            throw new NotSupportedException("UTF-32BE is not a supported encoding.");
+                        throw new NotSupportedException("UTF-32 is not a supported encoding.");
+                    }
+                }
+                else if ((_buffer[0] & 0xFF) < 0x80)
+                {
+                    // These cases are:
+                    //   nn mm -- -- - UTF-8, includes EF BB BF case
+                    //   nn 00 -- -- - Little endian UTF-16
+                    if (_buffer[1] != 0)
+                        _encoding = Encoding.UTF8;
+                    else if (_length < 4 || _buffer[2] != 0)
+                        _encoding = Encoding.Unicode;
+                    else
+                        throw new NotSupportedException("UTF-32LE is not a supported encoding.");
+                }
+                else
+                {
+                    // These cases are:
+                    //   EF BB BF -- - UTF-8
+                    //   FE FF -- -- - Big endian UTF-16
+                    //   FF FE 00 00 - Little endian UTF-32
+                    //   FF FE -- -- - Little endian UTF-16
+                    switch ((_buffer[0] & 0xFF))
+                    {
+                        case 0xEF:
+                            _encoding = Encoding.UTF8;
+                            break;
+                        case 0xFE:
+                            _encoding = Encoding.BigEndianUnicode;
+                            break;
+                        default:
+                            if (_length < 4 || _buffer[2] != 0)
+                                // in fact BE
+                                throw new NotSupportedException("UTF-16 is not a supported encoding.");
                             else
-                            {
-                                if (_length < 4 || _buffer[2] != 0)
-                                {
-                                    _encoding = Encoding.Unicode;
-                                }
-                                else
-                                {
-                                    throw new NotSupportedException("UTF-32LE is not a supported encoding.");
-                                }
-                            }
-                        }
-                        else
-                        {
-                            // These cases are:
-                            //   EF BB BF -- - UTF-8
-                            //   FE FF -- -- - Big endian UTF-16
-                            //   FF FE 00 00 - Little endian UTF-32
-                            //   FF FE -- -- - Little endian UTF-16
-                            if ((_buffer[0] & 0xFF) == 0xEF)
-                            {
-                                _encoding = Encoding.UTF8;
-                            }
-                            else
-                            {
-                                if ((_buffer[0] & 0xFF) == 0xFE)
-                                {
-                                    _encoding = Encoding.BigEndianUnicode;
-                                }
-                                else
-                                {
-                                    // in fact BE
-                                    if (_length < 4 || _buffer[2] != 0)
-                                    {
-                                        throw new NotSupportedException("UTF-16 is not a supported encoding.");
-                                    }
-                                    else
-                                    {
-                                        // in fact LE
-                                        throw new NotSupportedException("UTF-32 is not a supported encoding.");
-                                    }
-                                }
-                            }
-                        }
+                                // in fact LE
+                                throw new NotSupportedException("UTF-32 is not a supported encoding.");
                     }
                 }
             }
+
             // in fact LE
             return _encoding;
         }

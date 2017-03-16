@@ -572,13 +572,15 @@ namespace XmpCore.Impl
                 const string xml = XmpConstants.XmlLang;
                 const string rdf = "rdf:type"; // TODO extract to a constant too
 
-                if (x == xml)
-                    return -1;
-
-                if (x == rdf)
-                    return y == xml ? 1 : -1;
-
-                return 0;
+                switch (x)
+                {
+                    case xml:
+                        return -1;
+                    case rdf:
+                        return y == xml ? 1 : -1;
+                    default:
+                        return 0;
+                }
             }
         }
     }
