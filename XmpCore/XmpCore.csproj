@@ -18,6 +18,8 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/drewnoakes/xmp-core-dotnet.git</RepositoryUrl>
     <NetStandardImplicitPackageVersion Condition=" '$(TargetFramework)' == 'netstandard1.0' ">1.6.0</NetStandardImplicitPackageVersion>
+    <IncludeSymbols>true</IncludeSymbols>
+    <IncludeSource>true</IncludeSource>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Signed)' == 'True' ">
