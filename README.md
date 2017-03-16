@@ -31,7 +31,7 @@ The NuGet package has no other dependencies.
 
 ## Framework support
 
-.NET 3.5+, as well as PCL (portable-net45+sl50+netcore45+wpa81+wp8).
+The project targets `net35` and `netstandard1.0`, meaning you can use it pretty much anywhere these days.
 
 ## History
 
