@@ -9,6 +9,8 @@
 
 // ReSharper disable UnusedParameter.Global
 
+using JetBrains.Annotations;
+
 namespace XmpCore.Impl
 {
     /// <since>11.08.2006</since>
@@ -17,6 +19,7 @@ namespace XmpCore.Impl
         /// <summary>Asserts that an array name is set.</summary>
         /// <param name="arrayName">an array name</param>
         /// <exception cref="XmpException">Array name is null or empty</exception>
+        [ContractAnnotation("null => halt")]
         public static void AssertArrayName(string arrayName)
         {
             if (string.IsNullOrEmpty(arrayName))
@@ -28,6 +31,7 @@ namespace XmpCore.Impl
         /// <summary>Asserts that a property name is set.</summary>
         /// <param name="propName">a property name or path</param>
         /// <exception cref="XmpException">Property name is null or empty</exception>
+        [ContractAnnotation("null => halt")]
         public static void AssertPropName(string propName)
         {
             if (string.IsNullOrEmpty(propName))
@@ -39,6 +43,7 @@ namespace XmpCore.Impl
         /// <summary>Asserts that a schema namespace is set.</summary>
         /// <param name="schemaNs">a schema namespace</param>
         /// <exception cref="XmpException">Schema is null or empty</exception>
+        [ContractAnnotation("null => halt")]
         public static void AssertSchemaNs(string schemaNs)
         {
             if (string.IsNullOrEmpty(schemaNs))
@@ -50,6 +55,7 @@ namespace XmpCore.Impl
         /// <summary>Asserts that a prefix is set.</summary>
         /// <param name="prefix">a prefix</param>
         /// <exception cref="XmpException">Prefix is null or empty</exception>
+        [ContractAnnotation("null => halt")]
         public static void AssertPrefix(string prefix)
         {
             if (string.IsNullOrEmpty(prefix))
@@ -61,6 +67,7 @@ namespace XmpCore.Impl
         /// <summary>Asserts that a specific language is set.</summary>
         /// <param name="specificLang">a specific lang</param>
         /// <exception cref="XmpException">Specific language is null or empty</exception>
+        [ContractAnnotation("null => halt")]
         public static void AssertSpecificLang(string specificLang)
         {
             if (string.IsNullOrEmpty(specificLang))
@@ -72,6 +79,7 @@ namespace XmpCore.Impl
         /// <summary>Asserts that a struct name is set.</summary>
         /// <param name="structName">a struct name</param>
         /// <exception cref="XmpException">Struct name is null or empty</exception>
+        [ContractAnnotation("null => halt")]
         public static void AssertStructName(string structName)
         {
             if (string.IsNullOrEmpty(structName))
@@ -83,6 +91,7 @@ namespace XmpCore.Impl
         /// <summary>Asserts that a parameter is not null.</summary>
         /// <param name="param">the parameter's value</param>
         /// <exception cref="XmpException">Thrown if the parameter is null.</exception>
+        [ContractAnnotation("null => halt")]
         public static void AssertNotNull(object param)
         {
             if (param == null)
@@ -94,6 +103,7 @@ namespace XmpCore.Impl
         /// <summary>Asserts that any string parameter is not null or empty.</summary>
         /// <param name="param">a string parameter's value</param>
         /// <exception cref="XmpException">Thrown if the parameter is null or has length 0.</exception>
+        [ContractAnnotation("null => halt")]
         public static void AssertNotNullOrEmpty(string param)
         {
             if (param == null)
@@ -114,6 +124,7 @@ namespace XmpCore.Impl
         /// </summary>
         /// <param name="xmp">the XMP object</param>
         /// <exception cref="XmpException">A wrong implentaion is used.</exception>
+        [ContractAnnotation("null => halt")]
         public static void AssertImplementation(IXmpMeta xmp)
         {
             if (xmp == null)
