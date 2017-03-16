@@ -9,53 +9,29 @@
 
 
 using System;
-using System.IO;
 using System.Text;
 using Sharpen;
 using XmpCore.Impl;
 using XmpCore.Options;
+using Xunit;
+using Xunit.Abstractions;
 
 namespace XmpCore.Tests
 {
-    public static class XmpCoreCoverage
+    // TODO add assertions rather than logging output
+
+    public class XmpCoreCoverage
     {
-        private static TextWriter _log;
-        private static readonly IXmpSchemaRegistry _registry = XmpMetaFactory.SchemaRegistry;
+        private readonly IXmpSchemaRegistry _registry = XmpMetaFactory.SchemaRegistry;
+        private readonly ITestOutputHelper _log;
 
-        public static void Main()
+        public XmpCoreCoverage(ITestOutputHelper log)
         {
-            try
-            {
-#if PORTABLE
-                log = TextWriter.Null;
-#else
-                _log = Console.Out;
-#endif
-
-                _log.WriteLine("XmpCoreCoverage starting   " + DateTime.Now);
-                _log.WriteLine("XmpCore Version: " + XmpMetaFactory.VersionInfo);
-                _log.WriteLine();
-
-
-                DoCoreCoverage();
-
-
-                _log.WriteLine(); _log.WriteLine();
-                _log.WriteLine("XmpCoreCoverage ending   " + DateTime.Now);
-            }
-            catch (XmpException e)
-            {
-                _log.WriteLine("Caught XmpException " + e.ErrorCode + " :   " +e.Message);
-            }
-            catch (Exception e)
-            {
-                _log.WriteLine("Caught exception '" + e.Message  + "'");
-            }
-
-            _log?.Flush();
+            _log = log;
         }
 
-        private static void DoCoreCoverage()
+        [Fact]
+        public void DoCoreCoverage()
         {
             CoverNamespaceRegistry();
 
@@ -93,7 +69,7 @@ namespace XmpCore.Tests
          * register new namespaces and aliases.
          * @throws XmpException Forward exceptions
          */
-        private static void CoverNamespaceRegistry()
+        private void CoverNamespaceRegistry()
         {
             writeMajorLabel ("Test of namespace registry");
 
@@ -105,7 +81,6 @@ namespace XmpCore.Tests
             foreach (var pair in namespaces)
                 _log.WriteLine(pair.Key + "   --->   " + pair.Value);
 
-            _log.WriteLine();
 
             // Registry namespace functions
             writeMinorLabel ("Test namespace registry functions");
@@ -132,7 +107,7 @@ namespace XmpCore.Tests
          * List predefined aliases, register new aliases and resolve aliases.
          * @throws XmpException Forward exceptions
          */
-        private static void CoverAliasRegistry()
+        private void CoverAliasRegistry()
         {
             writeMajorLabel ("Test alias registry and functions");
             dumpAliases();
@@ -151,7 +126,6 @@ namespace XmpCore.Tests
 
             aliasInfo = _registry.ResolveAlias(TestData.NS2, "SimpleAlias");
             _log.WriteLine ("ResolveAlias ns2:SimpleAlias:   " + aliasInfo);
-            _log.WriteLine();
 
 
             aliasInfo = _registry.ResolveAlias (TestData.NS2, "BagAlias");
@@ -165,7 +139,6 @@ namespace XmpCore.Tests
 
             aliasInfo = _registry.ResolveAlias (TestData.NS2, "AltTextAlias");
             _log.WriteLine ("ResolveAlias ns2:AltTextAlias:   " + aliasInfo);
-            _log.WriteLine();
 
 
             aliasInfo = _registry.ResolveAlias (TestData.NS2, "BagItemAlias");
@@ -179,7 +152,6 @@ namespace XmpCore.Tests
 
             aliasInfo = _registry.ResolveAlias (TestData.NS2, "AltTextItemAlias");
             _log.WriteLine ("ResolveAlias ns2:AltTextItemAlias:   " + aliasInfo);
-            _log.WriteLine();
 
 
             // set alias properties
@@ -205,7 +177,7 @@ namespace XmpCore.Tests
          * Test simple constructors and parsing, setting the instance ID
          * @throws XmpException Forwards exceptions
          */
-        private static void CoverCreatingXmp()
+        private void CoverCreatingXmp()
         {
             writeMajorLabel ("Test simple constructors and parsing, setting the instance ID");
 
@@ -227,13 +199,12 @@ namespace XmpCore.Tests
             printXmpMeta(meta3, "Clone and add instance ID");
         }
 
-
         /**
          * Cover some basid set calls (including arrays and structs).
          * @return Returns an <code>XmpMeta</code> object that is reused in the next examples.
          * @throws XmpException Forwards Exceptions
          */
-        private static IXmpMeta CoverSetPropertyMethods()
+        private IXmpMeta CoverSetPropertyMethods()
         {
             // Basic set/get methods
             writeMajorLabel ("Test SetProperty and related methods");
@@ -297,7 +268,7 @@ namespace XmpCore.Tests
          * @param meta a predefined <code>XmpMeta</code> object.
          * @throws XmpException Forwards exceptions
          */
-        private static void CoverGetPropertyMethods(IXmpMeta meta)
+        private void CoverGetPropertyMethods(IXmpMeta meta)
         {
             writeMajorLabel ("Test getProperty, deleteProperty and related methods");
 
@@ -357,7 +328,6 @@ namespace XmpCore.Tests
 
             property = meta.GetArrayItem(TestData.NS1, "ns1:Alt", 1);
             _log.WriteLine("getArrayItem ns1:Alt[1] =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
-            _log.WriteLine();
 
             property = meta.GetStructField(TestData.NS1, "Struct", TestData.NS2, "Field1");
             _log.WriteLine("getStructField ns1:Struct/ns2:Field1 =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
@@ -373,7 +343,6 @@ namespace XmpCore.Tests
 
             property = meta.GetStructField(TestData.NS1, "ns1:Struct", TestData.NS2, "ns2:Field3");
             _log.WriteLine("getStructField ns1:Struct/ns2:Field3 =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
-            _log.WriteLine();
 
 
             writeMinorLabel("Get qualifier");
@@ -395,7 +364,6 @@ namespace XmpCore.Tests
 
             property = meta.GetQualifier(TestData.NS1, "QualProp3", TestData.NS2, "ns2:Qual");
             _log.WriteLine("getQualifier ns1:QualProp3/?ns2:Qual =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
-            _log.WriteLine();
 
 
             writeMinorLabel("Get non-simple properties");
@@ -415,7 +383,6 @@ namespace XmpCore.Tests
             property = meta.GetProperty(TestData.NS1, "Struct");
             _log.WriteLine("getProperty ns1:Struct =   " + property.Value + " ("
                     + property.Options.GetOptionsString() + ")");
-            _log.WriteLine();
 
 
             writeMinorLabel("Get not existing properties");
@@ -447,7 +414,7 @@ namespace XmpCore.Tests
          * Test doesPropertyExist, deleteProperty, and related methods.
          * @param meta a predefined <code>XmpMeta</code> object.
          */
-        private static void CoverExistingProperties(IXmpMeta meta)
+        private void CoverExistingProperties(IXmpMeta meta)
         {
             writeMajorLabel ("Test doesPropertyExist, deleteProperty, and related methods");
 
@@ -464,7 +431,7 @@ namespace XmpCore.Tests
                     + meta.DoesQualifierExist(TestData.NS1, "QualProp1", TestData.NS2, "Qual1"));
             _log.WriteLine("doesQualifierExist ns1:QualProp2/?xml:lang =    "
                     + meta.DoesQualifierExist(TestData.NS1, "QualProp2", XmpConstants.NsXml, "lang"));
-            _log.WriteLine();
+
             _log.WriteLine("doesPropertyExist (namespace is null) =    "
                     + meta.DoesPropertyExist(null, "ns1:Bag"));
             _log.WriteLine("doesArrayItemExist (namespace is null) =    "
@@ -484,7 +451,7 @@ namespace XmpCore.Tests
          * Tests deletion of properties, array items, struct fields and qualifer.
          * @param meta a predefined <code>XmpMeta</code> object.
          */
-        private static void CoverDeleteProperties(IXmpMeta meta)
+        private void CoverDeleteProperties(IXmpMeta meta)
         {
             writeMajorLabel("Test deleteProperty");
 
@@ -514,7 +481,7 @@ namespace XmpCore.Tests
          * Localized text set/get methods.
          * @throws XmpException Forwards exceptions
          */
-        private static void CoverLocalisedProperties()
+        private void CoverLocalisedProperties()
         {
             writeMajorLabel ("Test setLocalizedText and getLocalizedText");
 
@@ -527,7 +494,6 @@ namespace XmpCore.Tests
 
             meta.SetLocalizedText (TestData.NS1, "AltText", "en", "en-uk", "en-uk value");
             printXmpMeta (meta, "Set en/en-uk value");
-            _log.WriteLine();
 
             var property = meta.GetLocalizedText(TestData.NS1, "AltText", "en", "en-ca");
             _log.WriteLine("getLocalizedText en/en-ca =   " + property.Value + " (lang: " + property.Language + ", opt: " + property.Options.GetOptionsString() + ")");
@@ -541,7 +507,7 @@ namespace XmpCore.Tests
          * Literal value set/get methods
          * @throws XmpException
          */
-        private static void CoverLiteralProperties()
+        private void CoverLiteralProperties()
         {
             writeMajorLabel("Test SetProperty... and getProperty... methods " +
                 "(set/get with literal values)");
@@ -569,7 +535,6 @@ namespace XmpCore.Tests
 */
 
             printXmpMeta (meta, "A few basic binary Set... calls");
-            _log.WriteLine();
 
             var b = meta.GetPropertyBoolean(TestData.NS1, "Bool0");
             _log.WriteLine ("getPropertyBoolean ns1:Bool0 =   " + b);
@@ -582,7 +547,6 @@ namespace XmpCore.Tests
 
             var d = meta.GetPropertyDouble(TestData.NS1, "Double");
             _log.WriteLine ("getPropertyBoolean ns1:Int =   " + d);
-            _log.WriteLine();
 
             for (var i = 1; i <= 13; i++)
             {
@@ -600,7 +564,7 @@ namespace XmpCore.Tests
          * Parse and serialize methods.
          * @throws XmpException Forwards exceptions
          */
-        private static void CoverParsing()
+        private void CoverParsing()
         {
             writeMajorLabel ("Test parsing with multiple buffers and various options");
 
@@ -634,7 +598,7 @@ namespace XmpCore.Tests
          * Test CR and LF in values.
          * @throws XmpException Forwards exceptions
          */
-        private static void CoverLinefeedValues()
+        private void CoverLinefeedValues()
         {
             writeMajorLabel ("Test CR and LF in values");
 
@@ -662,7 +626,6 @@ namespace XmpCore.Tests
                 hasLF == valueWithLF && hasLF2 == valueWithLF &&
                 hasCRLF == valueWithCRLF && hasCRLF2 == valueWithCRLF)
             {
-                _log.WriteLine();
                 _log.WriteLine("\n## HasCR and HasLF and HasCRLF correctly retrieved\n");
             }
         }
@@ -672,7 +635,7 @@ namespace XmpCore.Tests
          * Covers the serialization of an <code>XmpMeta</code> object with different options.
          * @throws Exception Forwards exceptions
          */
-        private static void CoverSerialization()
+        private void CoverSerialization()
         {
             writeMajorLabel ("Test serialization with various options");
 
@@ -723,7 +686,7 @@ namespace XmpCore.Tests
          * Cover different use cases of the <code>XmpIterator</code>.
          * @throws XmpException Forwards exceptions
          */
-        private static void CoverIterator()
+        private void CoverIterator()
         {
             writeMajorLabel ("Test iteration methods");
 
@@ -827,7 +790,7 @@ namespace XmpCore.Tests
          * XPath composition utilities using the <code>XmpPathFactory</code>.
          * @throws XmpException Forwards exceptions
          */
-        private static void CoverPathCreation()
+        private void CoverPathCreation()
         {
             writeMajorLabel ("XPath composition utilities");
 
@@ -862,7 +825,7 @@ namespace XmpCore.Tests
         /**
          * Date/Time utilities
          */
-        private static void CoverDateTime()
+        private void CoverDateTime()
         {
             writeMajorLabel ("Test date/time utilities and special values");
 
@@ -882,7 +845,6 @@ namespace XmpCore.Tests
             _log.WriteLine("Print date created by a calendar =   {0}", date3);
             _log.WriteLine("Print current date =   {0}", currentDateTime);
 #endif
-            _log.WriteLine();
         }
 
 
@@ -897,7 +859,7 @@ namespace XmpCore.Tests
          * @param meta an <code>XmpMeta</code> object
          * @param title the headline
          */
-        private static void printXmpMeta(IXmpMeta meta, string title)
+        private void printXmpMeta(IXmpMeta meta, string title)
         {
             var name = meta.GetObjectName();
             if (!string.IsNullOrEmpty(name))
@@ -909,14 +871,13 @@ namespace XmpCore.Tests
                 _log.WriteLine("{0}:", title);
             }
             _log.WriteLine(meta.DumpObject());
-            _log.WriteLine();
         }
 
 
         /**
          * @param prop an <code>XmpPropertyInfo</code> from the <code>XmpIterator</code>.
          */
-        private static void printPropertyInfo(IXmpPropertyInfo prop)
+        private void printPropertyInfo(IXmpPropertyInfo prop)
         {
             _log.WriteLine("NS ({0})   PATH ({1})   VALUE ({2})  OPTIONS ({3})",
                 prop.Namespace, prop.Path, prop.Value, prop.Options.GetOptionsString());
@@ -926,12 +887,11 @@ namespace XmpCore.Tests
         /**
          * Dump the alias list to the output.
          */
-        private static void dumpAliases()
+        private void dumpAliases()
         {
             var aliases = _registry.Aliases;
             foreach (var qname in aliases.Keys)
                 _log.WriteLine("{0}   --->   {1}", qname, aliases[qname]);
-            _log.WriteLine();
         }
 
 
@@ -939,13 +899,11 @@ namespace XmpCore.Tests
          * Writes a major headline to the output.
          * @param title the headline
          */
-        private static void writeMajorLabel (string title)
+        private void writeMajorLabel (string title)
         {
-            _log.WriteLine();
             _log.WriteLine("// =============================================================================");
             _log.WriteLine("// {0}", title);
             _log.WriteLine("// =============================================================================");
-            _log.WriteLine();
         }
 
 
@@ -953,12 +911,10 @@ namespace XmpCore.Tests
          * Writes a minor headline to the output.
          * @param title the headline
          */
-        private static void writeMinorLabel (string title)
+        private void writeMinorLabel (string title)
         {
-            _log.WriteLine();
             _log.WriteLine ("// -----------------------------------------------------------------------------".Substring(0, title.Length + 3));
             _log.WriteLine ("// {0}", title);
-            _log.WriteLine();
         }
     }
 }
