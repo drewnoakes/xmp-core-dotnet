@@ -15,7 +15,8 @@ if ((test-path $nuget_path) -eq $false -or [System.Version](Get-Item $nuget_path
 }
 
 if ((test-path .\packages\vswhere\tools\vswhere.exe -ErrorAction SilentlyContinue) -eq $false) {
-    nuget install vswhere -ExcludeVersion -OutputDirectory packages
+    $nuget_params = 'install', 'vswhere', '-ExcludeVersion', '-OutputDirectory', 'packages'
+    & $nuget_path $nuget_params
 }
 
 $ids = 'Community', 'Professional', 'Enterprise', 'BuildTools' | foreach { 'Microsoft.VisualStudio.Product.' + $_ }
