@@ -23,11 +23,13 @@ Returned properties provide additional information, but the above example should
 
 ## Installation
 
-The easiest way to reference this project is to install [its NuGet package](https://www.nuget.org/packages/XmpCore/):
+The easiest way to reference this project is to install the [`XmpCore` package](https://www.nuget.org/packages/XmpCore/):
 
     PM> Install-Package XmpCore
 
 The NuGet package has no other dependencies.
+
+If you require strongly named assemblies, use the [`XmpCore.StrongName` package](https://www.nuget.org/packages/XmpCore.StrongName/) instead.
 
 ## Framework support
 
