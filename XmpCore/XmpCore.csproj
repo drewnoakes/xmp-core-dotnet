@@ -21,6 +21,15 @@
     <NetStandardImplicitPackageVersion Condition=" '$(TargetFramework)' == 'netstandard1.0' ">1.6.0</NetStandardImplicitPackageVersion>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Signed)' == 'True' ">
+    <AssemblyTitle>XmpCore-Signed</AssemblyTitle>
+    <AssemblyName>XmpCore-Signed</AssemblyName>
+    <AssemblyOriginatorKeyFile>../XmpCore.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>true</SignAssembly>
+    <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
+    <PackageId>XmpCore-Signed</PackageId>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="10.2.1" PrivateAssets="All" />
   </ItemGroup>
