@@ -847,12 +847,7 @@ namespace XmpCore.Tests
 #endif
         }
 
-
-
-
-        // ---------------------------------------------------------------------------------------------
-        // Utilities for this example
-        // ---------------------------------------------------------------------------------------------
+        #region Utilities
 
         /**
          * Print the content of an XmpMeta object a headline and its name.
@@ -916,5 +911,7 @@ namespace XmpCore.Tests
             _log.WriteLine ("// -----------------------------------------------------------------------------".Substring(0, title.Length + 3));
             _log.WriteLine ("// {0}", title);
         }
+
+        #endregion
     }
 }
