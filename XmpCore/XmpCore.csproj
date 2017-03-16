@@ -4,8 +4,8 @@
     <Description>.NET library for working with the Extensible Metadata Platform (XMP)</Description>
     <Copyright>Copyright 2015-2017</Copyright>
     <AssemblyTitle>XmpCore</AssemblyTitle>
-    <VersionPrefix>2.0.1</VersionPrefix>
-    <AssemblyVersion>5.1.2.0</AssemblyVersion>
+    <VersionPrefix>5.1.3.0</VersionPrefix>
+    <AssemblyVersion>5.1.3.0</AssemblyVersion>
     <Authors>Drew Noakes</Authors>
     <TargetFrameworks>netstandard1.0;net35</TargetFrameworks>
     <NoWarn>$(NoWarn);1591</NoWarn>
