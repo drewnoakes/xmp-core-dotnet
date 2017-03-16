@@ -19,8 +19,8 @@ namespace XmpCore.Tests
 {
     public static class XmpCoreCoverage
     {
-        private static TextWriter log;
-        private static readonly IXmpSchemaRegistry registry = XmpMetaFactory.SchemaRegistry;
+        private static TextWriter _log;
+        private static readonly IXmpSchemaRegistry _registry = XmpMetaFactory.SchemaRegistry;
 
         public static void Main()
         {
@@ -29,30 +29,30 @@ namespace XmpCore.Tests
 #if PORTABLE
                 log = TextWriter.Null;
 #else
-                log = Console.Out;
+                _log = Console.Out;
 #endif
 
-                log.WriteLine("XmpCoreCoverage starting   " + DateTime.Now);
-                log.WriteLine("XmpCore Version: " + XmpMetaFactory.VersionInfo);
-                log.WriteLine();
+                _log.WriteLine("XmpCoreCoverage starting   " + DateTime.Now);
+                _log.WriteLine("XmpCore Version: " + XmpMetaFactory.VersionInfo);
+                _log.WriteLine();
 
 
                 DoCoreCoverage();
 
 
-                log.WriteLine(); log.WriteLine();
-                log.WriteLine("XmpCoreCoverage ending   " + DateTime.Now);
+                _log.WriteLine(); _log.WriteLine();
+                _log.WriteLine("XmpCoreCoverage ending   " + DateTime.Now);
             }
             catch (XmpException e)
             {
-                log.WriteLine("Caught XmpException " + e.ErrorCode + " :   " +e.Message);
+                _log.WriteLine("Caught XmpException " + e.ErrorCode + " :   " +e.Message);
             }
             catch (Exception e)
             {
-                log.WriteLine("Caught exception '" + e.Message  + "'");
+                _log.WriteLine("Caught exception '" + e.Message  + "'");
             }
 
-            log?.Flush();
+            _log?.Flush();
         }
 
         private static void DoCoreCoverage()
@@ -101,30 +101,30 @@ namespace XmpCore.Tests
             //TODO reinstate this code
 
             writeMinorLabel ("List predefined namespaces");
-            var namespaces = registry.Namespaces;
+            var namespaces = _registry.Namespaces;
             foreach (var pair in namespaces)
-                log.WriteLine(pair.Key + "   --->   " + pair.Value);
+                _log.WriteLine(pair.Key + "   --->   " + pair.Value);
 
-            log.WriteLine();
+            _log.WriteLine();
 
             // Registry namespace functions
             writeMinorLabel ("Test namespace registry functions");
 
-            var prefix = registry.RegisterNamespace(TestData.NS1, "ns1");
-            log.WriteLine ("registerNamespace ns1:   {0}   --->   {1}", prefix, registry.GetNamespaceUri(prefix));
+            var prefix = _registry.RegisterNamespace(TestData.NS1, "ns1");
+            _log.WriteLine ("registerNamespace ns1:   {0}   --->   {1}", prefix, _registry.GetNamespaceUri(prefix));
 
-            prefix = registry.RegisterNamespace(TestData.NS2, "ns2");
-            log.WriteLine ("registerNamespace ns2:   {0}   --->   {1}", prefix, registry.GetNamespaceUri(prefix));
+            prefix = _registry.RegisterNamespace(TestData.NS2, "ns2");
+            _log.WriteLine ("registerNamespace ns2:   {0}   --->   {1}", prefix, _registry.GetNamespaceUri(prefix));
 
-            prefix = registry.GetNamespacePrefix(TestData.NS1);
-            log.WriteLine ("getNamespacePrefix ns1:   {0}", prefix);
+            prefix = _registry.GetNamespacePrefix(TestData.NS1);
+            _log.WriteLine ("getNamespacePrefix ns1:   {0}", prefix);
 
-            log.WriteLine("getNamespaceURI ns1:   {0}", registry.GetNamespaceUri("ns1"));
+            _log.WriteLine("getNamespaceURI ns1:   {0}", _registry.GetNamespaceUri("ns1"));
 
-            prefix = registry.GetNamespacePrefix("bogus");
-            log.WriteLine ("getNamespacePrefix bogus:   {0}", prefix);
+            prefix = _registry.GetNamespacePrefix("bogus");
+            _log.WriteLine ("getNamespacePrefix bogus:   {0}", prefix);
 
-            log.WriteLine("getNamespaceURI ns1:   {0}", registry.GetNamespaceUri("bogus"));
+            _log.WriteLine("getNamespaceURI ns1:   {0}", _registry.GetNamespaceUri("bogus"));
         }
 
 
@@ -146,40 +146,40 @@ namespace XmpCore.Tests
             // Resolve aliases
             writeMinorLabel ("Resolve ns2: to ns1: aliases");
 
-            var aliasInfo = registry.ResolveAlias(TestData.NS1, "SimpleActual");
-            log.WriteLine ("ResolveAlias ns1:SimpleActual:   " + aliasInfo + "   (wrong way!)");
+            var aliasInfo = _registry.ResolveAlias(TestData.NS1, "SimpleActual");
+            _log.WriteLine ("ResolveAlias ns1:SimpleActual:   " + aliasInfo + "   (wrong way!)");
 
-            aliasInfo = registry.ResolveAlias(TestData.NS2, "SimpleAlias");
-            log.WriteLine ("ResolveAlias ns2:SimpleAlias:   " + aliasInfo);
-            log.WriteLine();
-
-
-            aliasInfo = registry.ResolveAlias (TestData.NS2, "BagAlias");
-            log.WriteLine ("ResolveAlias ns2:BagAlias:   " + aliasInfo);
-
-            aliasInfo = registry.ResolveAlias (TestData.NS2, "SeqAlias");
-            log.WriteLine ("ResolveAlias ns2:SeqAlias:   " + aliasInfo);
-
-            aliasInfo = registry.ResolveAlias (TestData.NS2, "AltAlias");
-            log.WriteLine ("ResolveAlias ns2:AltAlias:   " + aliasInfo);
-
-            aliasInfo = registry.ResolveAlias (TestData.NS2, "AltTextAlias");
-            log.WriteLine ("ResolveAlias ns2:AltTextAlias:   " + aliasInfo);
-            log.WriteLine();
+            aliasInfo = _registry.ResolveAlias(TestData.NS2, "SimpleAlias");
+            _log.WriteLine ("ResolveAlias ns2:SimpleAlias:   " + aliasInfo);
+            _log.WriteLine();
 
 
-            aliasInfo = registry.ResolveAlias (TestData.NS2, "BagItemAlias");
-            log.WriteLine ("ResolveAlias ns2:BagItemAlias:   " + aliasInfo);
+            aliasInfo = _registry.ResolveAlias (TestData.NS2, "BagAlias");
+            _log.WriteLine ("ResolveAlias ns2:BagAlias:   " + aliasInfo);
 
-            aliasInfo = registry.ResolveAlias (TestData.NS2, "SeqItemAlias");
-            log.WriteLine ("ResolveAlias ns2:SeqItemAlias:   " + aliasInfo);
+            aliasInfo = _registry.ResolveAlias (TestData.NS2, "SeqAlias");
+            _log.WriteLine ("ResolveAlias ns2:SeqAlias:   " + aliasInfo);
 
-            aliasInfo = registry.ResolveAlias (TestData.NS2, "AltItemAlias");
-            log.WriteLine ("ResolveAlias ns2:AltItemAlias:   " + aliasInfo);
+            aliasInfo = _registry.ResolveAlias (TestData.NS2, "AltAlias");
+            _log.WriteLine ("ResolveAlias ns2:AltAlias:   " + aliasInfo);
 
-            aliasInfo = registry.ResolveAlias (TestData.NS2, "AltTextItemAlias");
-            log.WriteLine ("ResolveAlias ns2:AltTextItemAlias:   " + aliasInfo);
-            log.WriteLine();
+            aliasInfo = _registry.ResolveAlias (TestData.NS2, "AltTextAlias");
+            _log.WriteLine ("ResolveAlias ns2:AltTextAlias:   " + aliasInfo);
+            _log.WriteLine();
+
+
+            aliasInfo = _registry.ResolveAlias (TestData.NS2, "BagItemAlias");
+            _log.WriteLine ("ResolveAlias ns2:BagItemAlias:   " + aliasInfo);
+
+            aliasInfo = _registry.ResolveAlias (TestData.NS2, "SeqItemAlias");
+            _log.WriteLine ("ResolveAlias ns2:SeqItemAlias:   " + aliasInfo);
+
+            aliasInfo = _registry.ResolveAlias (TestData.NS2, "AltItemAlias");
+            _log.WriteLine ("ResolveAlias ns2:AltItemAlias:   " + aliasInfo);
+
+            aliasInfo = _registry.ResolveAlias (TestData.NS2, "AltTextItemAlias");
+            _log.WriteLine ("ResolveAlias ns2:AltTextItemAlias:   " + aliasInfo);
+            _log.WriteLine();
 
 
             // set alias properties
@@ -262,7 +262,7 @@ namespace XmpCore.Tests
 
             // Add some properties with qualifier
             writeMinorLabel ("Add some properties with qualifier");
-            log.WriteLine ("CountArrayItems Bag = " + meta.CountArrayItems(TestData.NS1, "Bag"));
+            _log.WriteLine ("CountArrayItems Bag = " + meta.CountArrayItems(TestData.NS1, "Bag"));
 
             meta.SetProperty (TestData.NS1, "QualProp1", "Prop value");
             meta.SetQualifier (TestData.NS1, "QualProp1", TestData.NS2, "Qual1", "Qual1 value");
@@ -329,16 +329,16 @@ namespace XmpCore.Tests
             writeMinorLabel("Get simple properties");
 
             var property = meta.GetProperty(TestData.NS1, "Prop");
-            log.WriteLine("getProperty ns1:Prop =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
+            _log.WriteLine("getProperty ns1:Prop =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
 
             property = meta.GetProperty(TestData.NS1, "ns1:XMLProp");
-            log.WriteLine("getProperty ns1:XMLProp =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
+            _log.WriteLine("getProperty ns1:XMLProp =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
 
             property = meta.GetProperty(TestData.NS1, "ns1:URIProp");
-            log.WriteLine("getProperty ns1:URIProp =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
+            _log.WriteLine("getProperty ns1:URIProp =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
 
             property = meta.GetArrayItem(TestData.NS1, "Bag", 2);
-            log.WriteLine("getArrayItem ns1:Bag[2] =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
+            _log.WriteLine("getArrayItem ns1:Bag[2] =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
 
             try
             {
@@ -346,40 +346,40 @@ namespace XmpCore.Tests
             }
             catch (XmpException e)
             {
-                log.WriteLine("getArrayItem with no schema URI - threw XmpException #" + e.ErrorCode +" :   " + e.Message + ")");
+                _log.WriteLine("getArrayItem with no schema URI - threw XmpException #" + e.ErrorCode +" :   " + e.Message + ")");
             }
 
 
             writeMinorLabel("Get array items and struct fields");
 
             property = meta.GetArrayItem(TestData.NS1, "ns1:Seq", 1);
-            log.WriteLine("getArrayItem ns1:Seq[1] =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
+            _log.WriteLine("getArrayItem ns1:Seq[1] =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
 
             property = meta.GetArrayItem(TestData.NS1, "ns1:Alt", 1);
-            log.WriteLine("getArrayItem ns1:Alt[1] =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
-            log.WriteLine();
+            _log.WriteLine("getArrayItem ns1:Alt[1] =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
+            _log.WriteLine();
 
             property = meta.GetStructField(TestData.NS1, "Struct", TestData.NS2, "Field1");
-            log.WriteLine("getStructField ns1:Struct/ns2:Field1 =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
+            _log.WriteLine("getStructField ns1:Struct/ns2:Field1 =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
 
             property = meta.GetStructField(TestData.NS1, "ns1:Struct", TestData.NS2, "Field2");
-            log.WriteLine("getStructField ns1:Struct/ns2:Field2 =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
+            _log.WriteLine("getStructField ns1:Struct/ns2:Field2 =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
 
             property = meta.GetStructField(TestData.NS1, "ns1:Struct", TestData.NS2, "ns2:Field3");
-            log.WriteLine("getStructField ns1:Struct/ns2:Field3 =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
+            _log.WriteLine("getStructField ns1:Struct/ns2:Field3 =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
 
             property = meta.GetStructField(TestData.NS1, "ns1:Struct", TestData.NS2, "ns2:Field3");
-            log.WriteLine("getStructField ns1:Struct/ns2:Field3 =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
+            _log.WriteLine("getStructField ns1:Struct/ns2:Field3 =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
 
             property = meta.GetStructField(TestData.NS1, "ns1:Struct", TestData.NS2, "ns2:Field3");
-            log.WriteLine("getStructField ns1:Struct/ns2:Field3 =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
-            log.WriteLine();
+            _log.WriteLine("getStructField ns1:Struct/ns2:Field3 =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
+            _log.WriteLine();
 
 
             writeMinorLabel("Get qualifier");
 
             property = meta.GetQualifier(TestData.NS1, "QualProp1", TestData.NS2, "Qual1");
-            log.WriteLine("getQualifier  ns1:QualProp1/?ns2:Qual1 =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
+            _log.WriteLine("getQualifier  ns1:QualProp1/?ns2:Qual1 =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
 
             try
             {
@@ -387,35 +387,35 @@ namespace XmpCore.Tests
             }
             catch (XmpException e)
             {
-                log.WriteLine("getQualifier with no schema URI - threw XmpException #" + e.ErrorCode + " :   " + e.Message);
+                _log.WriteLine("getQualifier with no schema URI - threw XmpException #" + e.ErrorCode + " :   " + e.Message);
             }
 
             property = meta.GetQualifier(TestData.NS1, "QualProp3", XmpConstants.NsXml, "xml:lang");
-            log.WriteLine("getQualifier ns1:QualProp3/@xml-lang =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
+            _log.WriteLine("getQualifier ns1:QualProp3/@xml-lang =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
 
             property = meta.GetQualifier(TestData.NS1, "QualProp3", TestData.NS2, "ns2:Qual");
-            log.WriteLine("getQualifier ns1:QualProp3/?ns2:Qual =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
-            log.WriteLine();
+            _log.WriteLine("getQualifier ns1:QualProp3/?ns2:Qual =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
+            _log.WriteLine();
 
 
             writeMinorLabel("Get non-simple properties");
 
             property = meta.GetProperty(TestData.NS1, "Bag");
-            log.WriteLine("getProperty ns1:Bag =   " + property.Value + " ("
+            _log.WriteLine("getProperty ns1:Bag =   " + property.Value + " ("
                     + property.Options.GetOptionsString() + ")");
 
             property = meta.GetProperty(TestData.NS1, "Seq");
-            log.WriteLine("getProperty ns1:Seq =   " + property.Value + " ("
+            _log.WriteLine("getProperty ns1:Seq =   " + property.Value + " ("
                     + property.Options.GetOptionsString() + ")");
 
             property = meta.GetProperty(TestData.NS1, "Alt");
-            log.WriteLine("getProperty ns1:Alt =   " + property.Value + " ("
+            _log.WriteLine("getProperty ns1:Alt =   " + property.Value + " ("
                     + property.Options.GetOptionsString() + ")");
 
             property = meta.GetProperty(TestData.NS1, "Struct");
-            log.WriteLine("getProperty ns1:Struct =   " + property.Value + " ("
+            _log.WriteLine("getProperty ns1:Struct =   " + property.Value + " ("
                     + property.Options.GetOptionsString() + ")");
-            log.WriteLine();
+            _log.WriteLine();
 
 
             writeMinorLabel("Get not existing properties");
@@ -426,20 +426,20 @@ namespace XmpCore.Tests
             }
             catch (XmpException e)
             {
-                log.WriteLine("getProperty with bogus schema URI - threw XmpException #" + e.ErrorCode + " :   " + e.Message);
+                _log.WriteLine("getProperty with bogus schema URI - threw XmpException #" + e.ErrorCode + " :   " + e.Message);
             }
 
             property = meta.GetProperty (TestData.NS1, "Bogus");
-            log.WriteLine ("getProperty ns1:Bogus (not existing) =   " + property);
+            _log.WriteLine ("getProperty ns1:Bogus (not existing) =   " + property);
 
             property = meta.GetArrayItem(TestData.NS1, "Bag", 99);
-            log.WriteLine ("ArrayItem ns1:Bag[99] (not existing) =   " + property);
+            _log.WriteLine ("ArrayItem ns1:Bag[99] (not existing) =   " + property);
 
             property = meta.GetStructField(TestData.NS1, "Struct", TestData.NS2, "Bogus");
-            log.WriteLine ("getStructField ns1:Struct/ns2:Bogus (not existing) =   " + property);
+            _log.WriteLine ("getStructField ns1:Struct/ns2:Bogus (not existing) =   " + property);
 
             property = meta.GetQualifier (TestData.NS1, "Prop", TestData.NS2, "Bogus");
-            log.WriteLine ("getQualifier ns1:Prop/?ns2:Bogus (not existing) =   " + property);
+            _log.WriteLine ("getQualifier ns1:Prop/?ns2:Bogus (not existing) =   " + property);
         }
 
 
@@ -453,29 +453,29 @@ namespace XmpCore.Tests
 
             printXmpMeta (meta, "XMP object");
 
-            log.WriteLine("doesPropertyExist ns1:Prop =    " + meta.DoesPropertyExist(TestData.NS1, "Prop"));
-            log.WriteLine("doesPropertyExist ns1:Struct =    " + meta.DoesPropertyExist(TestData.NS1, "ns1:Struct"));
-            log.WriteLine("doesArrayItemExist ns1:Bag[2] =    " + meta.DoesArrayItemExist(TestData.NS1, "Bag", 2));
-            log.WriteLine("doesArrayItemExist ns1:Seq[last()] =    "
+            _log.WriteLine("doesPropertyExist ns1:Prop =    " + meta.DoesPropertyExist(TestData.NS1, "Prop"));
+            _log.WriteLine("doesPropertyExist ns1:Struct =    " + meta.DoesPropertyExist(TestData.NS1, "ns1:Struct"));
+            _log.WriteLine("doesArrayItemExist ns1:Bag[2] =    " + meta.DoesArrayItemExist(TestData.NS1, "Bag", 2));
+            _log.WriteLine("doesArrayItemExist ns1:Seq[last()] =    "
                     + meta.DoesArrayItemExist(TestData.NS1, "ns1:Seq", XmpConstants.ArrayLastItem));
-            log.WriteLine("doesStructFieldExist ns1:Struct/ns2:Field1 =    "
+            _log.WriteLine("doesStructFieldExist ns1:Struct/ns2:Field1 =    "
                     + meta.DoesStructFieldExist(TestData.NS1, "Struct", TestData.NS2, "Field1"));
-            log.WriteLine("doesQualifierExist ns1:QualProp1/?ns2:Qual1 =    "
+            _log.WriteLine("doesQualifierExist ns1:QualProp1/?ns2:Qual1 =    "
                     + meta.DoesQualifierExist(TestData.NS1, "QualProp1", TestData.NS2, "Qual1"));
-            log.WriteLine("doesQualifierExist ns1:QualProp2/?xml:lang =    "
+            _log.WriteLine("doesQualifierExist ns1:QualProp2/?xml:lang =    "
                     + meta.DoesQualifierExist(TestData.NS1, "QualProp2", XmpConstants.NsXml, "lang"));
-            log.WriteLine();
-            log.WriteLine("doesPropertyExist (namespace is null) =    "
+            _log.WriteLine();
+            _log.WriteLine("doesPropertyExist (namespace is null) =    "
                     + meta.DoesPropertyExist(null, "ns1:Bag"));
-            log.WriteLine("doesArrayItemExist (namespace is null) =    "
+            _log.WriteLine("doesArrayItemExist (namespace is null) =    "
                     + meta.DoesArrayItemExist(null, "ns1:Bag", XmpConstants.ArrayLastItem));
-            log.WriteLine("doesQualifierExist ns:Bogus (namespace not existing) =    "
+            _log.WriteLine("doesQualifierExist ns:Bogus (namespace not existing) =    "
                     + meta.DoesPropertyExist("ns:bogus/", "Bogus"));
-            log.WriteLine("doesPropertyExist ns1:Bogus =    " + meta.DoesPropertyExist(TestData.NS1, "Bogus"));
-            log.WriteLine("doesArrayItemExist ns1:Bag[99] =    " + meta.DoesArrayItemExist(TestData.NS1, "Bag", 99));
-            log.WriteLine("doesStructFieldExist ns1:Struct/ns2:Bogus =    "
+            _log.WriteLine("doesPropertyExist ns1:Bogus =    " + meta.DoesPropertyExist(TestData.NS1, "Bogus"));
+            _log.WriteLine("doesArrayItemExist ns1:Bag[99] =    " + meta.DoesArrayItemExist(TestData.NS1, "Bag", 99));
+            _log.WriteLine("doesStructFieldExist ns1:Struct/ns2:Bogus =    "
                     + meta.DoesStructFieldExist(TestData.NS1, "Struct", TestData.NS2, "Bogus"));
-            log.WriteLine("doesQualifierExist ns1:Prop/?ns2:Bogus =    "
+            _log.WriteLine("doesQualifierExist ns1:Prop/?ns2:Bogus =    "
                     + meta.DoesQualifierExist(TestData.NS1, "Prop", TestData.NS2, "Bogus"));
         }
 
@@ -527,13 +527,13 @@ namespace XmpCore.Tests
 
             meta.SetLocalizedText (TestData.NS1, "AltText", "en", "en-uk", "en-uk value");
             printXmpMeta (meta, "Set en/en-uk value");
-            log.WriteLine();
+            _log.WriteLine();
 
             var property = meta.GetLocalizedText(TestData.NS1, "AltText", "en", "en-ca");
-            log.WriteLine("getLocalizedText en/en-ca =   " + property.Value + " (lang: " + property.Language + ", opt: " + property.Options.GetOptionsString() + ")");
+            _log.WriteLine("getLocalizedText en/en-ca =   " + property.Value + " (lang: " + property.Language + ", opt: " + property.Options.GetOptionsString() + ")");
 
             property = meta.GetProperty(TestData.NS1, "AltText");
-            log.WriteLine("getProperty ns1:AltText =   "  + property.Value + " (lang: " + property.Language + ", opt: " + property.Options.GetOptionsString() + ")");
+            _log.WriteLine("getProperty ns1:AltText =   "  + property.Value + " (lang: " + property.Language + ", opt: " + property.Options.GetOptionsString() + ")");
         }
 
 
@@ -569,26 +569,26 @@ namespace XmpCore.Tests
 */
 
             printXmpMeta (meta, "A few basic binary Set... calls");
-            log.WriteLine();
+            _log.WriteLine();
 
             var b = meta.GetPropertyBoolean(TestData.NS1, "Bool0");
-            log.WriteLine ("getPropertyBoolean ns1:Bool0 =   " + b);
+            _log.WriteLine ("getPropertyBoolean ns1:Bool0 =   " + b);
 
             b = meta.GetPropertyBoolean(TestData.NS1, "Bool1");
-            log.WriteLine ("getPropertyBoolean ns1:Bool1 =   " + b);
+            _log.WriteLine ("getPropertyBoolean ns1:Bool1 =   " + b);
 
             var integer = meta.GetPropertyInteger(TestData.NS1, "Int");
-            log.WriteLine ("getPropertyBoolean ns1:Int =   " + integer);
+            _log.WriteLine ("getPropertyBoolean ns1:Int =   " + integer);
 
             var d = meta.GetPropertyDouble(TestData.NS1, "Double");
-            log.WriteLine ("getPropertyBoolean ns1:Int =   " + d);
-            log.WriteLine();
+            _log.WriteLine ("getPropertyBoolean ns1:Int =   " + d);
+            _log.WriteLine();
 
             for (var i = 1; i <= 13; i++)
             {
                 var dateName = "Date" + i;
                 var dt = meta.GetPropertyDate (TestData.NS1, dateName);
-                log.WriteLine ("getPropertyDate (" + i + ") =   " + dt);
+                _log.WriteLine ("getPropertyDate (" + i + ") =   " + dt);
                 meta.SetPropertyDate (TestData.NS2, dateName, dateValue);
             }
 
@@ -625,7 +625,7 @@ namespace XmpCore.Tests
             }
             catch (XmpException e)
             {
-                log.WriteLine("Parse and do not reconcile inconsistent aliases - threw XmpException #{0} :   {1}", e.ErrorCode, e.Message);
+                _log.WriteLine("Parse and do not reconcile inconsistent aliases - threw XmpException #{0} :   {1}", e.ErrorCode, e.Message);
             }
         }
 
@@ -649,7 +649,7 @@ namespace XmpCore.Tests
             meta.SetProperty (TestData.NS2, "HasCRLF", valueWithCRLF);
 
             var result = XmpMetaFactory.SerializeToString(meta, new SerializeOptions { OmitPacketWrapper = true });
-            log.WriteLine(result);
+            _log.WriteLine(result);
 
             var hasCR = meta.GetPropertyString (TestData.NS1, "HasCR");
             var hasCR2 = meta.GetPropertyString (TestData.NS2, "HasCR");
@@ -662,8 +662,8 @@ namespace XmpCore.Tests
                 hasLF == valueWithLF && hasLF2 == valueWithLF &&
                 hasCRLF == valueWithCRLF && hasCRLF2 == valueWithCRLF)
             {
-                log.WriteLine();
-                log.WriteLine("\n## HasCR and HasLF and HasCRLF correctly retrieved\n");
+                _log.WriteLine();
+                _log.WriteLine("\n## HasCR and HasLF and HasCRLF correctly retrieved\n");
             }
         }
 
@@ -683,30 +683,30 @@ namespace XmpCore.Tests
             printXmpMeta (meta, "Parse simple RDF, serialize with various options");
 
             writeMinorLabel ("Default serialize");
-            log.WriteLine(XmpMetaFactory.SerializeToString(meta, null));
+            _log.WriteLine(XmpMetaFactory.SerializeToString(meta, null));
 
             writeMinorLabel ("Compact RDF, no packet serialize");
-            log.WriteLine(XmpMetaFactory.SerializeToString(meta, new SerializeOptions { UseCompactFormat = true, OmitPacketWrapper = true }));
+            _log.WriteLine(XmpMetaFactory.SerializeToString(meta, new SerializeOptions { UseCompactFormat = true, OmitPacketWrapper = true }));
 
             writeMinorLabel ("Read-only serialize");
-            log.WriteLine(XmpMetaFactory.SerializeToString(meta, new SerializeOptions { ReadOnlyPacket = true }));
+            _log.WriteLine(XmpMetaFactory.SerializeToString(meta, new SerializeOptions { ReadOnlyPacket = true }));
 
             writeMinorLabel ("Alternate newline serialize");
-            log.WriteLine(XmpMetaFactory.SerializeToString(meta, new SerializeOptions { Newline = "<--newline-->\n", OmitPacketWrapper = true }));
+            _log.WriteLine(XmpMetaFactory.SerializeToString(meta, new SerializeOptions { Newline = "<--newline-->\n", OmitPacketWrapper = true }));
 
             writeMinorLabel ("Alternate indent serialize");
-            log.WriteLine(XmpMetaFactory.SerializeToString(meta, new SerializeOptions { Indent = "-->", BaseIndent = 5, OmitPacketWrapper = true }));
+            _log.WriteLine(XmpMetaFactory.SerializeToString(meta, new SerializeOptions { Indent = "-->", BaseIndent = 5, OmitPacketWrapper = true }));
 
             writeMinorLabel ("Small padding serialize");
-            log.WriteLine(XmpMetaFactory.SerializeToString(meta, new SerializeOptions { Padding = 10 }));
+            _log.WriteLine(XmpMetaFactory.SerializeToString(meta, new SerializeOptions { Padding = 10 }));
 
             writeMinorLabel ("Serialize with exact packet size");
             var s = XmpMetaFactory.SerializeToBuffer(meta, new SerializeOptions { ReadOnlyPacket = true }).Length;
-            log.WriteLine ("Minimum packet size is " + s + " bytes\n");
+            _log.WriteLine ("Minimum packet size is " + s + " bytes\n");
 
             // with the flag "exact packet size" the padding becomes the overall length of the packet
             var buffer = XmpMetaFactory.SerializeToBuffer(meta, new SerializeOptions { ExactPacketLength = true, Padding = s });
-            log.WriteLine(Encoding.UTF8.GetString(buffer, 0, buffer.Length));
+            _log.WriteLine(Encoding.UTF8.GetString(buffer, 0, buffer.Length));
 
             try
             {
@@ -714,7 +714,7 @@ namespace XmpCore.Tests
             }
             catch (XmpException e)
             {
-                log.WriteLine("\nExact packet size smaller than minimal packet length - threw XmpException #{0} :   {1}", e.ErrorCode, e.Message);
+                _log.WriteLine("\nExact packet size smaller than minimal packet length - threw XmpException #{0} :   {1}", e.ErrorCode, e.Message);
             }
         }
 
@@ -836,23 +836,23 @@ namespace XmpCore.Tests
             meta.AppendArrayItem(TestData.NS1, "ArrayProp", new PropertyOptions { IsArray = true }, "Item 1", null);
 
             var path = XmpPathFactory.ComposeArrayItemPath("ArrayProp", 2);
-            log.WriteLine ("composeArrayItemPath ArrayProp[2] =   " + path);
+            _log.WriteLine ("composeArrayItemPath ArrayProp[2] =   " + path);
             meta.SetProperty (TestData.NS1, path, "new ns1:ArrayProp[2] value");
 
             path = "StructProperty";
             path += XmpPathFactory.ComposeStructFieldPath(TestData.NS2, "Field3");
-            log.WriteLine ("composeStructFieldPath StructProperty/ns2:Field3 =   " + path);
+            _log.WriteLine ("composeStructFieldPath StructProperty/ns2:Field3 =   " + path);
             meta.SetProperty (TestData.NS1, path, "new ns1:StructProp/ns2:Field3 value");
 
             path = "QualProp";
             path += XmpPathFactory.ComposeQualifierPath(TestData.NS2, "Qual");
-            log.WriteLine ("composeStructFieldPath QualProp/?ns2:Qual =   " + path);
+            _log.WriteLine ("composeStructFieldPath QualProp/?ns2:Qual =   " + path);
             meta.SetProperty (TestData.NS1, path, "new ns1:QualProp/?ns2:Qual value");
 
             meta.SetLocalizedText(TestData.NS1, "AltTextProp", null, "en-US", "initival value");
             path = "AltTextProp";
             path += XmpPathFactory.ComposeQualifierPath(XmpConstants.NsXml, "lang");
-            log.WriteLine ("composeQualifierPath ns1:AltTextProp/?xml:lang =   " + path);
+            _log.WriteLine ("composeQualifierPath ns1:AltTextProp/?xml:lang =   " + path);
             meta.SetProperty (TestData.NS1, path, "new ns1:AltTextProp/?xml:lang value");
 
             printXmpMeta (meta, "Modified simple RDF");
@@ -877,12 +877,12 @@ namespace XmpCore.Tests
 
             var currentDateTime = XmpDateTimeFactory.GetCurrentDateTime();
 
-            log.WriteLine("Print date 2000 Jan 31 12:34:56 PST =   {0}", date1);
-            log.WriteLine("Print zero date =   {0}", date2);
-            log.WriteLine("Print date created by a calendar =   {0}", date3);
-            log.WriteLine("Print current date =   {0}", currentDateTime);
+            _log.WriteLine("Print date 2000 Jan 31 12:34:56 PST =   {0}", date1);
+            _log.WriteLine("Print zero date =   {0}", date2);
+            _log.WriteLine("Print date created by a calendar =   {0}", date3);
+            _log.WriteLine("Print current date =   {0}", currentDateTime);
 #endif
-            log.WriteLine();
+            _log.WriteLine();
         }
 
 
@@ -902,14 +902,14 @@ namespace XmpCore.Tests
             var name = meta.GetObjectName();
             if (!string.IsNullOrEmpty(name))
             {
-                log.WriteLine("{0} (Name: '{1}'):", title, name);
+                _log.WriteLine("{0} (Name: '{1}'):", title, name);
             }
             else
             {
-                log.WriteLine("{0}:", title);
+                _log.WriteLine("{0}:", title);
             }
-            log.WriteLine(meta.DumpObject());
-            log.WriteLine();
+            _log.WriteLine(meta.DumpObject());
+            _log.WriteLine();
         }
 
 
@@ -918,7 +918,7 @@ namespace XmpCore.Tests
          */
         private static void printPropertyInfo(IXmpPropertyInfo prop)
         {
-            log.WriteLine("NS ({0})   PATH ({1})   VALUE ({2})  OPTIONS ({3})",
+            _log.WriteLine("NS ({0})   PATH ({1})   VALUE ({2})  OPTIONS ({3})",
                 prop.Namespace, prop.Path, prop.Value, prop.Options.GetOptionsString());
         }
 
@@ -928,10 +928,10 @@ namespace XmpCore.Tests
          */
         private static void dumpAliases()
         {
-            var aliases = registry.Aliases;
+            var aliases = _registry.Aliases;
             foreach (var qname in aliases.Keys)
-                log.WriteLine("{0}   --->   {1}", qname, aliases[qname]);
-            log.WriteLine();
+                _log.WriteLine("{0}   --->   {1}", qname, aliases[qname]);
+            _log.WriteLine();
         }
 
 
@@ -941,11 +941,11 @@ namespace XmpCore.Tests
          */
         private static void writeMajorLabel (string title)
         {
-            log.WriteLine();
-            log.WriteLine("// =============================================================================");
-            log.WriteLine("// {0}", title);
-            log.WriteLine("// =============================================================================");
-            log.WriteLine();
+            _log.WriteLine();
+            _log.WriteLine("// =============================================================================");
+            _log.WriteLine("// {0}", title);
+            _log.WriteLine("// =============================================================================");
+            _log.WriteLine();
         }
 
 
@@ -955,10 +955,10 @@ namespace XmpCore.Tests
          */
         private static void writeMinorLabel (string title)
         {
-            log.WriteLine();
-            log.WriteLine ("// -----------------------------------------------------------------------------".Substring(0, title.Length + 3));
-            log.WriteLine ("// {0}", title);
-            log.WriteLine();
+            _log.WriteLine();
+            _log.WriteLine ("// -----------------------------------------------------------------------------".Substring(0, title.Length + 3));
+            _log.WriteLine ("// {0}", title);
+            _log.WriteLine();
         }
     }
 }
