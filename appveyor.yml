@@ -1,19 +1,21 @@
-#---------------------------------#
-#    environment configuration    #
-#---------------------------------#
-
-# Build worker image (VM template)
+version: 2.0.{build}
+branches:
+  only:
+  - master
 image: Visual Studio 2017
-
-#---------------------------------#
-#       build configuration       #
-#---------------------------------#
+configuration: Release
 before_build:
   appveyor-retry nuget restore
-  
-#---------------------------------#
-#       tests configuration       #
-#---------------------------------#
+build:
+  parallel: true
+  verbosity: minimal
 test:
   assemblies:
     - XmpCore.Tests.dll
+notifications:
+- provider: Email
+  to:
+  - appveyor@drewnoakes.com
+  on_build_success: true
+  on_build_failure: true
+  on_build_status_changed: true
