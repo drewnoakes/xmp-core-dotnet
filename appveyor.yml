@@ -1,3 +1,19 @@
+#---------------------------------#
+#    environment configuration    #
+#---------------------------------#
+
+# Build worker image (VM template)
 image: Visual Studio 2017
-install:
+
+#---------------------------------#
+#       build configuration       #
+#---------------------------------#
+before_build:
   appveyor-retry nuget restore
+  
+#---------------------------------#
+#       tests configuration       #
+#---------------------------------#
+test:
+  assemblies:
+    - XmpCore.Tests.dll
