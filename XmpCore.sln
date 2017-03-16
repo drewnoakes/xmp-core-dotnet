@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{06DA73A6-87C5-4772-9A59-534F10530ED6}"
 	ProjectSection(SolutionItems) = preProject
@@ -10,9 +10,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "XmpCore", "XmpCore\XmpCore.xproj", "{205F08AB-1CBD-4FCA-96BD-5DE5C24BDF7E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XmpCore", "XmpCore\XmpCore.csproj", "{205F08AB-1CBD-4FCA-96BD-5DE5C24BDF7E}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "XmpCore.Tests", "XmpCore.Tests\XmpCore.Tests.xproj", "{B886F96C-DEB6-49CD-91F9-D55A91C99725}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XmpCore.Tests", "XmpCore.Tests\XmpCore.Tests.csproj", "{B886F96C-DEB6-49CD-91F9-D55A91C99725}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
