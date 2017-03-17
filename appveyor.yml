@@ -12,6 +12,8 @@ build:
 test:
   assemblies:
     - XmpCore.Tests.dll
+test_script:
+  - dotnet test .\XmpCore.Tests\XmpCore.Tests.csproj --configuration Release --no-build
 notifications:
 - provider: Email
   to:
