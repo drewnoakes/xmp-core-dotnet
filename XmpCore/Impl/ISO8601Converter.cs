@@ -67,107 +67,82 @@ namespace XmpCore.Impl
         public static IXmpDateTime Parse(string iso8601String, IXmpDateTime binValue)
         {
             if (iso8601String == null)
-            {
                 throw new XmpException("Parameter must not be null", XmpErrorCode.BadParam);
-            }
+
             if (iso8601String.Length == 0)
-            {
                 return binValue;
-            }
+
             var input = new ParseState(iso8601String);
             if (input.Ch(0) == '-')
-            {
                 input.Skip();
-            }
+
             // Extract the year.
             var value = input.GatherInt("Invalid year in date string", 9999);
             if (input.HasNext && input.Ch() != '-')
-            {
                 throw new XmpException("Invalid date string, after year", XmpErrorCode.BadValue);
-            }
             if (input.Ch(0) == '-')
-            {
                 value = -value;
-            }
             binValue.Year = value;
             if (!input.HasNext)
-            {
                 return binValue;
-            }
             input.Skip();
+
             // Extract the month.
             value = input.GatherInt("Invalid month in date string", 12);
             if (input.HasNext && input.Ch() != '-')
-            {
                 throw new XmpException("Invalid date string, after month", XmpErrorCode.BadValue);
-            }
             binValue.Month = value;
             if (!input.HasNext)
-            {
                 return binValue;
-            }
             input.Skip();
+
             // Extract the day.
             value = input.GatherInt("Invalid day in date string", 31);
             if (input.HasNext && input.Ch() != 'T')
-            {
                 throw new XmpException("Invalid date string, after day", XmpErrorCode.BadValue);
-            }
             binValue.Day = value;
             if (!input.HasNext)
-            {
                 return binValue;
-            }
             input.Skip();
+
             // Extract the hour.
             value = input.GatherInt("Invalid hour in date string", 23);
             binValue.Hour = value;
             if (!input.HasNext)
-            {
                 return binValue;
-            }
+
             // Extract the minute.
             if (input.Ch() == ':')
             {
                 input.Skip();
                 value = input.GatherInt("Invalid minute in date string", 59);
                 if (input.HasNext && input.Ch() != ':' && input.Ch() != 'Z' && input.Ch() != '+' && input.Ch() != '-')
-                {
                     throw new XmpException("Invalid date string, after minute", XmpErrorCode.BadValue);
-                }
                 binValue.Minute = value;
             }
+
             if (!input.HasNext)
-            {
                 return binValue;
-            }
+
             if (input.HasNext && input.Ch() == ':')
             {
                 input.Skip();
                 value = input.GatherInt("Invalid whole seconds in date string", 59);
                 if (input.HasNext && input.Ch() != '.' && input.Ch() != 'Z' && input.Ch() != '+' && input.Ch() != '-')
-                {
                     throw new XmpException("Invalid date string, after whole seconds", XmpErrorCode.BadValue);
-                }
                 binValue.Second = value;
                 if (input.Ch() == '.')
                 {
                     input.Skip();
-                    var digits = input.Pos();
+                    var digits = input.Pos;
                     value = input.GatherInt("Invalid fractional seconds in date string", 999999999);
                     if (input.HasNext && input.Ch() != 'Z' && input.Ch() != '+' && input.Ch() != '-')
-                    {
                         throw new XmpException("Invalid date string, after fractional second", XmpErrorCode.BadValue);
-                    }
-                    digits = input.Pos() - digits;
+                    digits = input.Pos - digits;
                     for (; digits > 9; --digits)
-                    {
-                        value = value / 10;
-                    }
+                        value = value/10;
                     for (; digits < 9; ++digits)
-                    {
-                        value = value * 10;
-                    }
+                        value = value*10;
                     binValue.Nanosecond = value;
                 }
             }
@@ -180,10 +155,8 @@ namespace XmpCore.Impl
             var tzHour = 0;
             var tzMinute = 0;
             if (!input.HasNext)
-            {
                 // no Timezone at all
                 return binValue;
-            }
             if (input.Ch() == 'Z')
             {
                 input.Skip();
@@ -329,41 +302,25 @@ namespace XmpCore.Impl
     internal sealed class ParseState
     {
         private readonly string _str;
-        private int _pos;
+
+        /// <returns>Returns the current position.</returns>
+        public int Pos { get; private set; }
 
         /// <param name="str">initializes the parser container</param>
-        public ParseState(string str)
-        {
-            _str = str;
-        }
+        public ParseState(string str) => _str = str;
 
         /// <value>Returns whether there are more chars to come.</value>
-        public bool HasNext => _pos < _str.Length;
+        public bool HasNext => Pos < _str.Length;
 
         /// <param name="index">index of char</param>
         /// <returns>Returns char at a certain index.</returns>
-        public char Ch(int index)
-        {
-            return index < _str.Length ? _str[index] : (char)0x0000;
-        }
+        public char Ch(int index) => index < _str.Length ? _str[index] : (char)0x0000;
 
         /// <returns>Returns the current char or 0x0000 if there are no more chars.</returns>
-        public char Ch()
-        {
-            return _pos < _str.Length ? _str[_pos] : (char)0x0000;
-        }
+        public char Ch() => Pos < _str.Length ? _str[Pos] : (char)0x0000;
 
         /// <summary>Skips the next char.</summary>
-        public void Skip()
-        {
-            _pos++;
-        }
-
-        /// <returns>Returns the current position.</returns>
-        public int Pos()
-        {
-            return _pos;
-        }
+        public void Skip() => Pos++;
 
         /// <summary>Parses a integer from the source and sets the pointer after it.</summary>
         /// <param name="errorMsg">Error message to put in the exception if no number can be found</param>
@@ -374,13 +331,13 @@ namespace XmpCore.Impl
         {
             var value = 0;
             var success = false;
-            var ch = Ch(_pos);
+            var ch = Ch(Pos);
             while ('0' <= ch && ch <= '9')
             {
                 value = value * 10 + (ch - '0');
                 success = true;
-                _pos++;
-                ch = Ch(_pos);
+                Pos++;
+                ch = Ch(Pos);
             }
 
             if (!success)
