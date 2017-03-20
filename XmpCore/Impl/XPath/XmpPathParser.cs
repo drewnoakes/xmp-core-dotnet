@@ -352,7 +352,7 @@ namespace XmpCore.Impl.XPath
 
         /// <summary>Set up the first 2 components of the expanded XMPPath.</summary>
         /// <remarks>
-        /// Set up the first 2 components of the expanded XMPPath. Normalizes the various cases of using
+        /// Normalizes the various cases of using
         /// the full schema URI and/or a qualified root property name. Returns true for normal
         /// processing. If allowUnknownSchemaNS is true and the schema namespace is not registered, false
         /// is returned. If allowUnknownSchemaNS is false and the schema namespace is not registered, an
