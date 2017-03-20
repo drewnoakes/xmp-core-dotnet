@@ -26,10 +26,9 @@ namespace Sharpen
         {
             lock (_lock)
             {
-                if (_pos < _buf.Length)
-                    return _buf[_pos++];
-
-                return base.Read();
+                return _pos < _buf.Length
+                    ? _buf[_pos++]
+                    : base.Read();
             }
         }
 

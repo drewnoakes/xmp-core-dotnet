@@ -6,39 +6,39 @@ namespace Sharpen
 {
     public interface IIterator
     {
-        bool HasNext ();
-        object Next ();
-        void Remove ();
+        bool HasNext();
+        object Next();
+        void Remove();
     }
 
     public abstract class Iterator<T> : IEnumerator<T>, IIterator
     {
         private T _lastValue;
 
-        object IIterator.Next ()
+        object IIterator.Next()
         {
-            return Next ();
+            return Next();
         }
 
-        public abstract bool HasNext ();
-        public abstract T Next ();
-        public abstract void Remove ();
+        public abstract bool HasNext();
+        public abstract T Next();
+        public abstract void Remove();
 
-        bool IEnumerator.MoveNext ()
+        bool IEnumerator.MoveNext()
         {
-            if (HasNext ()) {
-                _lastValue = Next ();
-                return true;
-            }
-            return false;
+            if (!HasNext())
+                return false;
+
+            _lastValue = Next();
+            return true;
         }
 
-        void IEnumerator.Reset ()
+        void IEnumerator.Reset()
         {
-            throw new NotImplementedException ();
+            throw new NotImplementedException();
         }
 
-        void IDisposable.Dispose ()
+        void IDisposable.Dispose()
         {
         }
 

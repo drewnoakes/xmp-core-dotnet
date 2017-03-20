@@ -19,9 +19,7 @@ namespace XmpCore.Impl
     public sealed class ByteBuffer
     {
         private byte[] _buffer;
-
         private int _length;
-
         private Encoding _encoding;
 
         /// <param name="initialCapacity">the initial capacity for this buffer</param>
@@ -43,9 +41,8 @@ namespace XmpCore.Impl
         public ByteBuffer(byte[] buffer, int length)
         {
             if (length > buffer.Length)
-            {
                 throw new IndexOutOfRangeException("Valid length exceeds the buffer length.");
-            }
+
             _buffer = buffer;
             _length = length;
         }
@@ -63,14 +60,9 @@ namespace XmpCore.Impl
             while ((read = stream.Read(_buffer, _length, chunk)) > 0)
             {
                 _length += read;
-                if (read == chunk)
-                {
-                    EnsureCapacity(_length + chunk);
-                }
-                else
-                {
+                if (read != chunk)
                     break;
-                }
+                EnsureCapacity(_length + chunk);
             }
         }
 
@@ -80,50 +72,33 @@ namespace XmpCore.Impl
         public ByteBuffer(byte[] buffer, int offset, int length)
         {
             if (length > buffer.Length - offset)
-            {
                 throw new IndexOutOfRangeException("Valid length exceeds the buffer length.");
-            }
+
             _buffer = new byte[length];
             Array.Copy(buffer, offset, _buffer, 0, length);
             _length = length;
         }
 
         /// <returns>Returns a byte stream that is limited to the valid amount of bytes.</returns>
-        public Stream GetByteStream()
-        {
-            return new MemoryStream(_buffer, 0, _length);
-        }
+        public Stream GetByteStream() => new MemoryStream(_buffer, 0, _length);
 
         /// <returns>
         /// Returns the length, that means the number of valid bytes, of the buffer;
         /// the inner byte array might be bigger than that.
         /// </returns>
-        public int Length()
-        {
-            return _length;
-        }
+        public int Length() => _length;
 
         /// <param name="index">the index to retrieve the byte from</param>
         /// <returns>Returns a byte from the buffer</returns>
-        public byte ByteAt(int index)
-        {
-            if (index < _length)
-            {
-                return _buffer[index];
-            }
-            throw new IndexOutOfRangeException("The index exceeds the valid buffer area");
-        }
+        public byte ByteAt(int index) => index < _length
+            ? _buffer[index]
+            : throw new IndexOutOfRangeException("The index exceeds the valid buffer area");
 
         /// <param name="index">the index to retrieve a byte as int or char.</param>
         /// <returns>Returns a byte from the buffer</returns>
-        public int CharAt(int index)
-        {
-            if (index < _length)
-            {
-                return _buffer[index] & 0xFF;
-            }
-            throw new IndexOutOfRangeException("The index exceeds the valid buffer area");
-        }
+        public int CharAt(int index) => index < _length
+            ? _buffer[index] & 0xFF
+            : throw new IndexOutOfRangeException("The index exceeds the valid buffer area");
 
         /// <summary>Appends a byte to the buffer.</summary>
         /// <param name="b">a byte</param>
@@ -146,17 +121,11 @@ namespace XmpCore.Impl
 
         /// <summary>Append a byte array to the buffer</summary>
         /// <param name="bytes">a byte array</param>
-        public void Append(byte[] bytes)
-        {
-            Append(bytes, 0, bytes.Length);
-        }
+        public void Append(byte[] bytes) => Append(bytes, 0, bytes.Length);
 
         /// <summary>Append another buffer to this buffer.</summary>
         /// <param name="anotherBuffer">another <c>ByteBuffer</c></param>
-        public void Append(ByteBuffer anotherBuffer)
-        {
-            Append(anotherBuffer._buffer, 0, anotherBuffer._length);
-        }
+        public void Append(ByteBuffer anotherBuffer) => Append(anotherBuffer._buffer, 0, anotherBuffer._length);
 
         /// <summary>Detects the encoding of the byte buffer, stores and returns it.</summary>
         /// <remarks>
@@ -210,7 +179,7 @@ namespace XmpCore.Impl
                     //   FE FF -- -- - Big endian UTF-16
                     //   FF FE 00 00 - Little endian UTF-32
                     //   FF FE -- -- - Little endian UTF-16
-                    switch ((_buffer[0] & 0xFF))
+                    switch (_buffer[0] & 0xFF)
                     {
                         case 0xEF:
                             _encoding = Encoding.UTF8;

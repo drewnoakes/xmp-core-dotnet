@@ -59,12 +59,12 @@ namespace Sharpen
 
         public long GetTimeInMillis()
         {
-            return GetTime().Ticks / TimeSpan.TicksPerMillisecond;
+            return GetTime().Ticks/TimeSpan.TicksPerMillisecond;
         }
 
         public void SetTimeInMillis(long millis)
         {
-            var ticks = millis * TimeSpan.TicksPerMillisecond;
+            var ticks = millis*TimeSpan.TicksPerMillisecond;
             _mCalendarDate = new DateTime(ticks, DateTimeKind.Unspecified);
         }
 
@@ -130,7 +130,7 @@ namespace Sharpen
             {
                 case CalendarEnum.Year:
                     //  to avoid exception which is absent in Calendar
-                    value = value % mod;
+                    value = value%mod;
                     _mCalendarDate = _mCalendarDate.AddYears(value - _mCalendarDate.Year);
                     return;
 
@@ -174,10 +174,13 @@ namespace Sharpen
                 case CalendarEnum.Millisecond:
                     //m_calendarDate = m_calendarDate.AddMilliseconds(value - m_calendarDate.Millisecond);
                     //  this not works right, because of milliseconds fraction, so we need to go another way here
-                    _mCalendarDate = new DateTime(_mCalendarDate.Year, _mCalendarDate.Month, _mCalendarDate.Day,
-                                                  _mCalendarDate.Hour,
-                                                  _mCalendarDate.Minute, _mCalendarDate.Second, value,
-                                                  _mCalendarDate.Kind);
+                    _mCalendarDate = new DateTime(
+                        _mCalendarDate.Year,
+                        _mCalendarDate.Month,
+                        _mCalendarDate.Day,
+                        _mCalendarDate.Hour,
+                        _mCalendarDate.Minute, _mCalendarDate.Second, value,
+                        _mCalendarDate.Kind);
                     return;
             }
 

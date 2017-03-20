@@ -9,7 +9,7 @@ namespace Sharpen
 
     public class GregorianCalendar : Calendar
     {
-        public const int January = (int) GregorianCalendarEnum.January;
+        public const int January = (int)GregorianCalendarEnum.January;
 
         public GregorianCalendar()
         {

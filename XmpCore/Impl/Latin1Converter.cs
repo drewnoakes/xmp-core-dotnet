@@ -16,7 +16,6 @@ namespace XmpCore.Impl
     public static class Latin1Converter
     {
         private const int StateStart = 0;
-
         private const int StateUtf8Char = 11;
 
         /// <summary>A converter that processes a byte buffer containing a mix of UTF8 and Latin-1/Cp1252 chars.</summary>
@@ -50,97 +49,93 @@ namespace XmpCore.Impl
         /// <returns>Returns a new buffer containing valid UTF-8</returns>
         public static ByteBuffer Convert(ByteBuffer buffer)
         {
-            if (ReferenceEquals(buffer.GetEncoding(), Encoding.UTF8))
-            {
-                // the buffer containing one UTF-8 char (up to 8 bytes)
-                var readAheadBuffer = new byte[8];
-                // the number of bytes read ahead.
-                var readAhead = 0;
-                // expected UTF8 bytes to come
-                var expectedBytes = 0;
-                // output buffer with estimated length
-                var output = new ByteBuffer(buffer.Length() * 4 / 3);
-                var state = StateStart;
-                for (var i = 0; i < buffer.Length(); i++)
-                {
-                    var b = buffer.CharAt(i);
-                    switch (state)
-                    {
-                        case StateStart:
-                        default:
-                        {
-                            if (b < 0x7F)
-                            {
-                                output.Append(unchecked((byte)b));
-                            }
-                            else
-                            {
-                                if (b >= 0xC0)
-                                {
-                                    // start of UTF8 sequence
-                                    expectedBytes = -1;
-                                    var test = b;
-                                    for (; expectedBytes < 8 && (test & 0x80) == 0x80; test = test << 1)
-                                    {
-                                        expectedBytes++;
-                                    }
-                                    readAheadBuffer[readAhead++] = unchecked((byte)b);
-                                    state = StateUtf8Char;
-                                }
-                                else
-                                {
-                                    //  implicitly:  b >= 0x80  &&  b < 0xC0
-                                    // invalid UTF8 start char, assume to be Latin-1
-                                    var utf8 = ConvertToUtf8(unchecked((byte)b));
-                                    output.Append(utf8);
-                                }
-                            }
-                            break;
-                        }
+            if (!ReferenceEquals(buffer.GetEncoding(), Encoding.UTF8))
+                return buffer;
 
-                        case StateUtf8Char:
+            // the buffer containing one UTF-8 char (up to 8 bytes)
+            var readAheadBuffer = new byte[8];
+            // the number of bytes read ahead.
+            var readAhead = 0;
+            // expected UTF8 bytes to come
+            var expectedBytes = 0;
+            // output buffer with estimated length
+            var output = new ByteBuffer(buffer.Length() * 4 / 3);
+            var state = StateStart;
+            for (var i = 0; i < buffer.Length(); i++)
+            {
+                var b = buffer.CharAt(i);
+                switch (state)
+                {
+                    case StateStart:
+                    default:
+                    {
+                        if (b < 0x7F)
                         {
-                            if (expectedBytes > 0 && (b & 0xC0) == 0x80)
+                            output.Append(unchecked((byte)b));
+                        }
+                        else if (b >= 0xC0)
+                        {
+                            // start of UTF8 sequence
+                            expectedBytes = -1;
+                            var test = b;
+                            for (; expectedBytes < 8 && (test & 0x80) == 0x80; test = test << 1)
                             {
-                                // valid UTF8 char, add to readAheadBuffer
-                                readAheadBuffer[readAhead++] = unchecked((byte)b);
-                                expectedBytes--;
-                                if (expectedBytes == 0)
-                                {
-                                    output.Append(readAheadBuffer, 0, readAhead);
-                                    readAhead = 0;
-                                    state = StateStart;
-                                }
+                                expectedBytes++;
                             }
-                            else
+                            readAheadBuffer[readAhead++] = unchecked((byte)b);
+                            state = StateUtf8Char;
+                        }
+                        else
+                        {
+                            //  implicitly:  b >= 0x80  &&  b < 0xC0
+                            // invalid UTF8 start char, assume to be Latin-1
+                            var utf8 = ConvertToUtf8(unchecked((byte)b));
+                            output.Append(utf8);
+                        }
+                        break;
+                    }
+
+                    case StateUtf8Char:
+                    {
+                        if (expectedBytes > 0 && (b & 0xC0) == 0x80)
+                        {
+                            // valid UTF8 char, add to readAheadBuffer
+                            readAheadBuffer[readAhead++] = unchecked((byte)b);
+                            expectedBytes--;
+                            if (expectedBytes == 0)
                             {
-                                // invalid UTF8 char:
-                                // 1. convert first of seq to UTF8
-                                var utf8 = ConvertToUtf8(readAheadBuffer[0]);
-                                output.Append(utf8);
-                                // 2. continue processing at second byte of sequence
-                                i = i - readAhead;
+                                output.Append(readAheadBuffer, 0, readAhead);
                                 readAhead = 0;
                                 state = StateStart;
                             }
-                            break;
                         }
+                        else
+                        {
+                            // invalid UTF8 char:
+                            // 1. convert first of seq to UTF8
+                            var utf8 = ConvertToUtf8(readAheadBuffer[0]);
+                            output.Append(utf8);
+                            // 2. continue processing at second byte of sequence
+                            i = i - readAhead;
+                            readAhead = 0;
+                            state = StateStart;
+                        }
+                        break;
                     }
                 }
-                // loop ends with "half" Utf8 char --> assume that the bytes are Latin-1
-                if (state == StateUtf8Char)
-                {
-                    for (var j = 0; j < readAhead; j++)
-                    {
-                        var b = readAheadBuffer[j];
-                        var utf8 = ConvertToUtf8(b);
-                        output.Append(utf8);
-                    }
-                }
-                return output;
             }
+            // loop ends with "half" Utf8 char --> assume that the bytes are Latin-1
+            if (state == StateUtf8Char)
+            {
+                for (var j = 0; j < readAhead; j++)
+                {
+                    var b = readAheadBuffer[j];
+                    var utf8 = ConvertToUtf8(b);
+                    output.Append(utf8);
+                }
+            }
+            return output;
             // Latin-1 fixing applies only to UTF-8
-            return buffer;
         }
 
         /// <summary>
@@ -158,17 +153,13 @@ namespace XmpCore.Impl
         private static byte[] ConvertToUtf8(byte ch)
         {
             var c = ch & 0xFF;
-            if (c >= 0x80)
-            {
-                if (c == 0x81 || c == 0x8D || c == 0x8F || c == 0x90 || c == 0x9D)
-                {
-                    return new byte[] { 0x20 };
-                }
-                // space for undefined
-                // interpret byte as Windows Cp1252 char
-                return Encoding.UTF8.GetBytes(Encoding.GetEncoding("windows-1252").GetString(new[] { ch }, 0, 1));
-            }
-            return new[] { ch };
+            if (c < 0x80)
+                return new[] {ch};
+            if (c == 0x81 || c == 0x8D || c == 0x8F || c == 0x90 || c == 0x9D)
+                return new byte[] {0x20};
+            // space for undefined
+            // interpret byte as Windows Cp1252 char
+            return Encoding.UTF8.GetBytes(Encoding.GetEncoding("windows-1252").GetString(new[] { ch }, 0, 1));
         }
     }
 }
