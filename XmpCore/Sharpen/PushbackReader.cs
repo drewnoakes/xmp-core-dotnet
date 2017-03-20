@@ -8,8 +8,8 @@ namespace Sharpen
     /// </summary>
     public class PushbackReader : StreamReader
     {
+        private readonly object _lock = new object();
         private readonly char[] _buf;
-        private readonly object _lock;
         private int _pos;
 
         public PushbackReader(StreamReader stream, int size)
@@ -18,7 +18,6 @@ namespace Sharpen
             if (size <= 0)
                 throw new ArgumentOutOfRangeException(nameof(size), "size <= 0");
 
-            _lock = this;
             _buf = new char[size];
             _pos = size;
         }
