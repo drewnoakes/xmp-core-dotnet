@@ -49,45 +49,32 @@ namespace XmpCore.Options
 
         /// <param name="optionBits">an option bitmask</param>
         /// <returns>Returns true, if this object is equal to the given options.</returns>
-        public bool IsExactly(int optionBits)
-        {
-            return GetOptions() == optionBits;
-        }
+        public bool IsExactly(int optionBits) => GetOptions() == optionBits;
 
         /// <param name="optionBits">an option bitmask</param>
         /// <returns>Returns true, if this object contains all given options.</returns>
-        public bool ContainsAllOptions(int optionBits)
-        {
-            return (GetOptions() & optionBits) == optionBits;
-        }
+        public bool ContainsAllOptions(int optionBits) => (GetOptions() & optionBits) == optionBits;
 
         /// <param name="optionBits">an option bitmask</param>
         /// <returns>Returns true, if this object contain at least one of the given options.</returns>
-        public bool ContainsOneOf(int optionBits)
-        {
-            return (GetOptions() & optionBits) != 0;
-        }
+        public bool ContainsOneOf(int optionBits) => (GetOptions() & optionBits) != 0;
 
         /// <param name="optionBit">the binary bit or bits that are requested</param>
         /// <returns>Returns if <emp>all</emp> of the requested bits are set or not.</returns>
-        protected bool GetOption(int optionBit)
-        {
-            return (_options & optionBit) != 0;
-        }
+        protected bool GetOption(int optionBit) => (_options & optionBit) != 0;
 
         /// <param name="optionBits">the binary bit or bits that shall be set to the given value</param>
         /// <param name="value">the boolean value to set</param>
         public void SetOption(int optionBits, bool value)
         {
-            _options = value ? _options | optionBits : _options & ~optionBits;
+            _options = value
+                ? _options | optionBits
+                : _options & ~optionBits;
         }
 
         /// <summary>Is friendly to access it during the tests.</summary>
         /// <returns>Returns the options.</returns>
-        public int GetOptions()
-        {
-            return _options;
-        }
+        public int GetOptions() => _options;
 
         /// <param name="options">The options to set.</param>
         /// <exception cref="XmpException"></exception>
@@ -97,16 +84,9 @@ namespace XmpCore.Options
             _options = options;
         }
 
-        public override bool Equals(object obj)
-        {
-            var options = obj as Options;
-            return options != null && GetOptions() == options.GetOptions();
-        }
+        public override bool Equals(object obj) => obj is Options options && GetOptions() == options.GetOptions();
 
-        public override int GetHashCode()
-        {
-            return GetOptions();
-        }
+        public override int GetHashCode() => GetOptions();
 
         /// <summary>Creates a human readable string from the set options.</summary>
         /// <remarks>
@@ -139,10 +119,7 @@ namespace XmpCore.Options
         }
 
         /// <returns>Returns the options as hex bitmask.</returns>
-        public override string ToString()
-        {
-            return $"0x{_options:X}";
-        }
+        public override string ToString() => $"0x{_options:X}";
 
         /// <summary>To be implemented by inheritants.</summary>
         /// <returns>Returns a bit mask where all valid option bits are set.</returns>

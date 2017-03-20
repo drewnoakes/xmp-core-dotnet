@@ -53,8 +53,8 @@ namespace XmpCore.Options
         /// </summary>
         public bool IsUri
         {
-            get { return GetOption(IsUriFlag); }
-            set { SetOption(IsUriFlag, value); }
+            get => GetOption(IsUriFlag);
+            set => SetOption(IsUriFlag, value);
         }
 
         /// <value>
@@ -64,8 +64,8 @@ namespace XmpCore.Options
         /// </value>
         public bool HasQualifiers
         {
-            get { return GetOption(HasQualifiersFlag); }
-            set { SetOption(HasQualifiersFlag, value); }
+            get => GetOption(HasQualifiersFlag);
+            set => SetOption(HasQualifiersFlag, value);
         }
 
         /// <value>
@@ -76,29 +76,29 @@ namespace XmpCore.Options
         /// </value>
         public bool IsQualifier
         {
-            get { return GetOption(QualifierFlag); }
-            set { SetOption(QualifierFlag, value); }
+            get => GetOption(QualifierFlag);
+            set => SetOption(QualifierFlag, value);
         }
 
         /// <value>Return whether this property has an <tt>xml:lang</tt> qualifier.</value>
         public bool HasLanguage
         {
-            get { return GetOption(HasLanguageFlag); }
-            set { SetOption(HasLanguageFlag, value); }
+            get => GetOption(HasLanguageFlag);
+            set => SetOption(HasLanguageFlag, value);
         }
 
         /// <value>Return whether this property has an <tt>rdf:type</tt> qualifier.</value>
         public bool HasType
         {
-            get { return GetOption(HasTypeFlag); }
-            set { SetOption(HasTypeFlag, value); }
+            get => GetOption(HasTypeFlag);
+            set => SetOption(HasTypeFlag, value);
         }
 
         /// <value>Return whether this property contains nested fields.</value>
         public bool IsStruct
         {
-            get { return GetOption(StructFlag); }
-            set { SetOption(StructFlag, value); }
+            get => GetOption(StructFlag);
+            set => SetOption(StructFlag, value);
         }
 
         /// <value>
@@ -107,8 +107,8 @@ namespace XmpCore.Options
         /// </value>
         public bool IsArray
         {
-            get { return GetOption(ArrayFlag); }
-            set { SetOption(ArrayFlag, value); }
+            get => GetOption(ArrayFlag);
+            set => SetOption(ArrayFlag, value);
         }
 
         /// <value>
@@ -117,8 +117,8 @@ namespace XmpCore.Options
         /// </value>
         public bool IsArrayOrdered
         {
-            get { return GetOption(ArrayOrderedFlag); }
-            set { SetOption(ArrayOrderedFlag, value); }
+            get => GetOption(ArrayOrderedFlag);
+            set => SetOption(ArrayOrderedFlag, value);
         }
 
         /// <value>
@@ -127,8 +127,8 @@ namespace XmpCore.Options
         /// </value>
         public bool IsArrayAlternate
         {
-            get { return GetOption(ArrayAlternateFlag); }
-            set { SetOption(ArrayAlternateFlag, value); }
+            get => GetOption(ArrayAlternateFlag);
+            set => SetOption(ArrayAlternateFlag, value);
         }
 
         /// <value>
@@ -138,15 +138,15 @@ namespace XmpCore.Options
         /// </value>
         public bool IsArrayAltText
         {
-            get { return GetOption(ArrayAltTextFlag); }
-            set { SetOption(ArrayAltTextFlag, value); }
+            get => GetOption(ArrayAltTextFlag);
+            set => SetOption(ArrayAltTextFlag, value);
         }
 
         /// <value>Returns whether the SCHEMA_NODE option is set.</value>
         public bool IsSchemaNode
         {
-            get { return GetOption(SchemaNodeFlag); }
-            set { SetOption(SchemaNodeFlag, value); }
+            get => GetOption(SchemaNodeFlag);
+            set => SetOption(SchemaNodeFlag, value);
         }
 
         /// <value>Returns whether the property is of composite type - an array or a struct.</value>
@@ -173,18 +173,13 @@ namespace XmpCore.Options
         public void MergeWith(PropertyOptions options)
         {
             if (options != null)
-            {
                 SetOptions(GetOptions() | options.GetOptions());
-            }
         }
 
         /// <value>Returns true if only array options are set.</value>
         public bool IsOnlyArrayOptions => (GetOptions() & ~(ArrayFlag | ArrayOrderedFlag | ArrayAlternateFlag | ArrayAltTextFlag)) == 0;
 
-        protected override int GetValidOptions()
-        {
-            return IsUriFlag | HasQualifiersFlag | QualifierFlag | HasLanguageFlag | HasTypeFlag | StructFlag | ArrayFlag | ArrayOrderedFlag | ArrayAlternateFlag | ArrayAltTextFlag | SchemaNodeFlag;
-        }
+        protected override int GetValidOptions() => IsUriFlag | HasQualifiersFlag | QualifierFlag | HasLanguageFlag | HasTypeFlag | StructFlag | ArrayFlag | ArrayOrderedFlag | ArrayAlternateFlag | ArrayAltTextFlag | SchemaNodeFlag;
 
         protected override string DefineOptionName(int option)
         {
@@ -226,13 +221,9 @@ namespace XmpCore.Options
         internal override void AssertConsistency(int options)
         {
             if ((options & StructFlag) > 0 && (options & ArrayFlag) > 0)
-            {
                 throw new XmpException("IsStruct and IsArray options are mutually exclusive", XmpErrorCode.BadOptions);
-            }
             if ((options & IsUriFlag) > 0 && (options & (ArrayFlag | StructFlag)) > 0)
-            {
                 throw new XmpException("Structs and arrays can't have \"value\" options", XmpErrorCode.BadOptions);
-            }
         }
     }
 }

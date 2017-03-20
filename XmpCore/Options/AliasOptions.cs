@@ -41,43 +41,37 @@ namespace XmpCore.Options
         }
 
         /// <returns>Returns if the alias is of the simple form.</returns>
-        public bool IsSimple()
-        {
-            return GetOptions() == PropDirect;
-        }
+        public bool IsSimple() => GetOptions() == PropDirect;
 
         public bool IsArray
         {
-            get { return GetOption(PropArray); }
-            set { SetOption(PropArray, value); }
+            get => GetOption(PropArray);
+            set => SetOption(PropArray, value);
         }
 
         public bool IsArrayOrdered
         {
-            get { return GetOption(PropArrayOrdered); }
-            set { SetOption(PropArray | PropArrayOrdered, value); }
+            get => GetOption(PropArrayOrdered);
+            set => SetOption(PropArray | PropArrayOrdered, value);
         }
 
         public bool IsArrayAlternate
         {
-            get { return GetOption(PropArrayAlternate); }
-            set { SetOption(PropArray | PropArrayOrdered | PropArrayAlternate, value); }
+            get => GetOption(PropArrayAlternate);
+            set => SetOption(PropArray | PropArrayOrdered | PropArrayAlternate, value);
         }
 
         public bool IsArrayAltText
         {
-            get { return GetOption(PropArrayAltText); }
-            set { SetOption(PropArray | PropArrayOrdered | PropArrayAlternate | PropArrayAltText, value); }
+            get => GetOption(PropArrayAltText);
+            set => SetOption(PropArray | PropArrayOrdered | PropArrayAlternate | PropArrayAltText, value);
         }
 
         /// <returns>
         /// Returns a <see cref="PropertyOptions"/> object
         /// </returns>
         /// <exception cref="XmpException">If the options are not consistant.</exception>
-        public PropertyOptions ToPropertyOptions()
-        {
-            return new PropertyOptions(GetOptions());
-        }
+        public PropertyOptions ToPropertyOptions() => new PropertyOptions(GetOptions());
 
         protected override string DefineOptionName(int option)
         {
@@ -98,9 +92,6 @@ namespace XmpCore.Options
             }
         }
 
-        protected override int GetValidOptions()
-        {
-            return PropDirect | PropArray | PropArrayOrdered | PropArrayAlternate | PropArrayAltText;
-        }
+        protected override int GetValidOptions() => PropDirect | PropArray | PropArrayOrdered | PropArrayAlternate | PropArrayAltText;
     }
 }

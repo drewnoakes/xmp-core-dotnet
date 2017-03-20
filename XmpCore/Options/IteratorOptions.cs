@@ -32,30 +32,30 @@ namespace XmpCore.Options
 
 //      /** Include aliases, default is just actual properties. <em>Note:</em> Not supported.
 //        *  @deprecated it is commonly preferred to work with the base properties */
-//      public static final int INCLUDE_ALIASES = 0x0800;
+//      public const int INCLUDE_ALIASES = 0x0800;
 
         public bool IsJustChildren
         {
-            get { return GetOption(JustChildren); }
-            set { SetOption(JustChildren, value); }
+            get => GetOption(JustChildren);
+            set => SetOption(JustChildren, value);
         }
 
         public bool IsJustLeafName
         {
-            get { return GetOption(JustLeafName); }
-            set { SetOption(JustLeafName, value); }
+            get => GetOption(JustLeafName);
+            set => SetOption(JustLeafName, value);
         }
 
         public bool IsJustLeafNodes
         {
-            get { return GetOption(JustLeafNodes); }
-            set { SetOption(JustLeafNodes, value); }
+            get => GetOption(JustLeafNodes);
+            set => SetOption(JustLeafNodes, value);
         }
 
         public bool IsOmitQualifiers
         {
-            get { return GetOption(OmitQualifiers); }
-            set { SetOption(OmitQualifiers, value); }
+            get => GetOption(OmitQualifiers);
+            set => SetOption(OmitQualifiers, value);
         }
 
         protected override string DefineOptionName(int option)
@@ -75,9 +75,6 @@ namespace XmpCore.Options
             }
         }
 
-        protected override int GetValidOptions()
-        {
-            return JustChildren | JustLeafNodes | JustLeafName | OmitQualifiers;
-        }
+        protected override int GetValidOptions() => JustChildren | JustLeafNodes | JustLeafName | OmitQualifiers;
     }
 }

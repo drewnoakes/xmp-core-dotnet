@@ -41,38 +41,38 @@ namespace XmpCore.Options
 
         public bool RequireXmpMeta
         {
-            get { return GetOption(RequireXmpMetaFlag); }
-            set { SetOption(RequireXmpMetaFlag, value); }
+            get => GetOption(RequireXmpMetaFlag);
+            set => SetOption(RequireXmpMetaFlag, value);
         }
 
         public bool StrictAliasing
         {
-            get { return GetOption(StrictAliasingFlag); }
-            set { SetOption(StrictAliasingFlag, value); }
+            get => GetOption(StrictAliasingFlag);
+            set => SetOption(StrictAliasingFlag, value);
         }
 
         public bool FixControlChars
         {
-            get { return GetOption(FixControlCharsFlag); }
-            set { SetOption(FixControlCharsFlag, value); }
+            get => GetOption(FixControlCharsFlag);
+            set => SetOption(FixControlCharsFlag, value);
         }
 
         public bool AcceptLatin1
         {
-            get { return GetOption(AcceptLatin1Flag); }
-            set { SetOption(AcceptLatin1Flag, value); }
+            get => GetOption(AcceptLatin1Flag);
+            set => SetOption(AcceptLatin1Flag, value);
         }
 
         public bool OmitNormalization
         {
-            get { return GetOption(OmitNormalizationFlag); }
-            set { SetOption(OmitNormalizationFlag, value); }
+            get => GetOption(OmitNormalizationFlag);
+            set => SetOption(OmitNormalizationFlag, value);
         }
 
         public bool DisallowDoctype
         {
-            get { return GetOption(DisallowDoctypeFlag); }
-            set { SetOption(DisallowDoctypeFlag, value); }
+            get => GetOption(DisallowDoctypeFlag);
+            set => SetOption(DisallowDoctypeFlag, value);
         }
 
         protected override string DefineOptionName(int option)
@@ -96,9 +96,6 @@ namespace XmpCore.Options
             }
         }
 
-        protected override int GetValidOptions()
-        {
-            return RequireXmpMetaFlag | StrictAliasingFlag | FixControlCharsFlag | AcceptLatin1Flag | OmitNormalizationFlag | DisallowDoctypeFlag;
-        }
+        protected override int GetValidOptions() => RequireXmpMetaFlag | StrictAliasingFlag | FixControlCharsFlag | AcceptLatin1Flag | OmitNormalizationFlag | DisallowDoctypeFlag;
     }
 }

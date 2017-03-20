@@ -59,23 +59,23 @@ namespace XmpCore.Options
         /// <summary>Omit the XML packet wrapper.</summary>
         public bool OmitPacketWrapper
         {
-            get { return GetOption(OmitPacketWrapperFlag); }
-            set { SetOption(OmitPacketWrapperFlag, value); }
+            get => GetOption(OmitPacketWrapperFlag);
+            set => SetOption(OmitPacketWrapperFlag, value);
         }
 
         /// <summary>Omit the &lt;x:xmpmeta&gt; tag.</summary>
         public bool OmitXmpMetaElement
         {
-            get { return GetOption(OmitXmpmetaElementFlag); }
-            set { SetOption(OmitXmpmetaElementFlag, value); }
+            get => GetOption(OmitXmpmetaElementFlag);
+            set => SetOption(OmitXmpmetaElementFlag, value);
         }
 
         /// <summary>Mark packet as read-only.</summary>
         /// <remarks>Default is a writeable packet.</remarks>
         public bool ReadOnlyPacket
         {
-            get { return GetOption(ReadonlyPacketFlag); }
-            set { SetOption(ReadonlyPacketFlag, value); }
+            get => GetOption(ReadonlyPacketFlag);
+            set => SetOption(ReadonlyPacketFlag, value);
         }
 
         /// <summary>Use a compact form of RDF.</summary>
@@ -87,16 +87,16 @@ namespace XmpCore.Options
         /// </remarks>
         public bool UseCompactFormat
         {
-            get { return GetOption(UseCompactFormatFlag); }
-            set { SetOption(UseCompactFormatFlag, value); }
+            get => GetOption(UseCompactFormatFlag);
+            set => SetOption(UseCompactFormatFlag, value);
         }
 
         /// <summary>Use the canonical form of RDF if set.</summary>
         /// <remarks>By default the compact form is used.</remarks>
         public bool UseCanonicalFormat
         {
-            get { return GetOption(UseCanonicalFormatFlag); }
-            set { SetOption(UseCanonicalFormatFlag, value); }
+            get => GetOption(UseCanonicalFormatFlag);
+            set => SetOption(UseCanonicalFormatFlag, value);
         }
 
         /// <summary>Include a padding allowance for a thumbnail image.</summary>
@@ -106,8 +106,8 @@ namespace XmpCore.Options
         /// </remarks>
         public bool IncludeThumbnailPad
         {
-            get { return GetOption(IncludeThumbnailPadFlag); }
-            set { SetOption(IncludeThumbnailPadFlag, value); }
+            get => GetOption(IncludeThumbnailPadFlag);
+            set => SetOption(IncludeThumbnailPadFlag, value);
         }
 
         /// <summary>The padding parameter provides the overall packet length.</summary>
@@ -117,22 +117,22 @@ namespace XmpCore.Options
         /// </remarks>
         public bool ExactPacketLength
         {
-            get { return GetOption(ExactPacketLengthFlag); }
-            set { SetOption(ExactPacketLengthFlag, value); }
+            get => GetOption(ExactPacketLengthFlag);
+            set => SetOption(ExactPacketLengthFlag, value);
         }
 
         /// <summary>Sort the struct properties and qualifier before serializing</summary>
         public bool Sort
         {
-            get { return GetOption(SortFlag); }
-            set { SetOption(SortFlag, value); }
+            get => GetOption(SortFlag);
+            set => SetOption(SortFlag, value);
         }
 
 
         /// <summary>UTF16BE encoding</summary>
         public bool EncodeUtf16Be
         {
-            get { return (GetOptions() & EncodingMask) == EncodeUtf16BeFlag; }
+            get => (GetOptions() & EncodingMask) == EncodeUtf16BeFlag;
             set
             {
                 // clear unicode bits
@@ -144,7 +144,7 @@ namespace XmpCore.Options
         /// <summary>UTF16LE encoding</summary>
         public bool EncodeUtf16Le
         {
-            get { return (GetOptions() & EncodingMask) == EncodeUtf16LeFlag; }
+            get => (GetOptions() & EncodingMask) == EncodeUtf16LeFlag;
             set
             {
                 // clear unicode bits
@@ -191,27 +191,20 @@ namespace XmpCore.Options
         public Encoding GetEncoding()
         {
             if (EncodeUtf16Be)
-            {
                 return Encoding.BigEndianUnicode;
-            }
             if (EncodeUtf16Le)
-            {
                 return Encoding.Unicode;
-            }
             return Encoding.UTF8;
         }
 
         /// <returns>Returns clone of this SerializeOptions-object with the same options set.</returns>
-        public object Clone()
+        public object Clone() => new SerializeOptions(GetOptions())
         {
-            return new SerializeOptions(GetOptions())
-            {
-                BaseIndent = BaseIndent,
-                Indent = Indent,
-                Newline = Newline,
-                Padding = Padding
-            };
-        }
+            BaseIndent = BaseIndent,
+            Indent = Indent,
+            Newline = Newline,
+            Padding = Padding
+        };
 
         protected override string DefineOptionName(int option)
         {
