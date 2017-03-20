@@ -241,8 +241,8 @@ namespace XmpCore
                 throw new XmpException("Empty convert-string", XmpErrorCode.BadValue);
 
             if (!(rawValue.StartsWith("0x")
-    ? int.TryParse(rawValue.Substring(2), NumberStyles.HexNumber, null, out int i)
-    : int.TryParse(rawValue, out i)))
+                ? int.TryParse(rawValue.Substring(2), NumberStyles.HexNumber, null, out int i)
+                : int.TryParse(rawValue, out i)))
                 throw new XmpException("Invalid integer string", XmpErrorCode.BadValue);
 
             return i;
@@ -269,8 +269,8 @@ namespace XmpCore
                 throw new XmpException("Empty convert-string", XmpErrorCode.BadValue);
 
             if (!(rawValue.StartsWith("0x")
-    ? long.TryParse(rawValue.Substring(2), NumberStyles.HexNumber, null, out long l)
-    : long.TryParse(rawValue, out l)))
+                ? long.TryParse(rawValue.Substring(2), NumberStyles.HexNumber, null, out long l)
+                : long.TryParse(rawValue, out l)))
                 throw new XmpException("Invalid long string", XmpErrorCode.BadValue);
 
             return l;
