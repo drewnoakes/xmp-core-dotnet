@@ -43,7 +43,7 @@ namespace XmpCore.Impl
         }
 
         /// <exception cref="System.IO.IOException"/>
-        public override int Read(char[] cbuf, int off, int len)
+        public override int Read(char[] buffer, int off, int len)
         {
             var readAhead = 0;
             var read = 0;
@@ -62,7 +62,7 @@ namespace XmpCore.Impl
                             // replace control chars with space
                             if (Utils.IsControlChar(c))
                                 c = ' ';
-                            cbuf[pos++] = c;
+                            buffer[pos++] = c;
                             readAhead = 0;
                             read++;
                             break;

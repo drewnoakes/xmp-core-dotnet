@@ -33,7 +33,7 @@ namespace Sharpen
             }
         }
 
-        public override int Read(char[] cbuf, int off, int len)
+        public override int Read(char[] buffer, int off, int len)
         {
             lock (_lock)
             {
@@ -43,7 +43,7 @@ namespace Sharpen
                     {
                         if (len < 0)
                             throw new ArgumentException();
-                        if ((off < 0) || (off > cbuf.Length))
+                        if (off < 0 || off > buffer.Length)
                             throw new ArgumentException();
                         return 0;
                     }
@@ -54,7 +54,7 @@ namespace Sharpen
                     {
                         if (len < avail)
                             avail = len;
-                        Array.Copy(_buf, _pos, cbuf, off, avail);
+                        Array.Copy(_buf, _pos, buffer, off, avail);
                         _pos += avail;
                         off += avail;
                         len -= avail;
@@ -62,7 +62,7 @@ namespace Sharpen
 
                     if (len > 0)
                     {
-                        len = base.Read(cbuf, off, len);
+                        len = base.Read(buffer, off, len);
                         return len != -1
                             ? avail + len
                             : avail == 0
@@ -79,14 +79,14 @@ namespace Sharpen
             }
         }
 
-        public void Unread(char[] cbuf, int off, int len)
+        public void Unread(char[] buffer, int off, int len)
         {
             lock (_lock)
             {
                 if (len > _pos)
                     throw new IOException("Pushback buffer overflow");
                 _pos -= len;
-                Array.Copy(cbuf, off, _buf, _pos, len);
+                Array.Copy(buffer, off, _buf, _pos, len);
             }
         }
     }
