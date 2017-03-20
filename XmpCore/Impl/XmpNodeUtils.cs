@@ -155,7 +155,7 @@ namespace XmpCore.Impl
         {
             // check if xpath is set.
             if (xpath == null || xpath.Size() == 0)
-                throw new XmpException("Empty XMPPath", XmpErrorCode.BadXPath);
+                throw new XmpException("Empty XmpPath", XmpErrorCode.BadXPath);
 
             // Root of implicitly created subtree to possible delete it later.
             // Valid only if leaf is new.
@@ -175,7 +175,7 @@ namespace XmpCore.Impl
             }
 
             // Save the top most implicit node.
-            // Now follow the remaining steps of the original XMPPath.
+            // Now follow the remaining steps of the original XmpPath.
             try
             {
                 for (var i = 1; i < xpath.Size(); i++)
@@ -370,7 +370,7 @@ namespace XmpCore.Impl
         /// <param name="parentNode">the node to start to start from</param>
         /// <param name="nextStep">the xpath segment</param>
         /// <param name="createNodes"></param>
-        /// <returns>returns the found or created XMPPath node</returns>
+        /// <returns>returns the found or created <see cref="XmpPath"/> node</returns>
         /// <exception cref="XmpException"></exception>
         private static XmpNode FollowXPathStep(XmpNode parentNode, XmpPathSegment nextStep, bool createNodes)
         {
@@ -423,7 +423,7 @@ namespace XmpCore.Impl
         /// the parent's vector of qualifiers. The iterator is unchanged if no qualifier node (null)
         /// is returned.
         /// <em>Note:</em> On entry, the qualName parameter must not have the leading '?' from the
-        /// XMPPath step.
+        /// <see cref="XmpPath"/> step.
         /// </remarks>
         /// <param name="parent">the parent XMPNode</param>
         /// <param name="qualName">the qualifier name</param>

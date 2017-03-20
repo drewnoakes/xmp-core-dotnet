@@ -37,14 +37,14 @@ namespace XmpCore.Impl.XPath
         SchemaNode = unchecked((int)0x80000000)
     }
 
-    /// <summary>Represents an XMP XMPPath with segment accessor methods.</summary>
+    /// <summary>Represents an XMP XmpPath with segment accessor methods.</summary>
     /// <since>28.02.2006</since>
     public sealed class XmpPath
     {
         public const int StepSchema = 0;
         public const int StepRootProp = 1;
 
-        /// <summary>stores the segments of an XMPPath</summary>
+        /// <summary>stores the segments of an <see cref="XmpPath"/></summary>
         private readonly List<XmpPathSegment> _segments = new List<XmpPathSegment>(5);
 
         // Bits for XPathStepInfo options.

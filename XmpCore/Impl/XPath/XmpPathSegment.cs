@@ -9,7 +9,7 @@
 
 namespace XmpCore.Impl.XPath
 {
-    /// <summary>A segment of a parsed <c>XMPPath</c>.</summary>
+    /// <summary>A segment of a parsed <see cref="XmpPath"/>.</summary>
     /// <since>23.06.2006</since>
     public sealed class XmpPathSegment
     {

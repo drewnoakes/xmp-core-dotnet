@@ -40,7 +40,7 @@ namespace XmpCore
         /// See <see cref="PropertyOptions"/> for detailed information about the options.
         /// <para />
         /// This is the simplest property getter, mainly for top level simple properties or after using
-        /// the path composition functions in XMPPathFactory.
+        /// the path composition functions in <see cref="XmpPathFactory"/>.
         /// </remarks>
         /// <param name="schemaNs">
         /// The namespace URI for the property. May be <c>null</c> or the empty

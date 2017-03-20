@@ -14,11 +14,11 @@ namespace XmpCore.Impl.XPath
     public static class XmpPathParser
     {
         /// <summary>
-        /// Split an XMPPath expression apart at the conceptual steps, adding the
+        /// Split an <see cref="XmpPath"/> expression apart at the conceptual steps, adding the
         /// root namespace prefix to the first property component.
         /// </summary>
         /// <remarks>
-        /// The schema URI is put in the first (0th) slot in the expanded XMPPath.
+        /// The schema URI is put in the first (0th) slot in the expanded <see cref="XmpPath"/>.
         /// Check if the top level component is an alias, but don't resolve it.
         /// <para />
         /// In the most verbose case steps are separated by '/', and each step can be
@@ -74,7 +74,7 @@ namespace XmpCore.Impl.XPath
         /// </remarks>
         /// <param name="schemaNs">schema namespace</param>
         /// <param name="path">property name</param>
-        /// <returns>Returns the expandet XMPPath.</returns>
+        /// <returns>Returns the expanded <see cref="XmpPath"/>.</returns>
         /// <exception cref="XmpException">Thrown if the format is not correct somehow.</exception>
         public static XmpPath ExpandXPath(string schemaNs, string path)
         {
@@ -88,7 +88,7 @@ namespace XmpCore.Impl.XPath
             // namespace prefix and and see if it is an alias. The start must be a "qualName".
             ParseRootNode(schemaNs, pos, expandedXPath);
 
-            // Now continue to process the rest of the XMPPath string.
+            // Now continue to process the rest of the XmpPath string.
             while (pos.StepEnd < path.Length)
             {
                 pos.StepBegin = pos.StepEnd;
@@ -151,7 +151,7 @@ namespace XmpCore.Impl.XPath
                 pos.StepBegin++;
 
                 if (pos.StepBegin >= path.Length)
-                    throw new XmpException("Empty XMPPath segment", XmpErrorCode.BadXPath);
+                    throw new XmpException("Empty XmpPath segment", XmpErrorCode.BadXPath);
             }
 
             if (path[pos.StepBegin] == '*')
@@ -176,7 +176,7 @@ namespace XmpCore.Impl.XPath
             pos.NameEnd = pos.StepEnd;
 
             if (pos.StepEnd == pos.StepBegin)
-                throw new XmpException("Empty XMPPath segment", XmpErrorCode.BadXPath);
+                throw new XmpException("Empty XmpPath segment", XmpErrorCode.BadXPath);
 
             // ! Touch up later, also changing '@' to '?'.
             return new XmpPathSegment(pos.Path.Substring(pos.StepBegin, pos.StepEnd - pos.StepBegin), XmpPathStepType.StructFieldStep);
@@ -277,7 +277,7 @@ namespace XmpCore.Impl.XPath
                 pos.StepEnd++;
 
             if (pos.StepEnd == pos.StepBegin)
-                throw new XmpException("Empty initial XMPPath step", XmpErrorCode.BadXPath);
+                throw new XmpException("Empty initial XmpPath step", XmpErrorCode.BadXPath);
 
             var rootProp = VerifyXPathRoot(schemaNs, pos.Path.Substring(pos.StepBegin, pos.StepEnd - pos.StepBegin));
             var aliasInfo = XmpMetaFactory.SchemaRegistry.FindAlias(rootProp);
@@ -350,7 +350,7 @@ namespace XmpCore.Impl.XPath
                 throw new XmpException("Bad XML name", XmpErrorCode.BadXPath);
         }
 
-        /// <summary>Set up the first 2 components of the expanded XMPPath.</summary>
+        /// <summary>Set up the first 2 components of the expanded <see cref="XmpPath"/>.</summary>
         /// <remarks>
         /// Normalizes the various cases of using
         /// the full schema URI and/or a qualified root property name. Returns true for normal
@@ -380,7 +380,7 @@ namespace XmpCore.Impl.XPath
                 throw new XmpException("Unregistered schema namespace URI", XmpErrorCode.BadSchema);
 
             // Verify the various URI and prefix combinations. Initialize the
-            // expanded XMPPath.
+            // expanded XmpPath.
             var colonPos = rootProp.IndexOf(':');
             if (colonPos < 0)
             {
