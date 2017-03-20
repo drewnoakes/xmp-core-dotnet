@@ -212,7 +212,7 @@ namespace XmpCore.Impl
 
                         exclusiveAttrs++;
 
-                        if (isTopLevel && (attrTerm == RdfTerm.About))
+                        if (isTopLevel && attrTerm == RdfTerm.About)
                         {
                             // This is the rdf:about attribute on a top level node. Set
                             // the XMP tree name if
@@ -1131,7 +1131,7 @@ namespace XmpCore.Impl
             var ns = name.NamespaceName;
             var parentNamespaceName = parentName != null ? parentName.NamespaceName : string.Empty;
 
-            if (ns == string.Empty && (localName == "about" || localName == "ID") && (nodeType == XmlNodeType.Attribute) && parentNamespaceName == XmpConstants.NsRdf)
+            if (ns == string.Empty && (localName == "about" || localName == "ID") && nodeType == XmlNodeType.Attribute && parentNamespaceName == XmpConstants.NsRdf)
                 ns = XmpConstants.NsRdf;
 
             if (ns != XmpConstants.NsRdf)

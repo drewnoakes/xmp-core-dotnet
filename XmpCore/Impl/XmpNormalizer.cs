@@ -85,7 +85,7 @@ namespace XmpCore.Impl
                 var nameStr = tree.Name.ToLower();
                 if (nameStr.StartsWith("uuid:"))
                 {
-                    nameStr = nameStr.Substring (5);
+                    nameStr = nameStr.Substring(5);
                 }
                 if (Utils.CheckUuidFormat(nameStr))
                 {
@@ -119,7 +119,7 @@ namespace XmpCore.Impl
             XmpNodeUtils.FindSchemaNode(xmp.GetRoot(), XmpConstants.NsDC, true);
 
             // Do the special case fixes within each schema.
-            for (var it = xmp.GetRoot().IterateChildren(); it.HasNext(); )
+            for (var it = xmp.GetRoot().IterateChildren(); it.HasNext();)
             {
                 var currSchema = (XmpNode)it.Next();
 
@@ -232,7 +232,7 @@ namespace XmpCore.Impl
             arrayNode.Options.IsArrayOrdered = true;
             arrayNode.Options.IsArrayAlternate = true;
             arrayNode.Options.IsArrayAltText = true;
-            for (var it = arrayNode.IterateChildren(); it.HasNext(); )
+            for (var it = arrayNode.IterateChildren(); it.HasNext();)
             {
                 var currChild = (XmpNode)it.Next();
                 if (currChild.Options.IsCompositeProperty)
@@ -274,14 +274,14 @@ namespace XmpCore.Impl
             }
             tree.HasAliases = false;
             var strictAliasing = options.StrictAliasing;
-            for (var schemaIt = tree.GetUnmodifiableChildren().Iterator(); schemaIt.HasNext(); )
+            for (var schemaIt = tree.GetUnmodifiableChildren().Iterator(); schemaIt.HasNext();)
             {
                 var currSchema = (XmpNode)schemaIt.Next();
                 if (!currSchema.HasAliases)
                 {
                     continue;
                 }
-                for (var propertyIt = currSchema.IterateChildren(); propertyIt.HasNext(); )
+                for (var propertyIt = currSchema.IterateChildren(); propertyIt.HasNext();)
                 {
                     var currProp = (XmpNode)propertyIt.Next();
                     if (!currProp.IsAlias)
@@ -426,7 +426,7 @@ namespace XmpCore.Impl
         {
             // Delete empty schema nodes. Do this last, other cleanup can make empty
             // schema.
-            for (var it = tree.IterateChildren(); it.HasNext(); )
+            for (var it = tree.IterateChildren(); it.HasNext();)
             {
                 var schema = (XmpNode)it.Next();
                 if (!schema.HasChildren)
@@ -453,14 +453,14 @@ namespace XmpCore.Impl
             if (!outerCall && (baseNode.Name != aliasNode.Name || !aliasNode.Options.Equals(baseNode.Options) || aliasNode.GetQualifierLength() != baseNode.GetQualifierLength()))
                 throw new XmpException("Mismatch between alias and base nodes", XmpErrorCode.BadXmp);
 
-            for (IIterator an = aliasNode.IterateChildren(), bn = baseNode.IterateChildren(); an.HasNext() && bn.HasNext(); )
+            for (IIterator an = aliasNode.IterateChildren(), bn = baseNode.IterateChildren(); an.HasNext() && bn.HasNext();)
             {
                 var aliasChild = (XmpNode)an.Next();
                 var baseChild = (XmpNode)bn.Next();
                 CompareAliasedSubtrees(aliasChild, baseChild, false);
             }
 
-            for (IIterator an = aliasNode.IterateQualifier(), bn1 = baseNode.IterateQualifier(); an.HasNext() && bn1.HasNext(); )
+            for (IIterator an = aliasNode.IterateQualifier(), bn1 = baseNode.IterateQualifier(); an.HasNext() && bn1.HasNext();)
             {
                 var aliasQual = (XmpNode)an.Next();
                 var baseQual = (XmpNode)bn1.Next();
@@ -549,10 +549,10 @@ namespace XmpCore.Impl
                     else
                     {
                         // 3B. Has double LF, compare the tail.
-                        if (dmValue != defaultValue.Substring (lfPos + 2))
+                        if (dmValue != defaultValue.Substring(lfPos + 2))
                         {
                             // 3B2. Replace the x-default tail.
-                            defaultNode.Value = defaultValue.Substring (0, lfPos + 2 - 0) + dmValue;
+                            defaultNode.Value = defaultValue.Substring(0, lfPos + 2 - 0) + dmValue;
                         }
                     }
                 }

@@ -17,7 +17,7 @@ using GregorianCalendar = Sharpen.GregorianCalendar;
 
 namespace XmpCore.Impl
 {
-    /// <summary>The default implementation of <see cref="IXmpDateTime"/>.</summary>
+    /// <summary>The default implementation of <see cref="IXmpDateTime" />.</summary>
     /// <since>16.02.2006</since>
     public sealed class XmpDateTime : IXmpDateTime
     {
@@ -61,7 +61,7 @@ namespace XmpCore.Impl
             _hour = intCalendar.Get(CalendarEnum.HourOfDay);
             _minute = intCalendar.Get(CalendarEnum.Minute);
             _second = intCalendar.Get(CalendarEnum.Second);
-            _nanoseconds = intCalendar.Get(CalendarEnum.Millisecond) * 1000000;
+            _nanoseconds = intCalendar.Get(CalendarEnum.Millisecond)*1000000;
             _timeZone = intCalendar.GetTimeZone();
             // object contains all date components
             HasDate = HasTime = HasTimeZone = true;
@@ -84,7 +84,7 @@ namespace XmpCore.Impl
             _hour = calendar.Get(CalendarEnum.HourOfDay);
             _minute = calendar.Get(CalendarEnum.Minute);
             _second = calendar.Get(CalendarEnum.Second);
-            _nanoseconds = calendar.Get(CalendarEnum.Millisecond) * 1000000;
+            _nanoseconds = calendar.Get(CalendarEnum.Millisecond)*1000000;
             _timeZone = timeZone;
             // object contains all date components
             HasDate = HasTime = HasTimeZone = true;
@@ -100,7 +100,7 @@ namespace XmpCore.Impl
 
         public int Year
         {
-            get { return _year; }
+            get => _year;
             set
             {
                 _year = Math.Min(Math.Abs(value), 9999);
@@ -110,7 +110,7 @@ namespace XmpCore.Impl
 
         public int Month
         {
-            get { return _month; }
+            get => _month;
             set
             {
                 _month = value < 1
@@ -124,7 +124,7 @@ namespace XmpCore.Impl
 
         public int Day
         {
-            get { return _day; }
+            get => _day;
             set
             {
                 _day = value < 1
@@ -138,7 +138,7 @@ namespace XmpCore.Impl
 
         public int Hour
         {
-            get { return _hour; }
+            get => _hour;
             set
             {
                 _hour = Math.Min(Math.Abs(value), 23);
@@ -148,7 +148,7 @@ namespace XmpCore.Impl
 
         public int Minute
         {
-            get { return _minute; }
+            get => _minute;
             set
             {
                 _minute = Math.Min(Math.Abs(value), 59);
@@ -158,7 +158,7 @@ namespace XmpCore.Impl
 
         public int Second
         {
-            get { return _second; }
+            get => _second;
             set
             {
                 _second = Math.Min(Math.Abs(value), 59);
@@ -168,7 +168,7 @@ namespace XmpCore.Impl
 
         public int Nanosecond
         {
-            get { return _nanoseconds; }
+            get => _nanoseconds;
             set
             {
                 _nanoseconds = value;
@@ -189,7 +189,7 @@ namespace XmpCore.Impl
 
         public TimeZoneInfo TimeZone
         {
-            get { return _timeZone; }
+            get => _timeZone;
             set
             {
                 _timeZone = value;

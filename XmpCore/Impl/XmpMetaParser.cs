@@ -10,8 +10,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Linq;
+using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using XmpCore.Options;
@@ -108,12 +108,12 @@ namespace XmpCore.Impl
         {
             // sort node Attributes to match Java DocumentBuilder (attribute order isn't supposed to matter but DocumentBuilder does some sorting)
             // namespace declarations come first, and then all are sorted in prefix:localname order
-            foreach(var node in document.Descendants().Where(d => d.Attributes().Count() > 1))
+            foreach (var node in document.Descendants().Where(d => d.Attributes().Count() > 1))
             {
                 var orderedattribs = node.Attributes()
-                                        .OrderBy(n => !n.IsNamespaceDeclaration)
-                                        .ThenBy(t => node.GetPrefixOfNamespace(t.Name.Namespace), StringComparer.Ordinal)
-                                        .ThenBy(s => s.Name.LocalName, StringComparer.Ordinal);
+                    .OrderBy(n => !n.IsNamespaceDeclaration)
+                    .ThenBy(t => node.GetPrefixOfNamespace(t.Name.Namespace), StringComparer.Ordinal)
+                    .ThenBy(s => s.Name.LocalName, StringComparer.Ordinal);
                 node.ReplaceAttributes(orderedattribs);
             }
 

@@ -336,12 +336,12 @@ namespace XmpCore.Impl
         {
             try
             {
-                for (var it = IterateChildren(); it.HasNext(); )
+                for (var it = IterateChildren(); it.HasNext();)
                 {
                     var child = (XmpNode)it.Next();
                     destination.AddChild((XmpNode)child.Clone());
                 }
-                for (var it1 = IterateQualifier(); it1.HasNext(); )
+                for (var it1 = IterateQualifier(); it1.HasNext();)
                 {
                     var qualifier = (XmpNode)it1.Next();
                     destination.AddQualifier((XmpNode)qualifier.Clone());
@@ -377,8 +377,8 @@ namespace XmpCore.Impl
 
         public PropertyOptions Options
         {
-            get { return _options ?? (_options = new PropertyOptions()); }
-            set { _options = value; }
+            get => _options ?? (_options = new PropertyOptions());
+            set => _options = value;
         }
 
         /// <summary>

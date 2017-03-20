@@ -35,14 +35,14 @@ namespace XmpCore.Impl
         private int _digits;
 
         /// <summary>The look-ahead size is 6 at maximum (&amp;#xAB;)</summary>
-        /// <seealso cref="PushbackReader(System.IO.StreamReader, int)"/>
+        /// <seealso cref="PushbackReader(System.IO.StreamReader, int)" />
         /// <param name="reader">a Reader</param>
         public FixAsciiControlsReader(StreamReader reader)
             : base(reader, BufferSize)
         {
         }
 
-        /// <exception cref="System.IO.IOException"/>
+        /// <exception cref="System.IO.IOException" />
         public override int Read(char[] buffer, int off, int len)
         {
             var readAhead = 0;
@@ -137,7 +137,7 @@ namespace XmpCore.Impl
                 {
                     if ('0' <= ch && ch <= '9')
                     {
-                        _control = _control * 10 + (ch - '0');
+                        _control = _control*10 + (ch - '0');
                         _digits++;
                         _state = _digits <= 5 ? StateDig1 : StateError;
                     }
@@ -158,7 +158,7 @@ namespace XmpCore.Impl
                 {
                     if (('0' <= ch && ch <= '9') || ('a' <= ch && ch <= 'f') || ('A' <= ch && ch <= 'F'))
                     {
-                        _control = _control * 16 + Convert.ToInt32(ch.ToString(), fromBase: 16);
+                        _control = _control*16 + Convert.ToInt32(ch.ToString(), fromBase: 16);
                         _digits++;
                         _state = _digits <= 4 ? StateHex : StateError;
                     }

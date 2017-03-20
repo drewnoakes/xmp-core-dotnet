@@ -270,7 +270,7 @@ namespace XmpCore.Impl
                     if (dateTime.Second != 0 || dateTime.Nanosecond != 0)
                     {
                         buffer.Append(':');
-                        var seconds = dateTime.Second + dateTime.Nanosecond / 1e9d;
+                        var seconds = dateTime.Second + dateTime.Nanosecond/1e9d;
                         buffer.AppendFormat("{0:00.#########}", seconds);
                     }
                     // time zone
@@ -278,7 +278,7 @@ namespace XmpCore.Impl
                     {
                         // used to calculate the time zone offset incl. Daylight Savings
                         var timeInMillis = dateTime.Calendar.GetTimeInMillis();
-                        var offset = (int) dateTime.TimeZone.GetUtcOffset(XmpDateTime.UnixTimeToDateTimeOffset(timeInMillis).DateTime).TotalMilliseconds;
+                        var offset = (int)dateTime.TimeZone.GetUtcOffset(XmpDateTime.UnixTimeToDateTimeOffset(timeInMillis).DateTime).TotalMilliseconds;
                         if (offset == 0)
                         {
                             // UTC
@@ -286,8 +286,8 @@ namespace XmpCore.Impl
                         }
                         else
                         {
-                            var thours = offset / 3600000;
-                            var tminutes = Math.Abs(offset % 3600000 / 60000);
+                            var thours = offset/3600000;
+                            var tminutes = Math.Abs(offset%3600000/60000);
                             buffer.Append(thours.ToString("+00;-00"));
                             buffer.Append(tminutes.ToString(":00"));
                         }
@@ -334,7 +334,7 @@ namespace XmpCore.Impl
             var ch = Ch(Pos);
             while ('0' <= ch && ch <= '9')
             {
-                value = value * 10 + (ch - '0');
+                value = value*10 + (ch - '0');
                 success = true;
                 Pos++;
                 ch = Ch(Pos);

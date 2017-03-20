@@ -25,8 +25,8 @@ namespace XmpCore.Impl
             var colon = qname.IndexOf(':');
             if (colon >= 0)
             {
-                _prefix = qname.Substring (0, colon - 0);
-                _localName = qname.Substring (colon + 1);
+                _prefix = qname.Substring(0, colon - 0);
+                _localName = qname.Substring(colon + 1);
             }
             else
             {

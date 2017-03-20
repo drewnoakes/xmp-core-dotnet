@@ -37,7 +37,7 @@ namespace XmpCore.Impl
         /// <param name="xmp">the iterated metadata object.</param>
         /// <param name="schemaNs">the iteration is reduced to this schema (optional)</param>
         /// <param name="propPath">the iteration is reduced to this property within the <c>schemaNS</c></param>
-        /// <param name="options">advanced iteration options, see <see cref="IteratorOptions"/></param>
+        /// <param name="options">advanced iteration options, see <see cref="IteratorOptions" /></param>
         /// <exception cref="XmpException">If the node defined by the parameters is not existing.</exception>
         public XmpIterator(XmpMeta xmp, string schemaNs, string propPath, IteratorOptions options)
         {
@@ -306,7 +306,7 @@ namespace XmpCore.Impl
                 }
                 if (_enclosing.Options.IsJustLeafName)
                 {
-                    return !segmentName.StartsWith("?") ? segmentName : segmentName.Substring (1);
+                    return !segmentName.StartsWith("?") ? segmentName : segmentName.Substring(1);
                 }
                 // qualifier
                 return parentPath + separator + segmentName;

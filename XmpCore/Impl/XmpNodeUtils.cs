@@ -388,7 +388,6 @@ namespace XmpCore.Impl
                     // This is an array indexing step. First get the index, then get the node.
                     if (!parentNode.Options.IsArray)
                         throw new XmpException("Indexing applied to non-array", XmpErrorCode.BadXPath);
-
                     int index;
                     switch (stepKind)
                     {
@@ -409,7 +408,6 @@ namespace XmpCore.Impl
                         default:
                             throw new XmpException("Unknown array indexing step in FollowXPathStep", XmpErrorCode.InternalFailure);
                     }
-
                     if (1 <= index && index <= parentNode.GetChildrenLength())
                         nextNode = parentNode.GetChild(index);
                     break;
@@ -473,9 +471,9 @@ namespace XmpCore.Impl
         /// [fieldName="value] - an element in an array of structs, chosen by a field value.
         /// No implicit nodes are created by field selectors.
         /// </remarks>
-        /// <param name="arrayNode"/>
-        /// <param name="fieldName"/>
-        /// <param name="fieldValue"/>
+        /// <param name="arrayNode" />
+        /// <param name="fieldName" />
+        /// <param name="fieldValue" />
         /// <returns>Returns the index of the field if found, otherwise -1.</returns>
         /// <exception cref="XmpException"></exception>
         private static int LookupFieldSelector(XmpNode arrayNode, string fieldName, string fieldValue)
@@ -666,7 +664,7 @@ namespace XmpCore.Impl
         /// Returns the kind of match as an Integer and the found node in an
         /// array.
         /// </returns>
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         internal static object[] ChooseLocalizedText(XmpNode arrayNode, string genericLang, string specificLang)
         {
             // See if the array has the right form. Allow empty alt arrays,
@@ -731,7 +729,7 @@ namespace XmpCore.Impl
         /// <param name="arrayNode">an array node</param>
         /// <param name="language">the requested language</param>
         /// <returns>Returns the index if the language has been found, -1 otherwise.</returns>
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         internal static int LookupLanguageItem(XmpNode arrayNode, string language)
         {
             if (!arrayNode.Options.IsArray)

@@ -29,7 +29,7 @@ namespace XmpCore.Impl
         /// <param name="xmp">a metadata implementation object</param>
         /// <param name="stream">the output stream to serialize to</param>
         /// <param name="options">serialization options, can be <c>null</c> for default.</param>
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public static void Serialize(XmpMeta xmp, Stream stream, SerializeOptions options)
         {
             options = options ?? new SerializeOptions();

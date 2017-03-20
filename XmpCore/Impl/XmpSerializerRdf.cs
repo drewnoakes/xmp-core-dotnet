@@ -124,7 +124,7 @@ namespace XmpCore.Impl
             if (_options.ExactPacketLength)
             {
                 // the string length is equal to the length of the UTF-8 encoding
-                var minSize = checked((int)(_stream.Position - _startPos)) + tailLength * _unicodeSize;
+                var minSize = checked((int)(_stream.Position - _startPos)) + tailLength*_unicodeSize;
                 if (minSize > _padding)
                 {
                     throw new XmpException("Can't fit into specified packet size", XmpErrorCode.BadSerialize);
@@ -197,13 +197,13 @@ namespace XmpCore.Impl
                     {
                         if (_padding == 0)
                         {
-                            _padding = DefaultPad * _unicodeSize;
+                            _padding = DefaultPad*_unicodeSize;
                         }
                         if (_options.IncludeThumbnailPad)
                         {
                             if (!_xmp.DoesPropertyExist(XmpConstants.NsXmp, "Thumbnails"))
                             {
-                                _padding += 10000 * _unicodeSize;
+                                _padding += 10000*_unicodeSize;
                             }
                         }
                     }
@@ -284,7 +284,7 @@ namespace XmpCore.Impl
             if (_xmp.GetRoot().GetChildrenLength() > 0)
             {
                 StartOuterRdfDescription(_xmp.GetRoot(), level);
-                for (var it = _xmp.GetRoot().IterateChildren(); it.HasNext(); )
+                for (var it = _xmp.GetRoot().IterateChildren(); it.HasNext();)
                 {
                     var currSchema = (XmpNode)it.Next();
                     SerializeCanonicalRdfSchema(currSchema, level);
@@ -302,7 +302,7 @@ namespace XmpCore.Impl
             }
         }
 
-        /// <exception cref="System.IO.IOException"/>
+        /// <exception cref="System.IO.IOException" />
         private void WriteTreeName()
         {
             Write('"');
@@ -328,14 +328,14 @@ namespace XmpCore.Impl
             ICollection<object> usedPrefixes = new HashSet<object>();
             usedPrefixes.Add("xml");
             usedPrefixes.Add("rdf");
-            for (var it = _xmp.GetRoot().IterateChildren(); it.HasNext(); )
+            for (var it = _xmp.GetRoot().IterateChildren(); it.HasNext();)
             {
                 var schema = (XmpNode)it.Next();
                 DeclareUsedNamespaces(schema, usedPrefixes, level + 3);
             }
             // Write the top level "attrProps" and close the rdf:Description start tag.
             var allAreAttrs = true;
-            for (var it1 = _xmp.GetRoot().IterateChildren(); it1.HasNext(); )
+            for (var it1 = _xmp.GetRoot().IterateChildren(); it1.HasNext();)
             {
                 var schema = (XmpNode)it1.Next();
                 allAreAttrs &= SerializeCompactRdfAttrProps(schema, level + 2);
@@ -353,7 +353,7 @@ namespace XmpCore.Impl
             }
             // ! Done if all properties in all schema are written as attributes.
             // Write the remaining properties for each schema.
-            for (var it2 = _xmp.GetRoot().IterateChildren(); it2.HasNext(); )
+            for (var it2 = _xmp.GetRoot().IterateChildren(); it2.HasNext();)
             {
                 var schema = (XmpNode)it2.Next();
                 SerializeCompactRdfElementProps(schema, level + 2);
@@ -372,11 +372,11 @@ namespace XmpCore.Impl
         /// <param name="parentNode">the parent property node</param>
         /// <param name="indent">the current indent level</param>
         /// <returns>Returns true if all properties can be rendered as RDF attribute.</returns>
-        /// <exception cref="System.IO.IOException"/>
+        /// <exception cref="System.IO.IOException" />
         private bool SerializeCompactRdfAttrProps(XmpNode parentNode, int indent)
         {
             var allAreAttrs = true;
-            for (var it = parentNode.IterateChildren(); it.HasNext(); )
+            for (var it = parentNode.IterateChildren(); it.HasNext();)
             {
                 var prop = (XmpNode)it.Next();
                 if (CanBeRdfAttrProp(prop))
@@ -440,7 +440,7 @@ namespace XmpCore.Impl
         /// <exception cref="XmpException">If qualifier and element fields are mixed.</exception>
         private void SerializeCompactRdfElementProps(XmpNode parentNode, int indent)
         {
-            for (var it = parentNode.IterateChildren(); it.HasNext(); )
+            for (var it = parentNode.IterateChildren(); it.HasNext();)
             {
                 var node = (XmpNode)it.Next();
 
@@ -461,7 +461,7 @@ namespace XmpCore.Impl
                 Write(elemName);
                 var hasGeneralQualifiers = false;
                 var hasRdfResourceQual = false;
-                for (var iq = node.IterateQualifier(); iq.HasNext(); )
+                for (var iq = node.IterateQualifier(); iq.HasNext();)
                 {
                     var qualifier = (XmpNode)iq.Next();
                     if (!RdfAttrQualifier.Contains(qualifier.Name))
@@ -586,7 +586,7 @@ namespace XmpCore.Impl
             var hasAttrFields = false;
             var hasElemFields = false;
             var emitEndTag = true;
-            for (var ic = node.IterateChildren(); ic.HasNext(); )
+            for (var ic = node.IterateChildren(); ic.HasNext();)
             {
                 var field = (XmpNode)ic.Next();
                 if (CanBeRdfAttrProp(field))
@@ -673,7 +673,7 @@ namespace XmpCore.Impl
             Write(" rdf:parseType=\"Resource\">");
             WriteNewline();
             SerializeCanonicalRdfProperty(node, false, true, indent + 1);
-            for (var iq = node.IterateQualifier(); iq.HasNext(); )
+            for (var iq = node.IterateQualifier(); iq.HasNext();)
             {
                 var qualifier = (XmpNode)iq.Next();
                 SerializeCanonicalRdfProperty(qualifier, false, false, indent + 1);
@@ -704,7 +704,7 @@ namespace XmpCore.Impl
         private void SerializeCanonicalRdfSchema(XmpNode schemaNode, int level)
         {
             // Write each of the schema's actual properties.
-            for (var it = schemaNode.IterateChildren(); it.HasNext(); )
+            for (var it = schemaNode.IterateChildren(); it.HasNext();)
             {
                 var propNode = (XmpNode)it.Next();
                 SerializeCanonicalRdfProperty(propNode, _options.UseCanonicalFormat, false, level + 2);
@@ -725,26 +725,26 @@ namespace XmpCore.Impl
             if (node.Options.IsSchemaNode)
             {
                 // The schema node name is the URI, the value is the prefix.
-                var prefix = node.Value.Substring (0, node.Value.Length - 1 - 0);
+                var prefix = node.Value.Substring(0, node.Value.Length - 1 - 0);
                 DeclareNamespace(prefix, node.Name, usedPrefixes, indent);
             }
             else
             {
                 if (node.Options.IsStruct)
                 {
-                    for (var it = node.IterateChildren(); it.HasNext(); )
+                    for (var it = node.IterateChildren(); it.HasNext();)
                     {
                         var field = (XmpNode)it.Next();
                         DeclareNamespace(field.Name, null, usedPrefixes, indent);
                     }
                 }
             }
-            for (var it1 = node.IterateChildren(); it1.HasNext(); )
+            for (var it1 = node.IterateChildren(); it1.HasNext();)
             {
                 var child = (XmpNode)it1.Next();
                 DeclareUsedNamespaces(child, usedPrefixes, indent);
             }
-            for (var it2 = node.IterateQualifier(); it2.HasNext(); )
+            for (var it2 = node.IterateQualifier(); it2.HasNext();)
             {
                 var qualifier = (XmpNode)it2.Next();
                 DeclareNamespace(qualifier.Name, null, usedPrefixes, indent);
@@ -810,7 +810,7 @@ namespace XmpCore.Impl
         }
 
         /// <summary>Write the <c>&lt;/rdf:Description&gt;</c> end tag.</summary>
-        /// <exception cref="System.IO.IOException"/>
+        /// <exception cref="System.IO.IOException" />
         private void EndOuterRdfDescription(int level)
         {
             WriteIndent(level + 1);
@@ -878,7 +878,7 @@ namespace XmpCore.Impl
             Write(elemName);
             var hasGeneralQualifiers = false;
             var hasRdfResourceQual = false;
-            for (var it = node.IterateQualifier(); it.HasNext(); )
+            for (var it = node.IterateQualifier(); it.HasNext();)
             {
                 var qualifier = (XmpNode)it.Next();
                 if (!RdfAttrQualifier.Contains(qualifier.Name))
@@ -926,7 +926,7 @@ namespace XmpCore.Impl
                 }
                 WriteNewline();
                 SerializeCanonicalRdfProperty(node, useCanonicalRdf, true, indent + 1);
-                for (var it1 = node.IterateQualifier(); it1.HasNext(); )
+                for (var it1 = node.IterateQualifier(); it1.HasNext();)
                 {
                     var qualifier = (XmpNode)it1.Next();
                     if (!RdfAttrQualifier.Contains(qualifier.Name))
@@ -984,7 +984,7 @@ namespace XmpCore.Impl
                         {
                             XmpNodeUtils.NormalizeLangArray(node);
                         }
-                        for (var it1 = node.IterateChildren(); it1.HasNext(); )
+                        for (var it1 = node.IterateChildren(); it1.HasNext();)
                         {
                             var child = (XmpNode)it1.Next();
                             SerializeCanonicalRdfProperty(child, useCanonicalRdf, false, indent + 2);
@@ -1032,7 +1032,7 @@ namespace XmpCore.Impl
                                     Write(" rdf:parseType=\"Resource\">");
                                 }
                                 WriteNewline();
-                                for (var it1 = node.IterateChildren(); it1.HasNext(); )
+                                for (var it1 = node.IterateChildren(); it1.HasNext();)
                                 {
                                     var child = (XmpNode)it1.Next();
                                     SerializeCanonicalRdfProperty(child, useCanonicalRdf, false, indent + 1);
@@ -1050,7 +1050,7 @@ namespace XmpCore.Impl
                         {
                             // This is a struct with an rdf:resource attribute, use the
                             // "empty property element" form.
-                            for (var it1 = node.IterateChildren(); it1.HasNext(); )
+                            for (var it1 = node.IterateChildren(); it1.HasNext();)
                             {
                                 var child = (XmpNode)it1.Next();
                                 if (!CanBeRdfAttrProp(child))
@@ -1129,7 +1129,7 @@ namespace XmpCore.Impl
         /// </remarks>
         /// <param name="value">the value of the node</param>
         /// <param name="forAttribute">flag if value is an attribute value</param>
-        /// <exception cref="System.IO.IOException"/>
+        /// <exception cref="System.IO.IOException" />
         private void AppendNodeValue(string value, bool forAttribute)
         {
             if (value == null)
@@ -1174,13 +1174,13 @@ namespace XmpCore.Impl
             _writer.Write(c);
         }
 
-		/// <summary>Writes a char to the output.</summary>
-		/// <param name="c">a char</param>
-		/// <exception cref="System.IO.IOException">forwards writer exceptions</exception>
-		private void Write(char c)
-		{
-			_writer.Write(c);
-		}
+        /// <summary>Writes a char to the output.</summary>
+        /// <param name="c">a char</param>
+        /// <exception cref="System.IO.IOException">forwards writer exceptions</exception>
+        private void Write(char c)
+        {
+            _writer.Write(c);
+        }
 
         /// <summary>Writes a String to the output.</summary>
         /// <param name="str">a String</param>
@@ -1193,7 +1193,7 @@ namespace XmpCore.Impl
         /// <summary>Writes an amount of chars, mostly spaces</summary>
         /// <param name="number">number of chars</param>
         /// <param name="c">a char</param>
-        /// <exception cref="System.IO.IOException"/>
+        /// <exception cref="System.IO.IOException" />
         private void WriteChars(int number, char c)
         {
             for (; number > 0; number--)

@@ -39,19 +39,19 @@ namespace XmpCore.Impl
             {
                 var isNameStartChar =
                     ch == ':' ||
-                    ('A' <= ch && ch <= 'Z') ||
+                    'A' <= ch && ch <= 'Z' ||
                     ch == '_' ||
-                    ('a' <= ch && ch <= 'z') ||
-                    (0xC0 <= ch && ch <= 0xD6) ||
-                    (0xD8 <= ch && ch <= 0xF6) ||
-                    (0xF8 <= ch && ch <= 0xFF);
+                    'a' <= ch && ch <= 'z' ||
+                    0xC0 <= ch && ch <= 0xD6 ||
+                    0xD8 <= ch && ch <= 0xF6 ||
+                    0xF8 <= ch && ch <= 0xFF;
 
                 _xmlNameStartChars[ch] = isNameStartChar;
                 _xmlNameChars[ch] =
                     isNameStartChar ||
                     ch == '-' ||
                     ch == '.' ||
-                    ('0' <= ch && ch <= '9') ||
+                    '0' <= ch && ch <= '9' ||
                     ch == 0xB7;
             }
         }
@@ -131,7 +131,7 @@ namespace XmpCore.Impl
             var pos = 1;
             if (selector[pos] == '?')
                 pos++;
-            name = selector.Substring (pos, eq - pos);
+            name = selector.Substring(pos, eq - pos);
 
             // get the value
             pos = eq + 1;
@@ -305,7 +305,7 @@ namespace XmpCore.Impl
             }
 
             // slow path with escaping
-            var buffer = new StringBuilder(value.Length * 4 / 3);
+            var buffer = new StringBuilder(value.Length*4/3);
             foreach (var c in value)
             {
                 if (!(escapeWhitespaces && (c == '\t' || c == '\n' || c == '\r')))

@@ -58,7 +58,7 @@ namespace XmpCore.Impl
             _tree = tree;
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public void AppendArrayItem(string schemaNs, string arrayName, PropertyOptions arrayOptions, string itemValue, PropertyOptions itemOptions)
         {
             ParameterAsserts.AssertSchemaNs(schemaNs);
@@ -112,13 +112,13 @@ namespace XmpCore.Impl
             DoSetArrayItem(arrayNode, XmpConstants.ArrayLastItem, itemValue, itemOptions, true);
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public void AppendArrayItem(string schemaNs, string arrayName, string itemValue)
         {
             AppendArrayItem(schemaNs, arrayName, null, itemValue, null);
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public int CountArrayItems(string schemaNs, string arrayName)
         {
             ParameterAsserts.AssertSchemaNs(schemaNs);
@@ -261,7 +261,7 @@ namespace XmpCore.Impl
             }
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public IXmpProperty GetArrayItem(string schemaNs, string arrayName, int itemIndex)
         {
             ParameterAsserts.AssertSchemaNs(schemaNs);
@@ -270,7 +270,7 @@ namespace XmpCore.Impl
             return GetProperty(schemaNs, itemPath);
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public IXmpProperty GetLocalizedText(string schemaNs, string altTextName, string genericLang, string specificLang)
         {
             ParameterAsserts.AssertSchemaNs(schemaNs);
@@ -294,7 +294,7 @@ namespace XmpCore.Impl
             return null;
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public void SetLocalizedText(string schemaNs, string altTextName, string genericLang, string specificLang, string itemValue, PropertyOptions options)
         {
             ParameterAsserts.AssertSchemaNs(schemaNs);
@@ -323,7 +323,7 @@ namespace XmpCore.Impl
             // Make sure the x-default item, if any, is first.
             var haveXDefault = false;
             XmpNode xdItem = null;
-            for (var it = arrayNode.IterateChildren(); it.HasNext(); )
+            for (var it = arrayNode.IterateChildren(); it.HasNext();)
             {
                 var currItem = (XmpNode)it.Next();
                 if (!currItem.HasQualifier || currItem.GetQualifier(1).Name != XmpConstants.XmlLang)
@@ -381,7 +381,7 @@ namespace XmpCore.Impl
                     {
                         // Update all items whose values match the old x-default value.
                         Debug.Assert(haveXDefault && xdItem == itemNode);
-                        for (var it1 = arrayNode.IterateChildren(); it1.HasNext(); )
+                        for (var it1 = arrayNode.IterateChildren(); it1.HasNext();)
                         {
                             var currItem = (XmpNode)it1.Next();
                             if (currItem == xdItem || currItem.Value != xdItem?.Value)
@@ -460,13 +460,13 @@ namespace XmpCore.Impl
             }
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public void SetLocalizedText(string schemaNs, string altTextName, string genericLang, string specificLang, string itemValue)
         {
             SetLocalizedText(schemaNs, altTextName, genericLang, specificLang, itemValue, null);
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public IXmpProperty GetProperty(string schemaNs, string propName)
         {
             return GetProperty(schemaNs, propName, ValueType.String);
@@ -571,139 +571,139 @@ namespace XmpCore.Impl
             return null;
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public bool GetPropertyBoolean(string schemaNs, string propName)
         {
             return (bool)GetPropertyObject(schemaNs, propName, ValueType.Boolean);
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public void SetPropertyBoolean(string schemaNs, string propName, bool propValue, PropertyOptions options)
         {
             SetProperty(schemaNs, propName, propValue ? XmpConstants.TrueString : XmpConstants.FalseString, options);
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public void SetPropertyBoolean(string schemaNs, string propName, bool propValue)
         {
             SetProperty(schemaNs, propName, propValue ? XmpConstants.TrueString : XmpConstants.FalseString, null);
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public int GetPropertyInteger(string schemaNs, string propName)
         {
             return (int)GetPropertyObject(schemaNs, propName, ValueType.Integer);
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public void SetPropertyInteger(string schemaNs, string propName, int propValue, PropertyOptions options)
         {
             SetProperty(schemaNs, propName, propValue, options);
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public void SetPropertyInteger(string schemaNs, string propName, int propValue)
         {
             SetProperty(schemaNs, propName, propValue, null);
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public long GetPropertyLong(string schemaNs, string propName)
         {
             return (long)GetPropertyObject(schemaNs, propName, ValueType.Long);
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public void SetPropertyLong(string schemaNs, string propName, long propValue, PropertyOptions options)
         {
             SetProperty(schemaNs, propName, propValue, options);
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public void SetPropertyLong(string schemaNs, string propName, long propValue)
         {
             SetProperty(schemaNs, propName, propValue, null);
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public double GetPropertyDouble(string schemaNs, string propName)
         {
             return (double)GetPropertyObject(schemaNs, propName, ValueType.Double);
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public void SetPropertyDouble(string schemaNs, string propName, double propValue, PropertyOptions options)
         {
             SetProperty(schemaNs, propName, propValue, options);
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public void SetPropertyDouble(string schemaNs, string propName, double propValue)
         {
             SetProperty(schemaNs, propName, propValue, null);
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public IXmpDateTime GetPropertyDate(string schemaNs, string propName)
         {
             return (IXmpDateTime)GetPropertyObject(schemaNs, propName, ValueType.Date);
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public void SetPropertyDate(string schemaNs, string propName, IXmpDateTime propValue, PropertyOptions options)
         {
             SetProperty(schemaNs, propName, propValue, options);
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public void SetPropertyDate(string schemaNs, string propName, IXmpDateTime propValue)
         {
             SetProperty(schemaNs, propName, propValue, null);
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public Calendar GetPropertyCalendar(string schemaNs, string propName)
         {
             return (Calendar)GetPropertyObject(schemaNs, propName, ValueType.Calendar);
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public void SetPropertyCalendar(string schemaNs, string propName, Calendar propValue, PropertyOptions options)
         {
             SetProperty(schemaNs, propName, propValue, options);
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public void SetPropertyCalendar(string schemaNs, string propName, Calendar propValue)
         {
             SetProperty(schemaNs, propName, propValue, null);
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public byte[] GetPropertyBase64(string schemaNs, string propName)
         {
             return (byte[])GetPropertyObject(schemaNs, propName, ValueType.Base64);
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public string GetPropertyString(string schemaNs, string propName)
         {
             return (string)GetPropertyObject(schemaNs, propName, ValueType.String);
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public void SetPropertyBase64(string schemaNs, string propName, byte[] propValue, PropertyOptions options)
         {
             SetProperty(schemaNs, propName, propValue, options);
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public void SetPropertyBase64(string schemaNs, string propName, byte[] propValue)
         {
             SetProperty(schemaNs, propName, propValue, null);
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public IXmpProperty GetQualifier(string schemaNs, string propName, string qualNs, string qualName)
         {
             // qualNS and qualName are checked inside composeQualifierPath
@@ -713,7 +713,7 @@ namespace XmpCore.Impl
             return GetProperty(schemaNs, qualPath);
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public IXmpProperty GetStructField(string schemaNs, string structName, string fieldNs, string fieldName)
         {
             // fieldNS and fieldName are checked inside composeStructFieldPath
@@ -734,7 +734,7 @@ namespace XmpCore.Impl
             }
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public void SetArrayItem(string schemaNs, string arrayName, int itemIndex, string itemValue, PropertyOptions options)
         {
             ParameterAsserts.AssertSchemaNs(schemaNs);
@@ -752,13 +752,13 @@ namespace XmpCore.Impl
             }
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public void SetArrayItem(string schemaNs, string arrayName, int itemIndex, string itemValue)
         {
             SetArrayItem(schemaNs, arrayName, itemIndex, itemValue, null);
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public void InsertArrayItem(string schemaNs, string arrayName, int itemIndex, string itemValue, PropertyOptions options)
         {
             ParameterAsserts.AssertSchemaNs(schemaNs);
@@ -776,13 +776,13 @@ namespace XmpCore.Impl
             }
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public void InsertArrayItem(string schemaNs, string arrayName, int itemIndex, string itemValue)
         {
             InsertArrayItem(schemaNs, arrayName, itemIndex, itemValue, null);
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public void SetProperty(string schemaNs, string propName, object propValue, PropertyOptions options)
         {
             ParameterAsserts.AssertSchemaNs(schemaNs);
@@ -800,13 +800,13 @@ namespace XmpCore.Impl
             }
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public void SetProperty(string schemaNs, string propName, object propValue)
         {
             SetProperty(schemaNs, propName, propValue, null);
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public void SetQualifier(string schemaNs, string propName, string qualNs, string qualName, string qualValue, PropertyOptions options)
         {
             ParameterAsserts.AssertSchemaNs(schemaNs);
@@ -819,13 +819,13 @@ namespace XmpCore.Impl
             SetProperty(schemaNs, qualPath, qualValue, options);
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public void SetQualifier(string schemaNs, string propName, string qualNs, string qualName, string qualValue)
         {
             SetQualifier(schemaNs, propName, qualNs, qualName, qualValue, null);
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public void SetStructField(string schemaNs, string structName, string fieldNs, string fieldName, string fieldValue, PropertyOptions options)
         {
             ParameterAsserts.AssertSchemaNs(schemaNs);
@@ -834,7 +834,7 @@ namespace XmpCore.Impl
             SetProperty(schemaNs, fieldPath, fieldValue, options);
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public void SetStructField(string schemaNs, string structName, string fieldNs, string fieldName, string fieldValue)
         {
             SetStructField(schemaNs, structName, fieldNs, fieldName, fieldValue, null);
@@ -880,7 +880,7 @@ namespace XmpCore.Impl
             _tree.Sort();
         }
 
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         public void Normalize(ParseOptions options)
         {
             if (options == null)
@@ -909,7 +909,7 @@ namespace XmpCore.Impl
         /// <param name="itemValue">the item value</param>
         /// <param name="itemOptions">the options for the new item</param>
         /// <param name="insert">insert oder overwrite at index position?</param>
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         private static void DoSetArrayItem(XmpNode arrayNode, int itemIndex, string itemValue, PropertyOptions itemOptions, bool insert)
         {
             var itemNode = new XmpNode(XmpConstants.ArrayItemName, null);
@@ -971,7 +971,7 @@ namespace XmpCore.Impl
         /// <param name="valueType">an int indicating the value type</param>
         /// <param name="propNode">the node containing the value</param>
         /// <returns>Returns a literal value for the node.</returns>
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         private static object EvaluateNodeValue(ValueType valueType, XmpNode propNode)
         {
             switch (valueType)

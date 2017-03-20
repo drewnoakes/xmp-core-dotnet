@@ -23,9 +23,7 @@ namespace XmpCore.Impl
         public static void AssertArrayName(string arrayName)
         {
             if (string.IsNullOrEmpty(arrayName))
-            {
                 throw new XmpException("Empty array name", XmpErrorCode.BadParam);
-            }
         }
 
         /// <summary>Asserts that a property name is set.</summary>
@@ -35,9 +33,7 @@ namespace XmpCore.Impl
         public static void AssertPropName(string propName)
         {
             if (string.IsNullOrEmpty(propName))
-            {
                 throw new XmpException("Empty property name", XmpErrorCode.BadParam);
-            }
         }
 
         /// <summary>Asserts that a schema namespace is set.</summary>
@@ -47,9 +43,7 @@ namespace XmpCore.Impl
         public static void AssertSchemaNs(string schemaNs)
         {
             if (string.IsNullOrEmpty(schemaNs))
-            {
                 throw new XmpException("Empty schema namespace URI", XmpErrorCode.BadParam);
-            }
         }
 
         /// <summary>Asserts that a prefix is set.</summary>
@@ -59,9 +53,7 @@ namespace XmpCore.Impl
         public static void AssertPrefix(string prefix)
         {
             if (string.IsNullOrEmpty(prefix))
-            {
                 throw new XmpException("Empty prefix", XmpErrorCode.BadParam);
-            }
         }
 
         /// <summary>Asserts that a specific language is set.</summary>
@@ -71,9 +63,7 @@ namespace XmpCore.Impl
         public static void AssertSpecificLang(string specificLang)
         {
             if (string.IsNullOrEmpty(specificLang))
-            {
                 throw new XmpException("Empty specific language", XmpErrorCode.BadParam);
-            }
         }
 
         /// <summary>Asserts that a struct name is set.</summary>
@@ -83,9 +73,7 @@ namespace XmpCore.Impl
         public static void AssertStructName(string structName)
         {
             if (string.IsNullOrEmpty(structName))
-            {
                 throw new XmpException("Empty array name", XmpErrorCode.BadParam);
-            }
         }
 
         /// <summary>Asserts that a parameter is not null.</summary>
@@ -95,9 +83,7 @@ namespace XmpCore.Impl
         public static void AssertNotNull(object param)
         {
             if (param == null)
-            {
                 throw new XmpException("Parameter must not be null", XmpErrorCode.BadParam);
-            }
         }
 
         /// <summary>Asserts that any string parameter is not null or empty.</summary>
@@ -107,34 +93,21 @@ namespace XmpCore.Impl
         public static void AssertNotNullOrEmpty(string param)
         {
             if (param == null)
-            {
                 throw new XmpException("Parameter must not be null", XmpErrorCode.BadParam);
-            }
             if (param.Length == 0)
-            {
                 throw new XmpException("Parameter must not be an empty string", XmpErrorCode.BadParam);
-            }
         }
 
-        /// <summary>
-        /// Asserts that the xmp object is of this implemention
-        /// (
-        /// <see cref="XmpMeta"/>
-        /// ).
-        /// </summary>
+        /// <summary>Asserts that the xmp object is of this implemention (<see cref="XmpMeta" />).</summary>
         /// <param name="xmp">the XMP object</param>
         /// <exception cref="XmpException">A wrong implentaion is used.</exception>
         [ContractAnnotation("null => halt")]
         public static void AssertImplementation(IXmpMeta xmp)
         {
             if (xmp == null)
-            {
                 throw new XmpException("Parameter must not be null", XmpErrorCode.BadParam);
-            }
             if (!(xmp is XmpMeta))
-            {
                 throw new XmpException("The XMPMeta-object is not compatible with this implementation", XmpErrorCode.BadParam);
-            }
         }
     }
 }

@@ -83,7 +83,7 @@ namespace XmpCore.Impl
             // Build the result, quoting the array items, adding separators.
             // Hurl if any item isn't simple.
             var catenatedString = new StringBuilder();
-            for (var it = arrayNode.IterateChildren(); it.HasNext(); )
+            for (var it = arrayNode.IterateChildren(); it.HasNext();)
             {
                 var currItem = (XmpNode)it.Next();
 
@@ -178,7 +178,7 @@ namespace XmpCore.Impl
                     }
                     // Have multiple spaces, or a space followed by a
                     // separator.
-                    itemValue = catedStr.Substring (itemStart, itemEnd - itemStart);
+                    itemValue = catedStr.Substring(itemStart, itemEnd - itemStart);
                 }
                 else
                 {
@@ -375,7 +375,7 @@ namespace XmpCore.Impl
                     // we don't have to be
                     // concerned with aliases, they are handled implicitly from the
                     // actual properties.
-                    for (var it = xmpImpl.GetRoot().IterateChildren(); it.HasNext(); )
+                    for (var it = xmpImpl.GetRoot().IterateChildren(); it.HasNext();)
                     {
                         var schema = (XmpNode)it.Next();
                         if (RemoveSchemaChildren(schema, doAllProperties))
@@ -398,7 +398,7 @@ namespace XmpCore.Impl
 
             var src = (XmpMeta)source;
             var dest = (XmpMeta)destination;
-            for (var it = src.GetRoot().IterateChildren(); it.HasNext(); )
+            for (var it = src.GetRoot().IterateChildren(); it.HasNext();)
             {
                 var sourceSchema = (XmpNode)it.Next();
 
@@ -414,7 +414,7 @@ namespace XmpCore.Impl
                 }
 
                 // Process the source schema's children.
-                for (var ic = sourceSchema.IterateChildren(); ic.HasNext(); )
+                for (var ic = sourceSchema.IterateChildren(); ic.HasNext();)
                 {
                     var sourceProp = (XmpNode)ic.Next();
                     if (doAllProperties || !Utils.IsInternalProperty(sourceSchema.Name, sourceProp.Name))
@@ -436,7 +436,7 @@ namespace XmpCore.Impl
         /// <returns>Returns true if the schema is empty after the operation.</returns>
         private static bool RemoveSchemaChildren(XmpNode schemaNode, bool doAllProperties)
         {
-            for (var it = schemaNode.IterateChildren(); it.HasNext(); )
+            for (var it = schemaNode.IterateChildren(); it.HasNext();)
             {
                 var currProp = (XmpNode)it.Next();
                 if (doAllProperties || !Utils.IsInternalProperty(schemaNode.Name, currProp.Name))
@@ -452,7 +452,7 @@ namespace XmpCore.Impl
         /// <param name="destParent">the parent of the destination node</param>
         /// <param name="replaceOldValues">Replace the values of existing properties.</param>
         /// <param name="deleteEmptyValues">flag if properties with empty values should be deleted in the destination object.</param>
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         private static void AppendSubtree(XmpMeta destXmp, XmpNode sourceNode, XmpNode destParent, bool replaceOldValues, bool deleteEmptyValues)
         {
             var destNode = XmpNodeUtils.FindChildNode(destParent, sourceNode.Name, false);
@@ -498,7 +498,7 @@ namespace XmpCore.Impl
                             // To merge a struct process the fields recursively. E.g. add simple missing fields.
                             // The recursive call to AppendSubtree will handle deletion for fields with empty
                             // values.
-                            for (var it = sourceNode.IterateChildren(); it.HasNext(); )
+                            for (var it = sourceNode.IterateChildren(); it.HasNext();)
                             {
                                 var sourceField = (XmpNode)it.Next();
                                 AppendSubtree(destXmp, sourceField, destNode, replaceOldValues, deleteEmptyValues);
@@ -511,7 +511,7 @@ namespace XmpCore.Impl
                             // Merge AltText arrays by the "xml:lang" qualifiers. Make sure x-default is first.
                             // Make a special check for deletion of empty values. Meaningful in AltText arrays
                             // because the "xml:lang" qualifier provides unambiguous source/dest correspondence.
-                            for (var it = sourceNode.IterateChildren(); it.HasNext(); )
+                            for (var it = sourceNode.IterateChildren(); it.HasNext();)
                             {
                                 var sourceItem = (XmpNode)it.Next();
 
@@ -549,12 +549,12 @@ namespace XmpCore.Impl
                             // Merge other arrays by item values. Don't worry about order or duplicates. Source
                             // items with empty values do not cause deletion, that conflicts horribly with
                             // merging.
-                            for (var children = sourceNode.IterateChildren(); children.HasNext(); )
+                            for (var children = sourceNode.IterateChildren(); children.HasNext();)
                             {
                                 var sourceItem = (XmpNode)children.Next();
 
                                 var match = false;
-                                for (var id = destNode.IterateChildren(); id.HasNext(); )
+                                for (var id = destNode.IterateChildren(); id.HasNext();)
                                 {
                                     var destItem = (XmpNode)id.Next();
                                     if (ItemValuesMatch(sourceItem, destItem))
@@ -604,7 +604,7 @@ namespace XmpCore.Impl
                     if (leftNode.GetChildrenLength() != rightNode.GetChildrenLength())
                         return false;
 
-                    for (var it = leftNode.IterateChildren(); it.HasNext(); )
+                    for (var it = leftNode.IterateChildren(); it.HasNext();)
                     {
                         var leftField = (XmpNode)it.Next();
                         var rightField = XmpNodeUtils.FindChildNode(rightNode, leftField.Name, false);
@@ -619,12 +619,12 @@ namespace XmpCore.Impl
                     // and extra values in the rightNode-> The rightNode is the
                     // destination for AppendProperties.
                     Debug.Assert(leftForm.IsArray);
-                    for (var il = leftNode.IterateChildren(); il.HasNext(); )
+                    for (var il = leftNode.IterateChildren(); il.HasNext();)
                     {
                         var leftItem = (XmpNode)il.Next();
                         var match = false;
 
-                        for (var ir = rightNode.IterateChildren(); ir.HasNext(); )
+                        for (var ir = rightNode.IterateChildren(); ir.HasNext();)
                         {
                             var rightItem = (XmpNode)ir.Next();
                             if (ItemValuesMatch(leftItem, rightItem))
@@ -646,8 +646,8 @@ namespace XmpCore.Impl
         /// <remarks>
         /// Separators must be one semicolon surrounded by zero or more spaces. Any of the recognized semicolons or spaces are allowed.
         /// </remarks>
-        /// <param name="separator"/>
-        /// <exception cref="XmpException"/>
+        /// <param name="separator" />
+        /// <exception cref="XmpException" />
         private static void CheckSeparator(string separator)
         {
             var haveSemicolon = false;
@@ -679,7 +679,7 @@ namespace XmpCore.Impl
         /// <param name="quotes">opened and closing quote in a string</param>
         /// <param name="openQuote">the open quote</param>
         /// <returns>Returns a corresponding closing quote.</returns>
-        /// <exception cref="XmpException"/>
+        /// <exception cref="XmpException" />
         private static char CheckQuotes(string quotes, char openQuote)
         {
             char closeQuote;
@@ -836,7 +836,7 @@ namespace XmpCore.Impl
                 }
 
                 // Copy the leading "normal" portion.
-                newItem.Append(openQuote).Append(item.Substring (0, splitPoint - 0));
+                newItem.Append(openQuote).Append(item.Substring(0, splitPoint - 0));
                 for (var charOffset = splitPoint; charOffset < item.Length; charOffset++)
                 {
                     newItem.Append(item[charOffset]);

@@ -85,6 +85,7 @@ namespace XmpCore.Impl
         /// <returns>
         /// Returns the length, that means the number of valid bytes, of the buffer;
         /// the inner byte array might be bigger than that.
+        ///     the inner byte array might be bigger than that.
         /// </returns>
         public int Length() => _length;
 
@@ -111,7 +112,7 @@ namespace XmpCore.Impl
         /// <summary>Appends a byte array or part of to the buffer.</summary>
         /// <param name="bytes">a byte array</param>
         /// <param name="offset">an offset with</param>
-        /// <param name="len"/>
+        /// <param name="len" />
         public void Append(byte[] bytes, int offset, int len)
         {
             EnsureCapacity(_length + len);
@@ -212,7 +213,7 @@ namespace XmpCore.Impl
             if (requestedLength > _buffer.Length)
             {
                 var oldBuf = _buffer;
-                _buffer = new byte[oldBuf.Length * 2];
+                _buffer = new byte[oldBuf.Length*2];
                 Array.Copy(oldBuf, 0, _buffer, 0, oldBuf.Length);
             }
         }
