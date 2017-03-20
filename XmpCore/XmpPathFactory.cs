@@ -38,9 +38,9 @@ namespace XmpCore
     /// </code>
     /// You could also use this code if you want the string form of the integer:
     /// <code>
-    /// String path = XMPPathFactory.composeStructFieldPath (schemaNS, &quot;Struct&quot;, fieldNS,
+    /// String path = XmpPathFactory.ComposeStructFieldPath (schemaNS, &quot;Struct&quot;, fieldNS,
     /// &quot;Array&quot;);
-    /// PropertyText xmpObj.getArrayItem (schemaNS, path, index);
+    /// PropertyText xmpObj.GetArrayItem (schemaNS, path, index);
     /// </code>
     /// <para />
     /// <em>Note:</em> It might look confusing that the schemaNS is passed in all of the calls above.
