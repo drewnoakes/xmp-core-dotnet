@@ -18,17 +18,11 @@ namespace XmpCore.Impl
     public class FixAsciiControlsReader : PushbackReader
     {
         private const int StateStart = 0;
-
         private const int StateAmp = 1;
-
         private const int StateHash = 2;
-
         private const int StateHex = 3;
-
         private const int StateDig1 = 4;
-
         private const int StateError = 5;
-
         private const int BufferSize = 8;
 
         /// <summary>the state of the automaton</summary>
@@ -81,16 +75,13 @@ namespace XmpCore.Impl
                             break;
                     }
                 }
-                else
+                else if (readAhead > 0)
                 {
-                    if (readAhead > 0)
-                    {
-                        // handles case when file ends within excaped sequence
-                        Unread(readAheadBuffer, 0, readAhead);
-                        _state = StateError;
-                        readAhead = 0;
-                        available = true;
-                    }
+                    // handles case when file ends within excaped sequence
+                    Unread(readAheadBuffer, 0, readAhead);
+                    _state = StateError;
+                    readAhead = 0;
+                    available = true;
                 }
             }
             return read > 0 || available ? read : -1;

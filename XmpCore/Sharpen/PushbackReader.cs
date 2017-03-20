@@ -9,16 +9,15 @@ namespace Sharpen
     public class PushbackReader : StreamReader
     {
         private readonly char[] _buf;
-        private int _pos;
         private readonly object _lock;
+        private int _pos;
 
         public PushbackReader(StreamReader stream, int size)
             : base(stream.BaseStream)
         {
             if (size <= 0)
-            {
                 throw new ArgumentOutOfRangeException(nameof(size), "size <= 0");
-            }
+
             _lock = this;
             _buf = new char[size];
             _pos = size;
@@ -46,16 +45,14 @@ namespace Sharpen
                     if (len <= 0)
                     {
                         if (len < 0)
-                        {
                             throw new ArgumentException();
-                        }
                         if ((off < 0) || (off > cbuf.Length))
-                        {
                             throw new ArgumentException();
-                        }
                         return 0;
                     }
+
                     var avail = _buf.Length - _pos;
+
                     if (avail > 0)
                     {
                         if (len < avail)
@@ -65,15 +62,17 @@ namespace Sharpen
                         off += avail;
                         len -= avail;
                     }
+
                     if (len > 0)
                     {
                         len = base.Read(cbuf, off, len);
-                        if (len == -1)
-                        {
-                            return avail == 0 ? -1 : avail;
-                        }
-                        return avail + len;
+                        return len != -1
+                            ? avail + len
+                            : avail == 0
+                                ? -1
+                                : avail;
                     }
+
                     return avail;
                 }
                 catch (IndexOutOfRangeException)
