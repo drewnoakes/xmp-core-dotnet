@@ -26,7 +26,6 @@ namespace Sharpen
         {
             lock (_lock)
             {
-                EnsureOpen();
                 if (_pos < _buf.Length)
                     return _buf[_pos++];
 
@@ -38,7 +37,6 @@ namespace Sharpen
         {
             lock (_lock)
             {
-                EnsureOpen();
                 try
                 {
                     if (len <= 0)
@@ -85,18 +83,11 @@ namespace Sharpen
         {
             lock (_lock)
             {
-                EnsureOpen();
                 if (len > _pos)
                     throw new IOException("Pushback buffer overflow");
                 _pos -= len;
                 Array.Copy(cbuf, off, _buf, _pos, len);
             }
-        }
-
-        private void EnsureOpen()
-        {
-            if (_buf == null)
-                throw new IOException("Stream closed");
         }
     }
 }
