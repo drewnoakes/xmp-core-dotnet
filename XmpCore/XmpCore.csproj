@@ -10,7 +10,7 @@ The API should be familiar to users of Adobe's XMPCore, though it has been modif
     <AssemblyTitle>XmpCore</AssemblyTitle>
     <VersionPrefix>5.1.3.0</VersionPrefix>
     <Authors>Drew Noakes</Authors>
-    <TargetFrameworks>netstandard1.0;net35</TargetFrameworks>
+    <TargetFrameworks>netstandard1.0;netstandard2.0;net35</TargetFrameworks>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <DebugType>portable</DebugType>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
