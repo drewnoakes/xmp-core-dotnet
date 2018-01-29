@@ -313,40 +313,33 @@ namespace XmpCore.Impl
         /// <returns>Returns the String representation of the node value.</returns>
         private static string SerializeNodeValue(object value)
         {
-            if (value == null)
-                return null;
-
-            if (value is bool)
-                return XmpCore.XmpUtils.ConvertFromBoolean((bool)value);
-
-            if (value is int)
-                return XmpCore.XmpUtils.ConvertFromInteger((int)value);
-
-            if (value is long)
-                return XmpCore.XmpUtils.ConvertFromLong((long)value);
-
-            if (value is double)
-                return XmpCore.XmpUtils.ConvertFromDouble((double)value);
+            switch (value)
+            {
+                case null:
+                    return null;
+                case bool b:
+                    return XmpCore.XmpUtils.ConvertFromBoolean(b);
+                case int i:
+                    return XmpCore.XmpUtils.ConvertFromInteger(i);
+                case long l:
+                    return XmpCore.XmpUtils.ConvertFromLong(l);
+                case double d:
+                    return XmpCore.XmpUtils.ConvertFromDouble(d);
+            }
 
             string strValue;
-            var dateTime = value as IXmpDateTime;
-            if (dateTime != null)
+            switch (value)
             {
-                strValue = XmpCore.XmpUtils.ConvertFromDate(dateTime);
-            }
-            else
-            {
-                var calendar = value as GregorianCalendar;
-                if (calendar != null)
-                {
+                case IXmpDateTime dateTime:
+                    strValue = XmpCore.XmpUtils.ConvertFromDate(dateTime);
+                    break;
+                case GregorianCalendar calendar:
                     var dt = XmpDateTimeFactory.CreateFromCalendar(calendar);
                     strValue = XmpCore.XmpUtils.ConvertFromDate(dt);
-                }
-                else
-                {
-                    var sbytes = value as byte[];
-                    strValue = sbytes != null ? XmpCore.XmpUtils.EncodeBase64(sbytes) : value.ToString();
-                }
+                    break;
+                default:
+                    strValue = value is byte[] sbytes ? XmpCore.XmpUtils.EncodeBase64(sbytes) : value.ToString();
+                    break;
             }
 
             return strValue != null ? Utils.RemoveControlChars(strValue) : null;

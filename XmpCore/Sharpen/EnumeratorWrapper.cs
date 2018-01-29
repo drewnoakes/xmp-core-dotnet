@@ -31,8 +31,7 @@ namespace Sharpen
 
         public override void Remove()
         {
-            var col = _collection as ICollection<T>;
-            if (col == null)
+            if (!(_collection is ICollection<T> col))
                 throw new NotSupportedException();
 
             if (_more && !_copied)
