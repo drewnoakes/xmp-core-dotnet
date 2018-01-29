@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Sharpen
 {
-    public class EnumeratorWrapper<T> : Iterator<T>
+    public sealed class EnumeratorWrapper<T> : Iterator<T>
     {
         private readonly object _collection;
         private IEnumerator<T> _e;
