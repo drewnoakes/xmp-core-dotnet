@@ -18,10 +18,7 @@ namespace Sharpen
             _more = e.MoveNext();
         }
 
-        public override bool HasNext()
-        {
-            return _more;
-        }
+        public override bool HasNext() => _more;
 
         public override T Next()
         {

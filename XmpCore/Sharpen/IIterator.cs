@@ -15,11 +15,7 @@ namespace Sharpen
     {
         private T _lastValue;
 
-        object IIterator.Next()
-        {
-            return Next();
-        }
-
+        object IIterator.Next() => Next();
         public abstract bool HasNext();
         public abstract T Next();
         public abstract void Remove();
@@ -33,17 +29,9 @@ namespace Sharpen
             return true;
         }
 
-        void IEnumerator.Reset()
-        {
-            throw new NotImplementedException();
-        }
-
-        void IDisposable.Dispose()
-        {
-        }
-
+        void IEnumerator.Reset() => throw new NotImplementedException();
+        void IDisposable.Dispose() {}
         T IEnumerator<T>.Current => _lastValue;
-
         object IEnumerator.Current => _lastValue;
     }
 }

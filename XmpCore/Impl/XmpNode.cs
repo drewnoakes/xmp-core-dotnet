@@ -292,20 +292,10 @@ namespace XmpCore.Impl
         /// </summary>
         private sealed class Iterator391 : IIterator
         {
-            public Iterator391(IIterator it)
-            {
-                _it = it;
-            }
-
+            public Iterator391(IIterator it) => _it = it;
             public bool HasNext() => _it.HasNext();
-
             public object Next() => _it.Next();
-
-            public void Remove()
-            {
-                throw new NotSupportedException("remove() is not allowed due to the internal constraints");
-            }
-
+            public void Remove() => throw new NotSupportedException("remove() is not allowed due to the internal constraints");
             private readonly IIterator _it;
         }
 
