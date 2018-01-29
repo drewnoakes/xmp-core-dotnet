@@ -530,7 +530,7 @@ namespace XmpCore.Impl
         /// <param name="list">the list to search in</param>
         /// <param name="expr">the search expression</param>
         /// <returns>Returns the found node or <c>nulls</c>.</returns>
-        private static XmpNode Find(IList<XmpNode> list, string expr) => list?.FirstOrDefault(node => node.Name == expr);
+        private static XmpNode Find(IEnumerable<XmpNode> list, string expr) => list?.FirstOrDefault(node => node.Name == expr);
 
         /// <summary>Checks that a node name is not existing on the same level, except for array items.</summary>
         /// <param name="childName">the node name to check</param>
