@@ -158,13 +158,13 @@ namespace XmpCore.Impl
         /// <exception cref="XmpException">Thrown if options are conflicting</exception>
         private void CheckOptionsConsistence()
         {
-            if (_options.EncodeUtf16Be | _options.EncodeUtf16Le)
+            if (_options.EncodeUtf16Be || _options.EncodeUtf16Le)
             {
                 _unicodeSize = 2;
             }
             if (_options.ExactPacketLength)
             {
-                if (_options.OmitPacketWrapper | _options.IncludeThumbnailPad)
+                if (_options.OmitPacketWrapper || _options.IncludeThumbnailPad)
                 {
                     throw new XmpException("Inconsistent options for exact size serialize", XmpErrorCode.BadOptions);
                 }
@@ -177,7 +177,7 @@ namespace XmpCore.Impl
             {
                 if (_options.ReadOnlyPacket)
                 {
-                    if (_options.OmitPacketWrapper | _options.IncludeThumbnailPad)
+                    if (_options.OmitPacketWrapper || _options.IncludeThumbnailPad)
                     {
                         throw new XmpException("Inconsistent options for read-only packet", XmpErrorCode.BadOptions);
                     }
