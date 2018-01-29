@@ -42,21 +42,15 @@ namespace XmpCore.Impl
         private string _packetHeader;
 
         /// <summary>Constructor for an empty metadata object.</summary>
-        public XmpMeta()
-        {
-            // create root node
-            _tree = new XmpNode(null, null, null);
-        }
+        public XmpMeta() : this(new XmpNode(null, null, null))
+        {}
 
         /// <summary>Constructor for a cloned metadata tree.</summary>
         /// <param name="tree">
         /// an prefilled metadata tree which fulfills all
         /// <c>XMPNode</c> contracts.
         /// </param>
-        public XmpMeta(XmpNode tree)
-        {
-            _tree = tree;
-        }
+        public XmpMeta(XmpNode tree) => _tree = tree;
 
         /// <exception cref="XmpException" />
         public void AppendArrayItem(string schemaNs, string arrayName, PropertyOptions arrayOptions, string itemValue, PropertyOptions itemOptions)
@@ -513,11 +507,12 @@ namespace XmpCore.Impl
             }
 
             private readonly XmpPropertyType _proptype;
+            private readonly object _value;
+            private readonly XmpNode _node;
 
             public XmpProperty(XmpNode itemNode)
             {
                 _node = itemNode;
-
                 _proptype = XmpPropertyType.item;
             }
 
@@ -525,24 +520,14 @@ namespace XmpCore.Impl
             {
                 _value = value;
                 _node = propNode;
-
                 _proptype = XmpPropertyType.prop;
             }
 
             public string Value => _proptype == XmpPropertyType.item ? _node.Value : _value?.ToString();
-
             public PropertyOptions Options => _node.Options;
-
             public string Language => _proptype == XmpPropertyType.item ? _node.GetQualifier(1).Value : null;
 
-            public override string ToString()
-            {
-                return _proptype == XmpPropertyType.item ? _node.Value : _value.ToString();
-            }
-
-            private readonly object _value;
-
-            private readonly XmpNode _node;
+            public override string ToString() => _proptype == XmpPropertyType.item ? _node.Value : _value.ToString();
         }
 
         /// <summary>Returns a property, but the result value can be requested.</summary>
@@ -840,27 +825,15 @@ namespace XmpCore.Impl
             SetStructField(schemaNs, structName, fieldNs, fieldName, fieldValue, null);
         }
 
-        public string GetObjectName()
-        {
-            return _tree.Name ?? string.Empty;
-        }
+        public string GetObjectName() => _tree.Name ?? string.Empty;
 
-        public void SetObjectName(string name)
-        {
-            _tree.Name = name;
-        }
+        public void SetObjectName(string name) => _tree.Name = name;
 
-        public string GetPacketHeader()
-        {
-            return _packetHeader;
-        }
+        public string GetPacketHeader() => _packetHeader;
 
         /// <summary>Sets the packetHeader attributes, only used by the parser.</summary>
         /// <param name="packetHeader">the processing instruction content</param>
-        public void SetPacketHeader(string packetHeader)
-        {
-            _packetHeader = packetHeader;
-        }
+        public void SetPacketHeader(string packetHeader) => _packetHeader = packetHeader;
 
         /// <summary>Performs a deep clone of the XMPMeta-object</summary>
         public IXmpMeta Clone()
@@ -869,32 +842,16 @@ namespace XmpCore.Impl
             return new XmpMeta(clonedTree);
         }
 
-        public string DumpObject()
-        {
-            // renders tree recursively
-            return GetRoot().DumpNode(true);
-        }
+        // renders tree recursively
+        public string DumpObject() => GetRoot().DumpNode(true);
 
-        public void Sort()
-        {
-            _tree.Sort();
-        }
+        public void Sort() => _tree.Sort();
 
         /// <exception cref="XmpException" />
-        public void Normalize(ParseOptions options)
-        {
-            if (options == null)
-            {
-                options = new ParseOptions();
-            }
-            XmpNormalizer.Process(this, options);
-        }
+        public void Normalize(ParseOptions options) => XmpNormalizer.Process(this, options ?? new ParseOptions());
 
         /// <returns>Returns the root node of the XMP tree.</returns>
-        public XmpNode GetRoot()
-        {
-            return _tree;
-        }
+        public XmpNode GetRoot() => _tree;
 
         /// <summary>Locate or create the item node and set the value.</summary>
         /// <remarks>
