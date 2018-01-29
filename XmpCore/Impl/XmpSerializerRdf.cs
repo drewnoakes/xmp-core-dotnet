@@ -764,9 +764,9 @@ namespace XmpCore.Impl
             {
                 // prefix contains qname, extract prefix and lookup namespace with prefix
                 var qname = new QName(prefix);
-                if (qname.HasPrefix())
+                if (qname.HasPrefix)
                 {
-                    prefix = qname.GetPrefix();
+                    prefix = qname.Prefix;
                     // add colon for lookup
                     ns = XmpMetaFactory.SchemaRegistry.GetNamespaceUri(prefix + ":");
                     // prefix w/o colon
