@@ -261,11 +261,9 @@ namespace XmpCore.Impl
         /// </returns>
         public IIterator IterateChildren()
         {
-            if (_children != null)
-            {
-                return GetChildren().Iterator();
-            }
-            return Enumerable.Empty<object>().Iterator();
+            return _children != null
+                ? (IIterator)GetChildren().Iterator()
+                : Enumerable.Empty<object>().Iterator();
         }
 
         /// <summary>
@@ -279,12 +277,9 @@ namespace XmpCore.Impl
         /// </returns>
         public IIterator IterateQualifier()
         {
-            if (_qualifier != null)
-            {
-                var it = GetQualifier().Iterator();
-                return new Iterator391(it);
-            }
-            return Enumerable.Empty<object>().Iterator();
+            return _qualifier != null
+                ? (IIterator)new Iterator391(GetQualifier().Iterator())
+                : Enumerable.Empty<object>().Iterator();
         }
 
         /// <summary>

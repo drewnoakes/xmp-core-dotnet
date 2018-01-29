@@ -126,9 +126,7 @@ namespace XmpCore.Impl
                 // the string length is equal to the length of the UTF-8 encoding
                 var minSize = checked((int)(_stream.Position - _startPos)) + tailLength*_unicodeSize;
                 if (minSize > _padding)
-                {
                     throw new XmpException("Can't fit into specified packet size", XmpErrorCode.BadSerialize);
-                }
                 _padding -= minSize;
             }
             // Now the actual amount of padding to add.
@@ -159,55 +157,34 @@ namespace XmpCore.Impl
         private void CheckOptionsConsistence()
         {
             if (_options.EncodeUtf16Be || _options.EncodeUtf16Le)
-            {
                 _unicodeSize = 2;
-            }
+
             if (_options.ExactPacketLength)
             {
                 if (_options.OmitPacketWrapper || _options.IncludeThumbnailPad)
-                {
                     throw new XmpException("Inconsistent options for exact size serialize", XmpErrorCode.BadOptions);
-                }
                 if ((_options.Padding & (_unicodeSize - 1)) != 0)
-                {
                     throw new XmpException("Exact size must be a multiple of the Unicode element", XmpErrorCode.BadOptions);
-                }
+            }
+            else if (_options.ReadOnlyPacket)
+            {
+                if (_options.OmitPacketWrapper || _options.IncludeThumbnailPad)
+                    throw new XmpException("Inconsistent options for read-only packet", XmpErrorCode.BadOptions);
+                _padding = 0;
+            }
+            else if (_options.OmitPacketWrapper)
+            {
+                if (_options.IncludeThumbnailPad)
+                    throw new XmpException("Inconsistent options for non-packet serialize", XmpErrorCode.BadOptions);
+                _padding = 0;
             }
             else
             {
-                if (_options.ReadOnlyPacket)
-                {
-                    if (_options.OmitPacketWrapper || _options.IncludeThumbnailPad)
-                    {
-                        throw new XmpException("Inconsistent options for read-only packet", XmpErrorCode.BadOptions);
-                    }
-                    _padding = 0;
-                }
-                else
-                {
-                    if (_options.OmitPacketWrapper)
-                    {
-                        if (_options.IncludeThumbnailPad)
-                        {
-                            throw new XmpException("Inconsistent options for non-packet serialize", XmpErrorCode.BadOptions);
-                        }
-                        _padding = 0;
-                    }
-                    else
-                    {
-                        if (_padding == 0)
-                        {
-                            _padding = DefaultPad*_unicodeSize;
-                        }
-                        if (_options.IncludeThumbnailPad)
-                        {
-                            if (!_xmp.DoesPropertyExist(XmpConstants.NsXmp, "Thumbnails"))
-                            {
-                                _padding += 10000*_unicodeSize;
-                            }
-                        }
-                    }
-                }
+                if (_padding == 0)
+                    _padding = DefaultPad*_unicodeSize;
+
+                if (_options.IncludeThumbnailPad && !_xmp.DoesPropertyExist(XmpConstants.NsXmp, "Thumbnails"))
+                    _padding += 10000*_unicodeSize;
             }
         }
 
@@ -218,6 +195,7 @@ namespace XmpCore.Impl
         private string SerializeAsRdf()
         {
             var level = 0;
+
             // Write the packet header PI.
             if (!_options.OmitPacketWrapper)
             {
@@ -225,6 +203,7 @@ namespace XmpCore.Impl
                 Write(PacketHeader);
                 WriteNewline();
             }
+
             // Write the x:xmpmeta element's start tag.
             if (!_options.OmitXmpMetaElement)
             {
@@ -235,23 +214,23 @@ namespace XmpCore.Impl
                 WriteNewline();
                 level++;
             }
+
             // Write the rdf:RDF start tag.
             WriteIndent(level);
             Write(RdfRdfStart);
             WriteNewline();
+
             // Write all of the properties.
             if (_options.UseCanonicalFormat)
-            {
                 SerializeCanonicalRdfSchemas(level);
-            }
             else
-            {
                 SerializeCompactRdfSchemas(level);
-            }
+
             // Write the rdf:RDF end tag.
             WriteIndent(level);
             Write(RdfRdfEnd);
             WriteNewline();
+
             // Write the xmpmeta end tag.
             if (!_options.OmitXmpMetaElement)
             {
@@ -260,6 +239,7 @@ namespace XmpCore.Impl
                 Write(RdfXmpmetaEnd);
                 WriteNewline();
             }
+
             // Write the packet trailer PI into the tail string as UTF-8.
             var tailStr = string.Empty;
             if (!_options.OmitPacketWrapper)
@@ -272,6 +252,7 @@ namespace XmpCore.Impl
                 tailStr += _options.ReadOnlyPacket ? 'r' : 'w';
                 tailStr += PacketTrailer2;
             }
+
             return tailStr;
         }
 
@@ -478,6 +459,7 @@ namespace XmpCore.Impl
                         Write('"');
                     }
                 }
+
                 // Process the property according to the standard patterns.
                 if (hasGeneralQualifiers)
                 {
@@ -504,13 +486,13 @@ namespace XmpCore.Impl
                         }
                     }
                 }
+
                 // Emit the property element end tag.
                 if (emitEndTag)
                 {
                     if (indentEndTag)
-                    {
                         WriteIndent(indent);
-                    }
+
                     Write("</");
                     Write(elemName);
                     Write('>');
@@ -528,6 +510,7 @@ namespace XmpCore.Impl
             // This is a simple property.
             var emitEndTag = true;
             var indentEndTag = true;
+
             if (node.Options.IsUri)
             {
                 Write(" rdf:resource=\"");
@@ -536,21 +519,19 @@ namespace XmpCore.Impl
                 WriteNewline();
                 emitEndTag = false;
             }
+            else if (string.IsNullOrEmpty(node.Value))
+            {
+                Write("/>");
+                WriteNewline();
+                emitEndTag = false;
+            }
             else
             {
-                if (string.IsNullOrEmpty(node.Value))
-                {
-                    Write("/>");
-                    WriteNewline();
-                    emitEndTag = false;
-                }
-                else
-                {
-                    Write('>');
-                    AppendNodeValue(node.Value, false);
-                    indentEndTag = false;
-                }
+                Write('>');
+                AppendNodeValue(node.Value, false);
+                indentEndTag = false;
             }
+
             return new object[] { emitEndTag, indentEndTag };
         }
 
@@ -566,9 +547,7 @@ namespace XmpCore.Impl
             WriteNewline();
             EmitRdfArrayTag(node, true, indent + 1);
             if (node.Options.IsArrayAltText)
-            {
                 XmpNodeUtils.NormalizeLangArray(node);
-            }
             SerializeCompactRdfElementProps(node, indent + 2);
             EmitRdfArrayTag(node, false, indent + 1);
         }
@@ -586,27 +565,24 @@ namespace XmpCore.Impl
             var hasAttrFields = false;
             var hasElemFields = false;
             var emitEndTag = true;
+
             for (var ic = node.IterateChildren(); ic.HasNext();)
             {
                 var field = (XmpNode)ic.Next();
+
                 if (CanBeRdfAttrProp(field))
-                {
                     hasAttrFields = true;
-                }
                 else
-                {
                     hasElemFields = true;
-                }
+
                 if (hasAttrFields && hasElemFields)
-                {
                     break;
-                }
             }
+
             // No sense looking further.
             if (hasRdfResourceQual && hasElemFields)
-            {
                 throw new XmpException("Can't mix rdf:resource qualifier and element fields", XmpErrorCode.BadRdf);
-            }
+
             if (!node.HasChildren)
             {
                 // Catch an empty struct as a special case. The case
@@ -617,44 +593,39 @@ namespace XmpCore.Impl
                 WriteNewline();
                 emitEndTag = false;
             }
+            else if (!hasElemFields)
+            {
+                // All fields can be attributes, use the
+                // emptyPropertyElt form.
+                SerializeCompactRdfAttrProps(node, indent + 1);
+                Write("/>");
+                WriteNewline();
+                emitEndTag = false;
+            }
+            else if (!hasAttrFields)
+            {
+                // All fields must be elements, use the
+                // parseTypeResourcePropertyElt form.
+                Write(" rdf:parseType=\"Resource\">");
+                WriteNewline();
+                SerializeCompactRdfElementProps(node, indent + 1);
+            }
             else
             {
-                if (!hasElemFields)
-                {
-                    // All fields can be attributes, use the
-                    // emptyPropertyElt form.
-                    SerializeCompactRdfAttrProps(node, indent + 1);
-                    Write("/>");
-                    WriteNewline();
-                    emitEndTag = false;
-                }
-                else
-                {
-                    if (!hasAttrFields)
-                    {
-                        // All fields must be elements, use the
-                        // parseTypeResourcePropertyElt form.
-                        Write(" rdf:parseType=\"Resource\">");
-                        WriteNewline();
-                        SerializeCompactRdfElementProps(node, indent + 1);
-                    }
-                    else
-                    {
-                        // Have a mix of attributes and elements, use an inner rdf:Description.
-                        Write('>');
-                        WriteNewline();
-                        WriteIndent(indent + 1);
-                        Write(RdfStructStart);
-                        SerializeCompactRdfAttrProps(node, indent + 2);
-                        Write(">");
-                        WriteNewline();
-                        SerializeCompactRdfElementProps(node, indent + 1);
-                        WriteIndent(indent + 1);
-                        Write(RdfStructEnd);
-                        WriteNewline();
-                    }
-                }
+                // Have a mix of attributes and elements, use an inner rdf:Description.
+                Write('>');
+                WriteNewline();
+                WriteIndent(indent + 1);
+                Write(RdfStructStart);
+                SerializeCompactRdfAttrProps(node, indent + 2);
+                Write(">");
+                WriteNewline();
+                SerializeCompactRdfElementProps(node, indent + 1);
+                WriteIndent(indent + 1);
+                Write(RdfStructEnd);
+                WriteNewline();
             }
+
             return emitEndTag;
         }
 
@@ -728,25 +699,24 @@ namespace XmpCore.Impl
                 var prefix = node.Value.Substring(0, node.Value.Length - 1 - 0);
                 DeclareNamespace(prefix, node.Name, usedPrefixes, indent);
             }
-            else
+            else if (node.Options.IsStruct)
             {
-                if (node.Options.IsStruct)
+                for (var it = node.IterateChildren(); it.HasNext();)
                 {
-                    for (var it = node.IterateChildren(); it.HasNext();)
-                    {
-                        var field = (XmpNode)it.Next();
-                        DeclareNamespace(field.Name, null, usedPrefixes, indent);
-                    }
+                    var field = (XmpNode)it.Next();
+                    DeclareNamespace(field.Name, null, usedPrefixes, indent);
                 }
             }
-            for (var it1 = node.IterateChildren(); it1.HasNext();)
+
+            for (var it = node.IterateChildren(); it.HasNext();)
             {
-                var child = (XmpNode)it1.Next();
+                var child = (XmpNode)it.Next();
                 DeclareUsedNamespaces(child, usedPrefixes, indent);
             }
-            for (var it2 = node.IterateQualifier(); it2.HasNext();)
+
+            for (var it = node.IterateQualifier(); it.HasNext();)
             {
-                var qualifier = (XmpNode)it2.Next();
+                var qualifier = (XmpNode)it.Next();
                 DeclareNamespace(qualifier.Name, null, usedPrefixes, indent);
                 DeclareUsedNamespaces(qualifier, usedPrefixes, indent);
             }
@@ -764,19 +734,17 @@ namespace XmpCore.Impl
             {
                 // prefix contains qname, extract prefix and lookup namespace with prefix
                 var qname = new QName(prefix);
-                if (qname.HasPrefix)
-                {
-                    prefix = qname.Prefix;
-                    // add colon for lookup
-                    ns = XmpMetaFactory.SchemaRegistry.GetNamespaceUri(prefix + ":");
-                    // prefix w/o colon
-                    DeclareNamespace(prefix, ns, usedPrefixes, indent);
-                }
-                else
-                {
+
+                if (!qname.HasPrefix)
                     return;
-                }
+
+                prefix = qname.Prefix;
+                // add colon for lookup
+                ns = XmpMetaFactory.SchemaRegistry.GetNamespaceUri(prefix + ":");
+                // prefix w/o colon
+                DeclareNamespace(prefix, ns, usedPrefixes, indent);
             }
+
             if (!usedPrefixes.Contains(prefix))
             {
                 WriteNewline();
@@ -906,9 +874,8 @@ namespace XmpCore.Impl
                 // ! The value is output by a recursive call ON THE SAME NODE with
                 // emitAsRDFValue set.
                 if (hasRdfResourceQual)
-                {
                     throw new XmpException("Can't mix rdf:resource and general qualifiers", XmpErrorCode.BadRdf);
-                }
+
                 // Change serialization to canonical format with inner rdf:Description-tag
                 // depending on option
                 if (useCanonicalRdf)
@@ -924,16 +891,17 @@ namespace XmpCore.Impl
                 {
                     Write(" rdf:parseType=\"Resource\">");
                 }
+
                 WriteNewline();
                 SerializeCanonicalRdfProperty(node, useCanonicalRdf, true, indent + 1);
-                for (var it1 = node.IterateQualifier(); it1.HasNext();)
+
+                for (var it = node.IterateQualifier(); it.HasNext();)
                 {
-                    var qualifier = (XmpNode)it1.Next();
+                    var qualifier = (XmpNode)it.Next();
                     if (!RdfAttrQualifier.Contains(qualifier.Name))
-                    {
                         SerializeCanonicalRdfProperty(qualifier, useCanonicalRdf, false, indent + 1);
-                    }
                 }
+
                 if (useCanonicalRdf)
                 {
                     WriteIndent(indent);
@@ -956,20 +924,17 @@ namespace XmpCore.Impl
                         WriteNewline();
                         emitEndTag = false;
                     }
+                    else if (string.IsNullOrEmpty(node.Value))
+                    {
+                        Write("/>");
+                        WriteNewline();
+                        emitEndTag = false;
+                    }
                     else
                     {
-                        if (string.IsNullOrEmpty(node.Value))
-                        {
-                            Write("/>");
-                            WriteNewline();
-                            emitEndTag = false;
-                        }
-                        else
-                        {
-                            Write('>');
-                            AppendNodeValue(node.Value, false);
-                            indentEndTag = false;
-                        }
+                        Write('>');
+                        AppendNodeValue(node.Value, false);
+                        indentEndTag = false;
                     }
                 }
                 else
@@ -980,95 +945,98 @@ namespace XmpCore.Impl
                         Write('>');
                         WriteNewline();
                         EmitRdfArrayTag(node, true, indent + 1);
+
                         if (node.Options.IsArrayAltText)
-                        {
                             XmpNodeUtils.NormalizeLangArray(node);
-                        }
+
                         for (var it1 = node.IterateChildren(); it1.HasNext();)
                         {
                             var child = (XmpNode)it1.Next();
                             SerializeCanonicalRdfProperty(child, useCanonicalRdf, false, indent + 2);
                         }
+
                         EmitRdfArrayTag(node, false, indent + 1);
                     }
-                    else
+                    else if (!hasRdfResourceQual)
                     {
-                        if (!hasRdfResourceQual)
+                        // This is a "normal" struct, use the rdf:parseType="Resource" form.
+                        if (!node.HasChildren)
                         {
-                            // This is a "normal" struct, use the rdf:parseType="Resource" form.
-                            if (!node.HasChildren)
+                            // Change serialization to canonical format with inner rdf:Description-tag
+                            // if option is set
+                            if (useCanonicalRdf)
                             {
-                                // Change serialization to canonical format with inner rdf:Description-tag
-                                // if option is set
-                                if (useCanonicalRdf)
-                                {
-                                    Write(">");
-                                    WriteNewline();
-                                    WriteIndent(indent + 1);
-                                    Write(RdfEmptyStruct);
-                                }
-                                else
-                                {
-                                    Write(" rdf:parseType=\"Resource\"/>");
-                                    emitEndTag = false;
-                                }
+                                Write(">");
                                 WriteNewline();
+                                WriteIndent(indent + 1);
+                                Write(RdfEmptyStruct);
                             }
                             else
                             {
-                                // Change serialization to canonical format with inner rdf:Description-tag
-                                // if option is set
-                                if (useCanonicalRdf)
-                                {
-                                    Write(">");
-                                    WriteNewline();
-                                    indent++;
-                                    WriteIndent(indent);
-                                    Write(RdfStructStart);
-                                    Write(">");
-                                }
-                                else
-                                {
-                                    Write(" rdf:parseType=\"Resource\">");
-                                }
-                                WriteNewline();
-                                for (var it1 = node.IterateChildren(); it1.HasNext();)
-                                {
-                                    var child = (XmpNode)it1.Next();
-                                    SerializeCanonicalRdfProperty(child, useCanonicalRdf, false, indent + 1);
-                                }
-                                if (useCanonicalRdf)
-                                {
-                                    WriteIndent(indent);
-                                    Write(RdfStructEnd);
-                                    WriteNewline();
-                                    indent--;
-                                }
+                                Write(" rdf:parseType=\"Resource\"/>");
+                                emitEndTag = false;
                             }
+
+                            WriteNewline();
                         }
                         else
                         {
-                            // This is a struct with an rdf:resource attribute, use the
-                            // "empty property element" form.
-                            for (var it1 = node.IterateChildren(); it1.HasNext();)
+                            // Change serialization to canonical format with inner rdf:Description-tag
+                            // if option is set
+                            if (useCanonicalRdf)
                             {
-                                var child = (XmpNode)it1.Next();
-                                if (!CanBeRdfAttrProp(child))
-                                {
-                                    throw new XmpException("Can't mix rdf:resource and complex fields", XmpErrorCode.BadRdf);
-                                }
+                                Write(">");
                                 WriteNewline();
-                                WriteIndent(indent + 1);
-                                Write(' ');
-                                Write(child.Name);
-                                Write("=\"");
-                                AppendNodeValue(child.Value, true);
-                                Write('"');
+                                indent++;
+                                WriteIndent(indent);
+                                Write(RdfStructStart);
+                                Write(">");
                             }
-                            Write("/>");
+                            else
+                            {
+                                Write(" rdf:parseType=\"Resource\">");
+                            }
+
                             WriteNewline();
-                            emitEndTag = false;
+                            for (var it = node.IterateChildren(); it.HasNext();)
+                            {
+                                var child = (XmpNode)it.Next();
+                                SerializeCanonicalRdfProperty(child, useCanonicalRdf, false, indent + 1);
+                            }
+
+                            if (useCanonicalRdf)
+                            {
+                                WriteIndent(indent);
+                                Write(RdfStructEnd);
+                                WriteNewline();
+                                indent--;
+                            }
                         }
+                    }
+                    else
+                    {
+                        // This is a struct with an rdf:resource attribute, use the
+                        // "empty property element" form.
+                        for (var it1 = node.IterateChildren(); it1.HasNext();)
+                        {
+                            var child = (XmpNode)it1.Next();
+                            if (!CanBeRdfAttrProp(child))
+                            {
+                                throw new XmpException("Can't mix rdf:resource and complex fields", XmpErrorCode.BadRdf);
+                            }
+
+                            WriteNewline();
+                            WriteIndent(indent + 1);
+                            Write(' ');
+                            Write(child.Name);
+                            Write("=\"");
+                            AppendNodeValue(child.Value, true);
+                            Write('"');
+                        }
+
+                        Write("/>");
+                        WriteNewline();
+                        emitEndTag = false;
                     }
                 }
             }
