@@ -16,6 +16,7 @@ using XmpCore.Options;
 
 namespace XmpCore.Impl
 {
+    /// <author>Stefan Makswit</author>
     /// <since>Aug 18, 2006</since>
     public static class XmpNormalizer
     {
@@ -56,6 +57,9 @@ namespace XmpCore.Impl
         {
             var tree = xmp.GetRoot();
             TouchUpDataModel(xmp);
+
+            // FfF: collect the aliases to prevent browsing the tree again
+
             MoveExplicitAliases(tree, options);
             TweakOldXmp(tree);
             DeleteEmptySchemas(tree);
@@ -134,11 +138,46 @@ namespace XmpCore.Impl
                     {
                         // Do a special case fix for exif:GPSTimeStamp.
                         FixGpsTimeStamp(currSchema);
-                        var arrayNode = XmpNodeUtils.FindChildNode(currSchema, "exif:UserComment", false);
+                        /*var arrayNode = XmpNodeUtils.FindChildNode(currSchema, "exif:UserComment", false);
                         if (arrayNode != null)
                         {
                             RepairAltText(arrayNode);
+                        }*/
+                        var userComment = XmpNodeUtils.FindChildNode(currSchema, "exif:UserComment", false);
+                        if (userComment != null)
+                        {
+                            if (userComment.Options.IsSimple)
+                            {
+                                XmpNode newNode = new XmpNode(XmpConstants.ArrayItemName, userComment.Value, userComment.Options);
+                                newNode.Parent = userComment;
+
+                                int QualNo = userComment.GetQualifierLength();
+                                while (QualNo > 0)
+                                {
+                                    newNode.AddQualifier(userComment.GetQualifier(userComment.GetQualifierLength() - QualNo));
+                                    --QualNo;
+                                }
+
+                                userComment.RemoveQualifiers();
+                                if (!newNode.Options.HasLanguage)
+                                {
+                                    var po = new PropertyOptions();
+                                    po.SetOption(PropertyOptions.HasQualifiersFlag, true);
+                                    XmpNode langQual = new XmpNode("xml:lang", "x-default", po);
+                                    newNode.AddQualifier(langQual);
+                                    newNode.Options.SetOption(PropertyOptions.HasQualifiersFlag, true);
+                                    newNode.Options.SetOption(PropertyOptions.HasLanguageFlag, true);
+                                }
+                                userComment.AddChild(newNode);
+                                userComment.Options = new PropertyOptions(PropertyOptions.ArrayFlag | PropertyOptions.ArrayOrderedFlag
+                                        | PropertyOptions.ArrayAltTextFlag | PropertyOptions.ArrayAlternateFlag);
+                                userComment.Value = "";
+
+
+                            }
+                            RepairAltText(userComment);
                         }
+
                         break;
                     }
                     case XmpConstants.NsDm:
@@ -375,6 +414,7 @@ namespace XmpCore.Impl
             {
                 if (childNode.Options.HasLanguage)
                 {
+                    // *** Allow x-default.
                     throw new XmpException("Alias to x-default already has a language qualifier", XmpErrorCode.BadXmp);
                 }
                 var langQual = new XmpNode(XmpConstants.XmlLang, XmpConstants.XDefault, null);
@@ -405,6 +445,8 @@ namespace XmpCore.Impl
 
                 var otherDate = XmpNodeUtils.FindChildNode(exifSchema, "exif:DateTimeOriginal", false)
                     ?? XmpNodeUtils.FindChildNode(exifSchema, "exif:DateTimeDigitized", false);
+                if (otherDate == null)
+                    return;
 
                 var binOtherDate = XmpCore.XmpUtils.ConvertToDate(otherDate.Value);
                 var cal = binGpsStamp.Calendar;

@@ -42,6 +42,7 @@ namespace XmpCore
     /// structure or array to an identical top level structure or array, or to the
     /// first item of an array of structures.
     /// </remarks>
+    /// <author>Stefan Makswit</author>
     /// <since>27.01.2006</since>
     public interface IXmpSchemaRegistry
     {

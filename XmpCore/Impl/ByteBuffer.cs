@@ -15,6 +15,7 @@ using System.Text;
 namespace XmpCore.Impl
 {
     /// <summary>Byte buffer container including length of valid data.</summary>
+    /// <author>Stefan Makswit</author>
     /// <since>11.10.2006</since>
     public sealed class ByteBuffer
     {

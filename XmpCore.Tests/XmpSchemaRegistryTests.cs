@@ -15,19 +15,19 @@ namespace XmpCore.Tests
         [Fact]
         public void DefaultNamespaces()
         {
-            Assert.Equal(56, _registry.Namespaces.Count);
+            Assert.Equal(57, _registry.Namespaces.Count);
         }
 
         [Fact]
         public void DefaultPrefixes()
         {
-            Assert.Equal(56, _registry.Prefixes.Count);
+            Assert.Equal(57, _registry.Prefixes.Count);
         }
 
         [Fact]
         public void DefaultAliases()
         {
-            Assert.Equal(34, _registry.Aliases.Count);
+            Assert.Equal(35, _registry.Aliases.Count);
         }
 
         [Fact]

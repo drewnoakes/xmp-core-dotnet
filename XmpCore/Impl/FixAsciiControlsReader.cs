@@ -14,6 +14,7 @@ using Sharpen;
 
 namespace XmpCore.Impl
 {
+    /// <author>Stefan Makswit</author>
     /// <since>22.08.2006</since>
     public class FixAsciiControlsReader : PushbackReader
     {

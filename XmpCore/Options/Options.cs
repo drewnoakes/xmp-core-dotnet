@@ -18,6 +18,7 @@ namespace XmpCore.Options
     /// The base class for a collection of 32 flag bits. Individual flags are defined as enum value bit
     /// masks. Inheriting classes add convenience accessor methods.
     /// </remarks>
+    /// <author>Stefan Makswit</author>
     /// <since>24.01.2006</since>
     public abstract class Options
     {
@@ -77,7 +78,7 @@ namespace XmpCore.Options
         public int GetOptions() => _options;
 
         /// <param name="options">The options to set.</param>
-        /// <exception cref="XmpException"></exception>
+        /// <exception cref="XmpException">If the options are not correct</exception>
         public void SetOptions(int options)
         {
             AssertOptionsValid(options);

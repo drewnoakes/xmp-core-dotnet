@@ -9,6 +9,7 @@
 
 namespace XmpCore
 {
+    /// <author>Stefan Makswit</author>
     public enum XmpErrorCode
     {
         Unknown = 0,

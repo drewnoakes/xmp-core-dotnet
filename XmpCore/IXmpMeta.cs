@@ -19,6 +19,7 @@ namespace XmpCore
     /// It has methods to read and modify all kinds of properties, create an iterator over all properties
     /// and serialize the metadata to a string, byte array or stream.
     /// </remarks>
+    /// <author>Stefan Makswit</author>
     /// <since>20.01.2006</since>
     public interface IXmpMeta
     {

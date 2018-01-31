@@ -8,13 +8,16 @@
 // =================================================================================================
 
 
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using XmpCore.Impl.XPath;
 using XmpCore.Options;
 
 namespace XmpCore.Impl
 {
+    /// <author>Stefan Makswit</author>
     /// <since>11.08.2006</since>
     public static class XmpUtils
     {
@@ -129,6 +132,18 @@ namespace XmpCore.Impl
             // Keep a zero value, has special meaning below.
             var arrayNode = SeparateFindCreateArray(schemaNs, arrayName, arrayOptions, xmpImpl);
 
+            int arrayElementLimit = int.MaxValue;
+            if (arrayNode != null)
+            {
+                if (arrayOptions != null)
+                {
+                    arrayElementLimit = arrayOptions.ArrayElementsLimit;
+                    if (arrayElementLimit == -1)
+                    {
+                        arrayElementLimit = int.MaxValue;
+                    }
+                }
+            }
             // Extract the item values one at a time, until the whole input string is done.
             var charKind = UnicodeKind.Normal;
             var ch = (char)0;
@@ -138,6 +153,12 @@ namespace XmpCore.Impl
             {
                 // Skip any leading spaces and separation characters. Always skip commas here.
                 // They can be kept when within a value, but not when alone between values.
+
+                if (arrayNode.GetChildrenLength() >= arrayElementLimit)
+                {
+                    break;
+                }
+
                 int itemStart;
                 for (itemStart = itemEnd; itemStart < endPos; itemStart++)
                 {
@@ -190,7 +211,7 @@ namespace XmpCore.Impl
                     var closeQuote = GetClosingQuote(openQuote);
                     itemStart++;
                     // Skip the opening quote;
-                    itemValue = string.Empty;
+                    var str = new StringBuilder();
                     for (itemEnd = itemStart; itemEnd < endPos; itemEnd++)
                     {
                         ch = catedStr[itemEnd];
@@ -199,7 +220,7 @@ namespace XmpCore.Impl
                         {
                             // This is not a matching quote, just append it to the
                             // item value.
-                            itemValue += ch;
+                            str.Append(ch);
                         }
                         else
                         {
@@ -217,7 +238,7 @@ namespace XmpCore.Impl
                             if (ch == nextChar)
                             {
                                 // This is doubled, copy it and skip the double.
-                                itemValue += ch;
+                                str.Append(ch);
                                 // Loop will add in charSize.
                                 itemEnd++;
                             }
@@ -226,7 +247,7 @@ namespace XmpCore.Impl
                                 if (!IsClosingQuote(ch, openQuote, closeQuote))
                                 {
                                     // This is an undoubled, non-closing quote, copy it.
-                                    itemValue += ch;
+                                    str.Append(ch);
                                 }
                                 else
                                 {
@@ -238,6 +259,8 @@ namespace XmpCore.Impl
                             }
                         }
                     }
+
+                    itemValue = str.ToString();
                 }
 
                 // Add the separated item to the array.
@@ -254,6 +277,15 @@ namespace XmpCore.Impl
 
                 if (foundIndex < 0)
                     arrayNode.AddChild(new XmpNode(XmpConstants.ArrayItemName, itemValue, null));
+                // <#AdobePrivate>
+                //			else
+                //			{
+                //				newItem = arrayNode.getChild(foundIndex);
+                //				// Don't match again, let duplicates be seen.
+                //				arrayNode.getChild(foundIndex).setValue(null);
+                //			}
+                //			 </#AdobePrivate>
+
             }
         }
 
@@ -418,7 +450,7 @@ namespace XmpCore.Impl
                 {
                     var sourceProp = (XmpNode)ic.Next();
                     if (doAllProperties || !Utils.IsInternalProperty(sourceSchema.Name, sourceProp.Name))
-                        AppendSubtree(dest, sourceProp, destSchema, replaceOldValues, deleteEmptyValues);
+                        AppendSubtree(dest, sourceProp, destSchema, false, replaceOldValues, deleteEmptyValues);
                 }
 
                 if (!destSchema.HasChildren && (createdSchema || deleteEmptyValues))
@@ -450,127 +482,161 @@ namespace XmpCore.Impl
         /// <param name="destXmp">The destination XMP object.</param>
         /// <param name="sourceNode">the source node</param>
         /// <param name="destParent">the parent of the destination node</param>
+        /// <param name="mergeCompound"></param>
         /// <param name="replaceOldValues">Replace the values of existing properties.</param>
         /// <param name="deleteEmptyValues">flag if properties with empty values should be deleted in the destination object.</param>
         /// <exception cref="XmpException" />
-        private static void AppendSubtree(XmpMeta destXmp, XmpNode sourceNode, XmpNode destParent, bool replaceOldValues, bool deleteEmptyValues)
+        private static void AppendSubtree(XmpMeta destXmp, XmpNode sourceNode, XmpNode destParent, bool mergeCompound, bool replaceOldValues, bool deleteEmptyValues)
         {
             var destNode = XmpNodeUtils.FindChildNode(destParent, sourceNode.Name, false);
             var valueIsEmpty = false;
 
-            if (deleteEmptyValues)
-                valueIsEmpty = sourceNode.Options.IsSimple ? string.IsNullOrEmpty(sourceNode.Value) : !sourceNode.HasChildren;
+            //if (deleteEmptyValues)
+            valueIsEmpty = sourceNode.Options.IsSimple ? string.IsNullOrEmpty(sourceNode.Value) : !sourceNode.HasChildren;
 
-            if (deleteEmptyValues && valueIsEmpty)
+            if (valueIsEmpty)
             {
-                if (destNode != null)
+                if (deleteEmptyValues && destNode != null)
                     destParent.RemoveChild(destNode);
+                return; // ! Done, empty values are either ignored or cause deletions.
             }
-            else
+
+            //else
+            //{
+            if (destNode == null)
             {
-                if (destNode == null)
+                // The one easy case, the destination does not exist.
+                XmpNode tempNode = (XmpNode)sourceNode.Clone(true);
+                if(tempNode != null)
+                    destParent.AddChild(tempNode);
+                return;
+            }
+
+            PropertyOptions sourceForm = sourceNode.Options;
+            bool replaceThis = replaceOldValues; // ! Don't modify replaceOld, it gets passed to inner calls.
+            if (mergeCompound && (!sourceForm.IsSimple))
+            {
+                replaceThis = false;
+            }
+
+            //else
+            //{
+            if (replaceThis)
+            {
+                // The destination exists and should be replaced.
+                //XmpMeta.SetNode(destNode, sourceNode.Value, sourceNode.Options, true);
+                destParent.RemoveChild(destNode);
+                //destNode = (XmpNode)sourceNode.Clone();
+                XmpNode tempNode = (XmpNode)sourceNode.Clone(true);
+                if (tempNode != null)
+                    destParent.AddChild(tempNode);
+                return;
+            }
+
+            //else
+            //{
+            // The destination exists and is not totally replaced. Structs and arrays are merged.
+            var destForm = destNode.Options;
+            //if (!Equals(sourceForm, destForm))
+            if(sourceForm.GetOptions() != destForm.GetOptions() || sourceForm.IsSimple)
+            {
+                return;
+            }
+
+            if (sourceForm.IsStruct)
+            {
+                // To merge a struct process the fields recursively. E.g. add simple missing fields.
+                // The recursive call to AppendSubtree will handle deletion for fields with empty
+                // values.
+                for (var it = sourceNode.IterateChildren(); it.HasNext();)
                 {
-                    // The one easy case, the destination does not exist.
-                    destParent.AddChild((XmpNode)sourceNode.Clone());
-                }
-                else
-                {
-                    if (replaceOldValues)
-                    {
-                        // The destination exists and should be replaced.
-                        XmpMeta.SetNode(destNode, sourceNode.Value, sourceNode.Options, true);
+                    var sourceField = (XmpNode)it.Next();
+                    AppendSubtree(destXmp, sourceField, destNode, mergeCompound, replaceOldValues, deleteEmptyValues);
+                    if (deleteEmptyValues && !destNode.HasChildren)
                         destParent.RemoveChild(destNode);
-                        destNode = (XmpNode)sourceNode.Clone();
-                        destParent.AddChild(destNode);
+                }
+            }
+            else if (sourceForm.IsArrayAltText)
+            {
+                // Merge AltText arrays by the "xml:lang" qualifiers. Make sure x-default is first.
+                // Make a special check for deletion of empty values. Meaningful in AltText arrays
+                // because the "xml:lang" qualifier provides unambiguous source/dest correspondence.
+                for (var it = sourceNode.IterateChildren(); it.HasNext();)
+                {
+                    var sourceItem = (XmpNode)it.Next();
+
+                    if (!sourceItem.HasQualifier || sourceItem.GetQualifier(1).Name != XmpConstants.XmlLang)
+                        continue;
+
+                    var destIndex = XmpNodeUtils.LookupLanguageItem(destNode, sourceItem.GetQualifier(1).Value);
+                    //if (deleteEmptyValues && string.IsNullOrEmpty(sourceItem.Value))
+                    if (string.IsNullOrEmpty(sourceItem.Value))
+                    {
+                        if (deleteEmptyValues && destIndex != -1)
+                        {
+                            destNode.RemoveChild(destIndex);
+                            if (!destNode.HasChildren)
+                                destParent.RemoveChild(destNode);
+                        }
                     }
                     else
                     {
-                        // The destination exists and is not totally replaced. Structs and arrays are merged.
-                        var sourceForm = sourceNode.Options;
-                        var destForm = destNode.Options;
-                        if (!Equals(sourceForm, destForm))
+                        if (destIndex == -1)
                         {
-                            return;
-                        }
-
-                        if (sourceForm.IsStruct)
-                        {
-                            // To merge a struct process the fields recursively. E.g. add simple missing fields.
-                            // The recursive call to AppendSubtree will handle deletion for fields with empty
-                            // values.
-                            for (var it = sourceNode.IterateChildren(); it.HasNext();)
+                            // Not replacing, keep the existing item.
+                            if (sourceItem.GetQualifier(1).Value != XmpConstants.XDefault || !destNode.HasChildren)
                             {
-                                var sourceField = (XmpNode)it.Next();
-                                AppendSubtree(destXmp, sourceField, destNode, replaceOldValues, deleteEmptyValues);
-                                if (deleteEmptyValues && !destNode.HasChildren)
-                                    destParent.RemoveChild(destNode);
+                                XmpNode tempNode = (XmpNode)sourceItem.Clone(true);
+                                if (tempNode != null)
+                                    destNode.AddChild(tempNode);
+                                //sourceItem.CloneSubtree(destNode);
+                            }
+                            else
+                            {
+                                var destItem = new XmpNode(sourceItem.Name, sourceItem.Value, sourceItem.Options);
+                                sourceItem.CloneSubtree(destItem, true);
+                                destNode.AddChild(1, destItem);
                             }
                         }
-                        else if (sourceForm.IsArrayAltText)
+                        else
                         {
-                            // Merge AltText arrays by the "xml:lang" qualifiers. Make sure x-default is first.
-                            // Make a special check for deletion of empty values. Meaningful in AltText arrays
-                            // because the "xml:lang" qualifier provides unambiguous source/dest correspondence.
-                            for (var it = sourceNode.IterateChildren(); it.HasNext();)
-                            {
-                                var sourceItem = (XmpNode)it.Next();
-
-                                if (!sourceItem.HasQualifier || sourceItem.GetQualifier(1).Name != XmpConstants.XmlLang)
-                                    continue;
-
-                                var destIndex = XmpNodeUtils.LookupLanguageItem(destNode, sourceItem.GetQualifier(1).Value);
-                                if (deleteEmptyValues && string.IsNullOrEmpty(sourceItem.Value))
-                                {
-                                    if (destIndex != -1)
-                                    {
-                                        destNode.RemoveChild(destIndex);
-                                        if (!destNode.HasChildren)
-                                            destParent.RemoveChild(destNode);
-                                    }
-                                }
-                                else if (destIndex == -1)
-                                {
-                                    // Not replacing, keep the existing item.
-                                    if (sourceItem.GetQualifier(1).Value != XmpConstants.XDefault || !destNode.HasChildren)
-                                    {
-                                        sourceItem.CloneSubtree(destNode);
-                                    }
-                                    else
-                                    {
-                                        var destItem = new XmpNode(sourceItem.Name, sourceItem.Value, sourceItem.Options);
-                                        sourceItem.CloneSubtree(destItem);
-                                        destNode.AddChild(1, destItem);
-                                    }
-                                }
-                            }
+                            if (replaceOldValues)
+                                destNode.GetChild(destIndex).Value = sourceItem.Value;
                         }
-                        else if (sourceForm.IsArray)
+
+                    }
+                }
+            }
+            else if (sourceForm.IsArray)
+            {
+                // Merge other arrays by item values. Don't worry about order or duplicates. Source
+                // items with empty values do not cause deletion, that conflicts horribly with
+                // merging.
+                for (var children = sourceNode.IterateChildren(); children.HasNext();)
+                {
+                    var sourceItem = (XmpNode)children.Next();
+
+                    var match = false;
+                    for (var id = destNode.IterateChildren(); id.HasNext();)
+                    {
+                        var destItem = (XmpNode)id.Next();
+                        if (ItemValuesMatch(sourceItem, destItem))
                         {
-                            // Merge other arrays by item values. Don't worry about order or duplicates. Source
-                            // items with empty values do not cause deletion, that conflicts horribly with
-                            // merging.
-                            for (var children = sourceNode.IterateChildren(); children.HasNext();)
-                            {
-                                var sourceItem = (XmpNode)children.Next();
-
-                                var match = false;
-                                for (var id = destNode.IterateChildren(); id.HasNext();)
-                                {
-                                    var destItem = (XmpNode)id.Next();
-                                    if (ItemValuesMatch(sourceItem, destItem))
-                                        match = true;
-                                }
-
-                                if (!match)
-                                {
-                                    destNode = (XmpNode)sourceItem.Clone();
-                                    destParent.AddChild(destNode);
-                                }
-                            }
+                            match = true;
+                            break;
+                        }
+                        if (!match)
+                        {
+                            XmpNode tempNode = (XmpNode)sourceItem.Clone(true);
+                            if (tempNode != null)
+                                destNode.AddChild(tempNode);
                         }
                     }
                 }
             }
+            //}
+            //}
+            //}
         }
 
         /// <summary>Compares two nodes including its children and qualifier.</summary>
@@ -583,10 +649,10 @@ namespace XmpCore.Impl
             var leftForm = leftNode.Options;
             var rightForm = rightNode.Options;
 
-            if (leftForm.Equals(rightForm))
+            if (!leftForm.Equals(rightForm))
                 return false;
 
-            if (leftForm.GetOptions() == 0)
+            if (leftForm.IsSimple)
             {
                 // Simple nodes, check the values and xml:lang qualifiers.
                 if (leftNode.Value != rightNode.Value)
@@ -639,8 +705,155 @@ namespace XmpCore.Impl
                     }
                 }
             }
-            return true;
+            return true; // All of the checks passed
         }
+
+        public static void DuplicateSubtree(IXmpMeta source, IXmpMeta dest, string sourceNS, string sourceRoot, string destNS, string destRoot, PropertyOptions options)
+        {
+
+            bool fullSourceTree = false;
+            bool fullDestTree   = false;
+            XmpPath sourcePath, destPath;
+            XmpNode sourceNode = null;
+            XmpNode destNode = null;
+
+            ParameterAsserts.AssertNotNull(source);
+		    ParameterAsserts.AssertSchemaNs(sourceNS);
+		    ParameterAsserts.AssertSchemaNs(sourceRoot);
+		    ParameterAsserts.AssertNotNull(dest);
+		    ParameterAsserts.AssertNotNull(destNS);
+		    ParameterAsserts.AssertNotNull(destRoot);
+
+		    if(destNS.Length == 0){
+			    destNS = sourceNS;
+		    }
+
+		    if(destRoot.Length == 0){
+			    destRoot = sourceRoot;
+		    }
+
+		    if(sourceNS.Equals("*")){
+			    fullSourceTree = true;
+		    }
+
+		    if(destNS.Equals("*")){
+			    fullDestTree = true;
+		    }
+
+		    if ((source == dest) && (fullSourceTree | fullDestTree) )
+			    throw new XmpException("Can't duplicate tree onto itself", XmpErrorCode.BadParam);
+
+		    if (fullSourceTree & fullDestTree )
+			    throw new XmpException( "Use Clone for full tree to full tree", XmpErrorCode.BadParam);
+
+		    if(fullSourceTree)
+            {
+			    destPath = XmpPathParser.ExpandXPath(destNS, destRoot);
+			    XmpMeta destImpl = (XmpMeta)dest;
+                destNode = XmpNodeUtils.FindNode(destImpl.GetRoot(), destPath, false, null);
+			    if(destNode == null || !(destNode.Options.IsStruct))
+				    throw new XmpException("Destination must be an existing struct", XmpErrorCode.BadXPath);
+
+			    if(destNode.HasChildren)
+                {
+				    if((options != null) && ((options.GetOptions() & PropertyOptions.DeleteExisting) != 0))
+					    destNode.RemoveChildren();
+				    else
+					    throw new XmpException("Destination must be an empty struct", XmpErrorCode.BadXPath);
+			    }
+
+			    XmpMeta sourceImpl = (XmpMeta)source;
+			    for (int schemaNum = 1, schemaLim = sourceImpl.GetRoot().GetChildrenLength(); schemaNum <= schemaLim; ++schemaNum )
+                {
+                    XmpNode currSchema = sourceImpl.GetRoot().GetChild(schemaNum);
+
+				    for (int propNum = 1, propLim = currSchema.GetChildrenLength(); propNum <= propLim; ++propNum )
+                    {
+					    sourceNode = currSchema.GetChild(propNum);
+					    destNode.AddChild((XmpNode)sourceNode.Clone(false));
+
+					    /*XMP_Node * copyNode = new XMP_Node ( destNode, sourceNode->name, sourceNode->value, sourceNode->options );
+					    destNode->children.push_back ( copyNode );
+					    CloneOffspring ( sourceNode, copyNode );*/  //implemented above
+				    }
+			    }
+		    }
+		    else if(fullDestTree)
+            {
+			    // The source node must be an existing struct, copy all of the fields to the dest top level.
+			    XmpMeta srcImpl = (XmpMeta)source;
+                XmpMeta dstImpl = (XmpMeta)dest;
+                sourcePath = XmpPathParser.ExpandXPath(sourceNS, sourceRoot);
+			    sourceNode = XmpNodeUtils.FindNode(srcImpl.GetRoot() , sourcePath , false, null);
+
+			    if ((sourceNode == null) || !(sourceNode.Options.IsStruct) )
+				    throw new XmpException("Source must be an existing struct", XmpErrorCode.BadXPath);
+
+			    destNode = dstImpl.GetRoot();
+
+			    if (destNode.HasChildren ) {
+				    if((options != null) && ((options.GetOptions() & PropertyOptions.DeleteExisting) != 0))
+					    destNode.RemoveChildren();
+				    else
+					    throw new XmpException("Source must be an existing struct", XmpErrorCode.BadXPath);
+			    }
+
+			    string nsPrefix;
+
+			    for (int fieldNum = 1, fieldLim = sourceNode.GetChildrenLength(); fieldNum <= fieldLim; ++fieldNum )
+                {
+				    XmpNode currField = sourceNode.GetChild(fieldNum);
+
+                    int colonPos = currField.Name.IndexOf(':');
+				    if (colonPos == -1 )
+                        continue;
+
+                    nsPrefix = currField.Name.Substring(0, colonPos+1);
+
+				    var nsRegister = XmpMetaFactory.SchemaRegistry;
+                    string nsURI = nsRegister.GetNamespaceUri(nsPrefix);
+
+				    if(nsURI == null)
+					    throw new XmpException("Source field namespace is not global", XmpErrorCode.BadSchema);
+
+				    XmpNode destSchema = XmpNodeUtils.FindSchemaNode(dstImpl.GetRoot(), nsURI, true);
+				    if (destSchema == null)
+					    throw new XmpException("Failed to find destination schema", XmpErrorCode.BadSchema);
+
+				    destSchema.AddChild((XmpNode) currField.Clone(false));
+			    }
+		    }
+		    else
+            {
+			    sourcePath = XmpPathParser.ExpandXPath(sourceNS, sourceRoot);
+			    destPath = XmpPathParser.ExpandXPath(destNS, destRoot);
+			    XmpMeta sourceImpl = (XmpMeta)source;
+                XmpMeta destImpl = (XmpMeta)dest;
+                sourceNode = XmpNodeUtils.FindNode(sourceImpl.GetRoot(), sourcePath, false, null);
+			    if(sourceNode == null)
+				    throw new XmpException("Can't find source subtree", XmpErrorCode.BadXPath);
+                destNode = XmpNodeUtils.FindNode(destImpl.GetRoot(), destPath, false, null);
+			    if(destNode != null)
+				    throw new XmpException("Destination subtree must not exist", XmpErrorCode.BadXPath);
+                destNode = XmpNodeUtils.FindNode(destImpl.GetRoot(), destPath, true, null);
+			    if(destNode == null)
+				    throw new XmpException("Can't create destination root node", XmpErrorCode.BadXPath);
+			    if (source == dest)
+                {
+				    for (XmpNode testNode = destNode; testNode != null; testNode = testNode.Parent)
+                    {
+					    if (testNode == sourceNode )
+                        {
+						    // *** delete the just-created dest root node
+						    throw new XmpException("Destination subtree is within the source subtree", XmpErrorCode.BadXPath);
+					    }
+				    }
+			    }
+			    destNode.Value = sourceNode.Value;
+                destNode.Options = sourceNode.Options;
+			    sourceNode.CloneSubtree(destNode, false);
+		    }
+	    }
 
         /// <summary>Make sure the separator is OK.</summary>
         /// <remarks>
@@ -931,5 +1144,487 @@ namespace XmpCore.Impl
         /// </summary>
         private const string Controls = "\u2028\u2029";
         // "\"\u005B\u005D\u00AB\u00BB\u301D\u301E\u301F\u2015\u2039\u203A";
+
+
+        /// <summary>Moves the specified Property from one Meta to another.</summary>
+	    /// <param name="stdXMP">Meta Object from where the property needs to move</param>
+	    /// <param name="extXMP">Meta Object to where the property needs to move</param>
+        /// <param name="schemaURI">Schema of the specified property</param>
+	    /// <param name="propName">Name of the property</param>
+        /// <returns>true in case of success otherwise false.</returns>
+        static bool MoveOneProperty(XmpMeta stdXMP, XmpMeta extXMP, string schemaURI, string propName)
+        {
+            XmpNode propNode = null;
+
+            XmpNode stdSchema = XmpNodeUtils.FindSchemaNode(stdXMP.GetRoot(), schemaURI, false);
+		    if (stdSchema != null)
+			    propNode = XmpNodeUtils.FindChildNode(stdSchema, propName, false);
+
+		    if (propNode == null)
+			    return false;
+
+		    XmpNode extSchema = XmpNodeUtils.FindSchemaNode(extXMP.GetRoot(), schemaURI, true);
+
+            propNode.Parent = extSchema;
+
+		    extSchema.IsImplicit = false;
+		    extSchema.AddChild(propNode);
+
+		    stdSchema.RemoveChild(propNode);
+
+		    if (stdSchema.HasChildren == false)
+            {
+			    XmpNode xmpTree = stdSchema.Parent;
+                xmpTree.RemoveChild(stdSchema);
+		    }
+
+		    return true;
+	    }
+
+        /// <summary>estimates the size of an xmp node</summary>
+        /// <param name="xmpNode">XMP Node Object</param>
+        /// <returns>the estimated size of the node</returns>
+        static int EstimateSizeForJPEG(XmpNode xmpNode)
+        {
+            int estSize = 0;
+            int nameSize = xmpNode.Name.Length;
+
+            bool includeName = (!xmpNode.Options.IsArray);
+
+            if (xmpNode.Options.IsSimple)
+            {
+                if (includeName)
+                    estSize += (nameSize + 3); // Assume attribute form.
+                estSize += xmpNode.Value.Length;
+            }
+            else if (xmpNode.Options.IsArray)
+            {
+                // The form of the value portion is:
+                // <rdf:Xyz><rdf:li>...</rdf:li>...</rdf:Xyx>
+                if (includeName)
+                    estSize += (2 * nameSize + 5);
+                int arraySize = xmpNode.GetChildrenLength();
+                estSize += 9 + 10; // The rdf:Xyz tags.
+                estSize += arraySize * (8 + 9); // The rdf:li tags.
+                for (int i = 1; i <= arraySize; ++i)
+                {
+                    estSize += EstimateSizeForJPEG(xmpNode.GetChild(i));
+                }
+            }
+            else
+            {
+                // The form is: <headTag
+                // rdf:parseType="Resource">...fields...</tailTag>
+                if (includeName)
+                    estSize += (2 * nameSize + 5);
+                estSize += 25; // The rdf:parseType="Resource" attribute.
+                int fieldCount = xmpNode.GetChildrenLength();
+                for (int i = 1; i <= fieldCount; ++i)
+                {
+                    estSize += EstimateSizeForJPEG(xmpNode.GetChild(i));
+                }
+            }
+            return estSize;
+        }
+
+        /// <summary>Utility function for placing objects in a Map. It behaves like a multi map.</summary>
+        /// <param name="multiMap">A Map object which takes int as a key and list of list of string as value</param>
+        /// <param name="key">A key for the map</param>
+        /// <param name="stringPair">A value for the map</param>
+        private static void PutObjectsInMultiMap(SortedDictionary<int, List<List<string>>> multiMap, int key, List<string> stringPair)
+        {
+            if (multiMap == null)
+                return;
+            List<List<string>> tempList = null; // multiMap[key];
+            //if (tempList == null)
+            if(!multiMap.TryGetValue(key, out tempList))
+            {
+                tempList = new List<List<string>>();
+                multiMap[key] = tempList;
+            }
+            tempList.Add(stringPair);
+        }
+
+        /// <summary>Utility function for retrieving biggest entry in the multimap</summary>
+	    /// <remarks>see EstimateSizeForJPEG for size calculation</remarks>
+	    /// <param name="multiMap">A Map object which takes int as a key and list of list of string as value</param>
+	    /// <returns>the list with the maximum size.</returns>
+        private static List<string> GetBiggestEntryInMultiMap(SortedDictionary<int, List<List<string>>> multiMap)
+        {
+            if (multiMap == null || multiMap.Count == 0)
+                return null;
+
+            //List<List<string>> myList = multiMap.get(((TreeMap)multiMap).lastKey());
+            List<List<string>> myList = multiMap[multiMap.Keys.Last()];
+            List<string> myList1 = myList[0];
+            myList.RemoveAt(0);
+            if (myList.Count == 0)
+            {
+                //multiMap.remove(((TreeMap)multiMap).lastKey());
+                multiMap.Remove(multiMap.Keys.Last());
+            }
+            return myList1;
+        }
+
+        /// <summary>Utility function for creating esimated size map for different properties of XMP Packet.</summary>
+        /// <remarks>see PackageForJPEG</remarks>
+        /// <param name="stdXMP">Meta Object whose property sizes needs to calculate.</param>
+        /// <param name="propSizes">A treeMap Object which takes int as a key and list of list of string as values</param>
+        private static void CreateEstimatedSizeMap(XmpMeta stdXMP, SortedDictionary<int, List<List<string>>> propSizes)
+        {
+            for (int s = stdXMP.GetRoot().GetChildrenLength(); s > 0; --s)
+            {
+                XmpNode stdSchema = stdXMP.GetRoot().GetChild(s);
+                for (int p = stdSchema.GetChildrenLength(); p > 0; --p)
+                {
+                    XmpNode stdProp = stdSchema.GetChild(p);
+                    if ((stdSchema.Name.Equals(XmpConstants.NsXmpNote))
+                            && (stdProp.Name.Equals("xmpNote:HasExtendedXMP")))
+                        continue; // ! Don't move xmpNote:HasExtendedXMP.
+
+                    int propSize = EstimateSizeForJPEG(stdProp);
+                    List<string> namePair = new List<string>();
+                    namePair.Add(stdSchema.Name);
+                    namePair.Add(stdProp.Name);
+                    PutObjectsInMultiMap(propSizes, propSize, namePair);
+                }
+            }
+        }
+
+        /// <summary>Utility function for moving the largest property from One XMP Packet to another.</summary>
+        /// <remarks>see MoveOneProperty and PackageForJPEG</remarks>
+        /// <param name="stdXMP">Meta Object from where property moves.</param>
+        /// <param name="extXMP">Meta Object to where property moves.</param>
+        /// <param name="propSizes">A treeMap Object which holds the estimated sizes of the property of stdXMP as a key and their string representation as map values.</param>
+        private static int MoveLargestProperty(XmpMeta stdXMP, XmpMeta extXMP, SortedDictionary<int, List<List<string>>> propSizes)
+        {
+            Debug.Assert(!(propSizes.Count == 0));
+
+            //int propSize = (Integer)((TreeMap)propSizes).lastKey();
+            int propSize = propSizes.Keys.Last();
+            List<string> tempList = GetBiggestEntryInMultiMap(propSizes);
+            string schemaURI = tempList[0];
+            string propName = tempList[1];
+
+            bool moved = MoveOneProperty(stdXMP, extXMP, schemaURI, propName);
+
+            Debug.Assert(moved);
+		    return propSize;
+        }
+
+        /// <summary>creates XMP serializations appropriate for a JPEG file.</summary>
+        /// <remarks>
+        /// The standard XMP in a JPEG file is limited to 64K bytes. This function
+	    /// serializes the XMP metadata in an XMP object into a string of RDF.If
+        /// the data does not fit into the 64K byte limit, it creates a second packet
+	    /// string with the extended data.
+        /// </remarks>
+        /// <param name="origXMPImpl">The XMP object containing the metadata.</param>
+        /// <param name="stdStr">A string object in which to return the full standard XMP packet.</param>
+        /// <param name="extStr">A string object in which to return the serialized extended XMP, empty if not needed.</param>
+        /// <param name="digestStr">A string object in which to return an MD5 digest of the serialized extended XMP, empty if not needed.</param>
+        public static void PackageForJPEG(IXmpMeta origXMPImpl,
+                   StringBuilder stdStr,
+                   StringBuilder extStr,
+                   StringBuilder digestStr)
+        {
+
+            XmpMeta origXMP = (XmpMeta)origXMPImpl;
+
+            Debug.Assert((stdStr != null) && (extStr != null) && (digestStr != null) );	// ! Enforced by wrapper.
+
+		    const int kStdXMPLimit = 65000;
+            const string kPacketTrailer = "<?xpacket end=\"w\"?>";
+            int kTrailerLen = kPacketTrailer.Length;
+
+            string tempStr = null;
+            XmpMeta stdXMP = new XmpMeta();
+            XmpMeta extXMP = new XmpMeta();
+            SerializeOptions keepItSmall = new SerializeOptions(SerializeOptions.UseCompactFormatFlag);
+            keepItSmall.Padding = 0;
+            keepItSmall.Indent = "";
+            keepItSmall.BaseIndent = 0;
+		    keepItSmall.Newline = " ";
+
+		    // Try to serialize everything. Note that we're making internal calls to SerializeToBuffer, so
+		    // we'll be getting back the pointer and length for its internal string.
+
+		    tempStr = XmpMetaFactory.SerializeToString(origXMP, keepItSmall);
+
+		    if (tempStr.Length > kStdXMPLimit )
+            {
+                // Couldn't fit everything, make a copy of the input XMP and make sure there is no xmp:Thumbnails property.
+
+                stdXMP.GetRoot().Options = origXMP.GetRoot().Options;
+                stdXMP.GetRoot().Name = origXMP.GetRoot().Name;
+                stdXMP.GetRoot().Value = origXMP.GetRoot().Value;
+
+                origXMP.GetRoot().CloneSubtree(stdXMP.GetRoot(), false);
+
+			    if (stdXMP.DoesPropertyExist(XmpConstants.NsXmp, "Thumbnails"))
+                {
+				    stdXMP.DeleteProperty(XmpConstants.NsXmp, "Thumbnails" );
+				    tempStr = XmpMetaFactory.SerializeToString(stdXMP, keepItSmall);
+			    }
+
+            }
+
+	        if (tempStr.Length > kStdXMPLimit )
+            {
+		        // Still doesn't fit, move all of the Camera Raw namespace. Add a dummy value for xmpNote:HasExtendedXMP.
+
+		        stdXMP.SetProperty(XmpConstants.NsXmpNote, "HasExtendedXMP", "123456789-123456789-123456789-12",
+				        new PropertyOptions(PropertyOptions.NoOptionsFlag));
+
+		        XmpNode crSchema = XmpNodeUtils.FindSchemaNode(stdXMP.GetRoot(), XmpConstants.NsCameraraw, false);
+
+		        if (crSchema != null )
+                {
+			        crSchema.Parent = extXMP.GetRoot();
+			        extXMP.GetRoot().AddChild(crSchema);
+                    stdXMP.GetRoot().RemoveChild(crSchema);
+
+                    tempStr = XmpMetaFactory.SerializeToString(stdXMP, keepItSmall);
+		        }
+
+	        }
+
+	        if (tempStr.Length > kStdXMPLimit )
+            {
+		        // Still doesn't fit, move photoshop:History.
+
+		        bool moved = MoveOneProperty(stdXMP, extXMP, XmpConstants.NsPhotoshop, "photoshop:History");
+
+		        if (moved )
+			        tempStr = XmpMetaFactory.SerializeToString(stdXMP, keepItSmall);
+	        }
+
+	        if (tempStr.Length > kStdXMPLimit )
+            {
+                // Still doesn't fit, move top level properties in order of estimated size. This is done by
+                // creating a multi-map that maps the serialized size to the string pair for the schema URI
+                // and top level property name. Since maps are inherently ordered, a reverse iteration of
+                // the map can be done to move the largest things first. We use a double loop to keep going
+                // until the serialization actually fits, in case the estimates are off.
+
+                SortedDictionary<int, List<List<string>>> propSizes = new SortedDictionary<int, List<List<string>>>();
+
+                CreateEstimatedSizeMap(stdXMP, propSizes );
+
+		        // Outer loop to make sure enough is actually moved.
+
+		        while ((tempStr.Length > kStdXMPLimit) && (!(propSizes.Count == 0)) )
+                {
+			        // Inner loop, move what seems to be enough according to the estimates.
+
+			        int tempLen = tempStr.Length;
+			        while ((tempLen > kStdXMPLimit) && (!(propSizes.Count == 0)) ) {
+
+				        int propSize = MoveLargestProperty(stdXMP, extXMP, propSizes);
+
+                        Debug.Assert(propSize > 0);
+
+				        if (propSize > tempLen ) propSize = tempLen;	// ! Don't go negative.
+				        tempLen -= propSize;
+
+			        }
+
+			        // Reserialize the remaining standard XMP.
+
+			        tempStr = XmpMetaFactory.SerializeToString(stdXMP, keepItSmall);
+		        }
+
+	        }
+
+	        if (tempStr.Length > kStdXMPLimit)
+            {
+		        // Still doesn't fit, throw an exception and let the client decide what to do.
+		        // ! This should never happen with the policy of moving any and all top level properties.
+			        throw new XmpException("Can't reduce XMP enough for JPEG file", XmpErrorCode.InternalFailure);
+	        }
+
+	        // Set the static output strings.
+	        if (extXMP.GetRoot().GetChildrenLength() == 0)
+            {
+		        // Just have the standard XMP.
+		        stdStr.Append(tempStr);
+	        }
+            else
+            {
+		        // Have extended XMP. Serialize it, compute the digest, reset xmpNote:HasExtendedXMP, and
+		        // reserialize the standard XMP.
+
+		        tempStr = XmpMetaFactory.SerializeToString(extXMP,
+                        new SerializeOptions(SerializeOptions.UseCompactFormatFlag | SerializeOptions.OmitPacketWrapperFlag));
+
+		        extStr.Append(tempStr);
+
+                // TODO: If we move to >= netstandard20, this portion can be implemented
+                /*
+		        MessageDigest md = MessageDigest.getInstance("MD5");
+                md.update(tempStr.getBytes());
+
+	            byte[] byteData = md.digest();
+
+                for (int i = 0; i < byteData.Length; i++)
+                {
+        	        digestStr.Append(int.Parse((byteData[i] & 0xff) + 0x100, 16).substring(1));
+                }
+                */
+
+                stdXMP.SetProperty(XmpConstants.NsXmpNote, "HasExtendedXMP", digestStr.ToString(),
+        		        new PropertyOptions(PropertyOptions.NoOptionsFlag));
+                tempStr = XmpMetaFactory.SerializeToString(stdXMP, keepItSmall);
+                stdStr.Append(tempStr);
+	        }
+
+            // Adjust the standard XMP padding to be up to 2KB.
+            Debug.Assert((stdStr.Length > kTrailerLen) && (stdStr.Length <= kStdXMPLimit) );
+
+		    int extraPadding = kStdXMPLimit - stdStr.Length;	// ! Do this before erasing the trailer.
+		    if (extraPadding > 2047 ) extraPadding = 2047;
+            //stdStr.delete(stdStr.toString().indexOf(kPacketTrailer), stdStr.length());
+            stdStr.Remove(stdStr.ToString().IndexOf(kPacketTrailer), stdStr.Length);
+
+            for (int i = 0; i<extraPadding; ++i)
+            {
+			    stdStr.Append(' ');
+		    }
+
+		    stdStr.Append(kPacketTrailer).ToString();
+	    }
+
+        /// <summary>merges standard and extended XMP retrieved from a JPEG file.</summary>
+        /// <remarks>
+        /// When an extended partition stores properties that do not fit into the
+        /// JPEG file limitation of 64K bytes, this function integrates those
+        /// properties back into the same XMP object with those from the standard XMP
+        /// packet.
+        /// </remarks>
+        /// <param name="fullXMP">An XMP object which the caller has initialized from the standard XMP packet in a JPEG file. The extended XMP is added to this object.</param>
+        /// <param name="extendedXMP">An XMP object which the caller has initialized from the extended XMP packet in a JPEG file.</param>
+        public static void MergeFromJPEG(IXmpMeta fullXMP, IXmpMeta extendedXMP)
+        {
+            TemplateOptions flags = new TemplateOptions(TemplateOptions.ReplaceExistingPropertiesFlag |TemplateOptions.IncludeInternalPropertiesFlag);
+
+            ApplyTemplate((XmpMeta)fullXMP, (XmpMeta)extendedXMP, flags);
+            fullXMP.DeleteProperty(XmpConstants.NsXmpNote, "HasExtendedXMP");
+        }
+
+        /// <summary>modifies a working XMP object according to a template object.</summary>
+        /// <remarks>
+        /// The XMP template can be used to add, replace or delete properties from
+	    /// the working XMP object. The actions that you specify determine how the
+	    /// template is applied.Each action can be applied individually or combined;
+	    /// if you do not specify any actions, the properties and values in the
+        /// working XMP object do not change.
+        /// </remarks>
+        /// <param name="OrigXMP">The destination XMP object.</param>
+        /// <param name="tempXMP">The template to apply to the destination XMP object.</param>
+        /// <param name="actions">Option flags to control the copying. If none are specified,
+	    ///    the properties and values in the working XMP do not change. A logical OR of these bit-flag constants:
+	    ///    <ul>
+	    ///    <li><code> CLEAR_UNNAMED_PROPERTIES</code> Delete anything that is not in the template.</li>
+	    ///    <li><code> ADD_NEW_PROPERTIES</code> Add properties; see detailed description.</li>
+        ///    <li><code> REPLACE_EXISTING_PROPERTIES</code> Replace the values of existing properties.</li>
+        ///    <li><code> REPLACE_WITH_DELETE_EMPTY</code> Replace the values of existing properties and delete properties if the new value is empty.</li>
+        ///    <li><code> INCLUDE_INTERNAL_PROPERTIES</code> Operate on internal properties as well as external properties.</li>
+	    ///    </ul>
+        /// </param>
+        public static void ApplyTemplate(IXmpMeta OrigXMP, IXmpMeta tempXMP, TemplateOptions actions)
+        {
+            XmpMeta workingXMP = (XmpMeta) OrigXMP;
+            XmpMeta templateXMP = (XmpMeta)tempXMP;
+
+            bool doClear = (actions.GetOptions() & TemplateOptions.ClearUnnamedPropertiesFlag) != 0;
+            bool doAdd = (actions.GetOptions() & TemplateOptions.AddNewPropertiesFlag) != 0;
+            bool doReplace = (actions.GetOptions() & TemplateOptions.ReplaceExistingPropertiesFlag) != 0;
+
+            bool deleteEmpty = (actions.GetOptions() & TemplateOptions.ReplaceWithDeleteEmptyFlag) != 0;
+            doReplace |= deleteEmpty; // Delete-empty implies Replace.
+		    deleteEmpty &= (!doClear); // Clear implies not delete-empty, but keep
+									   // the implicit Replace.
+
+		    bool doAll = (actions.GetOptions() & TemplateOptions.IncludeInternalPropertiesFlag) != 0;
+
+		    // ! In several places we do loops backwards so that deletions do not
+		    // perturb the remaining indices.
+		    // ! These loops use ordinals (size .. 1), we must use a zero based
+		    // index inside the loop.
+		    if (doClear)
+            {
+			    // Visit the top level working properties, delete if not in the
+			    // template.
+			    for (int schemaOrdinal = workingXMP.GetRoot().GetChildrenLength(); schemaOrdinal > 0; --schemaOrdinal)
+                {
+				    XmpNode workingSchema = workingXMP.GetRoot().GetChild(schemaOrdinal);
+                    XmpNode templateSchema = XmpNodeUtils.FindSchemaNode(templateXMP.GetRoot(), workingSchema.Name, false);
+
+				    if (templateSchema == null)
+                    {
+					    // The schema is not in the template, delete all properties
+					    // or just all external ones.
+
+					    if (doAll)
+                        {
+						    workingSchema.RemoveChildren(); // Remove the properties here, delete the schema below.
+					    }
+                        else
+                        {
+						    for (int propOrdinal = workingSchema.GetChildrenLength(); propOrdinal > 0; --propOrdinal)
+                            {
+							    XmpNode workingProp = workingSchema.GetChild(propOrdinal);
+							    if (!Utils.IsInternalProperty(workingSchema.Name, workingProp.Name))
+								    workingSchema.RemoveChild(propOrdinal);
+						    }
+					    }
+
+				    }
+                    else
+                    {
+					    // Check each of the working XMP's properties to see if it is in the template.
+					    for (int propOrdinal = workingSchema.GetChildrenLength(); propOrdinal > 0; --propOrdinal)
+                        {
+						    XmpNode workingProp = workingSchema.GetChild(propOrdinal);
+						    if ((doAll || !Utils.IsInternalProperty(workingSchema.Name, workingProp.Name))
+								    && (XmpNodeUtils.FindChildNode(templateSchema, workingProp.Name, false) == null))
+							    workingSchema.RemoveChild(propOrdinal);
+					    }
+				    }
+
+				    if (workingSchema.HasChildren == false)
+					    workingXMP.GetRoot().RemoveChild(schemaOrdinal);
+			    }
+		    }
+
+		    if (doAdd | doReplace)
+            {
+			    for (int schemaNum = 0, schemaLim = templateXMP.GetRoot().GetChildrenLength(); schemaNum<schemaLim; ++schemaNum)
+                {
+				    XmpNode templateSchema = templateXMP.GetRoot().GetChild(schemaNum + 1);
+
+                    // Make sure we have an output schema node, then process the top level template properties.
+                    XmpNode workingSchema = XmpNodeUtils.FindSchemaNode(workingXMP.GetRoot(), templateSchema.Name, false);
+				    if (workingSchema == null)
+                    {
+					    workingSchema = new XmpNode(templateSchema.Name, templateSchema.Value, new PropertyOptions(PropertyOptions.SchemaNodeFlag));
+					    workingXMP.GetRoot().AddChild(workingSchema);
+                        workingSchema.Parent = workingXMP.GetRoot();
+				    }
+
+				    for (int propNum = 1, propLim = templateSchema.GetChildrenLength(); propNum <= propLim; ++propNum)
+                    {
+                        XmpNode templateProp = templateSchema.GetChild(propNum);
+					    if (doAll || !Utils.IsInternalProperty(templateSchema.Name, templateProp.Name))
+                            AppendSubtree(workingXMP, templateProp, workingSchema, doAdd, doReplace, deleteEmpty);
+				    }
+
+				    if (workingSchema.HasChildren == false)
+					    workingXMP.GetRoot().RemoveChild(workingSchema);
+
+			    }
+		    }
+        }
+
     }
 }

@@ -12,6 +12,7 @@ using System.Text;
 
 namespace XmpCore.Impl
 {
+    /// <author>Stefan Makswit</author>
     /// <since>12.10.2006</since>
     public static class Latin1Converter
     {

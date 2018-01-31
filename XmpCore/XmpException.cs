@@ -13,6 +13,7 @@ using System;
 namespace XmpCore
 {
     /// <summary>This exception wraps all errors that occur in the XMP Toolkit.</summary>
+    /// <author>Stefan Makswit</author>
     /// <since>16.02.2006</since>
     public sealed class XmpException : Exception
     {

@@ -13,6 +13,7 @@ using JetBrains.Annotations;
 
 namespace XmpCore.Impl
 {
+    /// <author>Stefan Makswit</author>
     /// <since>11.08.2006</since>
     internal static class ParameterAsserts
     {

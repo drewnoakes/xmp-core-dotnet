@@ -13,6 +13,7 @@ namespace XmpCore.Options
     /// The property flags are used when properties are fetched from the <c>XMPMeta</c>-object
     /// and provide more detailed information about the property.
     /// </summary>
+    /// <author>Stefan Makswit</author>
     /// <since>03.07.2006</since>
     public sealed class PropertyOptions : Options
     {
@@ -31,6 +32,8 @@ namespace XmpCore.Options
 
         /// <summary>may be used in the future</summary>
         internal const int DeleteExisting = 0x20000000;
+
+        private int arrayElementsLimit = -1; // unlimited
 
         /// <summary>Default constructor</summary>
         public PropertyOptions()
@@ -142,6 +145,22 @@ namespace XmpCore.Options
             set => SetOption(ArrayAltTextFlag, value);
         }
 
+        /// <value>Return whether this property is an array with a limit on number-of-elements.</value>
+        public bool IsArrayLimited => arrayElementsLimit != -1;
+
+
+        /// <param name="arrayLimit">the limit to set on number-of-elements</param>
+        /// <value>Returns this to enable cascaded options.</value>
+        public PropertyOptions SetArrayElementLimit(int arrayLimit)
+        {
+            arrayElementsLimit = arrayLimit;
+            return this;
+        }
+
+
+        /// <value>Returns the current limit on number-of-elements</value>
+        public int ArrayElementsLimit => arrayElementsLimit;
+
         /// <value>Returns whether the SCHEMA_NODE option is set.</value>
         public bool IsSchemaNode
         {
@@ -179,7 +198,7 @@ namespace XmpCore.Options
         /// <value>Returns true if only array options are set.</value>
         public bool IsOnlyArrayOptions => (GetOptions() & ~(ArrayFlag | ArrayOrderedFlag | ArrayAlternateFlag | ArrayAltTextFlag)) == 0;
 
-        protected override int GetValidOptions() => IsUriFlag | HasQualifiersFlag | QualifierFlag | HasLanguageFlag | HasTypeFlag | StructFlag | ArrayFlag | ArrayOrderedFlag | ArrayAlternateFlag | ArrayAltTextFlag | SchemaNodeFlag;
+        protected override int GetValidOptions() => IsUriFlag | HasQualifiersFlag | QualifierFlag | HasLanguageFlag | HasTypeFlag | StructFlag | ArrayFlag | ArrayOrderedFlag | ArrayAlternateFlag | ArrayAltTextFlag | DeleteExisting | SchemaNodeFlag;
 
         protected override string DefineOptionName(int option)
         {

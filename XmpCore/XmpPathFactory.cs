@@ -49,6 +49,7 @@ namespace XmpCore
     /// <em>Note:</em> These methods are much simpler than in the C++-API, they don't check the given
     /// path or array indices.
     /// </remarks>
+    /// <author>Stefan Makswit</author>
     /// <since>25.01.2006</since>
     public static class XmpPathFactory
     {

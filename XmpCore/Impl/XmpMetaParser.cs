@@ -25,10 +25,17 @@ namespace XmpCore.Impl
     /// <remarks>
     /// After the parsing several normalisations are applied to the XMP tree.
     /// </remarks>
+    /// <author>Stefan Makswit</author>
     /// <since>01.02.2006</since>
     public static class XmpMetaParser
     {
         private static readonly object XmpRdf = new object();
+
+        // <#AdobePrivate>
+        // The Plain XMP format is disabled
+        /*  */
+        // private static final Object XMP_PLAIN = new Object();
+        // </#AdobePrivate>
 
         /// <summary>
         /// Parses an XMP metadata object from a stream, including de-aliasing and normalisation.
@@ -123,7 +130,17 @@ namespace XmpCore.Impl
                 // no appropriate root node found, return empty metadata object
                 return new XmpMeta();
 
-            var xmp = ParseRdf.Parse((XElement)result[0]);
+            // <#AdobePrivate>
+            // The Plain XMP format is disabled
+            //		else if (result != null  &&  result[1] == XMP_PLAIN)
+            //		{
+            //			XMPMetaImpl xmp = ParsePlainXMP.parse((Node) result[0]);
+            //			xmp.setPacketHeader((String) result[2]);
+            //			return XMPNormalizer.process(xmp, options);
+            //		}
+            // </#AdobePrivate>
+
+            var xmp = ParseRdf.Parse((XElement)result[0], options);
             xmp.SetPacketHeader((string)result[2]);
 
             // Check if the XMP object shall be normalized
@@ -142,12 +159,14 @@ namespace XmpCore.Impl
         /// <exception cref="XmpException">Thrown when the parsing fails.</exception>
         private static XDocument ParseXmlFromInputStream(Stream stream, ParseOptions options)
         {
-            if (!options.AcceptLatin1 && !options.FixControlChars)
+            if (!options.AcceptLatin1 &&
+                !options.FixControlChars &&
+                !options.DisallowDoctype)
                 return ParseStream(stream, options);
 
             try
             {
-                // load stream into bytebuffer
+                // load stream into ByteBuffer to apply advanced options
                 return ParseXmlFromByteBuffer(new ByteBuffer(stream), options);
             }
             catch (IOException e)
@@ -159,6 +178,8 @@ namespace XmpCore.Impl
         /// <summary>
         /// Parses XML from a byte buffer,
         /// fixing the encoding (Latin-1 to UTF-8) and illegal control character optionally.
+        /// To improve the performance on legal files, it is first tried to parse normally,
+        /// while the character fixing is only done when the first pass fails.
         /// </summary>
         /// <param name="buffer">a byte buffer containing the XMP packet</param>
         /// <param name="options">the parsing options</param>
@@ -172,6 +193,11 @@ namespace XmpCore.Impl
             }
             catch (XmpException e)
             {
+                //if ("DOCTYPE is disallowed".equals(e.getCause().getMessage()))
+                //{
+                //    throw new XMPException(e.getCause().getMessage(), XMPError.BADXML);
+                //}
+                //else
                 if (e.ErrorCode == XmpErrorCode.BadXml || e.ErrorCode == XmpErrorCode.BadStream)
                 {
                     if (options.AcceptLatin1)
@@ -383,6 +409,19 @@ namespace XmpCore.Impl
                         }
                         return result;
                     }
+                    // <#AdobePrivate>
+                    // The Plain XMP format is disabled
+                    //	else if ("XMP_Packet".equals(rootLocal)  &&
+                    //		XMPConst.NS_PXMP.equals(rootNS))
+                    //	{
+                    //		if (result != null)
+                    //		{
+                    //			result[0] = root;
+                    //			result[1] = XMP_PLAIN;
+                    //		}
+                    //		return result;
+                    //	}
+                    // </#AdobePrivate>
 
                     // continue searching
                     var newResult = FindRootNode(rootElem.Nodes(), xmpmetaRequired, result);

@@ -13,6 +13,7 @@ namespace XmpCore
     /// <remarks>
     /// Version information for the XMP toolkit is available at runtime via <see cref="XmpMetaFactory.VersionInfo"/>.
     /// </remarks>
+    /// <author>Stefan Makswit</author>
     /// <since>23.01.2006</since>
     public interface IXmpVersionInfo
     {

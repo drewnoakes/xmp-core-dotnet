@@ -11,6 +11,7 @@ namespace XmpCore
 {
     /// <summary>Models a property together with its path and namespace.</summary>
     /// <remarks>Instances of this type are are iterated via <see cref="IXmpIterator"/>.</remarks>
+    /// <author>Stefan Makswit</author>
     /// <since>06.07.2006</since>
     public interface IXmpPropertyInfo : IXmpProperty
     {

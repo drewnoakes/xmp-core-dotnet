@@ -18,6 +18,7 @@ namespace XmpCore
     /// A factory to create <see cref="XmpDateTime"/> instances from a <see cref="Calendar"/> or an
     /// ISO 8601 string or for the current time.
     /// </summary>
+    /// <author>Stefan Makswit</author>
     /// <since>16.02.2006</since>
     public static class XmpDateTimeFactory
     {

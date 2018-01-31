@@ -13,6 +13,7 @@ using XmpCore.Options;
 namespace XmpCore
 {
     /// <summary>Models a a text property together with its language and options.</summary>
+    /// <author>Stefan Makswit</author>
     /// <since>23.01.2006</since>
     public interface IXmpProperty
     {

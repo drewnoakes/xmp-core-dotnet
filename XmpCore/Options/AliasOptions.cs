@@ -10,6 +10,7 @@
 namespace XmpCore.Options
 {
     /// <summary>Options for XMPSchemaRegistryImpl#registerAlias.</summary>
+    /// <author>Stefan Makswit</author>
     /// <since>20.02.2006</since>
     public sealed class AliasOptions : Options
     {

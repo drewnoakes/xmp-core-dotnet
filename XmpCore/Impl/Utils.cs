@@ -8,6 +8,7 @@
 // =================================================================================================
 
 
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using JetBrains.Annotations;
@@ -15,6 +16,7 @@ using JetBrains.Annotations;
 namespace XmpCore.Impl
 {
     /// <summary>Utility functions for the XMPToolkit implementation.</summary>
+    /// <author>Stefan Makswit</author>
     /// <since>06.06.2006</since>
     public static class Utils
     {
@@ -155,6 +157,43 @@ namespace XmpCore.Impl
             value = valueStr.ToString();
         }
 
+        private static readonly HashSet<string> EXTERNAL_XMPDM_PROPS = new HashSet<string>
+        {
+            "xmpDM:album",
+            "xmpDM:altTapeName",
+            "xmpDM:altTimecode",
+            "xmpDM:artist",
+            "xmpDM:cameraAngle",
+            "xmpDM:cameraLabel",
+            "xmpDM:cameraModel",
+            "xmpDM:cameraMove",
+            "xmpDM:client",
+            "xmpDM:comment",
+            "xmpDM:composer",
+            "xmpDM:director",
+            "xmpDM:directorPhotography",
+            "xmpDM:engineer",
+            "xmpDM:genre",
+            "xmpDM:good",
+            "xmpDM:instrument",
+            "xmpDM:logComment",
+            "xmpDM:projectName",
+            "xmpDM:releaseDate",
+            "xmpDM:scene",
+            "xmpDM:shotDate",
+            "xmpDM:shotDay",
+            "xmpDM:shotLocation",
+            "xmpDM:shotName",
+            "xmpDM:shotNumber",
+            "xmpDM:shotSize",
+            "xmpDM:speakerPlacement",
+            "xmpDM:takeNumber",
+            "xmpDM:tapeName",
+            "xmpDM:trackNumber",
+            "xmpDM:videoAlphaMode",
+            "xmpDM:videoAlphaPremultipleColor"
+        };
+
         /// <param name="schema">a schema namespace</param>
         /// <param name="prop">an XMP Property</param>
         /// <returns>
@@ -176,9 +215,17 @@ namespace XmpCore.Impl
                 case XmpConstants.NsExif:
                     return prop != "exif:UserComment";
                 case XmpConstants.NsPhotoshop:
-                    return prop == "photoshop:ICCProfile";
+                    return prop == "photoshop:ICCProfile" || prop == "photoshop:TextLayers";
+                case XmpConstants.NsDm:
+                    return !EXTERNAL_XMPDM_PROPS.Contains(prop);
                 case XmpConstants.NsCameraraw:
-                    return prop == "crs:Version" || prop == "crs:RawFileName" || prop == "crs:ToneCurveName";
+                    //return prop == "crs:Version" || prop == "crs:RawFileName" || prop == "crs:ToneCurveName";
+                    return true;
+                case XmpConstants.NsScript:
+                    return prop != "xmpScript:action" && prop != "xmpScript:character" && prop != "xmpScript:dialog" && 
+                        prop != "xmpScript:sceneSetting" && prop != "xmpScript:sceneTimeOfDay";
+                case XmpConstants.NsBwf:
+                    return prop == "bext:version";
                 case XmpConstants.NsExifAux:
                 case XmpConstants.NsAdobestockphoto:
                 case XmpConstants.NsXmpMm:

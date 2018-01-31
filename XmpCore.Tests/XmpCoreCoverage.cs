@@ -181,7 +181,7 @@ namespace XmpCore.Tests
 
             var meta2 = XmpMetaFactory.Create();
             meta2.SetObjectName("New object name");
-            PrintXmpMeta(meta2, "XMP object with name");
+            PrintXmpMeta(meta2, "Set object name");
 
             var meta3 = XmpMetaFactory.ParseFromString(TestData.RDF_COVERAGE);
             PrintXmpMeta(meta3, "Construct and parse from buffer");

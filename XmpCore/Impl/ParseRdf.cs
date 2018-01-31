@@ -66,6 +66,7 @@ namespace XmpCore.Impl
     }
 
     /// <summary>Parser for "normal" XML serialisation of RDF.</summary>
+    /// <author>Stefan Makswit</author>
     /// <since>14.07.2006</since>
     public static class ParseRdf
     {
@@ -78,12 +79,13 @@ namespace XmpCore.Impl
         /// is created. This is a raw parse, the normalisation of the XMP tree happens outside.
         /// </remarks>
         /// <param name="xmlRoot">the XML root node</param>
+        /// <param name="options">ParseOptions to indicate the parse options provided by the client</param>
         /// <returns>Returns an XMP metadata object (not normalized)</returns>
         /// <exception cref="XmpException">Occurs if the parsing fails for any reason.</exception>
-        internal static XmpMeta Parse(XElement xmlRoot)
+        internal static XmpMeta Parse(XElement xmlRoot, ParseOptions options)
         {
             var xmp = new XmpMeta();
-            Rdf_RDF(xmp, xmlRoot);
+            Rdf_RDF(xmp, xmlRoot, options);
             return xmp;
         }
 
@@ -98,13 +100,14 @@ namespace XmpCore.Impl
         /// </remarks>
         /// <param name="xmp">the xmp metadata object that is generated</param>
         /// <param name="rdfRdfNode">the top-level xml node</param>
+        /// <param name="options">ParseOptions to indicate the parse options provided by the client</param>
         /// <exception cref="XmpException">thrown on parsing errors</exception>
-        private static void Rdf_RDF(XmpMeta xmp, XElement rdfRdfNode)
+        private static void Rdf_RDF(XmpMeta xmp, XElement rdfRdfNode, ParseOptions options)
         {
             if (!rdfRdfNode.Attributes().Any())
                 throw new XmpException("Invalid attributes of rdf:RDF element", XmpErrorCode.BadRdf);
 
-            Rdf_NodeElementList(xmp, xmp.GetRoot(), rdfRdfNode);
+            Rdf_NodeElementList(xmp, xmp.GetRoot(), rdfRdfNode, options);
         }
 
         /// <summary>
@@ -118,14 +121,15 @@ namespace XmpCore.Impl
         /// <param name="xmp">the xmp metadata object that is generated</param>
         /// <param name="xmpParent">the parent xmp node</param>
         /// <param name="rdfRdfNode">the top-level xml node</param>
+        /// /// <param name="options">ParseOptions to indicate the parse options provided by the client</param>
         /// <exception cref="XmpException">thrown on parsing errors</exception>
-        private static void Rdf_NodeElementList(XmpMeta xmp, XmpNode xmpParent, XElement rdfRdfNode)
+        private static void Rdf_NodeElementList(XmpMeta xmp, XmpNode xmpParent, XElement rdfRdfNode, ParseOptions options)
         {
             foreach (var child in rdfRdfNode.Nodes())
             {
                 // filter whitespaces (and all text nodes)
                 if (!IsWhitespaceNode(child))
-                    Rdf_NodeElement(xmp, xmpParent, (XElement)child, true);
+                    Rdf_NodeElement(xmp, xmpParent, (XElement)child, true, options);
             }
         }
 
@@ -144,8 +148,9 @@ namespace XmpCore.Impl
         /// <param name="xmpParent">the parent xmp node</param>
         /// <param name="xmlNode">the currently processed XML node</param>
         /// <param name="isTopLevel">Flag if the node is a top-level node</param>
+        /// <param name="options">ParseOptions to indicate the parse options provided by the client</param>
         /// <exception cref="XmpException">thrown on parsing errors</exception>
-        private static void Rdf_NodeElement(XmpMeta xmp, XmpNode xmpParent, XElement xmlNode, bool isTopLevel)
+        private static void Rdf_NodeElement(XmpMeta xmp, XmpNode xmpParent, XElement xmlNode, bool isTopLevel, ParseOptions options)
         {
             var nodeTerm = GetRdfTermKind(xmlNode);
 
@@ -155,8 +160,8 @@ namespace XmpCore.Impl
             if (isTopLevel && nodeTerm == RdfTerm.Other)
                 throw new XmpException("Top level typed node not allowed", XmpErrorCode.BadXmp);
 
-            Rdf_NodeElementAttrs(xmp, xmpParent, xmlNode, isTopLevel);
-            Rdf_PropertyElementList(xmp, xmpParent, xmlNode, isTopLevel);
+            Rdf_NodeElementAttrs(xmp, xmpParent, xmlNode, isTopLevel, options);
+            Rdf_PropertyElementList(xmp, xmpParent, xmlNode, isTopLevel, options);
         }
 
         /// <summary>
@@ -185,8 +190,9 @@ namespace XmpCore.Impl
         /// <param name="xmpParent">the parent xmp node</param>
         /// <param name="xmlNode">the currently processed XML node</param>
         /// <param name="isTopLevel">Flag if the node is a top-level node</param>
+        /// <param name="options">ParseOptions to indicate the parse options provided by the client</param>
         /// <exception cref="XmpException">thrown on parsing errors</exception>
-        private static void Rdf_NodeElementAttrs(XmpMeta xmp, XmpNode xmpParent, XElement xmlNode, bool isTopLevel)
+        private static void Rdf_NodeElementAttrs(XmpMeta xmp, XmpNode xmpParent, XElement xmlNode, bool isTopLevel, ParseOptions options)
         {
             // Used to detect attributes that are mutually exclusive.
             var exclusiveAttrs = 0;
@@ -251,9 +257,11 @@ namespace XmpCore.Impl
         /// <param name="xmpParent">the parent xmp node</param>
         /// <param name="xmlParent">the currently processed XML node</param>
         /// <param name="isTopLevel">Flag if the node is a top-level node</param>
+        /// <param name="options">ParseOptions to indicate the parse options provided by the client</param>
         /// <exception cref="XmpException">thrown on parsing errors</exception>
-        private static void Rdf_PropertyElementList(XmpMeta xmp, XmpNode xmpParent, XElement xmlParent, bool isTopLevel)
+        private static void Rdf_PropertyElementList(XmpMeta xmp, XmpNode xmpParent, XElement xmlParent, bool isTopLevel, ParseOptions options)
         {
+            int childcount = 0;
             foreach (var currChild in xmlParent.Nodes())
             {
                 if (IsWhitespaceNode(currChild))
@@ -265,7 +273,12 @@ namespace XmpCore.Impl
                 if (currChild.NodeType != XmlNodeType.Element)
                     throw new XmpException("Expected property element node not found", XmpErrorCode.BadRdf);
 
-                Rdf_PropertyElement(xmp, xmpParent, (XElement)currChild, isTopLevel);
+                if ((xmpParent.Options.IsArrayLimited && (childcount > xmpParent.Options.ArrayElementsLimit)))
+                    break;
+
+                Rdf_PropertyElement(xmp, xmpParent, (XElement)currChild, isTopLevel, options);
+
+                childcount++;
             }
         }
 
@@ -356,8 +369,9 @@ namespace XmpCore.Impl
         /// <param name="xmpParent">the parent xmp node</param>
         /// <param name="xmlNode">the currently processed XML node</param>
         /// <param name="isTopLevel">Flag if the node is a top-level node</param>
+        /// <param name="options">ParseOptions to indicate the parse options provided by the client</param>
         /// <exception cref="XmpException">thrown on parsing errors</exception>
-        private static void Rdf_PropertyElement(XmpMeta xmp, XmpNode xmpParent, XElement xmlNode, bool isTopLevel)
+        private static void Rdf_PropertyElement(XmpMeta xmp, XmpNode xmpParent, XElement xmlNode, bool isTopLevel, ParseOptions options)
         {
             var nodeTerm = GetRdfTermKind(xmlNode);
 
@@ -411,7 +425,7 @@ namespace XmpCore.Impl
                     else if (attrValue == "Literal")
                         Rdf_ParseTypeLiteralPropertyElement();
                     else if (attrValue == "Resource")
-                        Rdf_ParseTypeResourcePropertyElement(xmp, xmpParent, xmlNode, isTopLevel);
+                        Rdf_ParseTypeResourcePropertyElement(xmp, xmpParent, xmlNode, isTopLevel, options);
                     else if (attrValue == "Collection")
                         Rdf_ParseTypeCollectionPropertyElement();
                     else
@@ -431,7 +445,7 @@ namespace XmpCore.Impl
                         if (nonTextNode == null)
                             Rdf_LiteralPropertyElement(xmp, xmpParent, xmlNode, isTopLevel);
                         else
-                            Rdf_ResourcePropertyElement(xmp, xmpParent, xmlNode, isTopLevel);
+                            Rdf_ResourcePropertyElement(xmp, xmpParent, xmlNode, isTopLevel, options);
                     }
                 }
             }
@@ -458,8 +472,9 @@ namespace XmpCore.Impl
         /// <param name="xmpParent">the parent xmp node</param>
         /// <param name="xmlNode">the currently processed XML node</param>
         /// <param name="isTopLevel">Flag if the node is a top-level node</param>
+        /// <param name="options">ParseOptions to indicate the parse options provided by the client</param>
         /// <exception cref="XmpException">thrown on parsing errors</exception>
-        private static void Rdf_ResourcePropertyElement(XmpMeta xmp, XmpNode xmpParent, XElement xmlNode, bool isTopLevel)
+        private static void Rdf_ResourcePropertyElement(XmpMeta xmp, XmpNode xmpParent, XElement xmlNode, bool isTopLevel, ParseOptions options)
         {
             if (isTopLevel && xmlNode.Name == XName.Get("changes", "iX"))
             {
@@ -540,7 +555,16 @@ namespace XmpCore.Impl
                     }
                 }
 
-                Rdf_NodeElement(xmp, newCompound, currChildElem, false);
+                if (newCompound.Options.IsArray)
+                {
+                    //listLimit will hold the limit value for the array is the array name is found in the mXMPNodesToLimit map, otherwise will be null
+                    if (options.GetXMPNodesToLimit().TryGetValue(newCompound.Name, out var listLimit))
+                    {
+                        newCompound.Options.SetArrayElementLimit(listLimit);
+                    }
+                }
+
+                Rdf_NodeElement(xmp, newCompound, currChildElem, false, options);
 
                 if (newCompound.HasValueChild)
                     FixupQualifiedNode(newCompound);
@@ -598,6 +622,7 @@ namespace XmpCore.Impl
                 }
             }
 
+            // FfF: Can there be more than one text node in a row?
             var textValue = string.Empty;
 
             foreach (var child in xmlNode.Nodes())
@@ -645,8 +670,9 @@ namespace XmpCore.Impl
         /// <param name="xmpParent">the parent xmp node</param>
         /// <param name="xmlNode">the currently processed XML node</param>
         /// <param name="isTopLevel">Flag if the node is a top-level node</param>
+        /// <param name="options">ParseOptions to indicate the parse options provided by the client</param>
         /// <exception cref="XmpException">thrown on parsing errors</exception>
-        private static void Rdf_ParseTypeResourcePropertyElement(XmpMeta xmp, XmpNode xmpParent, XElement xmlNode, bool isTopLevel)
+        private static void Rdf_ParseTypeResourcePropertyElement(XmpMeta xmp, XmpNode xmpParent, XElement xmlNode, bool isTopLevel, ParseOptions options)
         {
             var newStruct = AddChildNode(xmp, xmpParent, xmlNode, string.Empty, isTopLevel);
 
@@ -677,10 +703,12 @@ namespace XmpCore.Impl
                 }
             }
 
-            Rdf_PropertyElementList(xmp, newStruct, xmlNode, false);
+            Rdf_PropertyElementList(xmp, newStruct, xmlNode, false, options);
 
             if (newStruct.HasValueChild)
                 FixupQualifiedNode(newStruct);
+
+            // *** Need to look for arrays using rdf:Description and rdf:type.
         }
 
         /// <summary>
@@ -924,6 +952,7 @@ namespace XmpCore.Impl
             if (ns == XmpConstants.NsDcDeprecated)
             {
                 // Fix a legacy DC namespace
+                // FfF: remove it after CS3
                 ns = XmpConstants.NsDC;
             }
 
@@ -947,9 +976,9 @@ namespace XmpCore.Impl
                 // Incoming parent must be the tree root.
                 var schemaNode = XmpNodeUtils.FindSchemaNode(xmp.GetRoot(), ns, DefaultPrefix, true);
 
-                schemaNode.IsImplicit = false;
+                schemaNode.IsImplicit = false; // Clear the implicit node bit.
 
-                // Clear the implicit node bit.
+                // *** Should use "opt &= ~flag" (no conditional),
                 // need runtime check for proper 32 bit code.
                 xmpParent = schemaNode;
 
@@ -964,7 +993,7 @@ namespace XmpCore.Impl
             }
 
             // Make sure that this is not a duplicate of a named node.
-            var isArrayItem = childName == XmpConstants.RdfLi;
+            var isArrayItem = IsNumberedArrayItemName(childName);
             var isValueNode = childName == "rdf:value";
 
             // Create XMP node and so some checks
@@ -984,13 +1013,14 @@ namespace XmpCore.Impl
                 xmpParent.HasValueChild = true;
             }
 
-            if (isArrayItem)
-            {
-                if (!xmpParent.Options.IsArray)
-                    throw new XmpException("Misplaced rdf:li element", XmpErrorCode.BadRdf);
+            var isParentArray = xmpParent.Options.IsArray;
 
+            if (isParentArray && isArrayItem)
                 newChild.Name = XmpConstants.ArrayItemName;
-            }
+            else if (!isParentArray && isArrayItem)
+                throw new XmpException("Misplaced rdf:li element", XmpErrorCode.BadRdf);
+            else if (isParentArray && !isArrayItem)
+                throw new XmpException("Arrays cannot have arbitrary child names", XmpErrorCode.BadRdf);
 
             return newChild;
         }
@@ -1036,6 +1066,8 @@ namespace XmpCore.Impl
             // Check for duplicate names between the value node's qualifiers and the parent's children.
             // The parent's children are about to become qualifiers. Check here, between the groups.
             // Intra-group duplicates are caught by XMPNode#addChild(...).
+
+            // FfF: integrate this into the loop below
             if (valueNode.Options.HasLanguage)
             {
                 if (xmpParent.Options.HasLanguage)
@@ -1164,6 +1196,26 @@ namespace XmpCore.Impl
                 default:
                     return RdfTerm.Other;
             }
+        }
+
+        /// <summary>Check if the child name</summary>
+        /// <param name="nodeName">an XML node</param>
+        /// <returns>Returns bool</returns>
+        private static bool IsNumberedArrayItemName(string nodeName)
+        {
+            bool result = "rdf:li".Equals(nodeName);
+
+            if (nodeName.StartsWith("rdf:_"))
+            {
+                result = true;
+                for (int i = 5; i < nodeName.Length; i++)
+                {
+                    //result = result && nodeName.charAt(i) >= '0' && nodeName.charAt(i) <= '9';
+                    result = result && nodeName[i] >= '0' && nodeName[i] <= '9';
+                }
+            }
+
+            return result;
         }
     }
 }

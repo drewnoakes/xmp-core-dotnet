@@ -13,6 +13,7 @@ using XmpCore.Options;
 namespace XmpCore
 {
     /// <summary>This interface is used to return info about an alias.</summary>
+    /// <author>Stefan Makswit</author>
     /// <since>27.01.2006</since>
     public interface IXmpAliasInfo
     {

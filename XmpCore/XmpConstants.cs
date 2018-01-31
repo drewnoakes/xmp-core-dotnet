@@ -9,6 +9,7 @@
 
 namespace XmpCore
 {
+    /// <author>Stefan Makswit</author>
     public static class XmpConstants
     {
         /// <summary>The XML namespace for XML.</summary>
@@ -119,7 +120,16 @@ namespace XmpCore
         /// <summary>Adobe Flash SWF</summary>
         public const string NsSwf = "http://ns.adobe.com/swf/1.0/";
 
+        /// <summary>Adobe Creative Cloud Video</summary>
+        public const string NsCcv = "http://ns.adobe.com/ccv/1.0/";
+
+
+        // XMP namespaces that are Adobe private
+
         public const string NsDm = "http://ns.adobe.com/xmp/1.0/DynamicMedia/";
+
+        // The Plain XMP format is disabled
+        // string NsPxmp = "http://ns.adobe.com/plain-xmp/1.0/";
 
         public const string NsTransient = "http://ns.adobe.com/xmp/transient/1.0/";
 

@@ -10,6 +10,7 @@
 namespace XmpCore.Options
 {
     /// <summary>Options for <c>XMPIterator</c> construction.</summary>
+    /// <author>Stefan Makswit</author>
     /// <since>24.01.2006</since>
     public sealed class IteratorOptions : Options
     {

@@ -14,6 +14,7 @@ using System.Text;
 namespace XmpCore.Impl
 {
     /// <summary>Converts between ISO 8601 Strings and <c>Calendar</c> with millisecond resolution.</summary>
+    /// <author>Stefan Makswit</author>
     /// <since>16.02.2006</since>
     public static class Iso8601Converter
     {
@@ -193,6 +194,7 @@ namespace XmpCore.Impl
             }
 
             // create a corresponding TZ and set it time zone
+            // FfF: would it be better to map into existing time zones?
             var offset = TimeSpan.FromHours(tzHour) + TimeSpan.FromMinutes(tzMinute);
             if (tzSign < 0)
                 offset = -offset;
@@ -298,6 +300,7 @@ namespace XmpCore.Impl
         }
     }
 
+    /// <author>Stefan Makswit</author>
     /// <since>22.08.2006</since>
     internal sealed class ParseState
     {

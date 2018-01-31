@@ -19,6 +19,7 @@ namespace XmpCore.Impl
     /// <summary>
     /// Implementation of <see cref="IXmpMeta"/>.
     /// </summary>
+    /// <author>Stefan Makswit</author>
     /// <since>17.02.2006</since>
     public sealed class XmpMeta : IXmpMeta
     {
@@ -66,6 +67,7 @@ namespace XmpCore.Impl
                 throw new XmpException("Only array form flags allowed for arrayOptions", XmpErrorCode.BadOptions);
             }
             // Check if array options are set correctly.
+            // FfF: move logic into PropertyOptions?
             arrayOptions = XmpNodeUtils.VerifySetOptions(arrayOptions, null);
             // Locate or create the array. If it already exists, make sure the array
             // form from the options
@@ -91,6 +93,7 @@ namespace XmpCore.Impl
                 // The array does not exist, try to create it.
                 if (arrayOptions.IsArray)
                 {
+                    // FfF: Must not call FindNode twice
                     arrayNode = XmpNodeUtils.FindNode(_tree, arrayPath, true, arrayOptions);
                     if (arrayNode == null)
                     {
@@ -901,13 +904,16 @@ namespace XmpCore.Impl
         /// <exception cref="XmpException">thrown if options and value do not correspond</exception>
         internal static void SetNode(XmpNode node, object value, PropertyOptions newOptions, bool deleteExisting)
         {
+            int compositeMask = (PropertyOptions.ArrayFlag | PropertyOptions.ArrayAltTextFlag | PropertyOptions.ArrayAlternateFlag
+                                | PropertyOptions.ArrayOrderedFlag | PropertyOptions.StructFlag);
+
             if (deleteExisting)
                 node.Clear();
 
-            // its checked by setOptions(), if the merged result is a valid options set
+            // its checked by SetOptions(), if the merged result is a valid options set
             node.Options.MergeWith(newOptions);
 
-            if (!node.Options.IsCompositeProperty)
+            if ((node.Options.GetOptions() & compositeMask) == 0)
             {
                 // This is setting the value of a leaf node.
                 XmpNodeUtils.SetNodeValue(node, value);
@@ -916,6 +922,14 @@ namespace XmpCore.Impl
             {
                 if (value != null && value.ToString().Length > 0)
                     throw new XmpException("Composite nodes can't have values", XmpErrorCode.BadXPath);
+
+                if ((node.Options.GetOptions() & compositeMask) != 0)   // Can't change an array to a struct, or vice versa.
+                {
+                    if ((newOptions.GetOptions() & compositeMask) != (node.Options.GetOptions() & compositeMask))
+                    {
+                        throw new XmpException("Requested and existing composite form mismatch", XmpErrorCode.BadXPath);
+                    }
+                }
 
                 node.RemoveChildren();
             }

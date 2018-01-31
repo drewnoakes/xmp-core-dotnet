@@ -20,6 +20,7 @@ namespace XmpCore.Impl
     /// <remarks>
     /// There is only one singleton instance used by the toolkit, accessed via <see cref="XmpMetaFactory.SchemaRegistry"/>.
     /// </remarks>
+    /// <author>Stefan Makswit</author>
     /// <since>27.01.2006</since>
     public sealed class XmpSchemaRegistry : IXmpSchemaRegistry
     {
@@ -203,10 +204,15 @@ namespace XmpCore.Impl
             RegisterNamespace(XmpConstants.NsScript, "xmpScript");
             RegisterNamespace(XmpConstants.NsTxmp, "txmp");
             RegisterNamespace(XmpConstants.NsSwf, "swf");
+            RegisterNamespace(XmpConstants.NsCcv, "ccv");
 
             // register Adobe private namespaces
             RegisterNamespace(XmpConstants.NsDm, "xmpDM");
             RegisterNamespace(XmpConstants.NsTransient, "xmpx");
+            // <#AdobePrivate>
+            // The Plain XMP format is disabled
+            // registerNamespace(NS_PXMP, "pxmp");
+            // </#AdobePrivate>
 
             // register Adobe standard type namespaces
             RegisterNamespace(XmpConstants.TypeText, "xmpT");
@@ -298,6 +304,9 @@ namespace XmpCore.Impl
                 ParameterAsserts.AssertPropName(aliasProp);
                 ParameterAsserts.AssertSchemaNs(actualNs);
                 ParameterAsserts.AssertPropName(actualProp);
+
+                // FfF: if we need the decoration with [1] or
+                // FfF: [?xml:lang="x-default"] for array forms
 
                 // Fix the alias options
                 var aliasOpts = aliasForm != null ? new AliasOptions(XmpNodeUtils.VerifySetOptions(aliasForm.ToPropertyOptions(), null).GetOptions()) : new AliasOptions();
@@ -394,6 +403,7 @@ namespace XmpCore.Impl
             RegisterAlias(XmpConstants.NsTiff, "Artist", XmpConstants.NsDC, "creator", aliasToArrayOrdered);
             RegisterAlias(XmpConstants.NsTiff, "Copyright", XmpConstants.NsDC, "rights", null);
             RegisterAlias(XmpConstants.NsTiff, "DateTime", XmpConstants.NsXmp, "ModifyDate", null);
+            RegisterAlias(XmpConstants.NsExif, "DateTimeDigitized", XmpConstants.NsXmp, "CreateDate", null);
             RegisterAlias(XmpConstants.NsTiff, "ImageDescription", XmpConstants.NsDC, "description", null);
             RegisterAlias(XmpConstants.NsTiff, "Software", XmpConstants.NsXmp, "CreatorTool", null);
 

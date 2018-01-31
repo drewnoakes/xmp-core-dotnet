@@ -17,6 +17,7 @@ namespace XmpCore.Impl
     /// Serializes the <c>XMPMeta</c>-object to an <c>OutputStream</c> according to the
     /// <c>SerializeOptions</c>.
     /// </summary>
+    /// <author>Stefan Makswit</author>
     /// <since>11.07.2006</since>
     public static class XmpSerializerHelper
     {
@@ -38,6 +39,15 @@ namespace XmpCore.Impl
             if (options.Sort)
                 xmp.Sort();
 
+            // <#AdobePrivate> This is not very aesthetic, but needed to strip the block
+            // The Plain XMP format is disabled
+            //		if (options.getUsePlainXMP())
+            //		{
+            //			new XMPSerializerPlain().serialize(xmp, out, options);
+            //			return;
+            //		}
+            // </#AdobePrivate>
+
             new XmpSerializerRdf().Serialize(xmp, stream, options);
         }
 
@@ -54,7 +64,10 @@ namespace XmpCore.Impl
         {
             // forces the encoding to be UTF-16 to get the correct string length
             options = options ?? new SerializeOptions();
-            options.EncodeUtf16Be = true;
+            // By default encoding is utf8
+            // options should be set by the client. Commenting setting utf16 option 
+            // so that users can get the string in whichever encoding they want (by setting the options bits)
+            //options.EncodeUtf16Be = true;
 
             var output = new MemoryStream(2048);
             Serialize(xmp, output, options);

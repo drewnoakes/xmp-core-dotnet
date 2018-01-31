@@ -23,6 +23,7 @@ namespace XmpCore.Impl
     /// During the iteration the XMPMeta-object must not be changed.
     /// Calls to <c>skipSubtree()</c> / <c>skipSiblings()</c> will affect the iteration.
     /// </remarks>
+    /// <author>Stefan Makswit</author>
     /// <since>29.06.2006</since>
     public sealed class XmpIterator : IXmpIterator
     {
@@ -113,6 +114,7 @@ namespace XmpCore.Impl
         /// The <c>XMPIterator</c> implementation.
         /// It first returns the node itself, then recursively the children and qualifier of the node.
         /// </remarks>
+        /// <author>Stefan Makswit</author>
         /// <since>29.06.2006</since>
         private class NodeIterator : IIterator
         {
@@ -362,6 +364,7 @@ namespace XmpCore.Impl
         /// This iterator is derived from the default <c>NodeIterator</c>,
         /// and is only used for the option <see cref="IteratorOptions.JustChildren"/>.
         /// </summary>
+        /// <author>Stefan Makswit</author>
         /// <since>02.10.2006</since>
         private sealed class NodeIteratorChildren : NodeIterator
         {

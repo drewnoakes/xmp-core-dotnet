@@ -7,11 +7,15 @@
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
 
+
+using System.Collections.Generic;
+
 namespace XmpCore.Options
 {
     /// <summary>
     /// Options for <see cref="XmpMetaFactory.Parse(System.IO.Stream, ParseOptions)"/>.
     /// </summary>
+    /// <author>Stefan Makswit</author>
     /// <since>24.01.2006</since>
     public sealed class ParseOptions : Options
     {
@@ -32,6 +36,9 @@ namespace XmpCore.Options
 
         /// <summary>Disallow DOCTYPE declarations to prevent entity expansion attacks.</summary>
         public const int DisallowDoctypeFlag = 0x0040;
+
+        /// <summary>Map of nodes whose children are to be limited.</summary>
+        private Dictionary<string, int> mXMPNodesToLimit = new Dictionary<string, int>();
 
         /// <summary>Sets the options to the default values.</summary>
         public ParseOptions()
@@ -74,6 +81,23 @@ namespace XmpCore.Options
             get => GetOption(DisallowDoctypeFlag);
             set => SetOption(DisallowDoctypeFlag, value);
         }
+
+        /// <summary>Returns true if some XMP nodes have been limited.</summary>
+        public bool AreXMPNodesLimited => mXMPNodesToLimit.Count > 0;
+
+        /// <param name="nodeMap">the Map with name of nodes and number-of-items to limit them to</param>
+	    /// <summary>Returns the instance to call more set-methods.</summary>
+        public ParseOptions SetXMPNodesToLimit(Dictionary<string, int> nodeMap)
+        {
+            //mXMPNodesToLimit.putAll(nodeMap);
+            foreach (var node in nodeMap)
+                mXMPNodesToLimit[node.Key] = node.Value;
+
+            return this;
+        }
+
+	    /// <summary>Returns map containing names oF XMP nodes to limit and number-of-items limit corresponding to the XMP nodes.</summary>
+        public Dictionary<string, int> GetXMPNodesToLimit() => new Dictionary<string, int>(mXMPNodesToLimit);
 
         protected override string DefineOptionName(int option)
         {

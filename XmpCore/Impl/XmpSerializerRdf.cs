@@ -19,7 +19,9 @@ namespace XmpCore.Impl
     /// Serializes the <c>XMPMeta</c>-object using the standard RDF serialization format.
     /// The output is written to an <c>OutputStream</c>
     /// according to the <c>SerializeOptions</c>.
+    /// FfF: Move to XMLStreamWriter (a lot of test would break due to slight format change).
     /// </remarks>
+    /// <author>Stefan Makswit</author>
     /// <since>11.07.2006</since>
     public sealed class XmpSerializerRdf
     {
@@ -340,6 +342,7 @@ namespace XmpCore.Impl
                 SerializeCompactRdfElementProps(schema, level + 2);
             }
             // Write the rdf:Description end tag.
+            // *** Elide the end tag if everything (all props in all schema) is an attr.
             WriteIndent(level + 1);
             Write(RdfSchemaEnd);
             WriteNewline();
@@ -641,6 +644,9 @@ namespace XmpCore.Impl
             // Emit using the qualified property pseudo-struct form. The
             // value is output by a call
             // to SerializePrettyRDFProperty with emitAsRDFValue set.
+
+            // *** We're losing compactness in the calls to SerializePrettyRDFProperty.
+            // *** Should refactor to have SerializeCompactRDFProperty that does one node.
             Write(" rdf:parseType=\"Resource\">");
             WriteNewline();
             SerializeCanonicalRdfProperty(node, false, true, indent + 1);
@@ -1120,6 +1126,7 @@ namespace XmpCore.Impl
         /// <returns>Returns true if the node serialized as RDF-Attribute</returns>
         private static bool CanBeRdfAttrProp(XmpNode node)
         {
+            // FfF: other possibilities than []? if ( propNode->name[0] == '[' ) return false;
             return !node.HasQualifier && !node.Options.IsUri && !node.Options.IsCompositeProperty && node.Name != XmpConstants.ArrayItemName;
         }
 

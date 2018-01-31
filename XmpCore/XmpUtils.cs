@@ -10,12 +10,14 @@
 
 using System;
 using System.Globalization;
+using System.Text;
 using XmpCore.Impl;
 using XmpCore.Options;
 
 namespace XmpCore
 {
     /// <summary>Utility methods for XMP.</summary>
+    /// <author>Stefan Makswit</author>
     /// <since>21.02.2006</since>
     public static class XmpUtils
     {
@@ -355,6 +357,130 @@ namespace XmpCore
             {
                 throw new XmpException("Invalid base64 string", XmpErrorCode.BadValue, e);
             }
+        }
+
+
+        /// <summary>Creates XMP serializations appropriate for a JPEG file.</summary>
+        /// <remarks>The standard XMP in a JPEG file is limited to 64K bytes. This function
+        /// serializes the XMP metadata in an XMP object into a string of RDF . If
+        /// the data does not fit into the 64K byte limit, it creates a second packet
+        /// string with the extended data.</remarks>
+        /// <param name="origXMP">The XMP object containing the metadata.</param>
+        /// <param name="stdStr">A string builder object in which to return the full standard XMP packet.</param>
+        /// <param name="extStr">A string builder object in which to return the serialized extended XMP, empty if not needed.</param>
+        /// <param name="digestStr">A string builder object in which to return an MD5 digest of the serialized extended XMP, empty if not needed.</param>
+
+        /// @throws NoSuchAlgorithmException if fail to find algorithm for MD5
+        /// <exception cref="XmpException">Forwards the Exceptions from the metadata processing</exception>
+        public static void PackageForJPEG(IXmpMeta origXMP, StringBuilder stdStr, StringBuilder extStr, StringBuilder digestStr)
+        {
+
+            Impl.XmpUtils.PackageForJPEG(origXMP, stdStr, extStr, digestStr);
+        }
+
+        /// <summary>Merges standard and extended XMP retrieved from a JPEG file.</summary>
+	    /// <remarks>When an extended partition stores properties that do not fit into the
+	    /// JPEG file limitation of 64K bytes, this function integrates those
+	    /// properties back into the same XMP object with those from the standard XMP
+	    /// packet.</remarks>
+	    /// <param name="fullXMP">An XMP object which the caller has initialized from the standard XMP packet in a JPEG file. The extended XMP is added to this object.</param>
+	    /// <param name="extendedXMP">An XMP object which the caller has initialized from the extended XMP packet in a JPEG file.</param>
+	    /// <exception cref="XmpException">Forwards the Exceptions from the metadata processing</exception>
+
+        public static void MergeFromJPEG(IXmpMeta fullXMP, IXmpMeta extendedXMP)
+        {
+            Impl.XmpUtils.MergeFromJPEG(fullXMP,extendedXMP);
+        }
+
+        /// <summary>Modifies a working XMP object according to a template object.</summary>
+        /// <remarks>
+        /// The XMP template can be used to add, replace or delete properties from
+	    /// the working XMP object. The actions that you specify determine how the
+	    /// template is applied.Each action can be applied individually or combined;
+	    /// if you do not specify any actions, the properties and values in the
+        /// working XMP object do not change.
+        /// <para />
+        /// These actions are available:
+        /// <list type="bullet">
+        /// <item>Clear <c>CLEAR_UNNAMED_PROPERTIES</c> : Deletes top-level
+	    /// properties.Any top-level property that is present in the template(even
+        /// with empty value) is retained.All other top-level properties in the
+        /// working object are deleted</item>
+        /// <item>Add <c>ADD_NEW_PROPERTIES</c>: Adds new properties to the
+	    /// working object if the template properties have values.See additional
+	    /// detail below.</item>
+	    /// <item>Replace <c>REPLACE_EXISTING_PROPERTIES</c>: Replaces the
+	    /// values of existing top-level properties in the working XMP if the value
+	    /// forms match those in the template. Properties with empty values in the
+        /// template are ignored. If combined with Clear or Add actions, those take
+	    /// precedence; values are cleared or added, rather than replaced.</item>
+        /// <item>Replace/Delete empty <c>REPLACE_WITH_DELETE_EMPTY</c>:
+	    /// Replaces values in the same way as the simple Replace action, and also
+	    /// deletes properties if the value in the template is empty.If combined
+	    /// with Clear or Add actions, those take precedence; values are cleared or
+	    /// added, rather than replaced.</item>
+        /// <item>Include internal <c>INCLUDE_INTERNAL_PROPERTIES</c>: Performs
+        /// specified action on internal properties as well as external properties.
+	    /// By default, internal properties are ignored for all actions.</item>
+        /// </list>
+        /// <para />
+        /// The Add behavior depends on the type of property:
+        /// <list type="bullet">
+	    /// <item>If a top-level property is not in the working XMP, and has a value in
+	    /// the template, the property and value are added.Empty properties are not
+	    /// added.</item>
+        /// <item>If a property is in both the working XMP and template, the value
+        /// forms must match, otherwise the template is ignored for that property.</item>
+	    /// <item>If a struct is present in both the working XMP and template, the
+	    /// individual fields of the template struct are added as appropriate; that
+        /// is, the logic is recursively applied to the fields.Struct values are
+        /// equivalent if they have the same fields with equivalent values.</item>
+	    /// <item>If an array is present in both the working XMP and template, items
+        /// from the template are added if the value forms match. Array values match
+        /// if they have sets of equivalent items, regardless of order.</item>
+        /// <item>Alt-text arrays use the \c xml:lang qualifier as a key, adding languages that are missing.</item>
+        /// </list>
+        /// <para />
+	    /// Array item checking is n-squared; this can be time-intensive if the
+        /// Replace option is not specified.Each source item is checked to see if it
+        /// already exists in the destination, without regard to order or duplicates.
+	    /// Simple items are compared by value and<code> xml:lang</code> qualifier;
+	    /// other qualifiers are ignored.Structs are recursively compared by field
+        /// names, without regard to field order.Arrays are compared by recursively
+        /// comparing all items.
+        /// </remarks>
+        /// <param name="workingXMP">The destination XMP object.</param>
+	    /// <param name="templateXMP">The template to apply to the destination XMP object.</param>
+	    /// <param name="options">Option flags to control the copying. If none are specified,
+        /// the properties and values in the working XMP do not change. A logical OR of these bit-flag constants:
+	    /// <list type="bullet">
+	    /// <item><c>CLEAR_UNNAMED_PROPERTIES</c> Delete anything that is not in the template</item>
+	    /// <item><c>ADD_NEW_PROPERTIES</c> Add properties; see detailed description.</item>
+        /// <item><c>REPLACE_EXISTING_PROPERTIES</c> Replace the values of existing properties.</item>
+        /// <item><c>REPLACE_WITH_DELETE_EMPTY</c> Replace the values of existing properties and delete properties if the new value is empty.</item>
+        /// <item><c>INCLUDE_INTERNAL_PROPERTIES</c> Operate on internal properties as well as external properties.</item>
+        /// </list>
+        /// </param>
+        /// <exception cref="XmpException">Forwards the Exceptions from the metadata processing</exception>
+        static public void ApplyTemplate(IXmpMeta workingXMP, IXmpMeta templateXMP, TemplateOptions options)
+        {
+            Impl.XmpUtils.ApplyTemplate(workingXMP, templateXMP, options);
+        }
+
+
+        /// <summary>Replicate a subtree from one XMP object into another, possibly at a
+	    /// different location.</summary>
+	    /// <param name="source">The source XMP object.</param>
+	    /// <param name="dest">The destination XMP object.</param>
+	    /// <param name="sourceNS">The schema namespace URI for the source subtree.</param>
+	    /// <param name="sourceRoot">The root location for the source subtree. May be a general path expression, must not be null or the empty string.</param>
+	    /// <param name="destNS">The schema namespace URI for the destination. Defaults to the source namespace.</param>
+	    /// <param name="destRoot">The root location for the destination. May be a general path expression. Defaults to the source location.</param>
+	    /// <param name="options">Option flags to control the separation. (For now, this argument is ignored. 0 should be passed.</param>
+	    /// <exception cref="XmpException">Forwards the Exceptions from the metadata processing</exception>
+        public static void DuplicateSubtree(IXmpMeta source, IXmpMeta dest, String sourceNS, String sourceRoot, String destNS, String destRoot, PropertyOptions options)
+        {
+            Impl.XmpUtils.DuplicateSubtree(source, dest, sourceNS, sourceRoot, destNS, destRoot, options);
         }
     }
 }

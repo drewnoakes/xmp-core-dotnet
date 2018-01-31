@@ -18,6 +18,7 @@ using GregorianCalendar = Sharpen.GregorianCalendar;
 namespace XmpCore.Impl
 {
     /// <summary>The default implementation of <see cref="IXmpDateTime" />.</summary>
+    /// <author>Stefan Makswit</author>
     /// <since>16.02.2006</since>
     public sealed class XmpDateTime : IXmpDateTime
     {

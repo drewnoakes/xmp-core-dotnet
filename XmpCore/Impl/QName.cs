@@ -9,6 +9,7 @@
 
 namespace XmpCore.Impl
 {
+    /// <author>Stefan Makswit</author>
     /// <since>09.11.2006</since>
     public sealed class QName
     {

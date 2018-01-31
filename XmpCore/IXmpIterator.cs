@@ -63,6 +63,7 @@ namespace XmpCore
     /// a <c>NoSuchElementException</c> if there are no more properties to
     /// return.
     /// </remarks>
+    /// <author>Stefan Makswit</author>
     /// <since>25.01.2006</since>
     public interface IXmpIterator : IIterator
     {

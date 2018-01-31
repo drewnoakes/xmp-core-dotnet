@@ -15,17 +15,19 @@ namespace XmpCore.Options
     /// <summary>
     /// Options for <see cref="XmpMetaFactory.SerializeToBuffer(IXmpMeta, SerializeOptions)"/>.
     /// </summary>
+    /// /// <author>Stefan Makswit</author>
     /// <since>24.01.2006</since>
     public sealed class SerializeOptions : Options
     {
-        private const int OmitPacketWrapperFlag = 0x0010;
-        private const int ReadonlyPacketFlag = 0x0020;
-        private const int UseCompactFormatFlag = 0x0040;
-        private const int UseCanonicalFormatFlag = 0x0080;
-        private const int IncludeThumbnailPadFlag = 0x0100;
-        private const int ExactPacketLengthFlag = 0x0200;
-        private const int OmitXmpmetaElementFlag = 0x1000;
-        private const int SortFlag = 0x2000;
+        public const int OmitPacketWrapperFlag = 0x0010;
+        public const int ReadonlyPacketFlag = 0x0020;
+        public const int UseCompactFormatFlag = 0x0040;
+        public const int UseCanonicalFormatFlag = 0x0080;
+        public const int UsePlainXmpFlag = 0x0400;
+        public const int IncludeThumbnailPadFlag = 0x0100;
+        public const int ExactPacketLengthFlag = 0x0200;
+        public const int OmitXmpmetaElementFlag = 0x1000;
+        public const int SortFlag = 0x2000;
 
         /// <summary>Bit indicating little endian encoding, unset is big endian</summary>
         private const int LittleEndianBit = 0x0001;
@@ -37,6 +39,15 @@ namespace XmpCore.Options
         public const int EncodeUtf16LeFlag = Utf16Bit | LittleEndianBit;
         private const int EncodingMask = Utf16Bit | LittleEndianBit;
 
+        //	 <#AdobePrivate>
+        //	/** Bit indicating UTF32 encoding */
+        //	private static final int XMP_UTF32_BIT = 0x0004;
+        //	/** UTF32BE */
+        //	public static final int ENCODE_UTF32BE = XMP_UTF32_BIT;
+        //	/** UTF32LE */
+        //	public static final int ENCODE_UTF32LE = XMP_UTF32_BIT | XMP_LITTLEENDIAN_BIT;
+        //	</#AdobePrivate>
+
         /// <summary>Default constructor.</summary>
         public SerializeOptions()
         {
@@ -45,9 +56,9 @@ namespace XmpCore.Options
             Indent = "  ";
         }
 
-        /// <summary>Constructor using inital options</summary>
-        /// <param name="options">the inital options</param>
-        /// <exception cref="XmpException">Thrown if options are not consistant.</exception>
+        /// <summary>Constructor using initial options</summary>
+        /// <param name="options">the initial options</param>
+        /// <exception cref="XmpException">Thrown if options are not consistent.</exception>
         public SerializeOptions(int options)
             : base(options)
         {
@@ -97,6 +108,13 @@ namespace XmpCore.Options
         {
             get => GetOption(UseCanonicalFormatFlag);
             set => SetOption(UseCanonicalFormatFlag, value);
+        }
+
+        /// <summary>Serialize as &quot;Plain XMP&quot;, not RDF.</summary>
+        public bool UsePlainXmp
+        {
+            get => GetOption(UsePlainXmpFlag);
+            set => SetOption(UsePlainXmpFlag, value);
         }
 
         /// <summary>Include a padding allowance for a thumbnail image.</summary>
@@ -216,9 +234,12 @@ namespace XmpCore.Options
                     return "READONLY_PACKET";
                 case UseCompactFormatFlag:
                     return "USE_COMPACT_FORMAT";
+                //case UseCanonicalFormatFlag:
+                //    return "USE_CANONICAL_FORMAT";
+                case UsePlainXmpFlag:
+                    return "USE_PLAIN_XMP";
                 case IncludeThumbnailPadFlag:
                     return "INCLUDE_THUMBNAIL_PAD";
-//              case USE_CANONICAL_FORMAT:        return "USE_CANONICAL_FORMAT";
                 case ExactPacketLengthFlag:
                     return "EXACT_PACKET_LENGTH";
                 case OmitXmpmetaElementFlag:
@@ -232,7 +253,7 @@ namespace XmpCore.Options
 
         protected override int GetValidOptions()
         {
-            return OmitPacketWrapperFlag | ReadonlyPacketFlag | UseCompactFormatFlag | IncludeThumbnailPadFlag | OmitXmpmetaElementFlag | ExactPacketLengthFlag | SortFlag;
+            return OmitPacketWrapperFlag | ReadonlyPacketFlag | UseCompactFormatFlag | UsePlainXmpFlag | IncludeThumbnailPadFlag | OmitXmpmetaElementFlag | ExactPacketLengthFlag | SortFlag;
             //        USE_CANONICAL_FORMAT |
         }
     }

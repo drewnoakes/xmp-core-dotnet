@@ -17,6 +17,7 @@ using XmpCore.Options;
 namespace XmpCore
 {
     /// <summary>Parses and serialises <see cref="IXmpMeta"/> instances.</summary>
+    /// <author>Stefan Makswit</author>
     /// <since>30.01.2006</since>
     public static class XmpMetaFactory
     {
@@ -130,7 +131,7 @@ namespace XmpCore
         }
 
         /// <summary>Obtain version information.</summary>
-        public static IXmpVersionInfo VersionInfo => new XmpVersionInfo(5, 1, 0, false, 3, "Adobe XMP Core 5.1.0-jc003");
+        public static IXmpVersionInfo VersionInfo => new XmpVersionInfo(6, 1, 10, false, 3, "Adobe XMP Core 6.1.10");
 
         private sealed class XmpVersionInfo : IXmpVersionInfo
         {

@@ -16,6 +16,7 @@ using XmpCore.Options;
 namespace XmpCore.Impl
 {
     /// <summary>Utilities for <c>XMPNode</c>.</summary>
+    /// <author>Stefan Makswit</author>
     /// <since>Aug 28, 2006</since>
     public static class XmpNodeUtils
     {
@@ -237,6 +238,8 @@ namespace XmpCore.Impl
         /// <remarks>
         /// Deletes the the given node and its children from its parent.
         /// Takes care about adjusting the flags.
+        /// FfF: think about moving is to XMPNode... (make removeChild/Qualifier private and
+        /// FfF: publish just deleteNode(XMPNode)
         /// </remarks>
         /// <param name="node">the top-most node to delete.</param>
         internal static void DeleteNode(XmpNode node)
@@ -274,6 +277,7 @@ namespace XmpCore.Impl
         /// <remarks>
         /// Verifies the PropertyOptions for consistency and updates them as needed.
         /// If options are <c>null</c> they are created with default values.
+        /// FfF: add an kind of autofix options to PropertyOptions and remove this method!!!
         /// </remarks>
         /// <param name="options">the <c>PropertyOptions</c></param>
         /// <param name="itemValue">the node value to set</param>
@@ -725,7 +729,7 @@ namespace XmpCore.Impl
         /// <exception cref="XmpException" />
         internal static int LookupLanguageItem(XmpNode arrayNode, string language)
         {
-            if (!arrayNode.Options.IsArray)
+            if (!arrayNode.Options.IsArray) // *** Check for alt-text?
                 throw new XmpException("Language item must be used on array", XmpErrorCode.BadXPath);
 
             for (var index = 1; index <= arrayNode.GetChildrenLength(); index++)

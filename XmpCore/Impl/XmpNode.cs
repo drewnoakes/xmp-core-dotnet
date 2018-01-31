@@ -29,6 +29,7 @@ namespace XmpCore.Impl
     /// 3. isImplicitNode should be removed completely and replaced by return values of fi.
     /// 4. hasLanguage, hasType should be automatically maintained by XMPNode
     /// </remarks>
+    /// <author>Stefan Makswit</author>
     /// <since>21.02.2006</since>
     public sealed class XmpNode : IComparable
     {
@@ -78,7 +79,10 @@ namespace XmpCore.Impl
         /// <summary>
         /// Get the parent node.
         /// </summary>
-        public XmpNode Parent { get; private set; }
+        /// <remarks>
+        /// Set internally by <see cref="AddChild(XmpCore.Impl.XmpNode)"/>, <see cref="AddChild(XmpCore.Impl.XmpNode)"/> and <see cref="AddQualifier"/>.
+        /// </remarks>
+        public XmpNode Parent { get; internal set; }
 
         /// <param name="index">an index [1..size]</param>
         /// <returns>Returns the child with the requested index.</returns>
@@ -323,6 +327,14 @@ namespace XmpCore.Impl
         /// <summary>Performs a <b>deep clone</b> of the node and the complete subtree.</summary>
         public object Clone()
         {
+            return Clone(skipEmpty: false);
+        }
+
+        /// <summary>Performs a <b>deep clone</b> of the node and the complete subtree.
+        /// if <c>skipEmpty</c> is true, it will not clone node which has empty child and empty value.</summary>
+        /// <param name="skipEmpty">If true, it will not clone those nodes with empty value and empty children</param>
+        public object Clone(bool skipEmpty)
+        {
             PropertyOptions newOptions;
             try
             {
@@ -334,28 +346,52 @@ namespace XmpCore.Impl
                 newOptions = new PropertyOptions();
             }
             var newNode = new XmpNode(Name, Value, newOptions);
-            CloneSubtree(newNode);
+            CloneSubtree(newNode, skipEmpty);
+
+            if (skipEmpty && string.IsNullOrEmpty(newNode.Value) && !newNode.HasChildren)
+            {
+                newNode = null;
+            }
+
             return newNode;
         }
 
         /// <summary>
         /// Performs a <b>deep clone</b> of the complete subtree (children and
         /// qualifier )into and add it to the destination node.
+        /// if <c>skipEmpty</c> is true, it will not clone node which has empty child and empty value.
         /// </summary>
         /// <param name="destination">the node to add the cloned subtree</param>
-        public void CloneSubtree(XmpNode destination)
+        /// <param name="skipEmpty">If true, it will not clone those nodes with empty value and empty children</param>
+        public void CloneSubtree(XmpNode destination, bool skipEmpty)
         {
             try
             {
                 for (var it = IterateChildren(); it.HasNext();)
                 {
                     var child = (XmpNode)it.Next();
-                    destination.AddChild((XmpNode)child.Clone());
+                    //destination.AddChild((XmpNode)child.Clone());
+                    if (skipEmpty && string.IsNullOrEmpty(child.Value)
+                        && (!child.HasChildren))
+                        continue;
+                    XmpNode childNode = (XmpNode)child.Clone(skipEmpty);
+                    if (childNode == null)
+                        continue;
+                    destination.AddChild(childNode);
+
                 }
                 for (var it1 = IterateQualifier(); it1.HasNext();)
                 {
                     var qualifier = (XmpNode)it1.Next();
-                    destination.AddQualifier((XmpNode)qualifier.Clone());
+                    //destination.AddQualifier((XmpNode)qualifier.Clone());
+                    if (skipEmpty && string.IsNullOrEmpty(qualifier.Value)
+                        && (!qualifier.HasChildren))
+                        continue;
+                    XmpNode qualNode = (XmpNode)qualifier.Clone(skipEmpty);
+                    if (qualNode == null)
+                        continue;
+                    destination.AddQualifier(qualNode);
+
                 }
             }
             catch (XmpException)
@@ -446,7 +482,8 @@ namespace XmpCore.Impl
         /// <summary>Dumps this node and its qualifier and children recursively.</summary>
         /// <remarks>
         /// Dumps this node and its qualifier and children recursively.
-        /// <em>Note:</em> It creats empty options on every node.
+        /// <em>Note:</em> It creates empty options on every node.
+        /// FfF: sort schemas and properties on each level if and only if it would increase performance
         /// </remarks>
         /// <param name="result">the buffer to append the dump.</param>
         /// <param name="recursive">Flag is qualifier and child nodes shall be rendered too</param>
