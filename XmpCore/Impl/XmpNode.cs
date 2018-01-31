@@ -36,6 +36,7 @@ namespace XmpCore.Impl
     {
         /// <summary>list of child nodes, lazy initialized</summary>
         private List<XmpNode> _children;
+        private Dictionary<string, XmpNode> _childrenLookup;
 
         /// <summary>list of qualifier of the node, lazy initialized</summary>
         private List<XmpNode> _qualifier;
@@ -70,6 +71,7 @@ namespace XmpCore.Impl
             Name = null;
             Value = null;
             _children = null;
+            _childrenLookup = null;
             _qualifier = null;
         }
 
@@ -94,6 +96,12 @@ namespace XmpCore.Impl
             AssertChildNotExisting(node.Name);
             node.Parent = this;
             GetChildren().Add(node);
+
+            // Note: If this is called from ParseRdf.AddChildNode, any nodes added with the name "rdf:li" are renamed at
+            // the end to XmpConstants.ArrayItemName. This implies 1-n "rdf:li" nodes are expected and we should ignore
+            // them in the lookup table
+            if (node.Name != "rdf:li" && node.Name != XmpConstants.ArrayItemName)
+                GetChildrenLookup()[node.Name] = node;
         }
 
         /// <summary>Adds a node as child to this node.</summary>
@@ -109,6 +117,12 @@ namespace XmpCore.Impl
             AssertChildNotExisting(node.Name);
             node.Parent = this;
             GetChildren().Insert(index - 1, node);
+
+            // Note: If this is called from ParseRdf.AddChildNode, any nodes added with the name "rdf:li" are renamed at
+            // the end to XmpConstants.ArrayItemName. This implies 1-n "rdf:li" nodes are expected and we should ignore
+            // them in the lookup table
+            if (node.Name != "rdf:li" && node.Name != XmpConstants.ArrayItemName)
+                GetChildrenLookup()[node.Name] = node;
         }
 
         /// <summary>Replaces a node with another one.</summary>
@@ -121,12 +135,15 @@ namespace XmpCore.Impl
         {
             node.Parent = this;
             GetChildren()[index - 1] = node;
+            GetChildrenLookup()[node.Name] = node;
         }
 
         /// <summary>Removes a child at the requested index.</summary>
         /// <param name="itemIndex">the index to remove [1..size]</param>
         public void RemoveChild(int itemIndex)
         {
+            GetChildrenLookup().Remove(GetChildren()[itemIndex - 1].Name);
+
             GetChildren().RemoveAt(itemIndex - 1);
             CleanupChildren();
         }
@@ -139,6 +156,8 @@ namespace XmpCore.Impl
         /// <param name="node">the child node to delete.</param>
         public void RemoveChild(XmpNode node)
         {
+            GetChildrenLookup().Remove(node.Name);
+
             GetChildren().Remove(node);
             CleanupChildren();
         }
@@ -151,13 +170,17 @@ namespace XmpCore.Impl
         private void CleanupChildren()
         {
             if (_children.Count == 0)
+            {
                 _children = null;
+                _childrenLookup = null;
+            }
         }
 
         /// <summary>Removes all children from the node.</summary>
         public void RemoveChildren()
         {
             _children = null;
+            _childrenLookup = null;
         }
 
         /// <returns>Returns the number of children without necessarily creating a list.</returns>
@@ -165,7 +188,7 @@ namespace XmpCore.Impl
 
         /// <param name="expr">child node name to look for</param>
         /// <returns>Returns an <c>XMPNode</c> if node has been found, <c>null</c> otherwise.</returns>
-        public XmpNode FindChildByName(string expr) => Find(GetChildren(), expr);
+        public XmpNode FindChildByName(string expr) => Find(GetChildrenLookup(), expr);
 
         /// <param name="index">an index [1..size]</param>
         /// <returns>Returns the qualifier with the requested index.</returns>
@@ -515,6 +538,13 @@ namespace XmpCore.Impl
         /// <returns>Returns list of children that is lazy initialized.</returns>
         private List<XmpNode> GetChildren() => _children ?? (_children = new List<XmpNode>(0));
 
+        /// <summary>
+        /// <em>Note:</em> This method should always be called when accessing 'children' lookup to be sure
+        /// that its initialized. This is used in the Find function to make searching large lists of children more efficient.
+        /// </summary>
+        /// <returns>Returns dictionary of children lookup that is lazy initialized.</returns>
+        private Dictionary<string, XmpNode> GetChildrenLookup() => _childrenLookup ?? (_childrenLookup = new Dictionary<string, XmpNode>(0));
+
         /// <returns>Returns a read-only copy of child nodes list.</returns>
         public IEnumerable<object> GetUnmodifiableChildren() => GetChildren().Cast<object>().ToList();
 
@@ -526,6 +556,17 @@ namespace XmpCore.Impl
         /// <param name="expr">the search expression</param>
         /// <returns>Returns the found node or <c>nulls</c>.</returns>
         private static XmpNode Find(IEnumerable<XmpNode> list, string expr) => list?.FirstOrDefault(node => node.Name == expr);
+
+        /// <summary>Internal find from a lookup Dictionary.</summary>
+        /// <param name="lookup">the lookup Dictionary to search in</param>
+        /// <param name="expr">the search expression</param>
+        /// <returns>Returns the found node or <c>nulls</c>.</returns>
+        private static XmpNode Find(Dictionary<string, XmpNode> lookup, string expr)
+        {
+            XmpNode ret = null;
+            lookup.TryGetValue(expr, out ret);
+            return ret;
+        }
 
         /// <summary>Checks that a node name is not existing on the same level, except for array items.</summary>
         /// <param name="childName">the node name to check</param>
