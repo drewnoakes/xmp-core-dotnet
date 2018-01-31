@@ -225,16 +225,10 @@ namespace XmpCore.Impl
             }
         }
 
-        public string ToIso8601String()
-        {
-            return Iso8601Converter.Render(this);
-        }
+        public string ToIso8601String() => Iso8601Converter.Render(this);
 
         /// <returns>Returns the ISO string representation.</returns>
-        public override string ToString()
-        {
-            return ToIso8601String();
-        }
+        public override string ToString() => ToIso8601String();
 
         #region Conversions
 
@@ -242,10 +236,7 @@ namespace XmpCore.Impl
 
         /// <param name="unixTime">Number of milliseconds since the Unix epoch (1970-01-01 00:00:00).</param>
         [Pure]
-        internal static DateTime UnixTimeToDateTime(long unixTime)
-        {
-            return new DateTime(_unixEpoch.Ticks + unixTime*10000);
-        }
+        internal static DateTime UnixTimeToDateTime(long unixTime) => new DateTime(_unixEpoch.Ticks + unixTime*10000);
 
         /// <param name="unixTime">Number of milliseconds since the Unix epoch (1970-01-01 00:00:00).</param>
         [Pure]

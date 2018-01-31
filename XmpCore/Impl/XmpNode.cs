@@ -261,11 +261,9 @@ namespace XmpCore.Impl
         /// </returns>
         public IIterator IterateChildren()
         {
-            if (_children != null)
-            {
-                return GetChildren().Iterator();
-            }
-            return Enumerable.Empty<object>().Iterator();
+            return _children != null
+                ? (IIterator)GetChildren().Iterator()
+                : Enumerable.Empty<object>().Iterator();
         }
 
         /// <summary>
@@ -279,12 +277,9 @@ namespace XmpCore.Impl
         /// </returns>
         public IIterator IterateQualifier()
         {
-            if (_qualifier != null)
-            {
-                var it = GetQualifier().Iterator();
-                return new Iterator391(it);
-            }
-            return Enumerable.Empty<object>().Iterator();
+            return _qualifier != null
+                ? (IIterator)new Iterator391(GetQualifier().Iterator())
+                : Enumerable.Empty<object>().Iterator();
         }
 
         /// <summary>
@@ -292,20 +287,10 @@ namespace XmpCore.Impl
         /// </summary>
         private sealed class Iterator391 : IIterator
         {
-            public Iterator391(IIterator it)
-            {
-                _it = it;
-            }
-
+            public Iterator391(IIterator it) => _it = it;
             public bool HasNext() => _it.HasNext();
-
             public object Next() => _it.Next();
-
-            public void Remove()
-            {
-                throw new NotSupportedException("remove() is not allowed due to the internal constraints");
-            }
-
+            public void Remove() => throw new NotSupportedException("remove() is not allowed due to the internal constraints");
             private readonly IIterator _it;
         }
 
@@ -540,7 +525,7 @@ namespace XmpCore.Impl
         /// <param name="list">the list to search in</param>
         /// <param name="expr">the search expression</param>
         /// <returns>Returns the found node or <c>nulls</c>.</returns>
-        private static XmpNode Find(IList<XmpNode> list, string expr) => list?.FirstOrDefault(node => node.Name == expr);
+        private static XmpNode Find(IEnumerable<XmpNode> list, string expr) => list?.FirstOrDefault(node => node.Name == expr);
 
         /// <summary>Checks that a node name is not existing on the same level, except for array items.</summary>
         /// <param name="childName">the node name to check</param>

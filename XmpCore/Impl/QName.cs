@@ -12,12 +12,6 @@ namespace XmpCore.Impl
     /// <since>09.11.2006</since>
     public sealed class QName
     {
-        /// <summary>XML namespace prefix</summary>
-        private readonly string _prefix;
-
-        /// <summary>XML localname</summary>
-        private readonly string _localName;
-
         /// <summary>Splits a qname into prefix and localname.</summary>
         /// <param name="qname">a QName</param>
         public QName(string qname)
@@ -25,13 +19,13 @@ namespace XmpCore.Impl
             var colon = qname.IndexOf(':');
             if (colon >= 0)
             {
-                _prefix = qname.Substring(0, colon - 0);
-                _localName = qname.Substring(colon + 1);
+                Prefix = qname.Substring(0, colon - 0);
+                LocalName = qname.Substring(colon + 1);
             }
             else
             {
-                _prefix = string.Empty;
-                _localName = qname;
+                Prefix = string.Empty;
+                LocalName = qname;
             }
         }
 
@@ -40,26 +34,19 @@ namespace XmpCore.Impl
         /// <param name="localName">the name</param>
         public QName(string prefix, string localName)
         {
-            _prefix = prefix;
-            _localName = localName;
+            Prefix = prefix;
+            LocalName = localName;
         }
 
-        /// <returns>Returns whether the QName has a prefix.</returns>
-        public bool HasPrefix()
-        {
-            return !string.IsNullOrEmpty(_prefix);
-        }
+        /// <value>Returns whether the QName has a prefix.</value>
+        public bool HasPrefix => !string.IsNullOrEmpty(Prefix);
 
-        /// <returns>the localName</returns>
-        public string GetLocalName()
-        {
-            return _localName;
-        }
+        /// <summary>XML localname</summary>
+        /// <value>the localName</value>
+        public string LocalName { get; }
 
-        /// <returns>the prefix</returns>
-        public string GetPrefix()
-        {
-            return _prefix;
-        }
+        /// <summary>XML namespace prefix</summary>
+        /// <value>the prefix</value>
+        public string Prefix { get; }
     }
 }

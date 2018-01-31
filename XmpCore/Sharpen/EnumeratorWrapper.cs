@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Sharpen
 {
-    public class EnumeratorWrapper<T> : Iterator<T>
+    public sealed class EnumeratorWrapper<T> : Iterator<T>
     {
         private readonly object _collection;
         private IEnumerator<T> _e;
@@ -18,10 +18,7 @@ namespace Sharpen
             _more = e.MoveNext();
         }
 
-        public override bool HasNext()
-        {
-            return _more;
-        }
+        public override bool HasNext() => _more;
 
         public override T Next()
         {
@@ -34,8 +31,7 @@ namespace Sharpen
 
         public override void Remove()
         {
-            var col = _collection as ICollection<T>;
-            if (col == null)
+            if (!(_collection is ICollection<T> col))
                 throw new NotSupportedException();
 
             if (_more && !_copied)

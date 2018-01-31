@@ -535,8 +535,6 @@ namespace XmpCore.Impl
                     if (!isRdf && childLocal != "Description")
                     {
                         var typeName = currChildElem.Name.NamespaceName;
-                        if (typeName == null)
-                            throw new XmpException("All XML elements must be in a namespace", XmpErrorCode.BadXmp);
                         typeName += ':' + childLocal;
                         AddQualifierNode(newCompound, "rdf:type", typeName);
                     }

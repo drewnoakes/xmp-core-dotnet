@@ -97,20 +97,11 @@ namespace XmpCore.Impl
             _skipSiblings = true;
         }
 
-        public bool HasNext()
-        {
-            return _nodeIterator.HasNext();
-        }
+        public bool HasNext() => _nodeIterator.HasNext();
 
-        public object Next()
-        {
-            return _nodeIterator.Next();
-        }
+        public object Next() => _nodeIterator.Next();
 
-        public void Remove()
-        {
-            throw new NotSupportedException("The XMPIterator does not support remove().");
-        }
+        public void Remove() => throw new NotSupportedException("The XMPIterator does not support remove().");
 
         private IteratorOptions Options { get; }
 
@@ -156,10 +147,7 @@ namespace XmpCore.Impl
             private IXmpPropertyInfo _returnProperty;
 
             /// <summary>Default constructor</summary>
-            protected NodeIterator(XmpIterator enclosing)
-            {
-                _enclosing = enclosing;
-            }
+            protected NodeIterator(XmpIterator enclosing) => _enclosing = enclosing;
 
             /// <summary>Constructor for the node iterator.</summary>
             /// <param name="enclosing"></param>
@@ -273,10 +261,7 @@ namespace XmpCore.Impl
             }
 
             /// <summary>Not supported.</summary>
-            public virtual void Remove()
-            {
-                throw new NotSupportedException();
-            }
+            public virtual void Remove() => throw new NotSupportedException();
 
             /// <param name="currNode">the node that will be added to the path.</param>
             /// <param name="parentPath">the path up to this node.</param>
@@ -352,7 +337,7 @@ namespace XmpCore.Impl
                         {
                             // determine namespace of leaf node
                             var qname = new QName(_node.Name);
-                            return XmpMetaFactory.SchemaRegistry.GetNamespaceUri(qname.GetPrefix());
+                            return XmpMetaFactory.SchemaRegistry.GetNamespaceUri(qname.Prefix);
                         }
                         return _baseNs;
                     }
@@ -365,16 +350,10 @@ namespace XmpCore.Impl
             }
 
             /// <returns>Returns the returnProperty.</returns>
-            protected IXmpPropertyInfo GetReturnProperty()
-            {
-                return _returnProperty;
-            }
+            protected IXmpPropertyInfo GetReturnProperty() => _returnProperty;
 
             /// <param name="returnProperty">the returnProperty to set</param>
-            protected void SetReturnProperty(IXmpPropertyInfo returnProperty)
-            {
-                _returnProperty = returnProperty;
-            }
+            protected void SetReturnProperty(IXmpPropertyInfo returnProperty) => _returnProperty = returnProperty;
 
             private readonly XmpIterator _enclosing;
         }
