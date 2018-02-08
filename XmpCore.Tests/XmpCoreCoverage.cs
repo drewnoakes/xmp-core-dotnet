@@ -25,10 +25,7 @@ namespace XmpCore.Tests
         private readonly IXmpSchemaRegistry _registry = XmpMetaFactory.SchemaRegistry;
         private readonly ITestOutputHelper _log;
 
-        public XmpCoreCoverage(ITestOutputHelper log)
-        {
-            _log = log;
-        }
+        public XmpCoreCoverage(ITestOutputHelper log) => _log = log;
 
         [Fact]
         public void DoCoreCoverage()
@@ -102,7 +99,6 @@ namespace XmpCore.Tests
             _log.WriteLine("getNamespaceURI ns1:   {0}", _registry.GetNamespaceUri("bogus"));
         }
 
-
         /**
          * List predefined aliases, register new aliases and resolve aliases.
          * @throws XmpException Forward exceptions
@@ -171,7 +167,6 @@ namespace XmpCore.Tests
 
             DumpAliases();
         }
-
 
         /**
          * Test simple constructors and parsing, setting the instance ID
@@ -261,7 +256,6 @@ namespace XmpCore.Tests
 
             return meta;
         }
-
 
         /**
          * Test getProperty, deleteProperty and related methods.
@@ -369,20 +363,16 @@ namespace XmpCore.Tests
             WriteMinorLabel("Get non-simple properties");
 
             property = meta.GetProperty(TestData.NS1, "Bag");
-            _log.WriteLine("getProperty ns1:Bag =   " + property.Value + " ("
-                           + property.Options.GetOptionsString() + ")");
+            _log.WriteLine("getProperty ns1:Bag =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
 
             property = meta.GetProperty(TestData.NS1, "Seq");
-            _log.WriteLine("getProperty ns1:Seq =   " + property.Value + " ("
-                           + property.Options.GetOptionsString() + ")");
+            _log.WriteLine("getProperty ns1:Seq =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
 
             property = meta.GetProperty(TestData.NS1, "Alt");
-            _log.WriteLine("getProperty ns1:Alt =   " + property.Value + " ("
-                           + property.Options.GetOptionsString() + ")");
+            _log.WriteLine("getProperty ns1:Alt =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
 
             property = meta.GetProperty(TestData.NS1, "Struct");
-            _log.WriteLine("getProperty ns1:Struct =   " + property.Value + " ("
-                           + property.Options.GetOptionsString() + ")");
+            _log.WriteLine("getProperty ns1:Struct =   " + property.Value + " (" + property.Options.GetOptionsString() + ")");
 
 
             WriteMinorLabel("Get not existing properties");
@@ -409,7 +399,6 @@ namespace XmpCore.Tests
             _log.WriteLine("getQualifier ns1:Prop/?ns2:Bogus (not existing) =   " + property);
         }
 
-
         /**
          * Test doesPropertyExist, deleteProperty, and related methods.
          * @param meta a predefined <code>XmpMeta</code> object.
@@ -423,29 +412,19 @@ namespace XmpCore.Tests
             _log.WriteLine("doesPropertyExist ns1:Prop =    " + meta.DoesPropertyExist(TestData.NS1, "Prop"));
             _log.WriteLine("doesPropertyExist ns1:Struct =    " + meta.DoesPropertyExist(TestData.NS1, "ns1:Struct"));
             _log.WriteLine("doesArrayItemExist ns1:Bag[2] =    " + meta.DoesArrayItemExist(TestData.NS1, "Bag", 2));
-            _log.WriteLine("doesArrayItemExist ns1:Seq[last()] =    "
-                           + meta.DoesArrayItemExist(TestData.NS1, "ns1:Seq", XmpConstants.ArrayLastItem));
-            _log.WriteLine("doesStructFieldExist ns1:Struct/ns2:Field1 =    "
-                           + meta.DoesStructFieldExist(TestData.NS1, "Struct", TestData.NS2, "Field1"));
-            _log.WriteLine("doesQualifierExist ns1:QualProp1/?ns2:Qual1 =    "
-                           + meta.DoesQualifierExist(TestData.NS1, "QualProp1", TestData.NS2, "Qual1"));
-            _log.WriteLine("doesQualifierExist ns1:QualProp2/?xml:lang =    "
-                           + meta.DoesQualifierExist(TestData.NS1, "QualProp2", XmpConstants.NsXml, "lang"));
+            _log.WriteLine("doesArrayItemExist ns1:Seq[last()] =    " + meta.DoesArrayItemExist(TestData.NS1, "ns1:Seq", XmpConstants.ArrayLastItem));
+            _log.WriteLine("doesStructFieldExist ns1:Struct/ns2:Field1 =    " + meta.DoesStructFieldExist(TestData.NS1, "Struct", TestData.NS2, "Field1"));
+            _log.WriteLine("doesQualifierExist ns1:QualProp1/?ns2:Qual1 =    " + meta.DoesQualifierExist(TestData.NS1, "QualProp1", TestData.NS2, "Qual1"));
+            _log.WriteLine("doesQualifierExist ns1:QualProp2/?xml:lang =    " + meta.DoesQualifierExist(TestData.NS1, "QualProp2", XmpConstants.NsXml, "lang"));
 
-            _log.WriteLine("doesPropertyExist (namespace is null) =    "
-                           + meta.DoesPropertyExist(null, "ns1:Bag"));
-            _log.WriteLine("doesArrayItemExist (namespace is null) =    "
-                           + meta.DoesArrayItemExist(null, "ns1:Bag", XmpConstants.ArrayLastItem));
-            _log.WriteLine("doesQualifierExist ns:Bogus (namespace not existing) =    "
-                           + meta.DoesPropertyExist("ns:bogus/", "Bogus"));
+            _log.WriteLine("doesPropertyExist (namespace is null) =    " + meta.DoesPropertyExist(null, "ns1:Bag"));
+            _log.WriteLine("doesArrayItemExist (namespace is null) =    " + meta.DoesArrayItemExist(null, "ns1:Bag", XmpConstants.ArrayLastItem));
+            _log.WriteLine("doesQualifierExist ns:Bogus (namespace not existing) =    " + meta.DoesPropertyExist("ns:bogus/", "Bogus"));
             _log.WriteLine("doesPropertyExist ns1:Bogus =    " + meta.DoesPropertyExist(TestData.NS1, "Bogus"));
             _log.WriteLine("doesArrayItemExist ns1:Bag[99] =    " + meta.DoesArrayItemExist(TestData.NS1, "Bag", 99));
-            _log.WriteLine("doesStructFieldExist ns1:Struct/ns2:Bogus =    "
-                           + meta.DoesStructFieldExist(TestData.NS1, "Struct", TestData.NS2, "Bogus"));
-            _log.WriteLine("doesQualifierExist ns1:Prop/?ns2:Bogus =    "
-                           + meta.DoesQualifierExist(TestData.NS1, "Prop", TestData.NS2, "Bogus"));
+            _log.WriteLine("doesStructFieldExist ns1:Struct/ns2:Bogus =    " + meta.DoesStructFieldExist(TestData.NS1, "Struct", TestData.NS2, "Bogus"));
+            _log.WriteLine("doesQualifierExist ns1:Prop/?ns2:Bogus =    " + meta.DoesQualifierExist(TestData.NS1, "Prop", TestData.NS2, "Bogus"));
         }
-
 
         /**
          * Tests deletion of properties, array items, struct fields and qualifer.
@@ -476,7 +455,6 @@ namespace XmpCore.Tests
             PrintXmpMeta(meta, "Delete all of Bag and Struct");
         }
 
-
         /**
          * Localized text set/get methods.
          * @throws XmpException Forwards exceptions
@@ -502,15 +480,13 @@ namespace XmpCore.Tests
             _log.WriteLine("getProperty ns1:AltText =   " + property.Value + " (lang: " + property.Language + ", opt: " + property.Options.GetOptionsString() + ")");
         }
 
-
         /**
          * Literal value set/get methods
          * @throws XmpException
          */
         private void CoverLiteralProperties()
         {
-            WriteMajorLabel("Test SetProperty... and getProperty... methods " +
-                            "(set/get with literal values)");
+            WriteMajorLabel("Test SetProperty... and getProperty... methods (set/get with literal values)");
 
             var meta = XmpMetaFactory.ParseFromString(TestData.DATETIME_RDF);
             var dateValue = XmpDateTimeFactory.Create(2000, 1, 2, 3, 4, 5, 0);
@@ -559,7 +535,6 @@ namespace XmpCore.Tests
             PrintXmpMeta(meta, "Get and re-set the dates in NS2");
         }
 
-
         /**
          * Parse and serialize methods.
          * @throws XmpException Forwards exceptions
@@ -593,7 +568,6 @@ namespace XmpCore.Tests
             }
         }
 
-
         /**
          * Test CR and LF in values.
          * @throws XmpException Forwards exceptions
@@ -612,8 +586,7 @@ namespace XmpCore.Tests
             meta.SetProperty(TestData.NS2, "HasLF", valueWithLF);
             meta.SetProperty(TestData.NS2, "HasCRLF", valueWithCRLF);
 
-            var result = XmpMetaFactory.SerializeToString(meta, new SerializeOptions {OmitPacketWrapper = true});
-            _log.WriteLine(result);
+            _log.WriteLine(XmpMetaFactory.SerializeToString(meta, new SerializeOptions {OmitPacketWrapper = true}));
 
             var hasCR = meta.GetPropertyString(TestData.NS1, "HasCR");
             var hasCR2 = meta.GetPropertyString(TestData.NS2, "HasCR");
@@ -629,7 +602,6 @@ namespace XmpCore.Tests
                 _log.WriteLine("\n## HasCR and HasLF and HasCRLF correctly retrieved\n");
             }
         }
-
 
         /**
          * Covers the serialization of an <code>XmpMeta</code> object with different options.
@@ -681,7 +653,6 @@ namespace XmpCore.Tests
             }
         }
 
-
         /**
          * Cover different use cases of the <code>XmpIterator</code>.
          * @throws XmpException Forwards exceptions
@@ -708,32 +679,28 @@ namespace XmpCore.Tests
             }
 
             writeMinorLabel ("Iterate omitting qualifiers");
-            for (XmpIterator it = meta.iterator(new IteratorOptions().setOmitQualifiers(true)); it
-                    .hasNext();)
+            for (XmpIterator it = meta.iterator(new IteratorOptions().setOmitQualifiers(true)); it.hasNext();)
             {
                 XmpPropertyInfo prop = (XmpPropertyInfo) it.next();
                 printPropertyInfo(prop);
             }
 
             writeMinorLabel("Iterate with just leaf names");
-            for (XmpIterator it = meta.iterator(new IteratorOptions().setJustLeafname(true)); it
-                    .hasNext();)
+            for (XmpIterator it = meta.iterator(new IteratorOptions().setJustLeafname(true)); it.hasNext();)
             {
                 XmpPropertyInfo prop = (XmpPropertyInfo) it.next();
                 printPropertyInfo(prop);
             }
 
             writeMinorLabel("Iterate with just leaf nodes");
-            for (XmpIterator it = meta.iterator(new IteratorOptions().setJustLeafnodes(true)); it
-                    .hasNext();)
+            for (XmpIterator it = meta.iterator(new IteratorOptions().setJustLeafnodes(true)); it.hasNext();)
             {
                 XmpPropertyInfo prop = (XmpPropertyInfo) it.next();
                 printPropertyInfo(prop);
             }
 
             writeMinorLabel("Iterate just the schema nodes");
-            for (XmpIterator it = meta.iterator(new IteratorOptions().setJustChildren(true)); it
-                    .hasNext();)
+            for (XmpIterator it = meta.iterator(new IteratorOptions().setJustChildren(true)); it.hasNext();)
             {
                 XmpPropertyInfo prop = (XmpPropertyInfo) it.next();
                 printPropertyInfo(prop);
@@ -768,23 +735,20 @@ namespace XmpCore.Tests
             }
 
             writeMinorLabel("Iterate the top of the ns2: namespace with just leaf names");
-            for (XmpIterator it = meta.iterator(NS2, null, new IteratorOptions().setJustChildren(true)
-                    .setJustLeafname(true)); it.hasNext();)
+            for (XmpIterator it = meta.iterator(NS2, null, new IteratorOptions().setJustChildren(true).setJustLeafname(true)); it.hasNext();)
             {
                 XmpPropertyInfo prop = (XmpPropertyInfo) it.next();
                 printPropertyInfo(prop);
             }
 
             writeMinorLabel("Iterate the top of the ns2: namespace with just leaf nodes");
-            for (XmpIterator it = meta.iterator(NS2, null, new IteratorOptions().setJustChildren(true)
-                    .setJustLeafnodes(true)); it.hasNext();)
+            for (XmpIterator it = meta.iterator(NS2, null, new IteratorOptions().setJustChildren(true).setJustLeafnodes(true)); it.hasNext();)
             {
                 XmpPropertyInfo prop = (XmpPropertyInfo) it.next();
                 printPropertyInfo(prop);
             }
 */
         }
-
 
         /**
          * XPath composition utilities using the <code>XmpPathFactory</code>.
@@ -820,7 +784,6 @@ namespace XmpCore.Tests
 
             PrintXmpMeta(meta, "Modified simple RDF");
         }
-
 
         /**
          * Date/Time utilities
@@ -868,7 +831,6 @@ namespace XmpCore.Tests
             _log.WriteLine(meta.DumpObject());
         }
 
-
         /**
          * @param prop an <code>XmpPropertyInfo</code> from the <code>XmpIterator</code>.
          */
@@ -877,7 +839,6 @@ namespace XmpCore.Tests
             _log.WriteLine("NS ({0})   PATH ({1})   VALUE ({2})  OPTIONS ({3})",
                 prop.Namespace, prop.Path, prop.Value, prop.Options.GetOptionsString());
         }
-
 
         /**
          * Dump the alias list to the output.
@@ -889,7 +850,6 @@ namespace XmpCore.Tests
                 _log.WriteLine("{0}   --->   {1}", qname, aliases[qname]);
         }
 
-
         /**
          * Writes a major headline to the output.
          * @param title the headline
@@ -900,7 +860,6 @@ namespace XmpCore.Tests
             _log.WriteLine("// {0}", title);
             _log.WriteLine("// =============================================================================");
         }
-
 
         /**
          * Writes a minor headline to the output.

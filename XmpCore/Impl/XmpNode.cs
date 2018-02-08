@@ -23,8 +23,6 @@ namespace XmpCore.Impl
     /// an array item, a struct node or a qualifier node (without '?').
     /// </summary>
     /// <remarks>
-    /// A node in the internally XMP tree, which can be a schema node, a property node, an array node,
-    /// an array item, a struct node or a qualifier node (without '?').
     /// Possible improvements:
     /// 1. The kind Node of node might be better represented by a class-hierarchy of different nodes.
     /// 2. The array type should be an enum
