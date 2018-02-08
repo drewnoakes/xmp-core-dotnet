@@ -184,6 +184,13 @@ namespace XmpCore
         /// <summary>xml:lang qualifier</summary>
         public const string XmlLang = "xml:lang";
 
+        /// <summary>rdf:li syntaxTerm</summary>
+        /// <remarks>
+        /// Does not appear in the original Java version. Added because of its usage in 
+        /// ParseRdf.cs and XmpNode.cs when string-comparing for array items.
+        /// </remarks>
+        public const string RdfLi = "rdf:li";
+
         /// <summary>rdf:type qualifier</summary>
         public const string RdfType = "rdf:type";
 

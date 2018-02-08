@@ -435,7 +435,7 @@ namespace XmpCore.Impl
                 // qualifiers at the same time.
                 var elemName = node.Name;
                 if (elemName == XmpConstants.ArrayItemName)
-                    elemName = "rdf:li";
+                    elemName = XmpConstants.RdfLi;
 
                 WriteIndent(indent);
                 Write('<');
@@ -839,7 +839,7 @@ namespace XmpCore.Impl
             if (emitAsRdfValue)
                 elemName = "rdf:value";
             else if (elemName == XmpConstants.ArrayItemName)
-                elemName = "rdf:li";
+                elemName = XmpConstants.RdfLi;
 
             WriteIndent(indent);
             Write('<');

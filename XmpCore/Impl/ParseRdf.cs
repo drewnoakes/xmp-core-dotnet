@@ -964,7 +964,7 @@ namespace XmpCore.Impl
             }
 
             // Make sure that this is not a duplicate of a named node.
-            var isArrayItem = childName == "rdf:li";
+            var isArrayItem = childName == XmpConstants.RdfLi;
             var isValueNode = childName == "rdf:value";
 
             // Create XMP node and so some checks
