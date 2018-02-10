@@ -11,6 +11,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+#if NETSTANDARD2_0
+using System.Security.Cryptography;
+#endif
 using System.Text;
 using XmpCore.Impl.XPath;
 using XmpCore.Options;
@@ -1440,18 +1443,26 @@ namespace XmpCore.Impl
 
                 extStr.Append(tempStr);
 
-                // TODO: If we move to >= netstandard20, this portion can be implemented
-                /*
-                MessageDigest md = MessageDigest.getInstance("MD5");
-                md.update(tempStr.getBytes());
+#if NETSTANDARD2_0
+                var md = MD5.Create();
+                var hashBytes = md.ComputeHash(Encoding.UTF8.GetBytes(tempStr));
 
-                byte[] byteData = md.digest();
+                digestStr.Append(ByteArrayToHexString(hashBytes));
 
-                for (int i = 0; i < byteData.Length; i++)
+                string ByteArrayToHexString(byte[] bytes)
                 {
-                    digestStr.Append(int.Parse((byteData[i] & 0xff) + 0x100, 16).substring(1));
+                    var result = new StringBuilder(bytes.Length*2);
+                    const string HexAlphabet = "0123456789ABCDEF";
+
+                    foreach (var b in bytes)
+                    {
+                        result.Append(HexAlphabet[b >> 4]);
+                        result.Append(HexAlphabet[b & 0xF]);
+                    }
+
+                    return result.ToString();
                 }
-                */
+#endif
 
                 stdXMP.SetProperty(XmpConstants.NsXmpNote, "HasExtendedXMP", digestStr.ToString(),
                         new PropertyOptions(PropertyOptions.NoOptionsFlag));
