@@ -33,7 +33,6 @@ namespace XmpCore.Impl
         public ByteBuffer(int initialCapacity)
         {
             _buffer = new byte[initialCapacity];
-            Length = 0;
         }
 
         /// <param name="buffer">a byte array that will be wrapped with <c>ByteBuffer</c>.</param>
@@ -61,7 +60,6 @@ namespace XmpCore.Impl
         {
             // load stream into buffer
             const int chunk = 16384;
-            Length = 0;
             _buffer = new byte[chunk];
             int read;
             while ((read = stream.Read(_buffer, Length, chunk)) > 0)
