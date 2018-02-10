@@ -1124,12 +1124,12 @@ namespace XmpCore.Impl
         /// <returns>Returns bool</returns>
         private static bool IsNumberedArrayItemName(string nodeName)
         {
-            bool result = "rdf:li".Equals(nodeName);
+            var result = "rdf:li" == nodeName;
 
             if (nodeName.StartsWith("rdf:_"))
             {
                 result = true;
-                for (int i = 5; i < nodeName.Length; i++)
+                for (var i = 5; i < nodeName.Length; i++)
                 {
                     //result = result && nodeName.charAt(i) >= '0' && nodeName.charAt(i) <= '9';
                     result = result && nodeName[i] >= '0' && nodeName[i] <= '9';

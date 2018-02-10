@@ -140,8 +140,8 @@ namespace XmpCore.Impl
         {
             node.Parent = this;
             GetChildren()[index - 1] = node;
-            if(_childrenLookup != null)
-            _childrenLookup[node.Name] = node;
+            if (_childrenLookup != null)
+                _childrenLookup[node.Name] = node;
         }
 
         /// <summary>Removes a child at the requested index.</summary>

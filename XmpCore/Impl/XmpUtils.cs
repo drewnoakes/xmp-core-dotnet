@@ -506,18 +506,16 @@ namespace XmpCore.Impl
             if (destNode == null)
             {
                 // The one easy case, the destination does not exist.
-                XmpNode tempNode = (XmpNode)sourceNode.Clone(true);
-                if(tempNode != null)
+                var tempNode = (XmpNode)sourceNode.Clone(true);
+                if (tempNode != null)
                     destParent.AddChild(tempNode);
                 return;
             }
 
-            PropertyOptions sourceForm = sourceNode.Options;
-            bool replaceThis = replaceOldValues; // ! Don't modify replaceOld, it gets passed to inner calls.
+            var sourceForm = sourceNode.Options;
+            var replaceThis = replaceOldValues; // ! Don't modify replaceOld, it gets passed to inner calls.
             if (mergeCompound && (!sourceForm.IsSimple))
-            {
                 replaceThis = false;
-            }
 
             //else
             //{
@@ -527,7 +525,7 @@ namespace XmpCore.Impl
                 //XmpMeta.SetNode(destNode, sourceNode.Value, sourceNode.Options, true);
                 destParent.RemoveChild(destNode);
                 //destNode = (XmpNode)sourceNode.Clone();
-                XmpNode tempNode = (XmpNode)sourceNode.Clone(true);
+                var tempNode = (XmpNode)sourceNode.Clone(true);
                 if (tempNode != null)
                     destParent.AddChild(tempNode);
                 return;
@@ -538,7 +536,7 @@ namespace XmpCore.Impl
             // The destination exists and is not totally replaced. Structs and arrays are merged.
             var destForm = destNode.Options;
             //if (!Equals(sourceForm, destForm))
-            if(sourceForm.GetOptions() != destForm.GetOptions() || sourceForm.IsSimple)
+            if (sourceForm.GetOptions() != destForm.GetOptions() || sourceForm.IsSimple)
             {
                 return;
             }
@@ -710,12 +708,12 @@ namespace XmpCore.Impl
 
         public static void DuplicateSubtree(IXmpMeta source, IXmpMeta dest, string sourceNS, string sourceRoot, string destNS, string destRoot, PropertyOptions options)
         {
-
-            bool fullSourceTree = false;
-            bool fullDestTree   = false;
-            XmpPath sourcePath, destPath;
-            XmpNode sourceNode = null;
-            XmpNode destNode = null;
+            var fullSourceTree = false;
+            var fullDestTree = false;
+            XmpPath sourcePath;
+            XmpPath destPath;
+            XmpNode sourceNode;
+            XmpNode destNode;
 
             ParameterAsserts.AssertNotNull(source);
             ParameterAsserts.AssertSchemaNs(sourceNS);
@@ -724,48 +722,44 @@ namespace XmpCore.Impl
             ParameterAsserts.AssertNotNull(destNS);
             ParameterAsserts.AssertNotNull(destRoot);
 
-            if(destNS.Length == 0){
+            if (destNS.Length == 0)
                 destNS = sourceNS;
-            }
 
-            if(destRoot.Length == 0){
+            if (destRoot.Length == 0)
                 destRoot = sourceRoot;
-            }
 
-            if(sourceNS.Equals("*")){
+            if (sourceNS == "*")
                 fullSourceTree = true;
-            }
 
-            if(destNS.Equals("*")){
+            if (destNS == "*")
                 fullDestTree = true;
-            }
 
-            if ((source == dest) && (fullSourceTree | fullDestTree) )
+            if (source == dest && (fullSourceTree || fullDestTree))
                 throw new XmpException("Can't duplicate tree onto itself", XmpErrorCode.BadParam);
 
-            if (fullSourceTree & fullDestTree )
-                throw new XmpException( "Use Clone for full tree to full tree", XmpErrorCode.BadParam);
+            if (fullSourceTree && fullDestTree)
+                throw new XmpException("Use Clone for full tree to full tree", XmpErrorCode.BadParam);
 
-            if(fullSourceTree)
+            if (fullSourceTree)
             {
                 destPath = XmpPathParser.ExpandXPath(destNS, destRoot);
-                XmpMeta destImpl = (XmpMeta)dest;
+                var destImpl = (XmpMeta)dest;
                 destNode = XmpNodeUtils.FindNode(destImpl.GetRoot(), destPath, false, null);
-                if(destNode == null || !(destNode.Options.IsStruct))
+                if (destNode == null || !destNode.Options.IsStruct)
                     throw new XmpException("Destination must be an existing struct", XmpErrorCode.BadXPath);
 
-                if(destNode.HasChildren)
+                if (destNode.HasChildren)
                 {
-                    if((options != null) && ((options.GetOptions() & PropertyOptions.DeleteExisting) != 0))
+                    if (options != null && ((options.GetOptions() & PropertyOptions.DeleteExisting) != 0))
                         destNode.RemoveChildren();
                     else
                         throw new XmpException("Destination must be an empty struct", XmpErrorCode.BadXPath);
                 }
 
-                XmpMeta sourceImpl = (XmpMeta)source;
+                var sourceImpl = (XmpMeta)source;
                 for (int schemaNum = 1, schemaLim = sourceImpl.GetRoot().GetChildrenLength(); schemaNum <= schemaLim; ++schemaNum )
                 {
-                    XmpNode currSchema = sourceImpl.GetRoot().GetChild(schemaNum);
+                    var currSchema = sourceImpl.GetRoot().GetChild(schemaNum);
 
                     for (int propNum = 1, propLim = currSchema.GetChildrenLength(); propNum <= propLim; ++propNum )
                     {
@@ -778,45 +772,44 @@ namespace XmpCore.Impl
                     }
                 }
             }
-            else if(fullDestTree)
+            else if (fullDestTree)
             {
                 // The source node must be an existing struct, copy all of the fields to the dest top level.
-                XmpMeta srcImpl = (XmpMeta)source;
-                XmpMeta dstImpl = (XmpMeta)dest;
+                var srcImpl = (XmpMeta)source;
+                var dstImpl = (XmpMeta)dest;
                 sourcePath = XmpPathParser.ExpandXPath(sourceNS, sourceRoot);
                 sourceNode = XmpNodeUtils.FindNode(srcImpl.GetRoot() , sourcePath , false, null);
 
-                if ((sourceNode == null) || !(sourceNode.Options.IsStruct) )
+                if (sourceNode == null || !sourceNode.Options.IsStruct)
                     throw new XmpException("Source must be an existing struct", XmpErrorCode.BadXPath);
 
                 destNode = dstImpl.GetRoot();
 
-                if (destNode.HasChildren ) {
-                    if((options != null) && ((options.GetOptions() & PropertyOptions.DeleteExisting) != 0))
+                if (destNode.HasChildren )
+                {
+                    if (options != null && ((options.GetOptions() & PropertyOptions.DeleteExisting) != 0))
                         destNode.RemoveChildren();
                     else
                         throw new XmpException("Source must be an existing struct", XmpErrorCode.BadXPath);
                 }
 
-                string nsPrefix;
-
                 for (int fieldNum = 1, fieldLim = sourceNode.GetChildrenLength(); fieldNum <= fieldLim; ++fieldNum )
                 {
-                    XmpNode currField = sourceNode.GetChild(fieldNum);
+                    var currField = sourceNode.GetChild(fieldNum);
 
-                    int colonPos = currField.Name.IndexOf(':');
-                    if (colonPos == -1 )
+                    var colonPos = currField.Name.IndexOf(':');
+                    if (colonPos == -1)
                         continue;
 
-                    nsPrefix = currField.Name.Substring(0, colonPos+1);
+                    var nsPrefix = currField.Name.Substring(0, colonPos+1);
 
                     var nsRegister = XmpMetaFactory.SchemaRegistry;
-                    string nsURI = nsRegister.GetNamespaceUri(nsPrefix);
+                    var nsURI = nsRegister.GetNamespaceUri(nsPrefix);
 
-                    if(nsURI == null)
+                    if (nsURI == null)
                         throw new XmpException("Source field namespace is not global", XmpErrorCode.BadSchema);
 
-                    XmpNode destSchema = XmpNodeUtils.FindSchemaNode(dstImpl.GetRoot(), nsURI, true);
+                    var destSchema = XmpNodeUtils.FindSchemaNode(dstImpl.GetRoot(), nsURI, true);
                     if (destSchema == null)
                         throw new XmpException("Failed to find destination schema", XmpErrorCode.BadSchema);
 
@@ -827,22 +820,22 @@ namespace XmpCore.Impl
             {
                 sourcePath = XmpPathParser.ExpandXPath(sourceNS, sourceRoot);
                 destPath = XmpPathParser.ExpandXPath(destNS, destRoot);
-                XmpMeta sourceImpl = (XmpMeta)source;
-                XmpMeta destImpl = (XmpMeta)dest;
+                var sourceImpl = (XmpMeta)source;
+                var destImpl = (XmpMeta)dest;
                 sourceNode = XmpNodeUtils.FindNode(sourceImpl.GetRoot(), sourcePath, false, null);
-                if(sourceNode == null)
+                if (sourceNode == null)
                     throw new XmpException("Can't find source subtree", XmpErrorCode.BadXPath);
                 destNode = XmpNodeUtils.FindNode(destImpl.GetRoot(), destPath, false, null);
-                if(destNode != null)
+                if (destNode != null)
                     throw new XmpException("Destination subtree must not exist", XmpErrorCode.BadXPath);
                 destNode = XmpNodeUtils.FindNode(destImpl.GetRoot(), destPath, true, null);
-                if(destNode == null)
+                if (destNode == null)
                     throw new XmpException("Can't create destination root node", XmpErrorCode.BadXPath);
                 if (source == dest)
                 {
                     for (XmpNode testNode = destNode; testNode != null; testNode = testNode.Parent)
                     {
-                        if (testNode == sourceNode )
+                        if (testNode == sourceNode)
                         {
                             // *** delete the just-created dest root node
                             throw new XmpException("Destination subtree is within the source subtree", XmpErrorCode.BadXPath);
@@ -1235,9 +1228,9 @@ namespace XmpCore.Impl
         {
             if (multiMap == null)
                 return;
-            List<List<string>> tempList = null; // multiMap[key];
+            List<List<string>> tempList; // multiMap[key];
             //if (tempList == null)
-            if(!multiMap.TryGetValue(key, out tempList))
+            if (!multiMap.TryGetValue(key, out tempList))
             {
                 tempList = new List<List<string>>();
                 multiMap[key] = tempList;
@@ -1255,8 +1248,8 @@ namespace XmpCore.Impl
                 return null;
 
             //List<List<string>> myList = multiMap.get(((TreeMap)multiMap).lastKey());
-            List<List<string>> myList = multiMap[multiMap.Keys.Last()];
-            List<string> myList1 = myList[0];
+            var myList = multiMap[multiMap.Keys.Last()];
+            var myList1 = myList[0];
             myList.RemoveAt(0);
             if (myList.Count == 0)
             {
@@ -1274,18 +1267,15 @@ namespace XmpCore.Impl
         {
             for (int s = stdXMP.GetRoot().GetChildrenLength(); s > 0; --s)
             {
-                XmpNode stdSchema = stdXMP.GetRoot().GetChild(s);
+                var stdSchema = stdXMP.GetRoot().GetChild(s);
                 for (int p = stdSchema.GetChildrenLength(); p > 0; --p)
                 {
                     XmpNode stdProp = stdSchema.GetChild(p);
-                    if ((stdSchema.Name.Equals(XmpConstants.NsXmpNote))
-                            && (stdProp.Name.Equals("xmpNote:HasExtendedXMP")))
+                    if (stdSchema.Name.Equals(XmpConstants.NsXmpNote) && stdProp.Name.Equals("xmpNote:HasExtendedXMP"))
                         continue; // ! Don't move xmpNote:HasExtendedXMP.
 
                     int propSize = EstimateSizeForJPEG(stdProp);
-                    List<string> namePair = new List<string>();
-                    namePair.Add(stdSchema.Name);
-                    namePair.Add(stdProp.Name);
+                    var namePair = new List<string> {stdSchema.Name, stdProp.Name};
                     PutObjectsInMultiMap(propSizes, propSize, namePair);
                 }
             }
@@ -1298,15 +1288,13 @@ namespace XmpCore.Impl
         /// <param name="propSizes">A treeMap Object which holds the estimated sizes of the property of stdXMP as a key and their string representation as map values.</param>
         private static int MoveLargestProperty(XmpMeta stdXMP, XmpMeta extXMP, SortedDictionary<int, List<List<string>>> propSizes)
         {
-            Debug.Assert(!(propSizes.Count == 0));
+            Debug.Assert(propSizes.Count != 0);
 
             //int propSize = (Integer)((TreeMap)propSizes).lastKey();
-            int propSize = propSizes.Keys.Last();
-            List<string> tempList = GetBiggestEntryInMultiMap(propSizes);
-            string schemaURI = tempList[0];
-            string propName = tempList[1];
+            var propSize = propSizes.Keys.Last();
+            var tempList = GetBiggestEntryInMultiMap(propSizes);
 
-            bool moved = MoveOneProperty(stdXMP, extXMP, schemaURI, propName);
+            var moved = MoveOneProperty(stdXMP, extXMP, schemaURI: tempList[0], propName: tempList[1]);
 
             Debug.Assert(moved);
             return propSize;
@@ -1328,28 +1316,29 @@ namespace XmpCore.Impl
                    StringBuilder extStr,
                    StringBuilder digestStr)
         {
+            var origXMP = (XmpMeta)origXMPImpl;
 
-            XmpMeta origXMP = (XmpMeta)origXMPImpl;
-
-            Debug.Assert((stdStr != null) && (extStr != null) && (digestStr != null) );    // ! Enforced by wrapper.
+            Debug.Assert(stdStr != null && extStr != null && digestStr != null);    // ! Enforced by wrapper.
 
             const int kStdXMPLimit = 65000;
             const string kPacketTrailer = "<?xpacket end=\"w\"?>";
             int kTrailerLen = kPacketTrailer.Length;
 
-            string tempStr = null;
-            XmpMeta stdXMP = new XmpMeta();
-            XmpMeta extXMP = new XmpMeta();
-            SerializeOptions keepItSmall = new SerializeOptions(SerializeOptions.UseCompactFormatFlag);
-            keepItSmall.Padding = 0;
-            keepItSmall.Indent = "";
-            keepItSmall.BaseIndent = 0;
-            keepItSmall.Newline = " ";
+            var stdXMP = new XmpMeta();
+            var extXMP = new XmpMeta();
+
+            var keepItSmall = new SerializeOptions(SerializeOptions.UseCompactFormatFlag)
+            {
+                Padding = 0,
+                Indent = "",
+                BaseIndent = 0,
+                Newline = " "
+            };
 
             // Try to serialize everything. Note that we're making internal calls to SerializeToBuffer, so
             // we'll be getting back the pointer and length for its internal string.
 
-            tempStr = XmpMetaFactory.SerializeToString(origXMP, keepItSmall);
+            var tempStr = XmpMetaFactory.SerializeToString(origXMP, keepItSmall);
 
             if (tempStr.Length > kStdXMPLimit )
             {
@@ -1366,19 +1355,20 @@ namespace XmpCore.Impl
                     stdXMP.DeleteProperty(XmpConstants.NsXmp, "Thumbnails" );
                     tempStr = XmpMetaFactory.SerializeToString(stdXMP, keepItSmall);
                 }
-
             }
 
             if (tempStr.Length > kStdXMPLimit )
             {
                 // Still doesn't fit, move all of the Camera Raw namespace. Add a dummy value for xmpNote:HasExtendedXMP.
 
-                stdXMP.SetProperty(XmpConstants.NsXmpNote, "HasExtendedXMP", "123456789-123456789-123456789-12",
-                        new PropertyOptions(PropertyOptions.NoOptionsFlag));
+                stdXMP.SetProperty(XmpConstants.NsXmpNote,
+                    "HasExtendedXMP",
+                    "123456789-123456789-123456789-12",
+                    new PropertyOptions(PropertyOptions.NoOptionsFlag));
 
-                XmpNode crSchema = XmpNodeUtils.FindSchemaNode(stdXMP.GetRoot(), XmpConstants.NsCameraraw, false);
+                var crSchema = XmpNodeUtils.FindSchemaNode(stdXMP.GetRoot(), XmpConstants.NsCameraraw, false);
 
-                if (crSchema != null )
+                if (crSchema != null)
                 {
                     crSchema.Parent = extXMP.GetRoot();
                     extXMP.GetRoot().AddChild(crSchema);
@@ -1386,10 +1376,9 @@ namespace XmpCore.Impl
 
                     tempStr = XmpMetaFactory.SerializeToString(stdXMP, keepItSmall);
                 }
-
             }
 
-            if (tempStr.Length > kStdXMPLimit )
+            if (tempStr.Length > kStdXMPLimit)
             {
                 // Still doesn't fit, move photoshop:History.
 
@@ -1399,7 +1388,7 @@ namespace XmpCore.Impl
                     tempStr = XmpMetaFactory.SerializeToString(stdXMP, keepItSmall);
             }
 
-            if (tempStr.Length > kStdXMPLimit )
+            if (tempStr.Length > kStdXMPLimit)
             {
                 // Still doesn't fit, move top level properties in order of estimated size. This is done by
                 // creating a multi-map that maps the serialized size to the string pair for the schema URI
@@ -1407,26 +1396,27 @@ namespace XmpCore.Impl
                 // the map can be done to move the largest things first. We use a double loop to keep going
                 // until the serialization actually fits, in case the estimates are off.
 
-                SortedDictionary<int, List<List<string>>> propSizes = new SortedDictionary<int, List<List<string>>>();
+                var propSizes = new SortedDictionary<int, List<List<string>>>();
 
-                CreateEstimatedSizeMap(stdXMP, propSizes );
+                CreateEstimatedSizeMap(stdXMP, propSizes);
 
                 // Outer loop to make sure enough is actually moved.
 
-                while ((tempStr.Length > kStdXMPLimit) && (!(propSizes.Count == 0)) )
+                while (tempStr.Length > kStdXMPLimit && propSizes.Count != 0)
                 {
                     // Inner loop, move what seems to be enough according to the estimates.
 
                     int tempLen = tempStr.Length;
-                    while ((tempLen > kStdXMPLimit) && (!(propSizes.Count == 0)) ) {
-
+                    while (tempLen > kStdXMPLimit && propSizes.Count != 0)
+                    {
                         int propSize = MoveLargestProperty(stdXMP, extXMP, propSizes);
 
                         Debug.Assert(propSize > 0);
 
-                        if (propSize > tempLen ) propSize = tempLen;    // ! Don't go negative.
-                        tempLen -= propSize;
+                        if (propSize > tempLen)
+                            propSize = tempLen;    // ! Don't go negative.
 
+                        tempLen -= propSize;
                     }
 
                     // Reserialize the remaining standard XMP.
