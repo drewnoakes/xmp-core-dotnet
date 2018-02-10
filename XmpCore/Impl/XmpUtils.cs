@@ -132,18 +132,14 @@ namespace XmpCore.Impl
             // Keep a zero value, has special meaning below.
             var arrayNode = SeparateFindCreateArray(schemaNs, arrayName, arrayOptions, xmpImpl);
 
-            int arrayElementLimit = int.MaxValue;
-            if (arrayNode != null)
+            var arrayElementLimit = int.MaxValue;
+            if (arrayNode != null && arrayOptions != null)
             {
-                if (arrayOptions != null)
-                {
-                    arrayElementLimit = arrayOptions.ArrayElementsLimit;
-                    if (arrayElementLimit == -1)
-                    {
-                        arrayElementLimit = int.MaxValue;
-                    }
-                }
+                arrayElementLimit = arrayOptions.ArrayElementsLimit;
+                if (arrayElementLimit == -1)
+                    arrayElementLimit = int.MaxValue;
             }
+
             // Extract the item values one at a time, until the whole input string is done.
             var charKind = UnicodeKind.Normal;
             var ch = (char)0;
@@ -155,9 +151,7 @@ namespace XmpCore.Impl
                 // They can be kept when within a value, but not when alone between values.
 
                 if (arrayNode.GetChildrenLength() >= arrayElementLimit)
-                {
                     break;
-                }
 
                 int itemStart;
                 for (itemStart = itemEnd; itemStart < endPos; itemStart++)
@@ -242,20 +236,17 @@ namespace XmpCore.Impl
                                 // Loop will add in charSize.
                                 itemEnd++;
                             }
+                            else if (!IsClosingQuote(ch, openQuote, closeQuote))
+                            {
+                                // This is an undoubled, non-closing quote, copy it.
+                                str.Append(ch);
+                            }
                             else
                             {
-                                if (!IsClosingQuote(ch, openQuote, closeQuote))
-                                {
-                                    // This is an undoubled, non-closing quote, copy it.
-                                    str.Append(ch);
-                                }
-                                else
-                                {
-                                    // This is an undoubled closing quote, skip it and
-                                    // exit the loop.
-                                    itemEnd++;
-                                    break;
-                                }
+                                // This is an undoubled closing quote, skip it and
+                                // exit the loop.
+                                itemEnd++;
+                                break;
                             }
                         }
                     }
@@ -278,13 +269,13 @@ namespace XmpCore.Impl
                 if (foundIndex < 0)
                     arrayNode.AddChild(new XmpNode(XmpConstants.ArrayItemName, itemValue, null));
                 // <#AdobePrivate>
-                //            else
-                //            {
-                //                newItem = arrayNode.getChild(foundIndex);
-                //                // Don't match again, let duplicates be seen.
-                //                arrayNode.getChild(foundIndex).setValue(null);
-                //            }
-                //             </#AdobePrivate>
+                // else
+                // {
+                //     newItem = arrayNode.getChild(foundIndex);
+                //     // Don't match again, let duplicates be seen.
+                //     arrayNode.getChild(foundIndex).setValue(null);
+                // }
+                // </#AdobePrivate>
 
             }
         }
@@ -1472,7 +1463,8 @@ namespace XmpCore.Impl
             Debug.Assert((stdStr.Length > kTrailerLen) && (stdStr.Length <= kStdXMPLimit) );
 
             int extraPadding = kStdXMPLimit - stdStr.Length;    // ! Do this before erasing the trailer.
-            if (extraPadding > 2047 ) extraPadding = 2047;
+            if (extraPadding > 2047)
+                extraPadding = 2047;
             //stdStr.delete(stdStr.toString().indexOf(kPacketTrailer), stdStr.length());
             stdStr.Remove(stdStr.ToString().IndexOf(kPacketTrailer), stdStr.Length);
 
@@ -1492,7 +1484,7 @@ namespace XmpCore.Impl
         /// <param name="extendedXMP">An XMP object which the caller has initialized from the extended XMP packet in a JPEG file.</param>
         public static void MergeFromJPEG(IXmpMeta fullXMP, IXmpMeta extendedXMP)
         {
-            TemplateOptions flags = new TemplateOptions(TemplateOptions.ReplaceExistingPropertiesFlag |TemplateOptions.IncludeInternalPropertiesFlag);
+            var flags = new TemplateOptions(TemplateOptions.ReplaceExistingPropertiesFlag |TemplateOptions.IncludeInternalPropertiesFlag);
 
             ApplyTemplate((XmpMeta)fullXMP, (XmpMeta)extendedXMP, flags);
             fullXMP.DeleteProperty(XmpConstants.NsXmpNote, "HasExtendedXMP");
@@ -1506,7 +1498,7 @@ namespace XmpCore.Impl
         /// if you do not specify any actions, the properties and values in the
         /// working XMP object do not change.
         /// </remarks>
-        /// <param name="OrigXMP">The destination XMP object.</param>
+        /// <param name="origXMP">The destination XMP object.</param>
         /// <param name="tempXMP">The template to apply to the destination XMP object.</param>
         /// <param name="actions">Option flags to control the copying. If none are specified,
         ///    the properties and values in the working XMP do not change. A logical OR of these bit-flag constants:
@@ -1518,10 +1510,10 @@ namespace XmpCore.Impl
         ///    <li><code> INCLUDE_INTERNAL_PROPERTIES</code> Operate on internal properties as well as external properties.</li>
         ///    </ul>
         /// </param>
-        public static void ApplyTemplate(IXmpMeta OrigXMP, IXmpMeta tempXMP, TemplateOptions actions)
+        public static void ApplyTemplate(IXmpMeta origXMP, IXmpMeta tempXMP, TemplateOptions actions)
         {
-            XmpMeta workingXMP = (XmpMeta) OrigXMP;
-            XmpMeta templateXMP = (XmpMeta)tempXMP;
+            var workingXMP = (XmpMeta)origXMP;
+            var templateXMP = (XmpMeta)tempXMP;
 
             bool doClear = (actions.GetOptions() & TemplateOptions.ClearUnnamedPropertiesFlag) != 0;
             bool doAdd = (actions.GetOptions() & TemplateOptions.AddNewPropertiesFlag) != 0;
@@ -1551,7 +1543,6 @@ namespace XmpCore.Impl
                     {
                         // The schema is not in the template, delete all properties
                         // or just all external ones.
-
                         if (doAll)
                         {
                             workingSchema.RemoveChildren(); // Remove the properties here, delete the schema below.
@@ -1565,7 +1556,6 @@ namespace XmpCore.Impl
                                     workingSchema.RemoveChild(propOrdinal);
                             }
                         }
-
                     }
                     else
                     {
@@ -1584,7 +1574,7 @@ namespace XmpCore.Impl
                 }
             }
 
-            if (doAdd | doReplace)
+            if (doAdd || doReplace)
             {
                 for (int schemaNum = 0, schemaLim = templateXMP.GetRoot().GetChildrenLength(); schemaNum<schemaLim; ++schemaNum)
                 {
@@ -1608,10 +1598,8 @@ namespace XmpCore.Impl
 
                     if (workingSchema.HasChildren == false)
                         workingXMP.GetRoot().RemoveChild(workingSchema);
-
                 }
             }
         }
-
     }
 }
