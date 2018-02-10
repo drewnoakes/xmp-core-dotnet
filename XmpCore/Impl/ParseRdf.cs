@@ -164,16 +164,6 @@ namespace XmpCore.Impl
             Rdf_PropertyElementList(xmp, xmpParent, xmlNode, isTopLevel, options);
         }
 
-        /// <summary>
-        /// 7.2.7 propertyAttributeURIs
-        /// anyURI - ( coreSyntaxTerms | rdf:Description | rdf:li | oldTerms )
-        /// 7.2.11 nodeElement
-        /// start-element ( URI == nodeElementURIs,
-        /// attributes == set ( ( idAttr | nodeIdAttr | aboutAttr )?, propertyAttr* ) )
-        /// propertyEltList
-        /// end-element()
-        /// Process the attribute list for an RDF node element.
-        /// </summary>
         /// <remarks>
         /// 7.2.7 propertyAttributeURIs
         /// anyURI - ( coreSyntaxTerms | rdf:Description | rdf:li | oldTerms )
@@ -282,46 +272,6 @@ namespace XmpCore.Impl
             }
         }
 
-        /// <summary>
-        /// 7.2.14 propertyElt
-        /// resourcePropertyElt | literalPropertyElt | parseTypeLiteralPropertyElt |
-        /// parseTypeResourcePropertyElt | parseTypeCollectionPropertyElt |
-        /// parseTypeOtherPropertyElt | emptyPropertyElt
-        /// 7.2.15 resourcePropertyElt
-        /// start-element ( URI == propertyElementURIs, attributes == set ( idAttr? ) )
-        /// ws* nodeElement ws
-        /// end-element()
-        /// 7.2.16 literalPropertyElt
-        /// start-element (
-        /// URI == propertyElementURIs, attributes == set ( idAttr?, datatypeAttr?) )
-        /// text()
-        /// end-element()
-        /// 7.2.17 parseTypeLiteralPropertyElt
-        /// start-element (
-        /// URI == propertyElementURIs, attributes == set ( idAttr?, parseLiteral ) )
-        /// literal
-        /// end-element()
-        /// 7.2.18 parseTypeResourcePropertyElt
-        /// start-element (
-        /// URI == propertyElementURIs, attributes == set ( idAttr?, parseResource ) )
-        /// propertyEltList
-        /// end-element()
-        /// 7.2.19 parseTypeCollectionPropertyElt
-        /// start-element (
-        /// URI == propertyElementURIs, attributes == set ( idAttr?, parseCollection ) )
-        /// nodeElementList
-        /// end-element()
-        /// 7.2.20 parseTypeOtherPropertyElt
-        /// start-element ( URI == propertyElementURIs, attributes == set ( idAttr?, parseOther ) )
-        /// propertyEltList
-        /// end-element()
-        /// 7.2.21 emptyPropertyElt
-        /// start-element ( URI == propertyElementURIs,
-        /// attributes == set ( idAttr?, ( resourceAttr | nodeIdAttr )?, propertyAttr* ) )
-        /// end-element()
-        /// The various property element forms are not distinguished by the XML element name,
-        /// but by their attributes for the most part.
-        /// </summary>
         /// <remarks>
         /// 7.2.14 propertyElt
         /// resourcePropertyElt | literalPropertyElt | parseTypeLiteralPropertyElt |
@@ -451,14 +401,6 @@ namespace XmpCore.Impl
             }
         }
 
-        /// <summary>
-        /// 7.2.15 resourcePropertyElt
-        /// start-element ( URI == propertyElementURIs, attributes == set ( idAttr? ) )
-        /// ws* nodeElement ws
-        /// end-element()
-        /// This handles structs using an rdf:Description node,
-        /// arrays using rdf:Bag/Seq/Alt, and typedNodes.
-        /// </summary>
         /// <remarks>
         /// 7.2.15 resourcePropertyElt
         /// start-element ( URI == propertyElementURIs, attributes == set ( idAttr? ) )
@@ -649,14 +591,6 @@ namespace XmpCore.Impl
             throw new XmpException("ParseTypeLiteral property element not allowed", XmpErrorCode.BadXmp);
         }
 
-        /// <summary>
-        /// 7.2.18 parseTypeResourcePropertyElt
-        /// start-element ( URI == propertyElementURIs,
-        /// attributes == set ( idAttr?, parseResource ) )
-        /// propertyEltList
-        /// end-element()
-        /// Add a new struct node with a qualifier for the possible rdf:ID attribute.
-        /// </summary>
         /// <remarks>
         /// 7.2.18 parseTypeResourcePropertyElt
         /// start-element ( URI == propertyElementURIs,
@@ -736,19 +670,6 @@ namespace XmpCore.Impl
             throw new XmpException("ParseTypeOther property element not allowed", XmpErrorCode.BadXmp);
         }
 
-        /// <summary>
-        /// 7.2.21 emptyPropertyElt
-        /// start-element ( URI == propertyElementURIs,
-        /// attributes == set (
-        /// idAttr?, ( resourceAttr | nodeIdAttr )?, propertyAttr* ) )
-        /// end-element()
-        /// &lt;ns:Prop1/&gt;  &lt;!-- a simple property with an empty value --&gt;
-        /// &lt;ns:Prop2 rdf:resource="http: *www.adobe.com/"/&gt; &lt;!-- a URI value --&gt;
-        /// &lt;ns:Prop3 rdf:value="..." ns:Qual="..."/&gt; &lt;!-- a simple qualified property --&gt;
-        /// &lt;ns:Prop4 ns:Field1="..." ns:Field2="..."/&gt; &lt;!-- a struct with simple fields --&gt;
-        /// An emptyPropertyElt is an element with no contained content, just a possibly empty set of
-        /// attributes.
-        /// </summary>
         /// <remarks>
         /// 7.2.21 emptyPropertyElt
         /// start-element ( URI == propertyElementURIs,
