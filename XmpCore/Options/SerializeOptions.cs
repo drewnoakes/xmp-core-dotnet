@@ -39,14 +39,14 @@ namespace XmpCore.Options
         public const int EncodeUtf16LeFlag = Utf16Bit | LittleEndianBit;
         private const int EncodingMask = Utf16Bit | LittleEndianBit;
 
-        //	 <#AdobePrivate>
-        //	/** Bit indicating UTF32 encoding */
-        //	private static final int XMP_UTF32_BIT = 0x0004;
-        //	/** UTF32BE */
-        //	public static final int ENCODE_UTF32BE = XMP_UTF32_BIT;
-        //	/** UTF32LE */
-        //	public static final int ENCODE_UTF32LE = XMP_UTF32_BIT | XMP_LITTLEENDIAN_BIT;
-        //	</#AdobePrivate>
+        //     <#AdobePrivate>
+        //    /** Bit indicating UTF32 encoding */
+        //    private static final int XMP_UTF32_BIT = 0x0004;
+        //    /** UTF32BE */
+        //    public static final int ENCODE_UTF32BE = XMP_UTF32_BIT;
+        //    /** UTF32LE */
+        //    public static final int ENCODE_UTF32LE = XMP_UTF32_BIT | XMP_LITTLEENDIAN_BIT;
+        //    </#AdobePrivate>
 
         /// <summary>Default constructor.</summary>
         public SerializeOptions()

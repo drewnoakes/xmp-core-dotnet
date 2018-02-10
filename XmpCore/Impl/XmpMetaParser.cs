@@ -132,12 +132,12 @@ namespace XmpCore.Impl
 
             // <#AdobePrivate>
             // The Plain XMP format is disabled
-            //		else if (result != null  &&  result[1] == XMP_PLAIN)
-            //		{
-            //			XMPMetaImpl xmp = ParsePlainXMP.parse((Node) result[0]);
-            //			xmp.setPacketHeader((String) result[2]);
-            //			return XMPNormalizer.process(xmp, options);
-            //		}
+            //        else if (result != null  &&  result[1] == XMP_PLAIN)
+            //        {
+            //            XMPMetaImpl xmp = ParsePlainXMP.parse((Node) result[0]);
+            //            xmp.setPacketHeader((String) result[2]);
+            //            return XMPNormalizer.process(xmp, options);
+            //        }
             // </#AdobePrivate>
 
             var xmp = ParseRdf.Parse((XElement)result[0], options);
@@ -411,16 +411,16 @@ namespace XmpCore.Impl
                     }
                     // <#AdobePrivate>
                     // The Plain XMP format is disabled
-                    //	else if ("XMP_Packet".equals(rootLocal)  &&
-                    //		XMPConst.NS_PXMP.equals(rootNS))
-                    //	{
-                    //		if (result != null)
-                    //		{
-                    //			result[0] = root;
-                    //			result[1] = XMP_PLAIN;
-                    //		}
-                    //		return result;
-                    //	}
+                    //    else if ("XMP_Packet".equals(rootLocal)  &&
+                    //        XMPConst.NS_PXMP.equals(rootNS))
+                    //    {
+                    //        if (result != null)
+                    //        {
+                    //            result[0] = root;
+                    //            result[1] = XMP_PLAIN;
+                    //        }
+                    //        return result;
+                    //    }
                     // </#AdobePrivate>
 
                     // continue searching

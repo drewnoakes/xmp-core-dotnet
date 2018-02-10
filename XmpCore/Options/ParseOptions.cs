@@ -86,7 +86,7 @@ namespace XmpCore.Options
         public bool AreXMPNodesLimited => mXMPNodesToLimit.Count > 0;
 
         /// <param name="nodeMap">the Map with name of nodes and number-of-items to limit them to</param>
-	    /// <summary>Returns the instance to call more set-methods.</summary>
+        /// <summary>Returns the instance to call more set-methods.</summary>
         public ParseOptions SetXMPNodesToLimit(Dictionary<string, int> nodeMap)
         {
             //mXMPNodesToLimit.putAll(nodeMap);
@@ -96,7 +96,7 @@ namespace XmpCore.Options
             return this;
         }
 
-	    /// <summary>Returns map containing names oF XMP nodes to limit and number-of-items limit corresponding to the XMP nodes.</summary>
+        /// <summary>Returns map containing names oF XMP nodes to limit and number-of-items limit corresponding to the XMP nodes.</summary>
         public Dictionary<string, int> GetXMPNodesToLimit() => new Dictionary<string, int>(mXMPNodesToLimit);
 
         protected override string DefineOptionName(int option)
