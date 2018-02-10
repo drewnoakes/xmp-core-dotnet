@@ -60,9 +60,9 @@ namespace XmpCore.Impl
             // expected UTF8 bytes to come
             var expectedBytes = 0;
             // output buffer with estimated length
-            var output = new ByteBuffer(buffer.Length()*4/3);
+            var output = new ByteBuffer(buffer.Length*4/3);
             var state = StateStart;
-            for (var i = 0; i < buffer.Length(); i++)
+            for (var i = 0; i < buffer.Length; i++)
             {
                 var b = buffer.CharAt(i);
                 switch (state)

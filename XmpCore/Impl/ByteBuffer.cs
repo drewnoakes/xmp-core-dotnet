@@ -20,21 +20,27 @@ namespace XmpCore.Impl
     public sealed class ByteBuffer
     {
         private byte[] _buffer;
-        private int _length;
         private Encoding _encoding;
+
+        /// <value>
+        /// Returns the length, that means the number of valid bytes, of the buffer;
+        /// the inner byte array might be bigger than that.
+        /// the inner byte array might be bigger than that.
+        /// </value>
+        public int Length { get; private set; }
 
         /// <param name="initialCapacity">the initial capacity for this buffer</param>
         public ByteBuffer(int initialCapacity)
         {
             _buffer = new byte[initialCapacity];
-            _length = 0;
+            Length = 0;
         }
 
         /// <param name="buffer">a byte array that will be wrapped with <c>ByteBuffer</c>.</param>
         public ByteBuffer(byte[] buffer)
         {
             _buffer = buffer;
-            _length = buffer.Length;
+            Length = buffer.Length;
         }
 
         /// <param name="buffer">a byte array that will be wrapped with <c>ByteBuffer</c>.</param>
@@ -45,7 +51,7 @@ namespace XmpCore.Impl
                 throw new IndexOutOfRangeException("Valid length exceeds the buffer length.");
 
             _buffer = buffer;
-            _length = length;
+            Length = length;
         }
 
         /// <summary>Loads the stream into a buffer.</summary>
@@ -55,15 +61,15 @@ namespace XmpCore.Impl
         {
             // load stream into buffer
             const int chunk = 16384;
-            _length = 0;
+            Length = 0;
             _buffer = new byte[chunk];
             int read;
-            while ((read = stream.Read(_buffer, _length, chunk)) > 0)
+            while ((read = stream.Read(_buffer, Length, chunk)) > 0)
             {
-                _length += read;
+                Length += read;
                 if (read != chunk)
                     break;
-                EnsureCapacity(_length + chunk);
+                EnsureCapacity(Length + chunk);
             }
         }
 
@@ -77,28 +83,21 @@ namespace XmpCore.Impl
 
             _buffer = new byte[length];
             Array.Copy(buffer, offset, _buffer, 0, length);
-            _length = length;
+            Length = length;
         }
 
         /// <returns>Returns a byte stream that is limited to the valid amount of bytes.</returns>
-        public Stream GetByteStream() => new MemoryStream(_buffer, 0, _length);
-
-        /// <returns>
-        /// Returns the length, that means the number of valid bytes, of the buffer;
-        /// the inner byte array might be bigger than that.
-        ///     the inner byte array might be bigger than that.
-        /// </returns>
-        public int Length() => _length;
+        public Stream GetByteStream() => new MemoryStream(_buffer, 0, Length);
 
         /// <param name="index">the index to retrieve the byte from</param>
         /// <returns>Returns a byte from the buffer</returns>
-        public byte ByteAt(int index) => index < _length
+        public byte ByteAt(int index) => index < Length
             ? _buffer[index]
             : throw new IndexOutOfRangeException("The index exceeds the valid buffer area");
 
         /// <param name="index">the index to retrieve a byte as int or char.</param>
         /// <returns>Returns a byte from the buffer</returns>
-        public int CharAt(int index) => index < _length
+        public int CharAt(int index) => index < Length
             ? _buffer[index] & 0xFF
             : throw new IndexOutOfRangeException("The index exceeds the valid buffer area");
 
@@ -106,8 +105,8 @@ namespace XmpCore.Impl
         /// <param name="b">a byte</param>
         public void Append(byte b)
         {
-            EnsureCapacity(_length + 1);
-            _buffer[_length++] = b;
+            EnsureCapacity(Length + 1);
+            _buffer[Length++] = b;
         }
 
         /// <summary>Appends a byte array or part of to the buffer.</summary>
@@ -116,9 +115,9 @@ namespace XmpCore.Impl
         /// <param name="len" />
         public void Append(byte[] bytes, int offset, int len)
         {
-            EnsureCapacity(_length + len);
-            Array.Copy(bytes, offset, _buffer, _length, len);
-            _length += len;
+            EnsureCapacity(Length + len);
+            Array.Copy(bytes, offset, _buffer, Length, len);
+            Length += len;
         }
 
         /// <summary>Append a byte array to the buffer</summary>
@@ -127,7 +126,7 @@ namespace XmpCore.Impl
 
         /// <summary>Append another buffer to this buffer.</summary>
         /// <param name="anotherBuffer">another <c>ByteBuffer</c></param>
-        public void Append(ByteBuffer anotherBuffer) => Append(anotherBuffer._buffer, 0, anotherBuffer._length);
+        public void Append(ByteBuffer anotherBuffer) => Append(anotherBuffer._buffer, 0, anotherBuffer.Length);
 
         /// <summary>Detects the encoding of the byte buffer, stores and returns it.</summary>
         /// <remarks>
@@ -140,7 +139,7 @@ namespace XmpCore.Impl
             if (_encoding == null)
             {
                 // needs four byte at maximum to determine encoding
-                if (_length < 2)
+                if (Length < 2)
                 {
                     // only one byte length must be UTF-8
                     _encoding = Encoding.UTF8;
@@ -151,7 +150,7 @@ namespace XmpCore.Impl
                     //   00 nn -- -- - Big endian UTF-16
                     //   00 00 00 nn - Big endian UTF-32
                     //   00 00 FE FF - Big endian UTF 32
-                    if (_length < 4 || _buffer[1] != 0)
+                    if (Length < 4 || _buffer[1] != 0)
                     {
                         _encoding = Encoding.BigEndianUnicode;
                     }
@@ -169,7 +168,7 @@ namespace XmpCore.Impl
                     //   nn 00 -- -- - Little endian UTF-16
                     if (_buffer[1] != 0)
                         _encoding = Encoding.UTF8;
-                    else if (_length < 4 || _buffer[2] != 0)
+                    else if (Length < 4 || _buffer[2] != 0)
                         _encoding = Encoding.Unicode;
                     else
                         throw new NotSupportedException("UTF-32LE is not a supported encoding.");
@@ -190,7 +189,7 @@ namespace XmpCore.Impl
                             _encoding = Encoding.BigEndianUnicode;
                             break;
                         default:
-                            if (_length < 4 || _buffer[2] != 0)
+                            if (Length < 4 || _buffer[2] != 0)
                                 // in fact BE
                                 throw new NotSupportedException("UTF-16 is not a supported encoding.");
                             else
