@@ -614,12 +614,12 @@ namespace XmpCore.Impl
                             match = true;
                             break;
                         }
-                        if (!match)
-                        {
-                            XmpNode tempNode = (XmpNode)sourceItem.Clone(true);
-                            if (tempNode != null)
-                                destNode.AddChild(tempNode);
-                        }
+                    }
+                    if (!match)
+                    {
+                        XmpNode tempNode = (XmpNode)sourceItem.Clone(true);
+                        if (tempNode != null)
+                            destNode.AddChild(tempNode);
                     }
                 }
             }
