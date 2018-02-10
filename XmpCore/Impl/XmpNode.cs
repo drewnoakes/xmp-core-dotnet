@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using JetBrains.Annotations;
 using Sharpen;
 using XmpCore.Options;
 
@@ -34,22 +35,22 @@ namespace XmpCore.Impl
     public sealed class XmpNode : IComparable
     {
         /// <summary>list of child nodes, lazy initialized</summary>
-        private List<XmpNode> _children;
+        [CanBeNull] private List<XmpNode> _children;
 
         /// <summary>list of child node references for faster lookup. Only initialized when the original _children list exceeds 9 entries</summary>
-        private Dictionary<string, XmpNode> _childrenLookup;
+        [CanBeNull] private Dictionary<string, XmpNode> _childrenLookup;
 
         /// <summary>list of qualifier of the node, lazy initialized</summary>
-        private List<XmpNode> _qualifier;
+        [CanBeNull] private List<XmpNode> _qualifier;
 
         /// <summary>options describing the kind of the node</summary>
-        private PropertyOptions _options;
+        [CanBeNull] private PropertyOptions _options;
 
         /// <summary>Creates an <c>XMPNode</c> with initial values.</summary>
         /// <param name="name">the name of the node</param>
         /// <param name="value">the value of the node</param>
         /// <param name="options">the options of the node</param>
-        public XmpNode(string name, string value, PropertyOptions options)
+        public XmpNode(string name, string value, [CanBeNull] PropertyOptions options)
         {
             // internal processing options
             Name = name;
