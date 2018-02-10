@@ -148,8 +148,7 @@ namespace XmpCore.Impl
         /// <param name="itemIndex">the index to remove [1..size]</param>
         public void RemoveChild(int itemIndex)
         {
-            if(_childrenLookup != null)
-                _childrenLookup.Remove(GetChildren()[itemIndex - 1].Name);
+            _childrenLookup?.Remove(GetChildren()[itemIndex - 1].Name);
 
             GetChildren().RemoveAt(itemIndex - 1);
             CleanupChildren();
@@ -163,8 +162,7 @@ namespace XmpCore.Impl
         /// <param name="node">the child node to delete.</param>
         public void RemoveChild(XmpNode node)
         {
-            if(_childrenLookup != null)
-                _childrenLookup.Remove(node.Name);
+            _childrenLookup?.Remove(node.Name);
 
             GetChildren().Remove(node);
             CleanupChildren();
@@ -620,8 +618,7 @@ namespace XmpCore.Impl
                     ret = Find(children, expr); // ... otherwise, search the List as usual
             }
 
-            if (lookup != null)
-                lookup.TryGetValue(expr, out ret);
+            lookup?.TryGetValue(expr, out ret);
 
             return ret;
         }
