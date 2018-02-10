@@ -1476,10 +1476,7 @@ namespace XmpCore.Impl
             //stdStr.delete(stdStr.toString().indexOf(kPacketTrailer), stdStr.length());
             stdStr.Remove(stdStr.ToString().IndexOf(kPacketTrailer), stdStr.Length);
 
-            for (int i = 0; i<extraPadding; ++i)
-            {
-                stdStr.Append(' ');
-            }
+            stdStr.Append(' ', extraPadding);
 
             stdStr.Append(kPacketTrailer).ToString();
         }
