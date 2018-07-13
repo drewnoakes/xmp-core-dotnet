@@ -99,7 +99,6 @@ namespace XmpCore.Impl
                 _xmp = (XmpMeta)xmp;
                 _options = options;
                 _padding = options.Padding;
-                _writer = new StreamWriter(_stream, options.GetEncoding());
                 CheckOptionsConsistence();
                 // serializes the whole packet, but don't write the tail yet
                 // and flush to make sure that the written bytes are calculated correctly
