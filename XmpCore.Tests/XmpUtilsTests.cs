@@ -1,4 +1,6 @@
-﻿using Xunit;
+﻿using System.Text;
+using XmpCore.Impl;
+using Xunit;
 
 namespace XmpCore.Tests
 {
@@ -30,6 +32,19 @@ namespace XmpCore.Tests
 
             Assert.Throws<XmpException>(() => XmpUtils.ConvertToLong(null));
             Assert.Throws<XmpException>(() => XmpUtils.ConvertToLong("Foo"));
+        }
+
+        [Fact]
+        public void PackageEmptyXmpDataToJPEG()
+        {
+            IXmpMeta data = new XmpMeta();
+            StringBuilder standard = new StringBuilder();
+            StringBuilder extended = new StringBuilder();
+            StringBuilder digest = new StringBuilder();
+
+            XmpUtils.PackageForJPEG(data, standard, extended, digest);
+            
+            Assert.Equal(0, extended.Length);
         }
     }
 }

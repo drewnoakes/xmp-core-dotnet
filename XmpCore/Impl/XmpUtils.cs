@@ -1477,7 +1477,9 @@ namespace XmpCore.Impl
             if (extraPadding > 2047)
                 extraPadding = 2047;
             //stdStr.delete(stdStr.toString().indexOf(kPacketTrailer), stdStr.length());
-            stdStr.Remove(stdStr.ToString().IndexOf(kPacketTrailer), stdStr.Length);
+            int index = stdStr.ToString().IndexOf(kPacketTrailer);
+            int length = stdStr.Length - index;
+            stdStr.Remove(index, length);
 
             stdStr.Append(' ', extraPadding);
 
