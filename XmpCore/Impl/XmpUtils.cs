@@ -1139,7 +1139,7 @@ namespace XmpCore.Impl
         /// <param name="schemaURI">Schema of the specified property</param>
         /// <param name="propName">Name of the property</param>
         /// <returns>true in case of success otherwise false.</returns>
-        static bool MoveOneProperty(XmpMeta stdXMP, XmpMeta extXMP, string schemaURI, string propName)
+        private static bool MoveOneProperty(XmpMeta stdXMP, XmpMeta extXMP, string schemaURI, string propName)
         {
             XmpNode propNode = null;
 
@@ -1171,7 +1171,7 @@ namespace XmpCore.Impl
         /// <summary>estimates the size of an xmp node</summary>
         /// <param name="xmpNode">XMP Node Object</param>
         /// <returns>the estimated size of the node</returns>
-        static int EstimateSizeForJPEG(XmpNode xmpNode)
+        private static int EstimateSizeForJPEG(XmpNode xmpNode)
         {
             int estSize = 0;
             int nameSize = xmpNode.Name.Length;
