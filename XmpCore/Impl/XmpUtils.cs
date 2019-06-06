@@ -1444,23 +1444,25 @@ namespace XmpCore.Impl
                 extStr.Append(tempStr);
 
 #if NETSTANDARD2_0
-                var md = MD5.Create();
-                var hashBytes = md.ComputeHash(Encoding.UTF8.GetBytes(tempStr));
-
-                digestStr.Append(ByteArrayToHexString(hashBytes));
-
-                string ByteArrayToHexString(byte[] bytes)
+                using (var md = MD5.Create())
                 {
-                    var result = new StringBuilder(bytes.Length*2);
-                    const string HexAlphabet = "0123456789ABCDEF";
+                    var hashBytes = md.ComputeHash(Encoding.UTF8.GetBytes(tempStr));
 
-                    foreach (var b in bytes)
+                    digestStr.Append(ByteArrayToHexString(hashBytes));
+
+                    string ByteArrayToHexString(byte[] bytes)
                     {
-                        result.Append(HexAlphabet[b >> 4]);
-                        result.Append(HexAlphabet[b & 0xF]);
-                    }
+                        var result = new StringBuilder(bytes.Length*2);
+                        const string HexAlphabet = "0123456789ABCDEF";
 
-                    return result.ToString();
+                        foreach (var b in bytes)
+                        {
+                            result.Append(HexAlphabet[b >> 4]);
+                            result.Append(HexAlphabet[b & 0xF]);
+                        }
+
+                        return result.ToString();
+                    }
                 }
 #endif
 
