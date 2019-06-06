@@ -1222,14 +1222,14 @@ namespace XmpCore.Impl
         {
             if (multiMap == null)
                 return;
-            List<List<string>> tempList; // multiMap[key];
-            //if (tempList == null)
-            if (!multiMap.TryGetValue(key, out tempList))
+
+            if (!multiMap.TryGetValue(key, out List<List<string>> list))
             {
-                tempList = new List<List<string>>();
-                multiMap[key] = tempList;
+                list = new List<List<string>>();
+                multiMap[key] = list;
             }
-            tempList.Add(stringPair);
+
+            list.Add(stringPair);
         }
 
         /// <summary>Utility function for retrieving biggest entry in the multimap</summary>
