@@ -199,7 +199,7 @@ namespace XmpCore
         /// Arrays and non-leaf levels of structs do not have values.
         /// Must be <c>null</c> if the value is not relevant.<br/>
         /// The value is automatically detected: Boolean, Integer, Long, Double, <see cref="IXmpDateTime"/> and
-        /// byte[] are handled, on all other <see cref="System.Object.ToString"/> is called.
+        /// byte[] are handled, on all other <see cref="object.ToString"/> is called.
         /// </param>
         /// <param name="options">Option flags describing the property. See the earlier description.</param>
         /// <exception cref="XmpException">Wraps all errors and exceptions that may occur.</exception>
