@@ -136,7 +136,7 @@ namespace XmpCore.Impl
             var arrayNode = SeparateFindCreateArray(schemaNs, arrayName, arrayOptions, xmpImpl);
 
             var arrayElementLimit = int.MaxValue;
-            if (arrayNode != null && arrayOptions != null)
+            if (arrayOptions != null)
             {
                 arrayElementLimit = arrayOptions.ArrayElementsLimit;
                 if (arrayElementLimit == -1)
