@@ -6,7 +6,7 @@
 This library is a port of Adobe's Java XMP SDK to .NET. It was initially ported by Yakov Danila and Nathanael Jones. Now maintained by Drew Noakes and contributors on GitHub.
 
 The API should be familiar to users of Adobe's XMPCore, though it has been modified in places to better suit .NET development.</Description>
-    <Copyright>Copyright 2015-2017</Copyright>
+    <Copyright>Copyright 2015-2019</Copyright>
     <AssemblyTitle>XmpCore</AssemblyTitle>
     <VersionPrefix>6.1.10.0</VersionPrefix>
     <Authors>Drew Noakes</Authors>
