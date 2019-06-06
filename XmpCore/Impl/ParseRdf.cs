@@ -11,6 +11,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using XmpCore.Options;
@@ -565,17 +566,17 @@ namespace XmpCore.Impl
             }
 
             // FfF: Can there be more than one text node in a row?
-            var textValue = string.Empty;
+            var textValue = new StringBuilder();
 
             foreach (var child in xmlNode.Nodes())
             {
                 if (child.NodeType != XmlNodeType.Text)
                     throw new XmpException("Invalid child of literal property element", XmpErrorCode.BadRdf);
 
-                textValue += ((XText)child).Value;
+                textValue.Append(((XText)child).Value);
             }
 
-            newChild.Value = textValue;
+            newChild.Value = textValue.ToString();
         }
 
         /// <summary>
