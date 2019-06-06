@@ -34,7 +34,6 @@ The API should be familiar to users of Adobe's XMPCore, though it has been modif
     <AssemblyOriginatorKeyFile>../XmpCore.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>true</SignAssembly>
     <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
-    <PackageId>XmpCore.StrongName</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
