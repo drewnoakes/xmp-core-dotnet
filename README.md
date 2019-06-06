@@ -4,7 +4,7 @@
 
 This library is a port of Adobe's XMP SDK to .NET.
 
-The API should be familiar to users of Adobe's XMPCore 5.1.2, though it has been modified
+The API should be familiar to users of Adobe's XMPCore 6.1.10, though it has been modified
 in places to better suit .NET development.
 
 ## Sample Usage
