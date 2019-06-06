@@ -31,6 +31,6 @@ if ((test-path $msbuild) -eq $false) {
 }
 
 &$msbuild XmpCore\XmpCore.csproj /t:Build,Pack /p:Configuration=Release /p:PackageOutputPath=..\artifacts
-&$msbuild XmpCore\XmpCore.csproj /t:Build,Pack /p:Configuration=Release /p:PackageOutputPath=..\artifacts /p:Signed=True
+&$msbuild XmpCore\XmpCore.csproj /t:Build,Pack /p:Configuration=Release /p:PackageOutputPath=..\artifacts /p:Signed=True /p:PackageId=XmpCore.StrongName
 
 Pop-Location

@@ -136,7 +136,7 @@ namespace XmpCore.Impl
             var arrayNode = SeparateFindCreateArray(schemaNs, arrayName, arrayOptions, xmpImpl);
 
             var arrayElementLimit = int.MaxValue;
-            if (arrayNode != null && arrayOptions != null)
+            if (arrayOptions != null)
             {
                 arrayElementLimit = arrayOptions.ArrayElementsLimit;
                 if (arrayElementLimit == -1)
@@ -1139,7 +1139,7 @@ namespace XmpCore.Impl
         /// <param name="schemaURI">Schema of the specified property</param>
         /// <param name="propName">Name of the property</param>
         /// <returns>true in case of success otherwise false.</returns>
-        static bool MoveOneProperty(XmpMeta stdXMP, XmpMeta extXMP, string schemaURI, string propName)
+        private static bool MoveOneProperty(XmpMeta stdXMP, XmpMeta extXMP, string schemaURI, string propName)
         {
             XmpNode propNode = null;
 
@@ -1171,7 +1171,7 @@ namespace XmpCore.Impl
         /// <summary>estimates the size of an xmp node</summary>
         /// <param name="xmpNode">XMP Node Object</param>
         /// <returns>the estimated size of the node</returns>
-        static int EstimateSizeForJPEG(XmpNode xmpNode)
+        private static int EstimateSizeForJPEG(XmpNode xmpNode)
         {
             int estSize = 0;
             int nameSize = xmpNode.Name.Length;
@@ -1222,14 +1222,14 @@ namespace XmpCore.Impl
         {
             if (multiMap == null)
                 return;
-            List<List<string>> tempList; // multiMap[key];
-            //if (tempList == null)
-            if (!multiMap.TryGetValue(key, out tempList))
+
+            if (!multiMap.TryGetValue(key, out List<List<string>> list))
             {
-                tempList = new List<List<string>>();
-                multiMap[key] = tempList;
+                list = new List<List<string>>();
+                multiMap[key] = list;
             }
-            tempList.Add(stringPair);
+
+            list.Add(stringPair);
         }
 
         /// <summary>Utility function for retrieving biggest entry in the multimap</summary>
@@ -1444,23 +1444,25 @@ namespace XmpCore.Impl
                 extStr.Append(tempStr);
 
 #if NETSTANDARD2_0
-                var md = MD5.Create();
-                var hashBytes = md.ComputeHash(Encoding.UTF8.GetBytes(tempStr));
-
-                digestStr.Append(ByteArrayToHexString(hashBytes));
-
-                string ByteArrayToHexString(byte[] bytes)
+                using (var md = MD5.Create())
                 {
-                    var result = new StringBuilder(bytes.Length*2);
-                    const string HexAlphabet = "0123456789ABCDEF";
+                    var hashBytes = md.ComputeHash(Encoding.UTF8.GetBytes(tempStr));
 
-                    foreach (var b in bytes)
+                    digestStr.Append(ByteArrayToHexString(hashBytes));
+
+                    string ByteArrayToHexString(byte[] bytes)
                     {
-                        result.Append(HexAlphabet[b >> 4]);
-                        result.Append(HexAlphabet[b & 0xF]);
-                    }
+                        var result = new StringBuilder(bytes.Length*2);
+                        const string HexAlphabet = "0123456789ABCDEF";
 
-                    return result.ToString();
+                        foreach (var b in bytes)
+                        {
+                            result.Append(HexAlphabet[b >> 4]);
+                            result.Append(HexAlphabet[b & 0xF]);
+                        }
+
+                        return result.ToString();
+                    }
                 }
 #endif
 

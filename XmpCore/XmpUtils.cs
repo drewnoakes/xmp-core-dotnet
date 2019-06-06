@@ -478,7 +478,7 @@ namespace XmpCore
         /// <param name="destRoot">The root location for the destination. May be a general path expression. Defaults to the source location.</param>
         /// <param name="options">Option flags to control the separation. (For now, this argument is ignored. 0 should be passed.</param>
         /// <exception cref="XmpException">Forwards the Exceptions from the metadata processing</exception>
-        public static void DuplicateSubtree(IXmpMeta source, IXmpMeta dest, String sourceNS, String sourceRoot, String destNS, String destRoot, PropertyOptions options)
+        public static void DuplicateSubtree(IXmpMeta source, IXmpMeta dest, string sourceNS, string sourceRoot, string destNS, string destRoot, PropertyOptions options)
         {
             Impl.XmpUtils.DuplicateSubtree(source, dest, sourceNS, sourceRoot, destNS, destRoot, options);
         }

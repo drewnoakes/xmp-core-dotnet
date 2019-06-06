@@ -10,6 +10,7 @@
 
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using XmpCore.Options;
 
 namespace XmpCore.Impl
@@ -242,19 +243,19 @@ namespace XmpCore.Impl
             }
 
             // Write the packet trailer PI into the tail string as UTF-8.
-            var tailStr = string.Empty;
+            var tailStr = new StringBuilder();
             if (!_options.OmitPacketWrapper)
             {
                 for (level = _options.BaseIndent; level > 0; level--)
                 {
-                    tailStr += _options.Indent;
+                    tailStr.Append(_options.Indent);
                 }
-                tailStr += PacketTrailer;
-                tailStr += _options.ReadOnlyPacket ? 'r' : 'w';
-                tailStr += PacketTrailer2;
+                tailStr.Append(PacketTrailer);
+                tailStr.Append(_options.ReadOnlyPacket ? 'r' : 'w');
+                tailStr.Append(PacketTrailer2);
             }
 
-            return tailStr;
+            return tailStr.ToString();
         }
 
         /// <summary>Serializes the metadata in pretty-printed manner.</summary>
