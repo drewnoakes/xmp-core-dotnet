@@ -38,7 +38,7 @@ namespace XmpCore.Options
         public const int DisallowDoctypeFlag = 0x0040;
 
         /// <summary>Map of nodes whose children are to be limited.</summary>
-        private Dictionary<string, int> mXMPNodesToLimit = new Dictionary<string, int>();
+        private readonly Dictionary<string, int> mXMPNodesToLimit = new Dictionary<string, int>();
 
         /// <summary>Sets the options to the default values.</summary>
         public ParseOptions()
