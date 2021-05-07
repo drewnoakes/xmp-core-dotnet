@@ -23,11 +23,6 @@ The API should be familiar to users of Adobe's XMPCore, though it has been modif
     <IncludeSource>true</IncludeSource>
     <PackageProjectUrl>https://github.com/drewnoakes/xmp-core-dotnet/</PackageProjectUrl>
     <LangVersion>latest</LangVersion>
-  </PropertyGroup>
-
-  <PropertyGroup Condition=" '$(Signed)' == 'True' ">
-    <AssemblyTitle>XmpCore.StrongName</AssemblyTitle>
-    <AssemblyName>XmpCore.StrongName</AssemblyName>
     <AssemblyOriginatorKeyFile>../XmpCore.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>true</SignAssembly>
     <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
