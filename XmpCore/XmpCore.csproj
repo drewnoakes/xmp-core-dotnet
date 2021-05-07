@@ -6,16 +6,13 @@
 This library is a port of Adobe's Java XMP SDK to .NET. It was initially ported by Yakov Danila and Nathanael Jones. Now maintained by Drew Noakes and contributors on GitHub.
 
 The API should be familiar to users of Adobe's XMPCore, though it has been modified in places to better suit .NET development.</Description>
-    <Copyright>Copyright 2015-2019</Copyright>
-    <AssemblyTitle>XmpCore</AssemblyTitle>
-    <VersionPrefix>6.1.10.0</VersionPrefix>
+    <Copyright>Copyright 2015-2021</Copyright>
+    <VersionPrefix>6.1.10.1</VersionPrefix>
     <Authors>Drew Noakes</Authors>
     <TargetFrameworks>netstandard1.0;netstandard2.0;net35</TargetFrameworks>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <DebugType>portable</DebugType>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <AssemblyName>XmpCore</AssemblyName>
-    <PackageId>XmpCore</PackageId>
     <PackageTags>XMP;Metadata;Exif;IPTC;ICC</PackageTags>
     <PackageIconUrl>https://raw.githubusercontent.com/drewnoakes/xmp-core-dotnet/master/docs/logo-512px.png</PackageIconUrl>
     <PackageLicenseUrl>https://www.adobe.com/devnet/xmp/library/eula-xmp-library-java.html</PackageLicenseUrl>
@@ -26,18 +23,13 @@ The API should be familiar to users of Adobe's XMPCore, though it has been modif
     <IncludeSource>true</IncludeSource>
     <PackageProjectUrl>https://github.com/drewnoakes/xmp-core-dotnet/</PackageProjectUrl>
     <LangVersion>latest</LangVersion>
-  </PropertyGroup>
-
-  <PropertyGroup Condition=" '$(Signed)' == 'True' ">
-    <AssemblyTitle>XmpCore.StrongName</AssemblyTitle>
-    <AssemblyName>XmpCore.StrongName</AssemblyName>
     <AssemblyOriginatorKeyFile>../XmpCore.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>true</SignAssembly>
     <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="10.4.0" PrivateAssets="All" />
+    <PackageReference Include="JetBrains.Annotations" Version="2021.1.0" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net35' ">

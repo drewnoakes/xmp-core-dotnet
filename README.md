@@ -31,7 +31,7 @@ The easiest way to reference this project is to install the [`XmpCore` package](
 
 The NuGet package has no other dependencies.
 
-If you require strongly named assemblies, use the [`XmpCore.StrongName` package](https://www.nuget.org/packages/XmpCore.StrongName/) instead.
+As of version 6.1.10.1 the package is now strong named. Before then, a separate `XmpCore.StrongName` package exists.
 
 ## Framework support
 
