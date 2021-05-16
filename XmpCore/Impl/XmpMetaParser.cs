@@ -234,8 +234,8 @@ namespace XmpCore.Impl
         {
             try
             {
-                using (var sr = new StringReader(input))
-                    return ParseTextReader(sr, options);
+                using var sr = new StringReader(input);
+                return ParseTextReader(sr, options);
             }
             catch (XmpException e)
             {
@@ -279,8 +279,8 @@ namespace XmpCore.Impl
 
                 rdrSettings.MaxCharactersFromEntities = (long)1e7;
 
-                using (var rdr = XmlReader.Create(new StreamReader(stream), rdrSettings))
-                    return XDocument.Load(rdr);
+                using var rdr = XmlReader.Create(new StreamReader(stream), rdrSettings);
+                return XDocument.Load(rdr);
             }
             catch (XmlException e)
             {
@@ -330,8 +330,8 @@ namespace XmpCore.Impl
 
                 rdrSettings.MaxCharactersFromEntities = (long)1e7;
 
-                using (var rdr = XmlReader.Create(reader, rdrSettings))
-                    return XDocument.Load(rdr);
+                using var rdr = XmlReader.Create(reader, rdrSettings);
+                return XDocument.Load(rdr);
             }
             catch (XmlException e)
             {
