@@ -332,7 +332,7 @@ namespace XmpCore.Impl
         /// Its used for tag bodies and attributes.
         /// <para />
         /// <em>Note:</em> The attribute is always limited by quotes,
-        /// thats why <c>&amp;apos;</c> is never serialized.
+        /// that's why <c>&amp;apos;</c> is never serialized.
         /// <para />
         /// <em>Note:</em> Control chars are written unescaped, but if the user uses others than tab, LF
         /// and CR the resulting XML will become invalid.
@@ -369,7 +369,7 @@ namespace XmpCore.Impl
                         case '<':
                         {
                             // we do what "Canonical XML" expects
-                            // AUDIT: &apos; not serialized as only outer qoutes are used
+                            // AUDIT: &apos; not serialized as only outer quotes are used
                             buffer.Append("&lt;");
                             continue;
                         }
