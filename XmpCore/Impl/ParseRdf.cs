@@ -129,8 +129,8 @@ namespace XmpCore.Impl
             foreach (var child in rdfRdfNode.Nodes())
             {
                 // filter whitespaces (and all text nodes)
-                if (!IsWhitespaceNode(child))
-                    Rdf_NodeElement(xmp, xmpParent, (XElement)child, true, options);
+                if (child is XElement element)
+                    Rdf_NodeElement(xmp, xmpParent, element, true, options);
             }
         }
 
