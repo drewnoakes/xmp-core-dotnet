@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 
 namespace Sharpen
@@ -130,7 +130,7 @@ namespace Sharpen
             {
                 case CalendarEnum.Year:
                     //  to avoid exception which is absent in Calendar
-                    value = value%mod;
+                    value %= mod;
                     _mCalendarDate = _mCalendarDate.AddYears(value - _mCalendarDate.Year);
                     return;
 

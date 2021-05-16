@@ -44,7 +44,7 @@ namespace XmpCore.Impl
         public static IXmpMeta Parse(Stream stream, ParseOptions options = null)
         {
             ParameterAsserts.AssertNotNull(stream);
-            options = options ?? new ParseOptions();
+            options ??= new ParseOptions();
             var doc = ParseXmlFromInputStream(stream, options);
             return ParseXmlDoc(doc, options);
         }
@@ -56,7 +56,7 @@ namespace XmpCore.Impl
         public static IXmpMeta Parse(byte[] bytes, ParseOptions options = null)
         {
             ParameterAsserts.AssertNotNull(bytes);
-            options = options ?? new ParseOptions();
+            options ??= new ParseOptions();
             var doc = ParseXmlFromByteBuffer(new ByteBuffer(bytes), options);
             return ParseXmlDoc(doc, options);
         }
@@ -68,7 +68,7 @@ namespace XmpCore.Impl
         public static IXmpMeta Parse(ByteBuffer byteBuffer, ParseOptions options = null)
         {
             ParameterAsserts.AssertNotNull(byteBuffer);
-            options = options ?? new ParseOptions();
+            options ??= new ParseOptions();
             var doc = ParseXmlFromByteBuffer(byteBuffer, options);
             return ParseXmlDoc(doc, options);
         }
@@ -80,7 +80,7 @@ namespace XmpCore.Impl
         public static IXmpMeta Parse(string xmlStr, ParseOptions options = null)
         {
             ParameterAsserts.AssertNotNullOrEmpty(xmlStr);
-            options = options ?? new ParseOptions();
+            options ??= new ParseOptions();
             var doc = ParseXmlString(xmlStr, options);
             return ParseXmlDoc(doc, options);
         }
@@ -92,7 +92,7 @@ namespace XmpCore.Impl
         public static IXmpMeta Parse(XDocument doc, ParseOptions options = null)
         {
             ParameterAsserts.AssertNotNull(doc);
-            options = options ?? new ParseOptions();
+            options ??= new ParseOptions();
             return ParseXmlDoc(doc, options);
         }
 
@@ -107,7 +107,7 @@ namespace XmpCore.Impl
         public static XDocument Extract(byte[] bytes, ParseOptions options = null)
         {
             ParameterAsserts.AssertNotNull(bytes);
-            options = options ?? new ParseOptions();
+            options ??= new ParseOptions();
             return ParseXmlFromByteBuffer(new ByteBuffer(bytes), options);
         }
 

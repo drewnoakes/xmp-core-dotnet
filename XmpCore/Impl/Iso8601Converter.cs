@@ -141,9 +141,9 @@ namespace XmpCore.Impl
                         throw new XmpException("Invalid date string, after fractional second", XmpErrorCode.BadValue);
                     digits = input.Pos - digits;
                     for (; digits > 9; --digits)
-                        value = value/10;
+                        value /= 10;
                     for (; digits < 9; ++digits)
-                        value = value*10;
+                        value *= 10;
                     binValue.Nanosecond = value;
                 }
             }
