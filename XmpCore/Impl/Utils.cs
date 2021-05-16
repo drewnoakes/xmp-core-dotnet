@@ -194,6 +194,9 @@ namespace XmpCore.Impl
             "xmpDM:videoAlphaPremultipleColor"
         };
 
+        private static readonly char[] BasicEscapeCharacters = { '<', '>', '&' };
+        private static readonly char[] WhiteSpaceEscapeCharacters = { '\t', '\n', '\r' };
+
         /// <param name="schema">a schema namespace</param>
         /// <param name="prop">an XMP Property</param>
         /// <returns>
@@ -342,8 +345,13 @@ namespace XmpCore.Impl
         public static string EscapeXml(string value, bool forAttribute, bool escapeWhitespaces)
         {
             // quick check if character are contained that need special treatment
-            var needsEscaping = value.ToCharArray()
-                .Any(c => c == '<' || c == '>' || c == '&' || (escapeWhitespaces && (c == '\t' || c == '\n' || c == '\r')) || (forAttribute && c == '"'));
+            var needsEscaping = value.IndexOfAny(BasicEscapeCharacters) != -1;
+
+            if (escapeWhitespaces)
+                needsEscaping |= value.IndexOfAny(WhiteSpaceEscapeCharacters) != -1;
+
+            if (forAttribute)
+                needsEscaping |= value.IndexOf('"') != -1;
 
             if (!needsEscaping)
             {
