@@ -1,4 +1,4 @@
-﻿// =================================================================================================
+// =================================================================================================
 // ADOBE SYSTEMS INCORPORATED
 // Copyright 2006 Adobe Systems Incorporated
 // All Rights Reserved
@@ -79,7 +79,7 @@ namespace XmpCore.Impl
                             // start of UTF8 sequence
                             expectedBytes = -1;
                             var test = b;
-                            for (; expectedBytes < 8 && (test & 0x80) == 0x80; test = test << 1)
+                            for (; expectedBytes < 8 && (test & 0x80) == 0x80; test <<= 1)
                             {
                                 expectedBytes++;
                             }
@@ -117,7 +117,7 @@ namespace XmpCore.Impl
                             var utf8 = ConvertToUtf8(readAheadBuffer[0]);
                             output.Append(utf8);
                             // 2. continue processing at second byte of sequence
-                            i = i - readAhead;
+                            i -= readAhead;
                             readAhead = 0;
                             state = StateStart;
                         }
