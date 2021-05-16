@@ -9,7 +9,6 @@
 
 
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using JetBrains.Annotations;
 
@@ -458,6 +457,26 @@ namespace XmpCore.Impl
                 IsNameStartChar(ch) ||
                 (ch >= 0x300 && ch <= 0x36F) ||
                 (ch >= 0x203F && ch <= 0x2040);
+        }
+
+        public static bool IsNullOrWhiteSpace(string value)
+        {
+#if NET35
+            if (value == null)
+                return true;
+
+            foreach (var c in value)
+            {
+                if (!char.IsWhiteSpace(c))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+#else
+            return string.IsNullOrWhiteSpace(value);
+#endif
         }
     }
 }
