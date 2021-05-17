@@ -9,7 +9,6 @@
 
 
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using JetBrains.Annotations;
 
@@ -194,6 +193,9 @@ namespace XmpCore.Impl
             "xmpDM:videoAlphaPremultipleColor"
         };
 
+        private static readonly char[] BasicEscapeCharacters = { '<', '>', '&' };
+        private static readonly char[] WhiteSpaceEscapeCharacters = { '\t', '\n', '\r' };
+
         /// <param name="schema">a schema namespace</param>
         /// <param name="prop">an XMP Property</param>
         /// <returns>
@@ -330,7 +332,7 @@ namespace XmpCore.Impl
         /// Its used for tag bodies and attributes.
         /// <para />
         /// <em>Note:</em> The attribute is always limited by quotes,
-        /// thats why <c>&amp;apos;</c> is never serialized.
+        /// that's why <c>&amp;apos;</c> is never serialized.
         /// <para />
         /// <em>Note:</em> Control chars are written unescaped, but if the user uses others than tab, LF
         /// and CR the resulting XML will become invalid.
@@ -342,8 +344,13 @@ namespace XmpCore.Impl
         public static string EscapeXml(string value, bool forAttribute, bool escapeWhitespaces)
         {
             // quick check if character are contained that need special treatment
-            var needsEscaping = value.ToCharArray()
-                .Any(c => c == '<' || c == '>' || c == '&' || (escapeWhitespaces && (c == '\t' || c == '\n' || c == '\r')) || (forAttribute && c == '"'));
+            var needsEscaping = value.IndexOfAny(BasicEscapeCharacters) != -1;
+
+            if (escapeWhitespaces)
+                needsEscaping |= value.IndexOfAny(WhiteSpaceEscapeCharacters) != -1;
+
+            if (forAttribute)
+                needsEscaping |= value.IndexOf('"') != -1;
 
             if (!needsEscaping)
             {
@@ -362,7 +369,7 @@ namespace XmpCore.Impl
                         case '<':
                         {
                             // we do what "Canonical XML" expects
-                            // AUDIT: &apos; not serialized as only outer qoutes are used
+                            // AUDIT: &apos; not serialized as only outer quotes are used
                             buffer.Append("&lt;");
                             continue;
                         }
@@ -450,6 +457,26 @@ namespace XmpCore.Impl
                 IsNameStartChar(ch) ||
                 (ch >= 0x300 && ch <= 0x36F) ||
                 (ch >= 0x203F && ch <= 0x2040);
+        }
+
+        public static bool IsNullOrWhiteSpace(string value)
+        {
+#if NET35
+            if (value == null)
+                return true;
+
+            foreach (var c in value)
+            {
+                if (!char.IsWhiteSpace(c))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+#else
+            return string.IsNullOrWhiteSpace(value);
+#endif
         }
     }
 }

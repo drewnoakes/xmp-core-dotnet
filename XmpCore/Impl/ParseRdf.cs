@@ -1039,7 +1039,7 @@ namespace XmpCore.Impl
         /// </returns>
         private static bool IsWhitespaceNode(XNode node)
         {
-            return node.NodeType == XmlNodeType.Text && ((XText)node).Value.ToCharArray().All(char.IsWhiteSpace);
+            return node.NodeType == XmlNodeType.Text && Utils.IsNullOrWhiteSpace(((XText)node).Value);
         }
 
         /// <summary>
