@@ -105,7 +105,7 @@ namespace XmpCore.Impl
         /// <exception cref="XmpException">thrown on parsing errors</exception>
         private static void Rdf_RDF(XmpMeta xmp, XElement rdfRdfNode, ParseOptions options)
         {
-            if (!rdfRdfNode.Attributes().Any())
+            if (rdfRdfNode.Attributes().Any(attr => attr.IsNamespaceDeclaration == false))
                 throw new XmpException("Invalid attributes of rdf:RDF element", XmpErrorCode.BadRdf);
 
             Rdf_NodeElementList(xmp, xmp.GetRoot(), rdfRdfNode, options);

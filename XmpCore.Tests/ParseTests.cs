@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Xml;
 using Xunit;
 
@@ -127,6 +127,53 @@ namespace XmpCore.Tests
             Assert.NotNull(e);
             Assert.True(e.InnerException.Message.StartsWith("The input document has exceeded a limit set by MaxCharactersFromEntities"));
 
+        }
+        [Fact]
+        public void ParseRdfThatContainsNamespaceAttributeShouldNotThrow() {
+            // The purpose of this unit test is to address this bug with port from java.
+            // https://github.com/drewnoakes/metadata-extractor-dotnet/issues/418
+            // If rdf:RDF has namespace attribute, it should not throw an exception (as per the spec)
+            const string xmpString = @"
+<x:xmpmeta xmlns:x=""adobe:ns:meta/"" xmlns:rdf=""http://www.w3.org/1999/02/22-rdf-syntax-ns#""
+    xmlns:xmp=""http://ns.adobe.com/xap/1.0/"" xmlns:xmpDM=""http://ns.adobe.com/xmp/1.0/DynamicMedia/""
+    xmlns:tmi=""http://company.com/tmi/1.0/"" x:xmptk=""XMP Core 5.6.0"">
+    <rdf:RDF>
+        <rdf:Description>
+      </rdf:Description>
+   </rdf:RDF>
+</x:xmpmeta>";
+            XmpException e = null;
+            try {
+                XmpMetaFactory.ParseFromString(xmpString, new Options.ParseOptions());
+            }
+            catch (XmpException ex) {
+                e = ex;
+            }
+            Assert.Null(e);
+        }
+        [Fact]
+        public void ParseRdfThatContainsInvalidAttributeShouldThrow() {
+            // The purpose of this unit test is to address this bug with port from java.
+            // https://github.com/drewnoakes/metadata-extractor-dotnet/issues/418
+            // If rdf:RDF has anything other than namespace attribute, it should throw an exception
+            const string xmpString = @"
+<x:xmpmeta xmlns:x=""adobe:ns:meta/"" xmlns:rdf=""http://www.w3.org/1999/02/22-rdf-syntax-ns#""
+    xmlns:xmp=""http://ns.adobe.com/xap/1.0/"" xmlns:xmpDM=""http://ns.adobe.com/xmp/1.0/DynamicMedia/""
+    xmlns:tmi=""http://company.com/tmi/1.0/"" x:xmptk=""XMP Core 5.6.0"">
+    <rdf:RDF ShouldntBeHere=""true"">
+        <rdf:Description>
+      </rdf:Description>
+   </rdf:RDF>
+</x:xmpmeta>";
+            XmpException e = null;
+            try {
+                XmpMetaFactory.ParseFromString(xmpString, new Options.ParseOptions());
+            }
+            catch (XmpException ex) {
+                e = ex;
+            }
+            Assert.NotNull(e);
+            Assert.True(e.Message.StartsWith("Invalid attributes of rdf:RDF element"));
         }
     }
 }
